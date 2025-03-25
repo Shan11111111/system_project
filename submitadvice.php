@@ -51,10 +51,10 @@
 
         <!-- 右側表單 -->
         <div class="right-panel">
-            <form action="#" method="POST" >
+            <form action="advice_accept.php" method="post" >
                 <!-- 標題輸入 -->
                 <label for="title">標題</label>
-                <input type="text" id="title" name="title" class="inpuu" required>
+                <input type="text" id="title" name="advice_title" class="inpuu" required>
 
                 <!-- 分類按鈕 -->
                 <label>分類</label>
@@ -70,12 +70,13 @@
 
                 <!-- 內容輸入 -->
                 <label for="content">內容</label>
-                <textarea id="content" name="content" class="inpuu" required></textarea>
+                <textarea id="content" name="advice_content" class="inpuu" required></textarea>
 
                 <!-- 上傳按鈕 -->
                 <label>檔案 / 照片上傳</label>
                 <button type="button" class="upload-btn" id="uploadBox">上傳</button>
                 <input type="file" id="fileInput" name="file" accept="image/*" hidden>
+                
 
                 <!-- 提交按鈕 -->
                 <button type="submit" class="submit">提交</button>
