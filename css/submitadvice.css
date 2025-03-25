@@ -1,0 +1,262 @@
+html, body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+  }
+
+/* 全局樣式 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 82%;
+    height: 55px;
+    background: white;
+    border-radius: 50px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px 50px;
+    display: flex;
+    align-items: center;
+}
+
+/* Navbar 內容 */
+.nav-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* 搜尋框 */
+.search-bar {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+    margin-right: 5%;
+}
+
+/* 建言與募資的間距調整 */
+.nav-left {
+    margin-right: 10%;
+}
+
+.nav-right {
+    margin-left: 10%;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    min-width: 120px;
+    z-index: 10;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* LOGO */
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* 登入 & 註冊 */
+.auth-links {
+    display: flex;
+    gap: 10px;
+    margin-left: 5%;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+}
+
+/* 主要容器 */
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    height: calc(100%-60px);
+}
+
+/* 左側面板 */
+.left-panel {
+    width: 30%;
+    background-color: #fdfb90;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.main-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #585858;
+    font-size: 16px;
+    text-align: center;
+}
+
+.image-placeholder {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+/* 右側面板 */
+.right-panel {
+    height: calc(100%-60px);
+    width: 65%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 100px;
+}
+
+/* 標籤 */
+label {
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    margin: 8px 0 5px;
+}
+
+/* 輸入框 */
+.inpuu {
+    width: 95%;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 25px;
+    font-size: 18px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+/* 文字區塊 */
+textarea {
+    height: 125px;
+    resize: none;
+}
+
+/* 分類按鈕 */
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.category {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 10px 20px;
+    border: 2px solid #333;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.category:hover {
+    background-color: #ffcc00;
+    color: rgb(0, 0, 0);
+}
+
+.category.selected {
+    background-color: #ffcc00;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+/* 上傳按鈕 */
+.upload-btn {
+    background-color: #fff;
+    border: 2px solid #333;
+    padding: 7px 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 16px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.upload-btn:hover {
+    background-color: #ddd;
+}
+
+/* 提交按鈕 */
+.submit {
+    background-color: #fdf2a5;
+    border: 2px solid #000;
+    border-radius: 50px;
+    padding: 10px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 25px auto 0;
+    width: 150px;
+    text-align: center;
+}
+
+.submit:hover {
+    background-color: #000;
+    color: white;
+}
