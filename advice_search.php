@@ -29,14 +29,18 @@
     <!--navbar -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- LOGO -->
             <div class="logo">LOGO</div>
+
+            <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
 
+            <!-- 桌面版選單 -->
             <div class="nav-center desktop-menu">
                 <div class="dropdown">
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
-                        <a href="#">發布建言</a>
+                        <a href="submitadvice.php">發布建言</a>
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -56,11 +60,12 @@
             </div>
         </div>
 
+        <!-- 手機版選單 -->
         <div class="mobile-menu" id="mobile-menu">
             <div class="dropdown">
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
-                    <a href="#">發布建言</a>
+                    <a href="submitadvice.php">發布建言</a>
                     <a href="#">最新建言</a>
                     <a href="#">熱門建言</a>
                 </div>
@@ -114,6 +119,20 @@
     <div class="footer">footer</div>
 
     <script>
+         // 點擊漢堡切換 menu
+         document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.toggle('active');
+            });
+
+            // 手機 dropdown 點擊展開
+            document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault(); // 防止跳頁
+                    const parent = btn.parentElement;
+                    parent.classList.toggle('active');
+                });
+            });
+
         const data = Array.from({ length: 25 }, (_, i) => ({
             title: `建言標題 ${i + 1}`,
             comments: Math.floor(Math.random() * 80),
