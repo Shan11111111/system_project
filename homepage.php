@@ -124,8 +124,8 @@
     </div>
     <div class="container">
         <!--建言查看區--->
-        <div class="seek_advice">查看建言</div>
         <div class="seek_advice_area">
+            <div class="seek_advice">查看建言</div>
             <div class="hot-area">
                 <div class="advice_classifedtitle">
                     <div class="title-bar">
@@ -138,28 +138,10 @@
                             <div class="more"><a href="">更多</a></div>
                         </div>
                     </div>
-                    <!-- Swiper container -->
                     <div class="swiper mySwiper1">
                         <div class="swiper-wrapper">
 
-                            <!-- 模擬 9 筆資料，每個都是 swiper-slide -->
-                            <!-- Slide 1 -->
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">利瑪竇可以整修一下廁所</div>
-                                        <div class="progress_line">
-                                            <progress value="20" max="100"></progress>
-                                            <div class="progress_percent">20%</div>
-                                            <i class="fa-regular fa-user">10</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                             <!-- Slide 2 -->
                             <div class="swiper-slide">
@@ -304,12 +286,12 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
+                <!-- Swiper container -->
             </div>
+
             <!--new建言查看��--->
             <div class="new-area">
                 <div class="advice_classifedtitle">
@@ -317,42 +299,23 @@
                         <div class="new_tag">NEW</div>
                         <div class="right-controls">
                             <div class="swiper-button-prev-2"><i class="fa-solid fa-arrow-left"
-                                    style="color: #a5a0a0;"></i>
-                            </div>
+                                    style="color: #a5a0a0;"></i></div>
                             <div class="swiper-button-next-2"><i class="fa-solid fa-arrow-right"
                                     style="color: #a5a0a0;"></i></div>
                             <div class="more"><a href="">更多</a></div>
                         </div>
                     </div>
-                    <!-- Swiper container -->
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
 
-                            <!-- 模擬 9 筆資料，每個都是 swiper-slide -->
-                            <!-- Slide 1 -->
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">利瑪竇可以整修一下廁所</div>
-                                        <div class="progress_line">
-                                            <progress value="20" max="100"></progress>
-                                            <div class="progress_percent">20%</div>
-                                            <i class="fa-regular fa-user">10</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                             <!-- Slide 2 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
                                         <div class="adv_content_text">操場的圍欄破了，會危險</div>
@@ -490,21 +453,35 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
+                <!-- Swiper container -->
             </div>
+
 
             <!--募資進度查看區--->
+            <!--還沒做完--->
+
             <div class="seek_fund">募資專區</div>
             <div class="seek_fund_area">
+                <div class="fund-area">
+                    <div class="hot_fund">HOT</div>
+                    <div class="right-controls">
+                        <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left"
+                                style="color: #a5a0a0;"></i></div>
+                        <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right"
+                                style="color: #a5a0a0;"></i></div>
+                        <div class="more"><a href="">更多</a></div>
+                    </div>
+                    <divF>
 
+                    </divF>
+
+                </div>
+                <!-- Swiper container -->
             </div>
         </div>
-
-
 
         <footer>
 
@@ -554,17 +531,19 @@
             swiperConfigs.forEach(config => {
                 new Swiper(config.container, {
                     slidesPerView: 'auto', // 用 auto 配合固定寬
-                    spaceBetween:  16,
+                    spaceBetween: 24,
                     loop: true,
                     speed: 800,
                     navigation: {
                         nextEl: config.next,
                         prevEl: config.prev
                     },
+                    slidesPerGroupAuto: true, // 自動根據可視區的卡片數滑動
+
                     breakpoints: {
                         768: {
-                            slidesPerView: 3,
-                            slidesPerGroup: 3
+                            slidesPerView: 4,
+                            slidesPerGroup: 4
                         },
                         480: {
                             slidesPerView: 2,
