@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-03-23 11:56:31
+-- 產生時間： 2025-03-25 15:40:17
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -34,7 +34,7 @@ CREATE TABLE `advice` (
   `advice_content` text DEFAULT NULL,
   `agree` int(11) DEFAULT 0,
   `category` varchar(20) DEFAULT NULL,
-  `state` varchar(20) DEFAULT '未處理',
+  `advice_state` varchar(20) DEFAULT '未處理',
   `announce_date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -42,9 +42,22 @@ CREATE TABLE `advice` (
 -- 傾印資料表的資料 `advice`
 --
 
-INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, `agree`, `category`, `state`, `announce_date`) VALUES
+INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, `agree`, `category`, `advice_state`, `announce_date`) VALUES
 (1, 412402001, '泳池不乾淨', '提議學生有薪水的打掃泳池', 0, ' 環境', '未處理', '2025-03-23'),
 (2, 412402001, '泳池超級臭', '學校趕快清理', 0, '環境', '未處理', '2025-03-23');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `advice_image`
+--
+
+CREATE TABLE `advice_image` (
+  `img_id` int(11) NOT NULL,
+  `img_name` varchar(255) NOT NULL,
+  `img_data` blob NOT NULL,
+  `advice_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -124,6 +137,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `level`, `email`, `department`) VALUES
+(332478, '安教授', 'teacher', '332478@m365.fju.edu.tw', '資訊管理學系'),
+(345678, '歐陽修', 'manager', '123@gmail.com', '學務處'),
 (412402001, '王小明', 'student', 'example@gmail.com', '資訊管理學系');
 
 --
@@ -136,6 +151,13 @@ INSERT INTO `users` (`user_id`, `name`, `level`, `email`, `department`) VALUES
 ALTER TABLE `advice`
   ADD PRIMARY KEY (`advice_id`),
   ADD KEY `fk_user_id` (`user_id`);
+
+--
+-- 資料表索引 `advice_image`
+--
+ALTER TABLE `advice_image`
+  ADD PRIMARY KEY (`img_id`),
+  ADD KEY `advice_id` (`advice_id`);
 
 --
 -- 資料表索引 `agree_record`
@@ -184,6 +206,12 @@ ALTER TABLE `advice`
   MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
+--
+ALTER TABLE `advice_image`
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
@@ -223,6 +251,12 @@ ALTER TABLE `users`
 ALTER TABLE `advice`
   ADD CONSTRAINT `advice_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- 資料表的限制式 `advice_image`
+--
+ALTER TABLE `advice_image`
+  ADD CONSTRAINT `advice_image_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE;
 
 --
 -- 資料表的限制式 `agree_record`
