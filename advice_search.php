@@ -88,58 +88,71 @@
     <div class="container">
         <!-- 快要達標 -->
         <div class="highlight">
-            快要達標的建言：這裡可以加 swiper 或卡片！
+            <div class="highlight_content">快要達標的建言</div>
+            <div class="highlight_btn">去覆議</div>
         </div>
+        <div class="highlight_title"><center><p>快要達標的建言，還剩php人</p></center></div>
+        <div class="advice_space">
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('active')">進行中</div>
+                <div class="tab" onclick="switchTab('ended')">已結束</div>
+            </div>
+            <hr style="width=70%; border-color:black;">
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('active')">進行中</div>
-            <div class="tab" onclick="switchTab('ended')">已結束</div>
+            <!-- 選單 + 搜尋 -->
+            <div class="filter-bar">
+                <div class="search_text">
+                    <select id="category">
+                        <option value="all">全部分類</option>
+                        <option value="equipment">設施改善</option>
+                        <option value="academic">學術發展</option>
+                        <option value="environment">社團活動</option>
+                        <option value="welfare">公益關懷</option>
+                        <option value="environment">環保永續</option>
+                        <option value="other">其他</option>
+                    </select>
+                    <input type="text" id="search" placeholder="請輸入關鍵字">
+                    <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="search_sort">
+                    <!--按鈕按下去後箭頭改變 牽涉到後端 所以留給你們 這裡有倒敘正敘的箭頭icon-->
+                    <button onclick="toggleArrow(this)">HOT<i class="fa-solid fa-caret-up"></i></button>
+                    <button onclick="toggleArrow(this)">NEW<i class="fa-solid fa-caret-up"></i></button>
+                </div>
+            </div>
+
+            <!-- 建言列表 -->
+            <div id="suggestion-list"></div>
+
+            <!-- 分頁 -->
+            <div class="pagination" id="pagination"></div>
         </div>
-
-        <!-- 選單 + 搜尋 -->
-        <div class="filter-bar">
-            <select id="category">
-                <option value="">選擇分類</option>
-                <option value="animal">動物</option>
-                <option value="environment">環境</option>
-            </select>
-            <input type="text" id="search" placeholder="請輸入關鍵字">
-            <button onclick="search()">搜尋</button>
-            <button onclick="sortBy('hot')">HOT</button>
-            <button onclick="sortBy('new')">NEW</button>
-        </div>
-
-        <!-- 建言列表 -->
-        <div id="suggestion-list"></div>
-
-        <!-- 分頁 -->
-        <div class="pagination" id="pagination"></div>
     </div>
     <div class="footer">footer</div>
 
     <script>
-         // 點擊漢堡切換 menu
-         document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
-                document.getElementById('mobile-menu').classList.toggle('active');
-            });
+        // 點擊漢堡切換 menu
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        });
 
-            // 手機 dropdown 點擊展開
-            document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault(); // 防止跳頁
-                    const parent = btn.parentElement;
-                    parent.classList.toggle('active');
-                });
+        // 手機 dropdown 點擊展開
+        document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); // 防止跳頁
+                const parent = btn.parentElement;
+                parent.classList.toggle('active');
             });
+        });
 
         const data = Array.from({ length: 25 }, (_, i) => ({
             title: `建言標題 ${i + 1}`,
             comments: Math.floor(Math.random() * 80),
-            deadline: '剩約30天',
+            deadline: '剩約天',
             status: i % 2 === 0 ? 'active' : 'ended',
             passed: i % 3 === 0, // 每三個通過一次
-            publishDate: '2025-03-01'
+            publishDate: 'date'
         }));
 
         let currentTab = 'active';
@@ -183,10 +196,16 @@
             <div class="suggestion-content">
               <div class="suggestion-title">${item.title}</div>
               <div class="suggestion-meta">
+              <div class="data">
                 <span>附議數：${item.comments}</span>
-                <span>留言數：${Math.floor(item.comments / 2)}</span>
+                <span><i class="fa-solid fa-comment"></i>：${Math.floor(item.comments / 2)}</span>
+                </div>
+                
+                <div class="date">
+                <i class="fa-solid fa-clock"></i>
                 <span>${item.deadline}</span>
                 <span>發布日：${item.publishDate}</span>
+                </div>
               </div>
             </div>
           `;
@@ -227,12 +246,15 @@
         }
 
         function search() {
-            alert("尚未實作");
+            alert("沒做");
+        }
+        
+        function toggleArrow(btn) {
+            const icon = btn.querySelector("i");
+            icon.classList.toggle("fa-caret-up");
+            icon.classList.toggle("fa-caret-down");
         }
 
-        function sortBy(type) {
-            alert("排序：" + type);
-        }
 
         renderSuggestions();
     </script>
