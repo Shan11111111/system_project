@@ -25,6 +25,7 @@
 </head>
 
 <body>
+    <?php session_start(); ?>>
     <!-- Navbar -->
 
     <nav class="navbar">
@@ -40,7 +41,15 @@
                 <div class="dropdown">
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
-                        <a href="submitadvice.php">發布建言</a>
+                        <?php if (isset($_SESSION['user_id'])) { ?>
+                            <a href="submitadvice.php">發布建言</a>
+                        <?php } else { ?>
+                            <script>
+                                alert("請先登入!發布建言為學生與教職人員專屬功能!");
+                                window.location.href = "login.php"; // 導向登入頁面
+                            </script>
+                        <?php } ?>
+
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -55,8 +64,23 @@
             </div>
 
             <div class="nav-right desktop-menu">
-                <a href="#" class="nav-item">登入</a>
-                <a href="#" class="nav-item">註冊</a>
+                <?php if (isset($_SESSION['user_id'])) { ?>
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <script>
+                        document.getElementById('logout-link').addEventListener('click', function () {
+                            // 彈出確認視窗
+                            const confirmLogout = confirm("確定要登出嗎？");
+                            if (confirmLogout) {
+                                // 如果用戶選擇確定，導向登出頁面
+                                window.location.href = "logout.php";
+                            }
+                            // 如果用戶選擇取消，什麼都不做
+                        });
+                    </script>
+                <?php } else { ?>
+                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="register.php" class="nav-item">註冊</a>
+                <?php } ?>
             </div>
         </div>
 
@@ -65,7 +89,15 @@
             <div class="dropdown">
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
-                    <a href="submitadvice.php">發布建言</a>
+                    <?php if (isset($_SESSION['user_id'])) { ?>
+                        <a href="submitadvice.php">發布建言</a>
+                    <?php } else { ?>
+                        <script>
+                            alert("請先登入!發布建言為學生與教職人員專屬功能!");
+                            window.location.href = "login.php"; // 導向登入頁面
+                        </script>
+                    <?php } ?>
+
                     <a href="#">最新建言</a>
                     <a href="#">熱門建言</a>
                 </div>
@@ -77,8 +109,25 @@
                     <a href="#">成功案例</a>
                 </div>
             </div>
-            <a href="#" class="nav-item">登入</a>
-            <a href="#" class="nav-item">註冊</a>
+            <?php if (isset($_SESSION['user_id'])) { ?>
+                <a class="nav-item">會員專區</a>
+                <a href="javascript:void(0);" class="nav-item" id="logout-link-mobile">登出</a>
+                <script>
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                        // 彈出確認視窗
+                        const confirmLogout = confirm("確定要登出嗎？");
+                        if (confirmLogout) {
+                            // 如果用戶選擇確定，導向登出頁面
+                            window.location.href = "logout.php";
+                        }
+                        // 如果用戶選擇取消，什麼都不做
+                    });
+                </script>
+            <?php } else { ?>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
+            <?php } ?>
+
         </div>
     </nav>
 
@@ -468,8 +517,8 @@
                 <div class="fund-area">
                     <div class="hot_fund">HOT</div>
                     <div class="right-controls">
-                        <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left"
-                                style="color: #a5a0a0;"></i></div>
+                        <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left" style="color: #a5a0a0;"></i>
+                        </div>
                         <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right"
                                 style="color: #a5a0a0;"></i></div>
                         <div class="more"><a href="">更多</a></div>
@@ -494,19 +543,19 @@
         <!-- 初始化 Swiper -->
         <script>
             // 點擊漢堡切換 menu
-            document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
                 document.getElementById('mobile-menu').classList.toggle('active');
             });
 
             // 手機 dropdown 點擊展開
             document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
+                btn.addEventListener('click', function (e) {
                     e.preventDefault(); // 防止跳頁
                     const parent = btn.parentElement;
                     parent.classList.toggle('active');
                 });
             });
-            window.addEventListener('scroll', function() {
+            window.addEventListener('scroll', function () {
                 const navbar = document.querySelector('.navbar');
                 if (window.scrollY > 400) {
                     navbar.classList.add('scrolled');
@@ -517,15 +566,15 @@
 
             /*CARD SLIDER*/
             const swiperConfigs = [{
-                    container: ".mySwiper1",
-                    next: ".swiper-button-next-1",
-                    prev: ".swiper-button-prev-1"
-                },
-                {
-                    container: ".mySwiper2",
-                    next: ".swiper-button-next-2",
-                    prev: ".swiper-button-prev-2"
-                }
+                container: ".mySwiper1",
+                next: ".swiper-button-next-1",
+                prev: ".swiper-button-prev-1"
+            },
+            {
+                container: ".mySwiper2",
+                next: ".swiper-button-next-2",
+                prev: ".swiper-button-prev-2"
+            }
             ];
 
             swiperConfigs.forEach(config => {
