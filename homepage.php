@@ -463,125 +463,18 @@
         <!--募資進度查看區--->
         <!--還沒做完--->
 
-        <div class="seek_fund">募資專區</div>
         <div class="seek_fund_area">
             <div class="fund_area">
                 <div class="hot_fund">HOT</div>
-                <div>
-                    <div class="right-controls">
-                        <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left" style="color: #a5a0a0;"></i></div>
-                        <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right" style="color: #a5a0a0;"></i></div>
-                        <div class="more"><a href="">更多</a></div>
-                    </div>
-                </div>
-                <div class="swiper mySwiper3">
-                    <div class="swiper-wrapper">
-                        <ol class="swiper-slide">
-                            <li class="fund_content_block">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">校門口機車亂停，建議規劃停車格</div>
-                                        <div class="progress_line">
-                                            <progress value="90" max="100"></progress>
-                                            <div class="progress_percent">90%</div>
-                                            <i class="fa-regular fa-user">45</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="fund_content_block">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">校門口機車亂停，建議規劃停車格</div>
-                                        <div class="progress_line">
-                                            <progress value="90" max="100"></progress>
-                                            <div class="progress_percent">90%</div>
-                                            <i class="fa-regular fa-user">45</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="fund_content_block">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">校門口機車亂停，建議規劃停車格</div>
-                                        <div class="progress_line">
-                                            <progress value="90" max="100"></progress>
-                                            <div class="progress_percent">90%</div>
-                                            <i class="fa-regular fa-user">45</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="fund_content_block">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">校門口機車亂停，建議規劃停車格</div>
-                                        <div class="progress_line">
-                                            <progress value="90" max="100"></progress>
-                                            <div class="progress_percent">90%</div>
-                                            <i class="fa-regular fa-user">45</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="fund_content_block">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">校門口機車亂停，建議規劃停車格</div>
-                                        <div class="progress_line">
-                                            <progress value="90" max="100"></progress>
-                                            <div class="progress_percent">90%</div>
-                                            <i class="fa-regular fa-user">45</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ol>
-                        <div class="swiper-slide">
-                            <ol>
-                                <li class="fund_content_block">卡片6</li>
-                                <li class="fund_content_block">卡片7</li>
-                                <li class="fund_content_block">卡片8</li>
-                                <li class="fund_content_block">卡片9</li>
-                                <li class="fund_content_block">卡片10</li>
-                            </ol>
-                        </div>
-                        <div class="swiper-slide">
-                            <ol>
-                                <li class="fund_content_block">卡片11</li>
-                                <li class="fund_content_block">卡片12</li>
-                                <li class="fund_content_block">卡片13</li>
-                                <li class="fund_content_block">卡片14</li>
-                                <li class="fund_content_block">卡片15</li>
-                            </ol>
-                        </div>
-                    </div>
+                <div class="right-controls">
+                    <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left"></i></div>
+                    <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="more"><a href="#">更多</a></div>
                 </div>
             </div>
         </div>
-        <!-- Swiper container -->
     </div>
+
 
     <footer>
 
@@ -626,6 +519,12 @@
                 next: ".swiper-button-next-2",
                 prev: ".swiper-button-prev-2"
             },
+            {
+                container: ".mySwiper3",
+                next: ".swiper-button-next-2",
+                prev: ".swiper-button-prev-2"
+            },
+
         ];
 
         swiperConfigs.forEach(config => {
@@ -656,16 +555,17 @@
                 }
             });
         });
-        /*募資區的控制按鈕*/
-        const swiper3 = new Swiper(".mySwiper3", {
-            slidesPerView: 1,
-            spaceBetween: 30,
-            speed: 900,
-            navigation: {
-                nextEl: ".swiper-button-next-3",
-                prevEl: ".swiper-button-prev-3",
-            },
-        });
+        /*
+                const swiper3 = new Swiper(".mySwiper3", {
+                    slidesPerView: 5,
+                    slidesPerGroup: 3,
+                    spaceBetween: 10,
+                    speed: 900,
+                    navigation: {
+                        nextEl: ".swiper-button-next-3",
+                        prevEl: ".swiper-button-prev-3",
+                    },
+                }); */
     </script>
 
 
