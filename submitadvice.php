@@ -19,6 +19,7 @@
 </head>
 
 <body>
+    <?php session_start(); ?>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
@@ -33,7 +34,13 @@
                 <div class="dropdown">
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
-                        <a href="submitadvice.php">發布建言</a>
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <a href="submitadvice.php">發布建言</a>
+                        <?php else: ?>
+                            <script>alert("請先登入");</script>
+                            <a>發布建言</a>
+                        <?php endif; ?>
+
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -48,8 +55,13 @@
             </div>
 
             <div class="nav-right desktop-menu">
-                <a href="#" class="nav-item">登入</a>
-                <a href="#" class="nav-item">註冊</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a class="nav-item">會員專區</a>
+                    <a href="logout.php" class="nav-item">登出</a>
+                <?php else: ?>
+                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="register.php" class="nav-item">註冊</a>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -58,7 +70,13 @@
             <div class="dropdown">
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
-                    <a href="submitadvice.php">發布建言</a>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="submitadvice.php">發布建言</a>
+                    <?php else: ?>
+                        <script>alert("請先登入");</script>
+                        <a>發布建言</a>
+                    <?php endif; ?>
+
                     <a href="#">最新建言</a>
                     <a href="#">熱門建言</a>
                 </div>
@@ -70,8 +88,14 @@
                     <a href="#">成功案例</a>
                 </div>
             </div>
-            <a href="#" class="nav-item">登入</a>
-            <a href="#" class="nav-item">註冊</a>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <a class="nav-item">會員專區</a>
+                <a href="logout.php" class="nav-item">登出</a>
+            <?php else: ?>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
+            <?php endif; ?>
+            
         </div>
     </nav>
     <div class="container1">
