@@ -30,7 +30,8 @@
         <div class="login-section">
             <div class="login-content">
                 <div class="top-bar">
-                    <button class="back-btn" onclick="history.back()">← Back</button>
+                    <button class="back-btn" >
+                        <a href="homepage.php">← Back</a> </button>
                     
                 </div>
 
@@ -50,10 +51,17 @@
                             <select name="department" required>
                                 <option value="">請選擇學院</option>
                                 <option value="文學院">文學院</option>
-                                <option value="理學院">理學院</option>
-                                <option value="工學院">工學院</option>
+                                <option value="藝術學院">藝術學院</option>
+                                <option value="外國語文學院">外國語文學院</option>
+                                <option value="理工學院">理工學院</option>
                                 <option value="管理學院">管理學院</option>
-                                <option value="其他">其他</option>
+                                <option value="社會科學院">社會科學院</option>
+                                <option value="法律學院">法律學院</option>
+                                <option value="醫學院">醫學院</option>
+                                <option value="民生學院">民生學院</option>
+                                <option value="傳播學院">傳播學院</option>
+                                <option value="教育學院">教育學院</option>
+                                <option value="織品服裝學院織品服裝學院">織品服裝學院織品服裝學院</option>
                             </select>
                         </div>
                     </div>
