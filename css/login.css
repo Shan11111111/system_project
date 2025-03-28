@@ -119,8 +119,13 @@
     cursor: pointer;
     margin-top: 10px;
   }
+
+  .sign-in-btn a {
+    color: white;
+    text-decoration: none;
+  }
   
-  /* 右側區塊變窄 */
+  
   .signup-section {
     width: 35%;
     background: linear-gradient(to bottom right, #23bfa0, #36b8d8);
@@ -155,9 +160,14 @@
     font-weight: bold;
     transition: background 0.3s;
   }
+
+  .signup-btn a {
+    text-decoration: none;
+    color: #36b8d8;
+  }
   
   .signup-btn:hover {
-    background: #f2f2f2;
+    background: #858585;
   }
 
   @media (max-width: 768px) {

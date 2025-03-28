@@ -163,6 +163,11 @@
     cursor: pointer;
     margin-top: 10px;
   }
+
+  .sign-in-btn a{
+    color: white;
+    text-decoration: none;
+  }
   
   /* 右側區塊 */
   .signup-section {
@@ -198,6 +203,11 @@
     cursor: pointer;
     font-weight: bold;
     transition: background 0.3s;
+  }
+
+  .signup-btn a {
+    text-decoration: none;
+    color: #36b8d8;
   }
   
   .signup-btn:hover {
