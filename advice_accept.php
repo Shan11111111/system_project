@@ -56,30 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('refresh:2;url=homepage.php');
     }
 
-    // 關閉連線
-    mysqli_stmt_close($stmt_advice);
-    mysqli_close($link);
-}
-?>
-
-
-
-<?php
-session_start();
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $advice_title=$_POST['advice_title'];
-    $advice_content=$_POST['advice_content'];
-    $category=$_POST['category'];
-    $img=$_POST['file'];
-    $user_id=$_SESSION['user_id'];
-
-    // 連接到資料庫
-    //Step 1
-    $link = mysqli_connect('localhost', 'root', '', 'system_project');
-    if (!$link) {
-        die("資料庫連線失敗: " . mysqli_connect_error());
-    }
 
     //Step 3:// 使用 prepared statement 防止 SQL 注入
     $sql = "insert into advice(user_id,advice_title,advice_content,category)values('$user_id','$advice_title','$advice_content','$category')";
