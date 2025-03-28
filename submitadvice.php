@@ -86,9 +86,7 @@
         <!-- 右側表單 -->
         <div class="right-panel">
 
-            <form action="#" method="POST">
-
-            <form action="advice_accept.php" method="post" >
+            <form action="advice_accept.php" method="post" enctype="multipart/form-data">
 
                 <!-- 標題輸入 -->
                 <label for="title">標題</label>
@@ -114,11 +112,12 @@
                 <label>檔案 / 照片上傳</label>
                 <button type="button" class="upload-btn" id="uploadBox">上傳</button>
                 <input type="file" id="fileInput" name="file" accept="image/*" hidden>
-                
+
 
                 <!-- 提交按鈕 -->
                 <button type="submit" class="submit">提交</button>
             </form>
+
         </div>
     </div>
     <script>
@@ -129,13 +128,13 @@
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault(); // 防止跳頁
-                    const parent = btn.parentElement;
-                    parent.classList.toggle('active');
-                });
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); // 防止跳頁
+                const parent = btn.parentElement;
+                parent.classList.toggle('active');
             });
-    
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
             const categoryButtons = document.querySelectorAll(".category");
             const selectedCategoryInput = document.getElementById("selected-category");
