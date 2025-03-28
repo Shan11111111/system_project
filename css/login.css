@@ -92,9 +92,6 @@
     cursor: pointer;
   }
   
-  .facebook { background: #3b5998; }
-  .google { background: #db4437; }
-  .linkedin { background: #0077b5; }
   
   .or {
     text-align: center;
@@ -162,4 +159,48 @@
   .signup-btn:hover {
     background: #f2f2f2;
   }
+
+  @media (max-width: 768px) {
+    .container1 {
+      flex-direction: column;
+    }
+  
+    .login-section,
+    .signup-section {
+      width: 100%;
+      height: auto;
+      padding: 40px 20px;
+    }
+  
+    .signup-section {
+      order: -1; /* 移到上方 */
+      padding-bottom: 20px;
+    }
+  
+    .top-bar {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        right: 10px;
+        bottom: 15px;
+        width: 100%;
+        margin-bottom: 10px;
+        justify-content: flex-start;
+        z-index: 10;
+      }
+    
+      .back-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    
+      .logo {
+        display: none; 
+      }
+    
+      .login-section {
+        padding-top: 60px; 
+      }
+  }
+  
   
