@@ -53,7 +53,7 @@
 
     <!-- 右側註冊區塊 -->
     <div class="signup-section">
-      <h2>沒有帳號</h2>
+      <h2>沒有帳號?</h2>
       <p>註冊帳號發表建言</p>
       <button class="signup-btn">註冊</button>
     </div>
