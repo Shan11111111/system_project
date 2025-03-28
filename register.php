@@ -64,7 +64,7 @@
                     <input type="password" placeholder="密碼" required />
                     <input type="password" placeholder="確認密碼" required />
 
-                    <button class="sign-in-btn" type="submit">註冊</button>
+                    <button class="sign-in-btn" type="submit"><a href="login.php">註冊</a></button>
                 </form>
             </div>
         </div>
@@ -73,7 +73,7 @@
         <div class="signup-section">
             <h2>歡迎回來!</h2>
             <p>已經有帳號了嗎</p>
-            <button class="signup-btn" onclick="window.location.href='index.html'">登入</button>
+            <button class="signup-btn" ><a href="login.php">登入</a></button>
         </div>
     </div>
 </body>
