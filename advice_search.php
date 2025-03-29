@@ -41,8 +41,8 @@
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
                         <a href="submitadvice.php">發布建言</a>
-                        <a href="#">最新建言</a>
-                        <a href="#">熱門建言</a>
+                        <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
+                        <a href="advice_search.php">熱門建言</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -55,8 +55,8 @@
             </div>
 
             <div class="nav-right desktop-menu">
-                <a href="#" class="nav-item">登入</a>
-                <a href="#" class="nav-item">註冊</a>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
             </div>
         </div>
 
@@ -66,7 +66,7 @@
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
                     <a href="submitadvice.php">發布建言</a>
-                    <a href="#">最新建言</a>
+                    <a href="">最新建言</a><!--之後要設(不知道是前端還後端)-->
                     <a href="#">熱門建言</a>
                 </div>
             </div>
@@ -77,8 +77,8 @@
                     <a href="#">成功案例</a>
                 </div>
             </div>
-            <a href="#" class="nav-item">登入</a>
-            <a href="#" class="nav-item">註冊</a>
+            <a href="login.php" class="nav-item">登入</a>
+            <a href="register.php" class="nav-item">註冊</a>
         </div>
     </nav>
 
@@ -145,16 +145,16 @@
                 parent.classList.toggle('active');
             });
         });
-
+//後端這邊自己調內容，我用array的方式建立十五條建言，title那些會直接加到下面寫的html框架中喔
         const data = Array.from({ length: 25 }, (_, i) => ({
             title: `建言標題 ${i + 1}`,
             comments: Math.floor(Math.random() * 80),
             deadline: '剩約天',
             status: i % 2 === 0 ? 'active' : 'ended',
-            passed: i % 3 === 0, // 每三個通過一次
+            passed: i % 3 === 0, // 每三個通過一次(後端之後要改，通過不通過)
             publishDate: 'date'
         }));
-
+//後端應該不用動這邊，這是每十條建言跳頁
         let currentTab = 'active';
         let currentPage = 1;
         const itemsPerPage = 10;
@@ -167,18 +167,25 @@
             renderSuggestions();
         }
 
+        
+
         function renderSuggestions() {
             const list = document.getElementById('suggestion-list');
             list.innerHTML = '';
             const filtered = data.filter(item => item.status === currentTab);
             const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
+//連去advice_detail.php
             paginated.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'suggestion';
+div.className = 'suggestion';
+div.onclick = () => {
+  window.location.href = `advice_detail.php`;//後端好像要加這個:?id=${item.id || ((currentPage - 1) * itemsPerPage + index + 1)
+};
 
+//上面那個是已結束的格式，下面是進行中
                 if (currentTab === 'ended') {
                     div.innerHTML = `
+                    
             <img src="https://placekitten.com/300/169" alt="建言圖">
             <div class="suggestion-content">
               <div class="suggestion-title">${item.title}</div>
@@ -189,10 +196,11 @@
                 <span>發布日：${item.publishDate}</span>
               </div>
             </div>
+           
           `;
                 } else {
                     div.innerHTML = `
-            <img src="https://placekitten.com/300/169" alt="建言圖">
+            <img src="https://daebak.tokyo/wp-content/uploads/2025/03/nmixx-20250312-001333-364x252.jpg" alt="建言圖">
             <div class="suggestion-content">
               <div class="suggestion-title">${item.title}</div>
               <div class="suggestion-meta">
@@ -216,7 +224,7 @@
 
             renderPagination(filtered.length);
         }
-
+//控制換頁(後端應該不用動這邊)
         function renderPagination(totalItems) {
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const pagination = document.getElementById('pagination');
@@ -244,11 +252,11 @@
                 pagination.appendChild(next);
             }
         }
-
+//搜尋做完自己刪
         function search() {
             alert("沒做");
         }
-        
+//最新最舊箭頭控制        
         function toggleArrow(btn) {
             const icon = btn.querySelector("i");
             icon.classList.toggle("fa-caret-up");
