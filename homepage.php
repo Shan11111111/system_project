@@ -48,11 +48,11 @@
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])) { ?>
-                            <a href="submitadvice.php">發布建言</a>
+                            <a href="submitadvice.php">提交建言</a>
                         <?php } else { ?>
-                            <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">發布建言</a>
+                            <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">提交建言</a>
                         <?php } ?>
-                        <a href="submitadvice.php">提交建言</a>
+                        
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -94,9 +94,9 @@
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
                     <?php if (isset($_SESSION['user_id'])) { ?>
-                        <a href="submitadvice.php">發布建言</a>
+                        <a href="submitadvice.php">提交建言</a>
                     <?php } else { ?>
-                        <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">發布建言</a>
+                        <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">提交建言</a>
                     <?php } ?>
 
                     <a href="#">最新建言</a>
