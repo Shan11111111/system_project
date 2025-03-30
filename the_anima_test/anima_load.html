@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加載動畫範例</title>
+    <!-- three.js v89 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/89/three.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            /* 確保加載動畫在最上層 */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>test</h1>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> -->
+    
+    <script>
+        var camera, scene, renderer;
+        var geometry, material, mesh;
+  
+        init();
+        animate();
+  
+        function init() {
+  
+            camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 ); // 建立新的相機，使用透視效果
+            camera.position.z = 1; // 三維(x,y,z)位置，z軸為1
+  
+            scene = new THREE.Scene(); // 建立新場景
+  
+            geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 ); // 建立四邊形
+            material = new THREE.MeshNormalMaterial(); // 建立RGB的材質
+  
+            mesh = new THREE.Mesh( geometry, material ); // 建立模型
+            scene.add( mesh ); // 將模型匯入至產景
+  
+            renderer = new THREE.WebGLRenderer( { antialias: false } ); // 使用渲染器，並消除鋸齒
+            renderer.setSize( window.innerWidth, window.innerHeight ); // 設定渲染器長寬
+            document.body.appendChild( renderer.domElement ); // 將渲染器匯入至網頁
+  
+        }
+  
+        function animate() {
+  
+            requestAnimationFrame( animate ); // 啟動動畫(60FPS) 
+  
+            mesh.rotation.x += 0.01; // 模型X軸旋轉幅度
+            mesh.rotation.y += 0.02; // 模型Y軸旋轉幅度
+  
+            renderer.render( scene, camera ); // 將場景匯入至渲染器中
+  
+        }
+    </script>
+    <script>
+    setTimeout(() => {
+            // 移除 Three.js 渲染器的畫布
+            const canvas = document.querySelector('canvas');
+            canvas.style.display = 'none';
+        }, 5000); // 5 秒後隱藏動畫
+    </script>
+</body>
+
+</html>

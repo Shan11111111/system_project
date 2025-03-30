@@ -44,7 +44,7 @@ session_start();
                     <!-- 身分 + 學院 選擇 -->
                     <div class="form-row">
                         <div class="select-wrapper">
-                            <select name="role" required>
+                            <select name="level" required>
                                 <option value="" disabled selected hidden>請選擇身分</option>
                                 <option value="student">學生</option>
                                 <option value="teacher">教職員</option>
