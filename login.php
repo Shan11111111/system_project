@@ -36,7 +36,7 @@
         <button class="back-btn" >
          <a href="homepage.php">← Back</a> 
         </button>
-        <div class="logo">孵仁</div>
+        <div class="logo"><img src="img\logo.png" style="width: 90px;"></div>
       </div>
 
       <div class="login-content">

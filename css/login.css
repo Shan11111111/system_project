@@ -1,3 +1,30 @@
+:root {
+  /* 主色調 */
+  --color-yellow: #fff6da;
+  /* 鵝黃色 - 小雞感 */
+  /*navbar*/
+  --color-orange-brown: #D9A679;
+  /* 溫柔橘棕 - 強調/按鈕  */
+  --color-dark-brown: #7c4d2b;
+  /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+  --color-soft-green: #dddfab7f;
+  /* 嫩綠色 - 自然感 */
+  --color-cream: #fff8ed;
+  /* 奶油白 - 背景 */
+
+  /* 字體與邊線 */
+  --color-text: #4B3F2F;
+  /* 深褐灰 - 內文字體 */
+  --color-line: #D7CBB8;
+  --navbar-text: #fff6da
+    /* 淡褐線條 */
+
+    /* 狀態/互動 */
+    --color-hover: #EFC89C;
+  /* hover/active 狀態用的柔橘 */
+}
 * {
     box-sizing: border-box;
     margin: 0;
@@ -8,7 +35,7 @@
   body {
     display: flex;
     min-height: 100vh;
-    background-color: #fff;
+    background-color: #f5eacb;
   }
   
   .container1 {
@@ -51,7 +78,7 @@
   }
 
   .back-btn a {
-    color: #00796b;
+    color:var(--color-dark-brown);
     text-decoration: none;
   }
   
@@ -73,6 +100,7 @@
   .login-section h1 {
     font-size: 36px;
     margin-bottom: 10px;
+    color: var(--color-dark-brown);
   }
   
   .login-section p {
@@ -107,13 +135,13 @@
     width: 100%;
     padding: 14px;
     border-radius: 25px;
-    border: 1px solid #eee;
+    border: 1px solid #d8cccc;
     margin-bottom: 15px;
-    background: #f1f9f6;
+    background: white;
   }
   
   .sign-in-btn {
-    background: #25b89a;
+    background: var(--color-dark-brown);
     border: none;
     padding: 14px;
     width: 100%;
@@ -132,7 +160,8 @@
   
   .signup-section {
     width: 35%;
-    background: linear-gradient(to bottom right, #23bfa0, #36b8d8);
+    background-image: 
+  url('../img/homepage.png');
     color: white;
     display: flex;
     flex-direction: column;
@@ -145,12 +174,14 @@
   .signup-section h2 {
     font-size: 32px;
     margin-bottom: 20px;
+    color: var(--color-dark-brown);
   }
   
   .signup-section p {
     font-size: 16px;
     margin-bottom: 30px;
     max-width: 300px;
+    color: var(--color-dark-brown);
   }
   
   .signup-btn {
@@ -167,7 +198,7 @@
 
   .signup-btn a {
     text-decoration: none;
-    color: #36b8d8;
+    color: var(--color-dark-brown);
   }
   
   .signup-btn:hover {
