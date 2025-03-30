@@ -426,7 +426,7 @@
                                             src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">學生餐廳應增加蔬食選項</div>
+                                        <div class="adv_content_text">學生餐廳應增加蔬食選項 </div>
                                         <div class="progress_line">
                                             <progress value="35" max="100"></progress>
                                             <div class="progress_percent">35%</div>

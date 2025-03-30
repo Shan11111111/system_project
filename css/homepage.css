@@ -515,7 +515,7 @@ progress {
   color: #333;
 }
 
-/* For small devices */
+/* For small device */
 
 @media (max-width: 768px) {
   .right-controls {
