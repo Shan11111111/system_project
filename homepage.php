@@ -31,7 +31,12 @@
     <nav class="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-            <div class="logo">LOGO</div>
+            <a href="homepage.php">
+                <div class="logo">
+                    <img src="img/logo.png" style="width: 90px;">
+                </div>
+            </a>
+
 
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
@@ -45,11 +50,11 @@
                             <a href="submitadvice.php">發布建言</a>
                         <?php } else { ?>
                             <script>
-                                alert("請先登入!發布建言為學生與教職人員專屬功能!");
-                                window.location.href = "#"; // 導向登入頁面
+                                //alert("請先登入!發布建言為學生與教職人員專屬功能!");
+                                // window.location.href = "#"; // 導向登入頁面
                             </script>
                         <?php } ?>
-
+                        <a href="submitadvice.php">提交建言</a>
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -67,7 +72,7 @@
                 <?php if (isset($_SESSION['user_id'])) { ?>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -94,7 +99,7 @@
                     <?php } else { ?>
                         <script>
                             //alert("請先登入!發布建言為學生與教職人員專屬功能!");
-                           // window.location.href = "#"; // 導向登入頁面
+                            // window.location.href = "#"; // 導向登入頁面
                         </script>
                     <?php } ?>
 
@@ -113,7 +118,7 @@
                 <a class="nav-item">會員專區</a>
                 <a href="javascript:void(0);" class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -138,6 +143,7 @@
                 <div class="chicken">
                     <img src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180">
                 </div>
+                 
             </div>
             <div class="new_propose">
                 <div class="chicken">
@@ -191,8 +197,6 @@
                         <div class="swiper-wrapper">
 
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
-
-                            <!-- Slide 2 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
@@ -200,145 +204,154 @@
                                             src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">操場的圍欄破了，會危險</div>
-                                        <div class="progress_line">
-                                            <progress value="50" max="100"></progress>
-                                            <div class="progress_percent">50%</div>
-                                            <i class="fa-regular fa-user">25</i>
+                                        <div class="adv_content_text">操場的圍欄破了，會危險拜託快修奛嗎寶半</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 60%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>25</span>
+                                            <span>60%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 3 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">圖書館冷氣太強了</div>
-                                        <div class="progress_line">
-                                            <progress value="70" max="100"></progress>
-                                            <div class="progress_percent">70%</div>
-                                            <i class="fa-regular fa-user">35</i>
+                                        <div class="adv_content_text">學校後門晚上無路燈，學生很害怕</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 45%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>18</span>
+                                            <span>45%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 4 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">希望週五可以加開夜間課程</div>
-                                        <div class="progress_line">
-                                            <progress value="40" max="100"></progress>
-                                            <div class="progress_percent">40%</div>
-                                            <i class="fa-regular fa-user">20</i>
+                                        <div class="adv_content_text">公園缺少遮蔭處，希望增加休息涼亭</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 70%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>34</span>
+                                            <span>70%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 5 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">福利社飲料機經常壞掉</div>
-                                        <div class="progress_line">
-                                            <progress value="30" max="100"></progress>
-                                            <div class="progress_percent">30%</div>
-                                            <i class="fa-regular fa-user">15</i>
+                                        <div class="adv_content_text">人行道磁磚凸起，長者容易跌倒</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 80%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>40</span>
+                                            <span>80%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 6 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">教室椅子有的壞掉了</div>
-                                        <div class="progress_line">
-                                            <progress value="60" max="100"></progress>
-                                            <div class="progress_percent">60%</div>
-                                            <i class="fa-regular fa-user">30</i>
+                                        <div class="adv_content_text">希望社區增設寵物友善空間</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 50%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>21</span>
+                                            <span>50%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 7 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">建議設置更多回收桶</div>
-                                        <div class="progress_line">
-                                            <progress value="80" max="100"></progress>
-                                            <div class="progress_percent">80%</div>
-                                            <i class="fa-regular fa-user">40</i>
+                                        <div class="adv_content_text">籃球場地板破損，打球容易受傷</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 30%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>12</span>
+                                            <span>30%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 8 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">學生餐廳應增加蔬食選項</div>
-                                        <div class="progress_line">
-                                            <progress value="35" max="100"></progress>
-                                            <div class="progress_percent">35%</div>
-                                            <i class="fa-regular fa-user">18</i>
+                                        <div class="adv_content_text">車流多但沒紅綠燈，建議設置號誌</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 65%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>28</span>
+                                            <span>65%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 9 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">校門口機車亂停，建議規劃停車格</div>
-                                        <div class="progress_line">
-                                            <progress value="90" max="100"></progress>
-                                            <div class="progress_percent">90%</div>
-                                            <i class="fa-regular fa-user">45</i>
+                                        <div class="adv_content_text">垃圾桶不足，常造成街道髒亂</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 90%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>50</span>
+                                            <span>90%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
-                <!-- Swiper container -->
             </div>
 
             <!--new建言查看��--->
@@ -348,9 +361,11 @@
                         <div class="new_tag">NEW</div>
                         <div class="right-controls">
                             <div class="swiper-button-prev-2"><i class="fa-solid fa-arrow-left"
-                                    style="color: #a5a0a0;"></i></div>
+                                    style="color: #a5a0a0;"></i>
+                            </div>
                             <div class="swiper-button-next-2"><i class="fa-solid fa-arrow-right"
-                                    style="color: #a5a0a0;"></i></div>
+                                    style="color: #a5a0a0;"></i>
+                            </div>
                             <div class="more"><a href="">更多</a></div>
                         </div>
                     </div>
@@ -359,7 +374,6 @@
 
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
-                            <!-- Slide 2 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
@@ -367,461 +381,484 @@
                                             src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">操場的圍欄破了，會危險</div>
-                                        <div class="progress_line">
-                                            <progress value="50" max="100"></progress>
-                                            <div class="progress_percent">50%</div>
-                                            <i class="fa-regular fa-user">25</i>
+                                        <div class="adv_content_text">操場的圍欄破了，會危險拜託快修奛嗎寶半</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 60%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>25</span>
+                                            <span>60%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 3 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">圖書館冷氣太強了</div>
-                                        <div class="progress_line">
-                                            <progress value="70" max="100"></progress>
-                                            <div class="progress_percent">70%</div>
-                                            <i class="fa-regular fa-user">35</i>
+                                        <div class="adv_content_text">學校後門晚上無路燈，學生很害怕</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 45%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>18</span>
+                                            <span>45%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 4 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">希望週五可以加開夜間課程</div>
-                                        <div class="progress_line">
-                                            <progress value="40" max="100"></progress>
-                                            <div class="progress_percent">40%</div>
-                                            <i class="fa-regular fa-user">20</i>
+                                        <div class="adv_content_text">公園缺少遮蔭處，希望增加休息涼亭</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 70%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>34</span>
+                                            <span>70%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 5 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">福利社飲料機經常壞掉</div>
-                                        <div class="progress_line">
-                                            <progress value="30" max="100"></progress>
-                                            <div class="progress_percent">30%</div>
-                                            <i class="fa-regular fa-user">15</i>
+                                        <div class="adv_content_text">人行道磁磚凸起，長者容易跌倒</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 80%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>40</span>
+                                            <span>80%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 6 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">教室椅子有的壞掉了</div>
-                                        <div class="progress_line">
-                                            <progress value="60" max="100"></progress>
-                                            <div class="progress_percent">60%</div>
-                                            <i class="fa-regular fa-user">30</i>
+                                        <div class="adv_content_text">希望社區增設寵物友善空間</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 50%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>21</span>
+                                            <span>50%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 7 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">建議設置更多回收桶</div>
-                                        <div class="progress_line">
-                                            <progress value="80" max="100"></progress>
-                                            <div class="progress_percent">80%</div>
-                                            <i class="fa-regular fa-user">40</i>
+                                        <div class="adv_content_text">籃球場地板破損，打球容易受傷</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 30%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>12</span>
+                                            <span>30%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 8 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">學生餐廳應增加蔬食選項</div>
-                                        <div class="progress_line">
-                                            <progress value="35" max="100"></progress>
-                                            <div class="progress_percent">35%</div>
-                                            <i class="fa-regular fa-user">18</i>
+                                        <div class="adv_content_text">車流多但沒紅綠燈，建議設置號誌</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 65%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>28</span>
+                                            <span>65%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Slide 9 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
-                                            src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
+                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">校門口機車亂停，建議規劃停車格</div>
-                                        <div class="progress_line">
-                                            <progress value="90" max="100"></progress>
-                                            <div class="progress_percent">90%</div>
-                                            <i class="fa-regular fa-user">45</i>
+                                        <div class="adv_content_text">垃圾桶不足，常造成街道髒亂</div>
+                                        <div class="progress-line">
+                                            <div class="progress" style="width: 90%;"></div>
+                                        </div>
+                                        <div class="card-data">
+                                            <span><i class="fa-regular fa-user"></i>50</span>
+                                            <span>90%</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- Swiper container -->
-            </div>
-
-
-            <!--募資進度查看區--->
-
-            <div class="seek_fund">
-                <div class="seek_advice">募資進度</div>
-                <div class="fund_area">
-                    <div class="top_fund_bar">
-                        <div class="hotfund_tag">HOT</div>
-                        <div class="fund_controls">
-                            <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left" style="color: #a5a0a0"></i></div>
-                            <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right" style="color: #a5a0a0"></i></div>
-                            <div class="more"><a href="#">更多</a></div>
-                        </div>
-                    </div>
-
-                    <!-- Swiper 區塊 -->
-                    <div class="swiper mySwiper3">
-                        <div class="swiper-wrapper">
-                            <!-- 一筆 swiper-slide（含1大圖 + 4小圖） -->
-                            <div class="swiper-slide">
-                                <div class="fund-section">
-                                    <div class="fund-content">
-                                        <!-- 左側大卡片 -->
-                                        <div class="left-big-card">
-                                            <div class="fundraiser-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" alt="" />
-                                                    <div class="donation-count">1K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Support the Marco Family</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 100%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>$155,819 raised</span>
-                                                        <span>100%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- 右側四張小卡片 -->
-                                        <div class="right-small-cards">
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">3.8K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Frank’s Battle Against Leukemia</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 90%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>$321,619</span>
-                                                        <span>90%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">1K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Unterstützung für Ehefrau</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 80%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>€65,285</span>
-                                                        <span>80%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">2.2K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Geef Hayat een kans</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 70%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>€56,140</span>
-                                                        <span>70%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">1K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Behandeling in het buitenland</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 60%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>€38,755</span>
-                                                        <span>60%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- fund-content 結束 -->
-                                </div>
-                            </div>
-                            <!-- 如果有第2組資料可以複製整個 swiper-slide 再放下來 -->
-                            <div class="swiper-slide">
-                                <div class="fund-section">
-                                    <div class="fund-content">
-                                        <!-- 左側大卡片 -->
-                                        <div class="left-big-card">
-                                            <div class="fundraiser-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wz1T6Cnb7gv2ySD2yrcstftNSGrM4ZA1vA&s" alt="" />
-                                                    <div class="donation-count">1K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Support the Marco Family</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 100%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>$155,819 raised</span>
-                                                        <span>100%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- 右側四張小卡片 -->
-                                        <div class="right-small-cards">
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">3.8K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Frank’s Battle Against Leukemia</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 90%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>$321,619</span>
-                                                        <span>90%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">1K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Unterstützung für Ehefrau</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 80%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>$321,619</span>
-                                                        <span>80%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">2.2K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Geef Hayat een kans</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 70%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>$321,619</span>
-                                                        <span>70%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                    <div class="donation-count">1K donations</div>
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">Behandeling in het buitenland</div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: 60%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <span>$321,619</span>
-                                                        <span>60%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- fund-content 結束 -->
-                                </div>
-                            </div>
-
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
 
-        <footer>
+        <!--募資進度查看區--->
 
-        </footer>
+        <div class="seek_fund">
+            <div class="seek_advice">募資進度</div>
+            <div class="fund_area">
+                <div class="top_fund_bar">
+                    <div class="hotfund_tag">HOT</div>
+                    <div class="fund_controls">
+                        <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left" style="color: #a5a0a0"></i>
+                        </div>
+                        <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right" style="color: #a5a0a0"></i>
+                        </div>
+                        <div class="more"><a href="#">更多</a></div>
+                    </div>
+                </div>
+
+                <!-- Swiper 區塊 -->
+                <div class="swiper mySwiper3">
+                    <div class="swiper-wrapper">
+                        <!-- 一筆 swiper-slide（含1大圖 + 4小圖） -->
+                        <div class="swiper-slide">
+                            <div class="fund-section">
+                                <div class="fund-content">
+                                    <!-- 左側大卡片 -->
+                                    <div class="left-big-card">
+                                        <div class="fundraiser-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s"
+                                                    alt="" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Support the Marco Family</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 100%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$155,819 raised</span>
+                                                    <span>100%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 右側四張小卡片 -->
+                                    <div class="right-small-cards">
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">3.8K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Frank’s Battle Against Leukemia
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 90%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>90%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Unterstützung für Ehefrau</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 80%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>€65,285</span>
+                                                    <span>80%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">2.2K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Geef Hayat een kans</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 70%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>€56,140</span>
+                                                    <span>70%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Behandeling in het buitenland
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 60%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>€38,755</span>
+                                                    <span>60%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- fund-content 結束 -->
+                            </div>
+                        </div>
+                        <!-- 如果有第2組資料可以複製整個 swiper-slide 再放下來 -->
+                        <div class="swiper-slide">
+                            <div class="fund-section">
+                                <div class="fund-content">
+                                    <!-- 左側大卡片 -->
+                                    <div class="left-big-card">
+                                        <div class="fundraiser-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wz1T6Cnb7gv2ySD2yrcstftNSGrM4ZA1vA&s"
+                                                    alt="" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Support the Marco Family</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 100%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$155,819 raised</span>
+                                                    <span>100%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 右側四張小卡片 -->
+                                    <div class="right-small-cards">
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">3.8K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Frank’s Battle Against Leukemia
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 90%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>90%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Unterstützung für Ehefrau</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 80%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>80%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">2.2K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Geef Hayat een kans</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 70%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>70%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img
+                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Behandeling in het buitenland
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 60%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>60%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- fund-content 結束 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        footer
+
+    </footer>
 
 
-        <!-- Swiper JS -->
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-        <!-- 初始化 Swiper -->
-        <script>
-            // 點擊漢堡切換 menu
-            document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
-                document.getElementById('mobile-menu').classList.toggle('active');
+    <!-- 初始化 Swiper -->
+    <script>
+        // 點擊漢堡切換 menu
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        });
+
+        // 手機 dropdown 點擊展開
+        document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); // 防止跳頁
+                const parent = btn.parentElement;
+                parent.classList.toggle('active');
             });
+        });
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 400) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
 
-            // 手機 dropdown 點擊展開
-            document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault(); // 防止跳頁
-                    const parent = btn.parentElement;
-                    parent.classList.toggle('active');
-                });
-            });
-            window.addEventListener('scroll', function() {
-                const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 400) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
+        /*CARD SLIDER*/
+        const swiperConfigs = [{
+            container: ".mySwiper1",
+            next: ".swiper-button-next-1",
+            prev: ".swiper-button-prev-1"
+        },
+        {
+            container: ".mySwiper2",
+            next: ".swiper-button-next-2",
+            prev: ".swiper-button-prev-2"
+        }
+        ];
 
-            /*CARD SLIDER*/
-            const swiperConfigs = [{
-                    container: ".mySwiper1",
-                    next: ".swiper-button-next-1",
-                    prev: ".swiper-button-prev-1"
-                },
-                {
-                    container: ".mySwiper2",
-                    next: ".swiper-button-next-2",
-                    prev: ".swiper-button-prev-2"
-                }
-            ];
-
-            swiperConfigs.forEach(config => {
-                new Swiper(config.container, {
-                    slidesPerView: 'auto', // 用 auto 配合固定寬
-                    spaceBetween: 24,
-                    loop: true,
-                    speed: 800,
-                    navigation: {
-                        nextEl: config.next,
-                        prevEl: config.prev
-                    },
-                    slidesPerGroupAuto: true, // 自動根據可視區的卡片數滑動
-
-                    breakpoints: {
-                        768: {
-                            slidesPerView: 4,
-                            slidesPerGroup: 4
-                        },
-                        480: {
-                            slidesPerView: 2,
-                            slidesPerGroup: 2
-                        },
-                        240: {
-                            slidesPerView: 1,
-                            slidesPerGroup: 1
-                        }
-                    }
-                });
-            });
-            new Swiper(".mySwiper3", {
-                slidesPerView: 1,
-                slidesPerGroup: 1,
+        swiperConfigs.forEach(config => {
+            new Swiper(config.container, {
+                slidesPerView: 'auto', // 用 auto 配合固定寬
+                spaceBetween: 24,
                 loop: true,
-                speed: 900,
+                speed: 800,
                 navigation: {
-                    nextEl: ".swiper-button-next-3",
-                    prevEl: ".swiper-button-prev-3"
+                    nextEl: config.next,
+                    prevEl: config.prev
                 },
+                slidesPerGroupAuto: true, // 自動根據可視區的卡片數滑動
+
                 breakpoints: {
                     768: {
-                        slidesPerView: 1,
-                        slidesPerGroup: 1
+                        slidesPerView: 4,
+                        slidesPerGroup: 4
                     },
-                    1024: {
+                    480: {
+                        slidesPerView: 2,
+                        slidesPerGroup: 2
+                    },
+                    240: {
                         slidesPerView: 1,
                         slidesPerGroup: 1
                     }
                 }
             });
-        </script>
+        });
+        new Swiper(".mySwiper3", {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+            loop: true,
+            speed: 900,
+            navigation: {
+                nextEl: ".swiper-button-next-3",
+                prevEl: ".swiper-button-prev-3"
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 1,
+                    slidesPerGroup: 1
+                },
+                1024: {
+                    slidesPerView: 1,
+                    slidesPerGroup: 1
+                }
+            }
+        });
+    </script>
 
 
 </body>
