@@ -53,30 +53,30 @@
                             <a href="submitadvice.php">提交建言</a>
                         <?php } else { ?>
                             <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
-                        <script>
-                            function showLoginAlert() {
+                            <script>
+                                function showLoginAlert() {
 
-                                Swal.fire({
-                                    icon: 'warning', // 圖示類型
-                                    title: '請先登入',
-                                    text: '發布建言為學生與教職人員專屬功能！',
-                                    confirmButtonText: '確定',
-                                    confirmButtonColor: '#3085d6',
-                                    focusConfirm: false, // 禁用自動聚焦
-                                    didOpen: () => {
-                                        // 禁用滾動
-                                        document.body.style.overflow = 'hidden';
-                                        
-                                    },
-                                    didClose: () => {
-                                        // 恢復滾動
-                                        document.body.style.overflow = '';
-                                        // 恢復滾動位置
-                                        
-                                    }
-                                });
-                            }
-                        </script>
+                                    Swal.fire({
+                                        icon: 'warning', // 圖示類型
+                                        title: '請先登入',
+                                        text: '發布建言為學生與教職人員專屬功能！',
+                                        confirmButtonText: '確定',
+                                        confirmButtonColor: '#3085d6',
+                                        focusConfirm: false, // 禁用自動聚焦
+                                        didOpen: () => {
+                                            // 禁用滾動
+                                            document.body.style.overflow = 'hidden';
+
+                                        },
+                                        didClose: () => {
+                                            // 恢復滾動
+                                            document.body.style.overflow = '';
+                                            // 恢復滾動位置
+
+                                        }
+                                    });
+                                }
+                            </script>
                         <?php } ?>
 
                         <a href="#">最新建言</a>
