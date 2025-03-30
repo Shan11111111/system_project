@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -25,7 +26,7 @@
 </head>
 
 <body>
-    <?php session_start(); ?>
+
     <!-- Navbar -->
 
     <nav class="navbar">
@@ -44,10 +45,7 @@
                         <?php if (isset($_SESSION['user_id'])) { ?>
                             <a href="submitadvice.php">發布建言</a>
                         <?php } else { ?>
-                            <script>
-                                alert("請先登入!發布建言為學生與教職人員專屬功能!");
-                                window.location.href = "#"; // 導向登入頁面
-                            </script>
+                            <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">發布建言</a>
                         <?php } ?>
 
                         <a href="#">最新建言</a>
@@ -65,9 +63,10 @@
 
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
+                    <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -92,10 +91,7 @@
                     <?php if (isset($_SESSION['user_id'])) { ?>
                         <a href="submitadvice.php">發布建言</a>
                     <?php } else { ?>
-                        <script>
-                            //alert("請先登入!發布建言為學生與教職人員專屬功能!");
-                           // window.location.href = "#"; // 導向登入頁面
-                        </script>
+                        <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">發布建言</a>
                     <?php } ?>
 
                     <a href="#">最新建言</a>
@@ -109,11 +105,15 @@
                     <a href="#">成功案例</a>
                 </div>
             </div>
+
+
+
+        
             <?php if (isset($_SESSION['user_id'])) { ?>
-                <a class="nav-item">會員專區</a>
-                <a href="javascript:void(0);" class="nav-item" id="logout-link-mobile">登出</a>
+                <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -517,8 +517,10 @@
                     <div class="top_fund_bar">
                         <div class="hotfund_tag">HOT</div>
                         <div class="fund_controls">
-                            <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left" style="color: #a5a0a0"></i></div>
-                            <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right" style="color: #a5a0a0"></i></div>
+                            <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left"
+                                    style="color: #a5a0a0"></i></div>
+                            <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right"
+                                    style="color: #a5a0a0"></i></div>
                             <div class="more"><a href="#">更多</a></div>
                         </div>
                     </div>
@@ -534,7 +536,8 @@
                                         <div class="left-big-card">
                                             <div class="fundraiser-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" alt="" />
+                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s"
+                                                        alt="" />
                                                     <div class="donation-count">1K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -553,7 +556,8 @@
                                         <div class="right-small-cards">
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">3.8K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -570,7 +574,8 @@
 
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">1K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -587,7 +592,8 @@
 
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">2.2K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -604,7 +610,8 @@
 
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">1K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -631,7 +638,8 @@
                                         <div class="left-big-card">
                                             <div class="fundraiser-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wz1T6Cnb7gv2ySD2yrcstftNSGrM4ZA1vA&s" alt="" />
+                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wz1T6Cnb7gv2ySD2yrcstftNSGrM4ZA1vA&s"
+                                                        alt="" />
                                                     <div class="donation-count">1K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -650,7 +658,8 @@
                                         <div class="right-small-cards">
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">3.8K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -667,7 +676,8 @@
 
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">1K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -684,7 +694,8 @@
 
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">2.2K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -701,7 +712,8 @@
 
                                             <div class="fundraiser-card small-card">
                                                 <div class="card-image">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                    <img
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
                                                     <div class="donation-count">1K donations</div>
                                                 </div>
                                                 <div class="card-info">
@@ -739,19 +751,19 @@
         <!-- 初始化 Swiper -->
         <script>
             // 點擊漢堡切換 menu
-            document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
                 document.getElementById('mobile-menu').classList.toggle('active');
             });
 
             // 手機 dropdown 點擊展開
             document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
+                btn.addEventListener('click', function (e) {
                     e.preventDefault(); // 防止跳頁
                     const parent = btn.parentElement;
                     parent.classList.toggle('active');
                 });
             });
-            window.addEventListener('scroll', function() {
+            window.addEventListener('scroll', function () {
                 const navbar = document.querySelector('.navbar');
                 if (window.scrollY > 400) {
                     navbar.classList.add('scrolled');
@@ -762,15 +774,15 @@
 
             /*CARD SLIDER*/
             const swiperConfigs = [{
-                    container: ".mySwiper1",
-                    next: ".swiper-button-next-1",
-                    prev: ".swiper-button-prev-1"
-                },
-                {
-                    container: ".mySwiper2",
-                    next: ".swiper-button-next-2",
-                    prev: ".swiper-button-prev-2"
-                }
+                container: ".mySwiper1",
+                next: ".swiper-button-next-1",
+                prev: ".swiper-button-prev-1"
+            },
+            {
+                container: ".mySwiper2",
+                next: ".swiper-button-next-2",
+                prev: ".swiper-button-prev-2"
+            }
             ];
 
             swiperConfigs.forEach(config => {
