@@ -22,7 +22,9 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-
+    <!-- 引入 SweetAlert2 :美觀彈出未登入警告圖示-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -50,9 +52,33 @@
                         <?php if (isset($_SESSION['user_id'])) { ?>
                             <a href="submitadvice.php">提交建言</a>
                         <?php } else { ?>
-                            <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">提交建言</a>
+                            <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                        <script>
+                            function showLoginAlert() {
+
+                                Swal.fire({
+                                    icon: 'warning', // 圖示類型
+                                    title: '請先登入',
+                                    text: '發布建言為學生與教職人員專屬功能！',
+                                    confirmButtonText: '確定',
+                                    confirmButtonColor: '#3085d6',
+                                    focusConfirm: false, // 禁用自動聚焦
+                                    didOpen: () => {
+                                        // 禁用滾動
+                                        document.body.style.overflow = 'hidden';
+                                        
+                                    },
+                                    didClose: () => {
+                                        // 恢復滾動
+                                        document.body.style.overflow = '';
+                                        // 恢復滾動位置
+                                        
+                                    }
+                                });
+                            }
+                        </script>
                         <?php } ?>
-                        
+
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -96,7 +122,29 @@
                     <?php if (isset($_SESSION['user_id'])) { ?>
                         <a href="submitadvice.php">提交建言</a>
                     <?php } else { ?>
-                        <a href="javascript:void(0);" onclick="alert('請先登入!發布建言為學生與教職人員專屬功能!')">提交建言</a>
+                        <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                        <script>
+                            function showLoginAlert() {
+                                Swal.fire({
+                                    icon: 'warning', // 圖示類型
+                                    title: '請先登入',
+                                    text: '發布建言為學生與教職人員專屬功能！',
+                                    confirmButtonText: '確定',
+                                    confirmButtonColor: '#3085d6',
+                                    focusConfirm: false, // 禁用自動聚焦
+                                    didOpen: () => {
+                                        // 禁用滾動
+                                        document.body.style.overflow = 'hidden';
+                                    },
+                                    didClose: () => {
+                                        // 恢復滾動
+                                        document.body.style.overflow = '';
+                                        // 恢復滾動位置
+                                        window.scrollTo(0, scrollTop);
+                                    }
+                                });
+                            }
+                        </script>
                     <?php } ?>
 
                     <a href="#">最新建言</a>
@@ -113,7 +161,7 @@
 
 
 
-        
+
             <?php if (isset($_SESSION['user_id'])) { ?>
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
@@ -143,7 +191,7 @@
                 <div class="chicken">
                     <img src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180">
                 </div>
-                 
+
             </div>
             <div class="new_propose">
                 <div class="chicken">
