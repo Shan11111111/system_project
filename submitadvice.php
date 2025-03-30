@@ -19,6 +19,7 @@
 </head>
 
 <body>
+    <?php session_start(); ?>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
@@ -33,7 +34,13 @@
                 <div class="dropdown">
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
-                        <a href="submitadvice.php">發布建言</a>
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <a href="submitadvice.php">發布建言</a>
+                        <?php else: ?>
+                            <script>alert("請先登入");</script>
+                            <a>發布建言</a>
+                        <?php endif; ?>
+
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -48,8 +55,13 @@
             </div>
 
             <div class="nav-right desktop-menu">
-                <a href="#" class="nav-item">登入</a>
-                <a href="#" class="nav-item">註冊</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a class="nav-item">會員專區</a>
+                    <a href="logout.php" class="nav-item">登出</a>
+                <?php else: ?>
+                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="register.php" class="nav-item">註冊</a>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -58,7 +70,13 @@
             <div class="dropdown">
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
-                    <a href="submitadvice.php">發布建言</a>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="submitadvice.php">發布建言</a>
+                    <?php else: ?>
+                        <script>alert("請先登入");</script>
+                        <a>發布建言</a>
+                    <?php endif; ?>
+
                     <a href="#">最新建言</a>
                     <a href="#">熱門建言</a>
                 </div>
@@ -70,8 +88,14 @@
                     <a href="#">成功案例</a>
                 </div>
             </div>
-            <a href="#" class="nav-item">登入</a>
-            <a href="#" class="nav-item">註冊</a>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <a class="nav-item">會員專區</a>
+                <a href="logout.php" class="nav-item">登出</a>
+            <?php else: ?>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
+            <?php endif; ?>
+            
         </div>
     </nav>
     <div class="container1">
@@ -86,9 +110,7 @@
         <!-- 右側表單 -->
         <div class="right-panel">
 
-            <form action="#" method="POST">
-
-            <form action="advice_accept.php" method="post" >
+            <form action="advice_accept.php" method="post" enctype="multipart/form-data">
 
                 <!-- 標題輸入 -->
                 <label for="title">標題</label>
@@ -114,11 +136,12 @@
                 <label>檔案 / 照片上傳</label>
                 <button type="button" class="upload-btn" id="uploadBox">上傳</button>
                 <input type="file" id="fileInput" name="file" accept="image/*" hidden>
-                
+
 
                 <!-- 提交按鈕 -->
                 <button type="submit" class="submit">提交</button>
             </form>
+
         </div>
     </div>
     <script>
@@ -129,13 +152,13 @@
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault(); // 防止跳頁
-                    const parent = btn.parentElement;
-                    parent.classList.toggle('active');
-                });
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); // 防止跳頁
+                const parent = btn.parentElement;
+                parent.classList.toggle('active');
             });
-    
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
             const categoryButtons = document.querySelectorAll(".category");
             const selectedCategoryInput = document.getElementById("selected-category");

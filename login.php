@@ -33,8 +33,8 @@
     <!-- 左側登入區塊 -->
     <div class="login-section">
       <div class="top-bar">
-        <button class="back-btn" onclick="history.back()">
-          ← Back
+        <button class="back-btn" >
+         <a href="homepage.php">← Back</a> 
         </button>
         <div class="logo">孵仁</div>
       </div>
