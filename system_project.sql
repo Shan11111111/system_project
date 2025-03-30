@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-03-30 04:34:51
+-- 產生時間： 2025-03-30 12:29:25
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -44,7 +44,13 @@ CREATE TABLE `advice` (
 
 INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, `agree`, `category`, `advice_state`, `announce_date`) VALUES
 (1, 412402001, '泳池不乾淨', '提議學生有薪水的打掃泳池', 0, ' 環境', '未處理', '2025-03-23'),
-(2, 412402001, '泳池超級臭', '學校趕快清理', 0, '環境', '未處理', '2025-03-23');
+(2, 412402001, '泳池超級臭', '學校趕快清理', 0, '環境', '未處理', '2025-03-23'),
+(3, 412402002, '123', '學校廁所施工很吵! 希望學校能在假日的時候施工', 0, '設施改善', '未處理', '2025-03-30'),
+(4, 412402002, '456', 'redvsgg', 0, '學術發展', '未處理', '2025-03-30'),
+(8, 412402002, 'gggg', 'chicken', 0, '設施改善', '未處理', '2025-03-30'),
+(9, 412402002, '111', '111', 0, '環保永續', '未處理', '2025-03-30'),
+(16, 412402002, '55', 'qggo', 0, '學術發展', '未處理', '2025-03-30'),
+(17, 412402002, '55', 'qggo', 0, '環保永續', '未處理', '2025-03-30');
 
 -- --------------------------------------------------------
 
@@ -146,8 +152,11 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `password`, `name`, `level`, `email`, `department`) VALUES
 (332478, '332478', '安教授', 'teacher', '332478@m365.fju.edu.tw', '資訊管理學系'),
+(333333, '333333', '王傑明', 'teacher', 'abcd@gmail.com', '外國語文學院'),
 (345678, '345678', '歐陽修', 'manager', '123@gmail.com', '學務處'),
-(412402001, '412402001', '王小明', 'student', 'example@gmail.com', '資訊管理學系');
+(412380012, '444aa', '吉伊卡娃', 'student', 'a@gmail.com', '藝術學院'),
+(412402001, '412402001', '王小明', 'student', 'example@gmail.com', '資訊管理學系'),
+(412402002, 'sss', '吉伊卡娃二號', 'student', 'abc@gmail.com', '文學院');
 
 --
 -- 已傾印資料表的索引
@@ -211,13 +220,13 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice`
 --
 ALTER TABLE `advice`
-  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
 --
 ALTER TABLE `advice_image`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
@@ -247,7 +256,7 @@ ALTER TABLE `funding_people`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=412402002;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=412402003;
 
 --
 -- 已傾印資料表的限制式
