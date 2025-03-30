@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="css\submitadvice.css">
+    <link rel="stylesheet" href="css/submit_advice.css">
     <!-- cdn link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -24,7 +24,11 @@
     <nav class="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-            <div class="logo">LOGO</div>
+            <a href="homepage.php">
+                <div class="logo">
+                    <img src="img/logo.png" style="width: 90px;">
+                </div>
+            </a>
 
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
@@ -37,7 +41,7 @@
                         <?php if (isset($_SESSION['user_id'])): ?>
                             <a href="submitadvice.php">發布建言</a>
                         <?php else: ?>
-                            <script>alert("請先登入");</script>
+                            <script>alert("請先登入") /;</script>
                             <a>發布建言</a>
                         <?php endif; ?>
 
@@ -95,7 +99,7 @@
                 <a href="login.php" class="nav-item">登入</a>
                 <a href="register.php" class="nav-item">註冊</a>
             <?php endif; ?>
-            
+
         </div>
     </nav>
     <div class="container1">

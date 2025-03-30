@@ -1,8 +1,37 @@
+:root {
+  /* 主色調 */
+  --color-yellow: #fff6da;
+  /* 鵝黃色 - 小雞感 */
+  /*navbar*/
+  --color-orange-brown: #D9A679;
+  /* 溫柔橘棕 - 強調/按鈕  */
+  --color-dark-brown: #7c4d2b;
+  /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+  --color-soft-green: #dddfab7f;
+  /* 嫩綠色 - 自然感 */
+  --color-cream: #fff8ed;
+  /* 奶油白 - 背景 */
+
+  /* 字體與邊線 */
+  --color-text: #4B3F2F;
+  /* 深褐灰 - 內文字體 */
+  --color-line: #D7CBB8;
+  --navbar-text: #fff6da
+    /* 淡褐線條 */
+
+    /* 狀態/互動 */
+    --color-hover: #EFC89C;
+  /* hover/active 狀態用的柔橘 */
+}
+
 html,
 body {
   font-family: Arial, sans-serif;
   height: 100%;
   margin: 0;
+  background-color: var(--color-cream);
 }
 
 /* Navbar */
@@ -13,7 +42,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  background: white;
+  background: var(--color-yellow);
   border-radius: 50px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px 170px;
@@ -86,7 +115,7 @@ body {
 }
 
 .dropbtn:hover {
-  color: #d6ae57;
+  color: var(--color-dark-brown);
 }
 
 /* 修正 dropdown 選單位置 & 寬度 */
@@ -96,7 +125,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   top: 100%;
-  background-color: white;
+  background-color: var(--color-yellow);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   min-width: 150px;
@@ -118,6 +147,10 @@ body {
   white-space: nowrap;
 }
 
+.dropdown-content a:hover {
+  color: var(--color-dark-brown);
+}
+
 /* 登入、註冊樣式 */
 .nav-item {
   text-decoration: none;
@@ -125,6 +158,10 @@ body {
   font-size: 16px;
   font-weight: bold;
   padding: 8px 12px;
+}
+
+.nav-item:hover {
+  color: var(--color-dark-brown);
 }
 
 /* 漢堡按鈕 */
@@ -182,7 +219,8 @@ body {
   }
 
   .dropdown:hover .dropdown-content {
-    display: none; /* hover 無效 */
+    display: none;
+    /* hover 無效 */
   }
 
   .dropdown.active .dropdown-content {
@@ -194,15 +232,15 @@ body {
   }
 }
 
-.banner {
-  height: calc(100%);
-  background-image: url(https://png.pngtree.com/background/20230605/original/pngtree-cartoon-farm-in-countryside-with-red-road-beside-red-farm-houses-picture-image_2875744.jpg);
-  background-size: cover;
-  /* 背景圖全屏覆蓋 */
-  background-repeat: no-repeat;
-  /* 禁止重複 */
-  background-position: center;
-  /* 居中對齊 */
+.banner { 
+  height: 100%;
+  background-image: 
+  linear-gradient(to bottom, rgba(0, 0, 0, 0),#b0a99894),
+  url('../img/homepage.png');
+  background-size: cover;          /* 背景圖全屏覆蓋 */
+  background-repeat: no-repeat;    /* 禁止重複 */
+  background-position: center;     /* 居中對齊 */
+  object-fit: fill;
   display: flex;
 }
 
@@ -259,7 +297,7 @@ body {
 
 .philosophy {
   display: flex;
-  background-color: rgb(199, 184, 169);
+  background-color: var(--color-yellow);
   height: 120px;
   align-items: center;
   justify-content: center;
@@ -288,19 +326,21 @@ a {
 }
 
 .seek_advice {
-  font-size: 20px;
+  font-size: 28px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-dark-brown);
   max-width: 1100px;
   margin: auto;
-  padding: 0 14px 20px; /* ✅ 統一左右 padding */
+  padding: 0 14px 20px;
+  /* ✅ 統一左右 padding */
 }
 
 .hot-area {
   max-width: 1100px;
   margin: auto;
-  padding: 0 20px 20px; /* ✅ 統一左右 padding */
-  background-color: #fbfdd2;
+  padding: 0 20px 20px;
+  /* ✅ 統一左右 padding */
+  background-color: rgb(229, 232, 225);
   border-radius: 12px;
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
@@ -311,14 +351,16 @@ a {
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
   max-width: 1100px;
   margin: 30px auto;
-  padding: 0 20px 20px; /* ✅ 統一左右 padding */
-  background-color: #f0e6e6;
+  padding: 0 20px 20px;
+  /* ✅ 統一左右 padding */
+  background-color: rgb(229, 232, 225);
   border-radius: 12px;
 }
 
 .advice_classifedtitle {
   padding: 15px;
 }
+
 .title-bar {
   display: flex;
   justify-content: space-between;
@@ -333,19 +375,23 @@ a {
 }
 
 .hot_tag {
-  background-color: #d6ae57;
-  color: #fff;
+  background-color: #f06b4a;
+  color: white;
+  font-weight: bold;
   padding: 5px 10px;
   font-size: 16px;
   border-radius: 15px;
+  border: 1.5px solid #a5a0a0;
 }
 
 .new_tag {
-  background-color: #eeaeae;
+  background-color: #78cf5e;
   color: #fff;
   padding: 5px 10px;
   font-size: 16px;
   border-radius: 15px;
+  border: 1.5px solid #a5a0a0;
+
 }
 
 /* 修正 `more` 讓它靠右 */
@@ -361,7 +407,7 @@ a {
 
 .more a {
   text-decoration: none;
-  color: #faa702;
+  color: var(--color-dark-brown);
 }
 
 [class^="swiper-button-next"],
@@ -369,7 +415,7 @@ a {
   position: relative !important;
   width: 30px;
   height: 30px;
-  background: white;
+  background: rgb(255, 255, 255);
   border: 2px solid #a5a0a0;
   border-radius: 90px;
   display: flex;
@@ -400,7 +446,8 @@ a {
 .swiper.mySwiper2,
 .swiper .mySwiper3 {
   width: 100%;
-  max-width: unset; /* ✅ 清掉 max-width 限制 */
+  max-width: unset;
+  /* ✅ 清掉 max-width 限制 */
   box-sizing: border-box;
 }
 
@@ -409,7 +456,8 @@ a {
 }
 
 .swiper {
-  width: 100%; /* ✅ 改為自適應 */
+  width: 100%;
+  /* ✅ 改為自適應 */
   max-width: 1100px;
   margin: 0 auto;
   box-sizing: border-box;
@@ -432,12 +480,13 @@ a {
 .adv_content_block {
   width: 100%;
   max-width: 320px;
-  background-color: rgb(231, 226, 187);
+  background-color: rgb(255, 255, 255);
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  border: 0.5px solid #4d4c4c1c;
 
   transition: all 0.3s ease;
   /* ⭐ 平滑動畫 */
@@ -449,7 +498,7 @@ a {
   /* ⭐ 微放大 */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   /* ⭐ 陰影加深 */
-  background-color: #e8da81;
+  background-color: var(--color-yellow);
   /* ⭐ 可選，hover 時稍微變亮 */
 }
 
@@ -477,13 +526,16 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 10px; /* ✅ 上下空間加大 */
+  padding: 10px 15px 10px 15px;
+  /* ✅ 上下空間加大 */
 }
 
 .adv_content_text {
   font-size: 16px;
+  font-weight: 550;
   margin-bottom: 10px;
-  min-height: 48px; /* 可視需求設定固定高度 */
+  min-height: 48px;
+  /* 可視需求設定固定高度 */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -491,50 +543,34 @@ a {
   text-overflow: ellipsis;
 }
 
-.progress_line {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  width: 100%;
-}
-
-.progress_line progress {
-  appearance: none;
-  -webkit-appearance: none;
+.progress-line {
   width: 100%;
   height: 10px;
+  background-color: #e0e0e0; /* 背景條顏色 */
   border-radius: 6px;
   overflow: hidden;
-  background-color: #ffffff; /* ✅ 白底 */
-  border: none;
+  margin-bottom: 5px;
 }
 
-/* 背景條顏色（WebKit） */
-.progress_line progress::-webkit-progress-bar {
-  background-color: #ffffff;
+.progress-line .progress {
+  height: 100%;
+  background-color: #4caf50; /* 進度條顏色 */
+  width: 0%; /* 由 inline style 控制，例如 style="width: 60%;" */
+  border-radius: 6px 0 0 6px; /* 左圓角，右邊如果是滿的才會圓角 */
+  transition: width 0.3s ease; /* 平滑動畫效果 */
 }
 
-/* ✅ 進度條主色：淡紅色 */
-.progress_line progress::-webkit-progress-value {
-  background-color: #eab46c;
-  transition: width 0.3s ease;
-  border-radius: 6px;
-}
-
-/* ✅ Firefox 進度色 */
-.progress_line progress::-moz-progress-bar {
-  background-color: #ff7a7a;
-  border-radius: 6px;
-}
-
-.progress_percent {
+.card-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 14px;
-  color: #333;
+  gap: 10px;
 }
 
-.progress_line i {
-  font-size: 14px;
-  color: #333;
+.card-data  i { 
+  margin-left: 4px;
+  gap: 10px;
 }
 
 /*fund    */
@@ -565,6 +601,8 @@ a {
   padding: 5px 10px;
   font-size: 16px;
   border-radius: 15px;
+  border: 1,5px solid #a5a0a0;
+
 }
 
 .fund_controls {
@@ -579,13 +617,16 @@ a {
   grid-template-columns: 1fr 1fr;
   width: 100%;
   gap: 15px;
-  align-items: stretch; /* 左右欄高度對齊 */
+  align-items: stretch;
+  /* 左右欄高度對齊 */
 }
+
 .fundraiser-card {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
+
 .right-small-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -616,7 +657,8 @@ a {
 
 
 .card-image {
-  height: 80%; /* ✅ 不變動的固定高 */
+  height: 80%;
+  /* ✅ 不變動的固定高 */
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -627,7 +669,8 @@ a {
 .card-image img {
   height: 100%;
   width: 100%;
-  object-fit: fill; /* ✅ 圖片等比縮放，不裁切 */
+  object-fit: fill;
+  /* ✅ 圖片等比縮放，不裁切 */
 }
 
 .fundraiser-card.small-card:hover {
@@ -637,14 +680,17 @@ a {
 }
 
 .left-big-card .card-image {
-  height: 370px; /* 左側大圖高度 */
+  height: 370px;
+  /* 左側大圖高度 */
 }
+
 .fundraiser-card.small-card .card-image {
-  height: 125px; /* 右側小圖高度 */
+  height: 125px;
+  /* 右側小圖高度 */
 }
 
 
-.left-big-card:hover{
+.left-big-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   transition: all 0.3s ease;
@@ -678,7 +724,8 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 20px 10px 20px; /* 建議上下都 10px */
+  padding: 10px 20px 10px 20px;
+  /* 建議上下都 10px */
 }
 
 .card-title {
@@ -686,11 +733,13 @@ a {
   font-size: 1rem;
   margin-bottom: 6px;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 顯示最多兩行 */
+  -webkit-line-clamp: 2;
+  /* 顯示最多兩行 */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 2.8em; /* 固定兩行高度 */
+  height: 2.8em;
+  /* 固定兩行高度 */
   line-height: 1.4em;
 }
 
@@ -699,8 +748,10 @@ a {
   height: 6px;
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 10px; /* ✅ 統一下方間距 */
-  margin-top: 4px; /* ✅ 統一上方間距，讓對齊 */
+  margin-bottom: 10px;
+  /* ✅ 統一下方間距 */
+  margin-top: 4px;
+  /* ✅ 統一上方間距，讓對齊 */
 }
 
 .card-info .progress {
@@ -714,7 +765,12 @@ a {
   justify-content: space-between;
   font-size: 0.85rem;
   color: #555;
-  margin-top: auto; /* ✅ 貼底對齊（若需要） */
+  margin-top: auto;
+  /* ✅ 貼底對齊（若需要） */
+}
+
+.footer{
+  background-color: var(--color-orange-brown);
 }
 
 @media (max-width: 768px) {
