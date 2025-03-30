@@ -246,10 +246,14 @@ body {
   display: flex;
 }
 
+/*首頁五元素*/
+
 .banner1 {
+  margin-top: 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap:10px
 }
 
 .hot_propose {
@@ -266,21 +270,55 @@ body {
   justify-content: flex-end;
 }
 
+.chicken {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid #f4c542;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.banner2 .chicken  {
+  width: 220px;
+  height: 220px;
+}
+.chicken:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.chicken img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 .banner2 {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
+
 }
 
-.banner2 img {
+.banner1 img, .banner2 img ,.banner3 img{
   max-width: 100%;
+  object-fit: cover;
 }
+
+
 
 .banner3 {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap:10px;
+  margin-top: 20px;
+
 }
 
 .hot_fund {
@@ -288,6 +326,7 @@ body {
   display: flex;
   align-items: end;
   justify-content: flex-start;
+  margin-right: 20px;
 }
 
 .new_fund {
@@ -297,6 +336,21 @@ body {
   justify-content: flex-start;
 }
 
+.new_propose .chicken {
+  transform: translateX(70px); /* 向內靠近中心 */
+}
+
+.new_fund .chicken {
+  transform: translateX(-70px); /* 向內靠近中心 */
+}
+
+.chicken_tag{
+  font-size: 20px;
+  color: #e0e0e0;
+  position: absolute;
+}
+
+/*結束*/
 .philosophy {
   display: flex;
   background-color: var(--color-yellow);
