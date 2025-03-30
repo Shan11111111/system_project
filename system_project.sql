@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-03-25 15:40:17
+-- 產生時間： 2025-03-30 04:34:51
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `advice` (
   `advice_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
   `advice_title` varchar(20) DEFAULT NULL,
   `advice_content` text DEFAULT NULL,
-  `agree` int(11) DEFAULT 0,
+  `agree` int(11) DEFAULT 0 COMMENT '是否同意匿名?',
   `category` varchar(20) DEFAULT NULL,
   `advice_state` varchar(20) DEFAULT '未處理',
   `announce_date` date NOT NULL DEFAULT current_timestamp()
@@ -56,7 +56,7 @@ CREATE TABLE `advice_image` (
   `img_id` int(11) NOT NULL,
   `img_name` varchar(255) NOT NULL,
   `img_data` blob NOT NULL,
-  `advice_id` int(11) DEFAULT NULL
+  `advice_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -67,8 +67,8 @@ CREATE TABLE `advice_image` (
 
 CREATE TABLE `agree_record` (
   `agree_record_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `advice_id` int(11) DEFAULT NULL
+  `user_id` int(11) NOT NULL,
+  `advice_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -79,10 +79,10 @@ CREATE TABLE `agree_record` (
 
 CREATE TABLE `comments` (
   `comment_id` int(11) NOT NULL,
-  `advice_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `comment_content` text DEFAULT NULL,
-  `comment_time` date DEFAULT current_timestamp()
+  `advice_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment_content` text NOT NULL,
+  `comment_time` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -100,10 +100,17 @@ INSERT INTO `comments` (`comment_id`, `advice_id`, `user_id`, `comment_content`,
 
 CREATE TABLE `funding` (
   `funding_id` int(11) NOT NULL,
-  `advice_id` int(11) DEFAULT NULL,
-  `money` int(11) DEFAULT 0,
-  `target` int(11) DEFAULT NULL
+  `advice_id` int(11) NOT NULL,
+  `money` int(11) NOT NULL DEFAULT 0,
+  `target` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `funding`
+--
+
+INSERT INTO `funding` (`funding_id`, `advice_id`, `money`, `target`) VALUES
+(1, 1, 0, 1000);
 
 -- --------------------------------------------------------
 
@@ -113,9 +120,9 @@ CREATE TABLE `funding` (
 
 CREATE TABLE `funding_people` (
   `funding_people_id` int(11) NOT NULL,
-  `people_name` varchar(20) DEFAULT NULL,
-  `donate_money` int(11) DEFAULT NULL,
-  `funding_id` int(11) DEFAULT NULL
+  `people_name` varchar(20) NOT NULL,
+  `donate_money` int(11) NOT NULL,
+  `funding_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -126,6 +133,7 @@ CREATE TABLE `funding_people` (
 
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
+  `password` varchar(20) NOT NULL,
   `name` varchar(20) NOT NULL,
   `level` varchar(20) NOT NULL,
   `email` text DEFAULT NULL,
@@ -136,10 +144,10 @@ CREATE TABLE `users` (
 -- 傾印資料表的資料 `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `level`, `email`, `department`) VALUES
-(332478, '安教授', 'teacher', '332478@m365.fju.edu.tw', '資訊管理學系'),
-(345678, '歐陽修', 'manager', '123@gmail.com', '學務處'),
-(412402001, '王小明', 'student', 'example@gmail.com', '資訊管理學系');
+INSERT INTO `users` (`user_id`, `password`, `name`, `level`, `email`, `department`) VALUES
+(332478, '332478', '安教授', 'teacher', '332478@m365.fju.edu.tw', '資訊管理學系'),
+(345678, '345678', '歐陽修', 'manager', '123@gmail.com', '學務處'),
+(412402001, '412402001', '王小明', 'student', 'example@gmail.com', '資訊管理學系');
 
 --
 -- 已傾印資料表的索引
@@ -227,7 +235,7 @@ ALTER TABLE `comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding`
 --
 ALTER TABLE `funding`
-  MODIFY `funding_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `funding_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_people`
