@@ -118,3 +118,4 @@ if (isset($_SESSION['level'])) {
     echo "<script>window.location.href='login.php';</script>";
 }
 ?>
+</html>

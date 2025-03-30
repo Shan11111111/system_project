@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
         logo.classList.add("fade-out");
         myobject.classList.add("fade-out");
         setTimeout(() => {
-            window.location.href = "../homepage.php";
+            window.location.href = "../homepage.php"; // Redirect to homepage.php
         }, 1000); // Wait for fade-out duration before redirecting
     }, 3000); // Duration of rotation
 });

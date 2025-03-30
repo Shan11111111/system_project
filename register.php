@@ -70,7 +70,7 @@ session_start();
                         </div>
                     </div>
 
-                    <input type="int" name="user_id" placeholder="學號" required />
+                    <input type="int" name="user_id" placeholder="學號/教職員編號" required />
                     <input type="email" name="email" placeholder="Email" required />
                     <input type="text" name="name" placeholder="暱稱" required />
                     <input type="password" id="password" name="password" placeholder="密碼" required />
