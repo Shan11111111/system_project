@@ -294,7 +294,6 @@ a {
   max-width: 1100px;
   margin: auto;
   padding: 0 14px 20px; /* ✅ 統一左右 padding */
-
 }
 
 .hot-area {
@@ -481,19 +480,6 @@ a {
   padding: 20px 10px; /* ✅ 上下空間加大 */
 }
 
-.progress_line {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  width: 100%;
-}
-
-progress {
-  flex-grow: 1;
-  height: 10px;
-  width: 100%;
-}
-
 .adv_content_text {
   font-size: 16px;
   margin-bottom: 10px;
@@ -505,9 +491,45 @@ progress {
   text-overflow: ellipsis;
 }
 
+.progress_line {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.progress_line progress {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #ffffff; /* ✅ 白底 */
+  border: none;
+}
+
+/* 背景條顏色（WebKit） */
+.progress_line progress::-webkit-progress-bar {
+  background-color: #ffffff;
+}
+
+/* ✅ 進度條主色：淡紅色 */
+.progress_line progress::-webkit-progress-value {
+  background-color: #eab46c;
+  transition: width 0.3s ease;
+  border-radius: 6px;
+}
+
+/* ✅ Firefox 進度色 */
+.progress_line progress::-moz-progress-bar {
+  background-color: #ff7a7a;
+  border-radius: 6px;
+}
+
 .progress_percent {
   font-size: 14px;
-  color: #555;
+  color: #333;
 }
 
 .progress_line i {
@@ -515,7 +537,174 @@ progress {
   color: #333;
 }
 
-/* For small device */
+/*fund    */
+
+.seek_fund {
+  max-width: 1100px;
+  margin: 30px auto;
+}
+
+.fund_area {
+  background-color: rgb(219, 240, 188);
+  flex-direction: column;
+  padding: 15px 30px 30px 30px;
+  border-radius: 15px;
+
+}
+
+.top_fund_bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.hotfund_tag {
+  background-color: #d6ae57;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 15px;
+}
+
+.fund_controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 2. 左右卡片高度一致（主要容器與卡片內部） */
+.fund-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 15px;
+  align-items: stretch; /* 左右欄高度對齊 */
+}
+.fundraiser-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.right-small-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 100%;
+  gap: 15px;
+}
+
+.swiper .mySwiper3 {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* 卡片樣式共用 */
+.fundraiser-card {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.card-image {
+  height: 80%; /* ✅ 不變動的固定高 */
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+.card-image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* ✅ 圖片等比縮放，不裁切 */
+}
+.fundraiser-card.small-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+
+.left-big-card:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+
+}
+
+.fundraiser-card.small-card .card-title {
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.8em;
+  line-height: 1.4em;
+}
+
+.donation-count {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 20px 10px 20px; /* 建議上下都 10px */
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 顯示最多兩行 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.8em; /* 固定兩行高度 */
+  line-height: 1.4em;
+}
+
+.card-info .progress-bar {
+  background: #eee;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 10px; /* ✅ 統一下方間距 */
+  margin-top: 4px; /* ✅ 統一上方間距，讓對齊 */
+}
+
+.card-info .progress {
+  height: 100%;
+  background: #00b67a;
+  transition: width 0.3s ease;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: auto; /* ✅ 貼底對齊（若需要） */
+}
 
 @media (max-width: 768px) {
   .right-controls {
@@ -530,5 +719,122 @@ progress {
 
   .more {
     margin-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .fund-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .left-big-card {
+    width: 100%;
+  }
+
+  .left-big-card .fundraiser-card {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .left-big-card .card-image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .left-big-card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .left-big-card .card-info {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .left-big-card .card-title {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .left-big-card .progress-bar {
+    height: 6px;
+    margin-bottom: 4px;
+    border-radius: 3px;
+  }
+
+  .left-big-card .card-meta {
+    font-size: 12px;
+    color: #555;
+  }
+
+  .donation-count {
+    position: absolute;
+    bottom: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 0.5rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* 小卡片格式一致 */
+  .right-small-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fundraiser-card.small-card {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .fundraiser-card.small-card .card-image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .fundraiser-card.small-card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fundraiser-card.small-card .card-info {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .fundraiser-card.small-card .card-title {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .fundraiser-card.small-card .progress-bar {
+    height: 6px;
+    margin-bottom: 4px;
+    border-radius: 3px;
+  }
+
+  .fundraiser-card.small-card .card-meta {
+    font-size: 12px;
+    color: #555;
   }
 }

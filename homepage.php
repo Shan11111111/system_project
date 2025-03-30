@@ -25,6 +25,7 @@
 </head>
 
 <body>
+    <?php session_start(); ?>>
     <!-- Navbar -->
 
     <nav class="navbar">
@@ -40,7 +41,15 @@
                 <div class="dropdown">
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
-                        <a href="submitadvice.php">發布建言</a>
+                        <?php if (isset($_SESSION['user_id'])) { ?>
+                            <a href="submitadvice.php">發布建言</a>
+                        <?php } else { ?>
+                            <script>
+                                alert("請先登入!發布建言為學生與教職人員專屬功能!");
+                                window.location.href = "#"; // 導向登入頁面
+                            </script>
+                        <?php } ?>
+
                         <a href="#">最新建言</a>
                         <a href="#">熱門建言</a>
                     </div>
@@ -55,8 +64,23 @@
             </div>
 
             <div class="nav-right desktop-menu">
-                <a href="#" class="nav-item">登入</a>
-                <a href="#" class="nav-item">註冊</a>
+                <?php if (isset($_SESSION['user_id'])) { ?>
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <script>
+                        document.getElementById('logout-link').addEventListener('click', function () {
+                            // 彈出確認視窗
+                            const confirmLogout = confirm("確定要登出嗎？");
+                            if (confirmLogout) {
+                                // 如果用戶選擇確定，導向登出頁面
+                                window.location.href = "logout.php";
+                            }
+                            // 如果用戶選擇取消，什麼都不做
+                        });
+                    </script>
+                <?php } else { ?>
+                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="register.php" class="nav-item">註冊</a>
+                <?php } ?>
             </div>
         </div>
 
@@ -65,7 +89,15 @@
             <div class="dropdown">
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
-                    <a href="submitadvice.php">發布建言</a>
+                    <?php if (isset($_SESSION['user_id'])) { ?>
+                        <a href="submitadvice.php">發布建言</a>
+                    <?php } else { ?>
+                        <script>
+                            alert("請先登入!發布建言為學生與教職人員專屬功能!");
+                            window.location.href = "#"; // 導向登入頁面
+                        </script>
+                    <?php } ?>
+
                     <a href="#">最新建言</a>
                     <a href="#">熱門建言</a>
                 </div>
@@ -77,8 +109,25 @@
                     <a href="#">成功案例</a>
                 </div>
             </div>
-            <a href="#" class="nav-item">登入</a>
-            <a href="#" class="nav-item">註冊</a>
+            <?php if (isset($_SESSION['user_id'])) { ?>
+                <a class="nav-item">會員專區</a>
+                <a href="javascript:void(0);" class="nav-item" id="logout-link-mobile">登出</a>
+                <script>
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                        // 彈出確認視窗
+                        const confirmLogout = confirm("確定要登出嗎？");
+                        if (confirmLogout) {
+                            // 如果用戶選擇確定，導向登出頁面
+                            window.location.href = "logout.php";
+                        }
+                        // 如果用戶選擇取消，什麼都不做
+                    });
+                </script>
+            <?php } else { ?>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
+            <?php } ?>
+
         </div>
     </nav>
 
@@ -143,7 +192,7 @@
 
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
-                            <!-- Slide 1 -->
+                            <!-- Slide 2 -->
                             <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
@@ -426,7 +475,7 @@
                                             src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">學生餐廳應增加蔬食選項 </div>
+                                        <div class="adv_content_text">學生餐廳應增加蔬食選項</div>
                                         <div class="progress_line">
                                             <progress value="35" max="100"></progress>
                                             <div class="progress_percent">35%</div>
@@ -458,58 +507,262 @@
                 </div>
                 <!-- Swiper container -->
             </div>
-        </div>
 
-        <!--募資進度查看區--->
-        <!--還沒做完--->
 
-        <div class="seek_fund_area">
+            <!--募資進度查看區--->
+            <!--還沒做完--->
+
+            <div class="seek_fund">
+        <div class="seek_advice">募資進度</div>
             <div class="fund_area">
-                <div class="hot_fund">HOT</div>
-                <div class="right-controls">
-                    <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left"></i></div>
-                    <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="more"><a href="#">更多</a></div>
+                <div class="top_fund_bar">
+                    <div class="hotfund_tag">HOT</div>
+                    <div class="fund_controls">
+                        <div class="swiper-button-prev-3"><i class="fa-solid fa-arrow-left" style="color: #a5a0a0"></i></div>
+                        <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right" style="color: #a5a0a0"></i></div>
+                        <div class="more"><a href="#">更多</a></div>
+                    </div>
+                </div>
+
+                <!-- Swiper 區塊 -->
+                <div class="swiper mySwiper3">
+                    <div class="swiper-wrapper">
+                        <!-- 一筆 swiper-slide（含1大圖 + 4小圖） -->
+                        <div class="swiper-slide">
+                            <div class="fund-section">
+                                <div class="fund-content">
+                                    <!-- 左側大卡片 -->
+                                    <div class="left-big-card">
+                                        <div class="fundraiser-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" alt="" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Support the Marco Family</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 100%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$155,819 raised</span>
+                                                    <span>100%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 右側四張小卡片 -->
+                                    <div class="right-small-cards">
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">3.8K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Frank’s Battle Against Leukemia</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 90%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>90%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Unterstützung für Ehefrau</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 80%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>€65,285</span>
+                                                    <span>80%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">2.2K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Geef Hayat een kans</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 70%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>€56,140</span>
+                                                    <span>70%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Behandeling in het buitenland</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 60%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>€38,755</span>
+                                                    <span>60%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- fund-content 結束 -->
+                            </div>
+                        </div>
+                        <!-- 如果有第2組資料可以複製整個 swiper-slide 再放下來 -->
+                        <div class="swiper-slide">
+                            <div class="fund-section">
+                                <div class="fund-content">
+                                    <!-- 左側大卡片 -->
+                                    <div class="left-big-card">
+                                        <div class="fundraiser-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wz1T6Cnb7gv2ySD2yrcstftNSGrM4ZA1vA&s" alt="" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Support the Marco Family</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 100%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$155,819 raised</span>
+                                                    <span>100%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 右側四張小卡片 -->
+                                    <div class="right-small-cards">
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">3.8K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Frank’s Battle Against Leukemia</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 90%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>90%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Unterstützung für Ehefrau</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 80%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>80%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">2.2K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Geef Hayat een kans</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 70%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>70%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="fundraiser-card small-card">
+                                            <div class="card-image">
+                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                                                <div class="donation-count">1K donations</div>
+                                            </div>
+                                            <div class="card-info">
+                                                <div class="card-title">Behandeling in het buitenland</div>
+                                                <div class="progress-bar">
+                                                    <div class="progress" style="width: 60%;"></div>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <span>$321,619</span>
+                                                    <span>60%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- fund-content 結束 -->
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+        <footer>
 
-    <footer>
-
-    </footer>
+        </footer>
 
 
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <!-- Swiper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <!-- 初始化 Swiper -->
-    <script>
-        // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('active');
-        });
-
-        // 手機 dropdown 點擊展開
-        document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault(); // 防止跳頁
-                const parent = btn.parentElement;
-                parent.classList.toggle('active');
+        <!-- 初始化 Swiper -->
+        <script>
+            // 點擊漢堡切換 menu
+            document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+                document.getElementById('mobile-menu').classList.toggle('active');
             });
-        });
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 400) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
 
-        /*CARD SLIDER*/
-        const swiperConfigs = [{
+            // 手機 dropdown 點擊展開
+            document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault(); // 防止跳頁
+                    const parent = btn.parentElement;
+                    parent.classList.toggle('active');
+                });
+            });
+            window.addEventListener('scroll', function () {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 400) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            /*CARD SLIDER*/
+            const swiperConfigs = [{
                 container: ".mySwiper1",
                 next: ".swiper-button-next-1",
                 prev: ".swiper-button-prev-1"
@@ -518,55 +771,59 @@
                 container: ".mySwiper2",
                 next: ".swiper-button-next-2",
                 prev: ".swiper-button-prev-2"
-            },
-            {
-                container: ".mySwiper3",
-                next: ".swiper-button-next-2",
-                prev: ".swiper-button-prev-2"
-            },
+            }
+            ];
 
-        ];
-
-        swiperConfigs.forEach(config => {
-            new Swiper(config.container, {
-                slidesPerView: 'auto', // 用 auto 配合固定寬
-                spaceBetween: 24,
-                loop: true,
-                speed: 900,
-                navigation: {
-                    nextEl: config.next,
-                    prevEl: config.prev
-                },
-                slidesPerGroupAuto: true, // 自動根據可視區的卡片數滑動
-
-                breakpoints: {
-                    768: {
-                        slidesPerView: 4,
-                        slidesPerGroup: 4
-                    },
-                    480: {
-                        slidesPerView: 2,
-                        slidesPerGroup: 2
-                    },
-                    240: {
-                        slidesPerView: 1,
-                        slidesPerGroup: 1
-                    }
-                }
-            });
-        });
-        /*
-                const swiper3 = new Swiper(".mySwiper3", {
-                    slidesPerView: 5,
-                    slidesPerGroup: 3,
-                    spaceBetween: 10,
-                    speed: 900,
+            swiperConfigs.forEach(config => {
+                new Swiper(config.container, {
+                    slidesPerView: 'auto', // 用 auto 配合固定寬
+                    spaceBetween: 24,
+                    loop: true,
+                    speed: 800,
                     navigation: {
-                        nextEl: ".swiper-button-next-3",
-                        prevEl: ".swiper-button-prev-3",
+                        nextEl: config.next,
+                        prevEl: config.prev
                     },
-                }); */
-    </script>
+                    slidesPerGroupAuto: true, // 自動根據可視區的卡片數滑動
+
+                    breakpoints: {
+                        768: {
+                            slidesPerView: 4,
+                            slidesPerGroup: 4
+                        },
+                        480: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2
+                        },
+                        240: {
+                            slidesPerView: 1,
+                            slidesPerGroup: 1
+                        }
+                    }
+                });
+            });
+            new Swiper(".mySwiper3", {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+            loop: true,
+            speed: 900,
+            navigation: {
+                nextEl: ".swiper-button-next-3",
+                prevEl: ".swiper-button-prev-3"
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 1,
+                    slidesPerGroup: 1
+                },
+                1024: {
+                    slidesPerView: 1,
+                    slidesPerGroup: 1
+                }
+            }
+        });
+
+        </script>
 
 
 </body>
