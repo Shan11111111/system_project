@@ -271,6 +271,7 @@ body {
 }
 
 .chicken {
+  position: relative; /* 一定要有這行！ */
   width: 180px;
   height: 180px;
   border-radius: 50%;
@@ -278,6 +279,18 @@ body {
   border: 5px solid #f4c542;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.chicken_tag {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size:px;
+  color: white;
+  text-shadow: 0px 0px 5px rgba(0,0,0,0.5); /* 讓白字更清楚 */
+}
+.banner2 .chicken_tag {
+  font-size: 20px;
 }
 
 .banner2 .chicken  {
@@ -309,8 +322,6 @@ body {
   max-width: 100%;
   object-fit: cover;
 }
-
-
 
 .banner3 {
   flex: 1;
@@ -344,11 +355,6 @@ body {
   transform: translateX(-70px); /* 向內靠近中心 */
 }
 
-.chicken_tag{
-  font-size: 20px;
-  color: #e0e0e0;
-  position: absolute;
-}
 
 /*結束*/
 .philosophy {

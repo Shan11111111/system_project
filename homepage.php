@@ -190,44 +190,36 @@
             <div class="hot_propose">
                 <div class="chicken">
                     <img src="img\image2333.jpg">
-                </div>
-                <div class="chicken_tag">
-                    熱門建言瀏覽
+                    <div class="chicken_tag"> 熱門建言瀏覽</div>
                 </div>
             </div>
             <div class="new_propose">
                 <div class="chicken">
                     <img src="img\6A7933B2-AA2E-498F-964B-259E5C7ACB2B.png">
+                    <div class="chicken_tag">最新建言瀏覽 </div>
                 </div>
-                <div class="chicken_tag">
-                    最新建言瀏覽
-                </div>
+
             </div>
         </div>
         <div class="banner2">
             <div class="chicken">
                 <img src="img\F66F58A6-65E9-4AF5-9188-3D246E67AE26.png">
-            </div>
-            <div>
-                我要建言
+                <div class="chicken_tag">我要建言</div>
             </div>
         </div>
         <div class="banner3">
             <div class="hot_fund">
                 <div class="chicken">
                     <img src="img\10C332BB-804B-48D6-B909-50720AD3B2B5.png">
-                </div>
-                <div class="chicken_tag">
-                    熱門募資專案
+                    <div class="chicken_tag">熱門募資專案</div>
                 </div>
             </div>
             <div class="new_fund">
                 <div class="chicken">
                     <img src="img\D8904374-10AE-4B6B-B6FB-355FEA8C7B44.png">
+                    <div class="chicken_tag">最新募資專案</div>
                 </div>
-                <div class="chicken_tag">
-                    最新募資專案
-                </div>
+
             </div>
         </div>
     </div>
