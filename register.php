@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -36,20 +39,21 @@
                 </div>
 
                 <h2>註冊</h2>
-                <form>
+                <form id="register-form" action="register_in.php" method="POST">
+                    <input type="hidden" name="method" value="register">
                     <!-- 身分 + 學院 選擇 -->
                     <div class="form-row">
                         <div class="select-wrapper">
                             <select name="role" required>
-                                <option value="">請選擇身分</option>
-                                <option value="學生">學生</option>
-                                <option value="教職員">教職員</option>
+                                <option value="" disabled selected hidden>請選擇身分</option>
+                                <option value="student">學生</option>
+                                <option value="teacher">教職員</option>
                             </select>
                         </div>
 
                         <div class="select-wrapper">
                             <select name="department" required>
-                                <option value="">請選擇學院</option>
+                                <option value="" disabled selected hidden>請選擇學院</option>
                                 <option value="文學院">文學院</option>
                                 <option value="藝術學院">藝術學院</option>
                                 <option value="外國語文學院">外國語文學院</option>
@@ -66,13 +70,13 @@
                         </div>
                     </div>
 
-                    <input type="text" placeholder="學號" required />
-                    <input type="email" placeholder="Email" required />
-                    <input type="text" placeholder="暱稱" required />
-                    <input type="password" placeholder="密碼" required />
-                    <input type="password" placeholder="確認密碼" required />
+                    <input type="int" name="user_id" placeholder="學號" required />
+                    <input type="email" name="email" placeholder="Email" required />
+                    <input type="text" name="name" placeholder="暱稱" required />
+                    <input type="password" id="password" name="password" placeholder="密碼" required />
+                    <input type="password" id="confirm-password" placeholder="確認密碼" required />
 
-                    <button class="sign-in-btn" type="submit"><a href="login.php">註冊</a></button>
+                    <button class="sign-in-btn" type="submit">註冊</button>
                 </form>
             </div>
         </div>
@@ -84,6 +88,19 @@
             <button class="signup-btn" ><a href="login.php">登入</a></button>
         </div>
     </div>
+
+    <script>
+        // 表單提交時進行密碼驗證
+        document.getElementById('register-form').addEventListener('submit', function (event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault(); // 阻止表單提交
+                alert('密碼與確認密碼不相符，請重新輸入！');
+            }
+        });
+    </script>
 </body>
 
 </html>
