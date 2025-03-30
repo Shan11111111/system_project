@@ -68,6 +68,9 @@ if ($record = mysqli_fetch_assoc($result)) {
     $_SESSION['user_id'] = $record['user_id'];
     $_SESSION['name'] = $record['name'];
     $_SESSION['level'] = $record['level'];
+    $_SESSION['department'] = $record['department'];
+    $_SESSION['email'] = $record['email'];
+    $_SESSION['name'] = $record['name'];
 }
 if (isset($_SESSION['level'])) { 
     ?>
