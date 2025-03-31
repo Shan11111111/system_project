@@ -30,11 +30,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-            <a href="homepage.php">
-                <div class="logo">
-                    <img src="img/logo.png" style="width: 90px;">
-                </div>
-            </a>
+            <div class="logo">LOGO</div>
 
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
@@ -95,7 +91,11 @@
             <div class="highlight_content">快要達標的建言</div>
             <div class="highlight_btn">去覆議</div>
         </div>
-        <div class="highlight_title"><center><p>快要達標的建言，還剩php人</p></center></div>
+        <div class="highlight_title">
+            <center>
+                <p>快要達標的建言，還剩php人</p>
+            </center>
+        </div>
         <div class="advice_space">
             <!-- Tabs -->
             <div class="tabs">
@@ -113,17 +113,18 @@
                         <option value="academic">學術發展</option>
                         <option value="environment">社團活動</option>
                         <option value="welfare">公益關懷</option>
-                        <option value="environment">環保永續</option>
+                        <option value="sustainability">環保永續</option>
                         <option value="other">其他</option>
                     </select>
+
                     <input type="text" id="search" placeholder="請輸入關鍵字">
                     <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
                 <div class="search_sort">
-                    <!--按鈕按下去後箭頭改變 牽涉到後端 所以留給你們 這裡有倒敘正敘的箭頭icon-->
-                    <button onclick="toggleArrow(this)">HOT<i class="fa-solid fa-caret-up"></i></button>
-                    <button onclick="toggleArrow(this)">NEW<i class="fa-solid fa-caret-up"></i></button>
+                    <button onclick="toggleSort('hot', this)">HOT <i class="fa-solid fa-caret-down"></i></button>
+                    <button onclick="toggleSort('new', this)">NEW <i class="fa-solid fa-caret-down"></i></button>
                 </div>
+
             </div>
 
             <!-- 建言列表 -->
@@ -149,86 +150,122 @@
                 parent.classList.toggle('active');
             });
         });
-//後端這邊自己調內容，我用array的方式建立十五條建言，title那些會直接加到下面寫的html框架中喔
-        const data = Array.from({ length: 25 }, (_, i) => ({
-            title: `建言標題 ${i + 1}`,
-            comments: Math.floor(Math.random() * 80),
-            deadline: '剩約天',
-            status: i % 2 === 0 ? 'active' : 'ended',
-            passed: i % 3 === 0, // 每三個通過一次(後端之後要改，通過不通過)
-            publishDate: 'date'
-        }));
-//後端應該不用動這邊，這是每十條建言跳頁
-        let currentTab = 'active';
-        let currentPage = 1;
-        const itemsPerPage = 10;
 
-        function switchTab(tab) {
-            currentTab = tab;
-            currentPage = 1;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab')[tab === 'active' ? 0 : 1].classList.add('active');
-            renderSuggestions();
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            let currentTab = 'active'; // 預設顯示進行中的建議
+            let currentPage = 1; // 預設顯示第1頁
+            const itemsPerPage = 10; // 每頁顯示的項目數
 
-        
+            function switchTab(tab) {
+                currentTab = tab; // 更新當前選擇的狀態
+                currentPage = 1;  // 切換時回到第1頁
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab')[tab === 'active' ? 0 : 1].classList.add('active');
+                renderSuggestions(); // 重新渲染建議列表
+            }
 
-        function renderSuggestions() {
-            const list = document.getElementById('suggestion-list');
-            list.innerHTML = '';
-            const filtered = data.filter(item => item.status === currentTab);
-            const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-//連去advice_detail.php
-            paginated.forEach(item => {
-                const div = document.createElement('div');
-div.className = 'suggestion';
-div.onclick = () => {
-  window.location.href = `advice_detail.php`;//後端好像要加這個:?id=${item.id || ((currentPage - 1) * itemsPerPage + index + 1)
-};
+            // 渲染建議列表
+            function renderSuggestions() {
+                const list = document.getElementById('suggestion-list');
+                list.innerHTML = ''; // 清空現有的列表
 
-//上面那個是已結束的格式，下面是進行中
-                if (currentTab === 'ended') {
-                    div.innerHTML = `
-                    
-            <img src="https://placekitten.com/300/169" alt="建言圖">
-            <div class="suggestion-content">
-              <div class="suggestion-title">${item.title}</div>
-              <div class="suggestion-meta">
-                <span class="suggestion-status ${item.passed ? 'status-passed' : 'status-failed'}">
-                  ${item.passed ? '通過' : '未通過'}
-                </span>
-                <span>發布日：${item.publishDate}</span>
-              </div>
-            </div>
-           
-          `;
-                } else {
-                    div.innerHTML = `
-            <img src="https://daebak.tokyo/wp-content/uploads/2025/03/nmixx-20250312-001333-364x252.jpg" alt="建言圖">
-            <div class="suggestion-content">
-              <div class="suggestion-title">${item.title}</div>
-              <div class="suggestion-meta">
-              <div class="data">
-                <span>附議數：${item.comments}</span>
-                <span><i class="fa-solid fa-comment"></i>：${Math.floor(item.comments / 2)}</span>
-                </div>
-                
-                <div class="date">
-                <i class="fa-solid fa-clock"></i>
-                <span>${item.deadline}</span>
-                <span>發布日：${item.publishDate}</span>
-                </div>
-              </div>
-            </div>
-          `;
+                // 從後端獲取資料，傳送當前頁數和狀態
+                fetch(`advice_get.php?page=${currentPage}&status=${currentTab}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const suggestions = data.suggestions; // 直接使用從後端返回的資料
+                        if (suggestions.length === 0) {
+                            list.innerHTML = `<div class="no-data">目前沒有資料顯示</div>`;
+                        } else {
+                            // 渲染每一條建議
+                            suggestions.forEach(item => {
+                                const div = document.createElement('div');
+                                div.className = 'suggestion';
+                                div.onclick = () => {
+                                    window.location.href = `advice_detail.php?id=${item.id}`;
+                                };
+
+                                // 如果是進行中的建議
+                                if (currentTab === 'active') {
+                                    div.innerHTML = `
+                                <img src="https://placekitten.com/300/169" alt="建言圖">
+                                <div class="suggestion-content">
+                                    <div class="suggestion-title">${item.title}</div>
+                                    <div class="suggestion-meta">
+                                        <div class="data">
+                                            <span>附議數：${item.comments}</span>
+                                            <span><i class="fa-solid fa-comment"></i>：${Math.floor(item.comments / 2)}</span>
+                                        </div>
+                                        <div class="date">
+                                            <i class="fa-solid fa-clock"></i>
+                                            <span>${item.deadline}</span>
+                                            <span>發布日：${item.publishDate}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                                } else { // 如果是已結束的建議
+                                    div.innerHTML = `
+                                <img src="https://placekitten.com/300/169" alt="建言圖">
+                                <div class="suggestion-content">
+                                    <div class="suggestion-title">${item.title}</div>
+                                    <div class="suggestion-meta">
+                                        <span class="suggestion-status ${item.passed ? 'status-passed' : 'status-failed'}">
+                                            ${item.passed ? '通過' : '未通過'}
+                                        </span>
+                                        <span>發布日：${item.publishDate}</span>
+                                    </div>
+                                </div>
+                            `;
+                                }
+
+                                list.appendChild(div);
+                            });
+                        }
+
+                        renderPagination(data.totalPages); // 渲染分頁
+                    })
+                    .catch(error => {
+                        console.error('Error fetching suggestions:', error);
+                        const list = document.getElementById('suggestion-list');
+                        list.innerHTML = `<div class="no-data">載入資料時發生錯誤</div>`;
+                    });
+            }
+
+
+
+
+            // 渲染分頁功能
+            function renderPagination(totalPages) {
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = ''; // 清空現有的分頁
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.textContent = i;
+                    pageButton.onclick = () => {
+                        currentPage = i;
+                        renderSuggestions(); // 重新渲染列表
+                    };
+                    pagination.appendChild(pageButton);
                 }
+            }
 
-                list.appendChild(div);
+            // 初始化：綁定 tab 按鈕的事件
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    switchTab(this.innerText === '進行中' ? 'active' : 'ended'); // 根據 tab 的文字切換
+                });
             });
 
-            renderPagination(filtered.length);
-        }
-//控制換頁(後端應該不用動這邊)
+            // 初次載入時渲染建議
+            renderSuggestions();
+        });
+
+
+
+
+
+        //控制換頁(後端應該不用動這邊)
         function renderPagination(totalItems) {
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const pagination = document.getElementById('pagination');
@@ -256,19 +293,94 @@ div.onclick = () => {
                 pagination.appendChild(next);
             }
         }
-//搜尋做完自己刪
+        //搜尋做完自己刪
         function search() {
             alert("沒做");
         }
-//最新最舊箭頭控制        
-        function toggleArrow(btn) {
-            const icon = btn.querySelector("i");
-            icon.classList.toggle("fa-caret-up");
-            icon.classList.toggle("fa-caret-down");
+
+        // 初始化排序狀態
+        let currentSort = {
+            hot: 'desc',  // 默认按 "HOT" 降序排列
+            new: 'desc'   // 默认按 "NEW" 降序排列
+        };
+
+        // 切換排序條件
+        function toggleSort(type, button) {
+            currentSort[type] = (currentSort[type] === 'desc') ? 'asc' : 'desc';
+            updateArrow(button, currentSort[type]);
+            search();
         }
 
+        // 更新排序箭頭的顯示
+        function updateArrow(button, direction) {
+            const icon = button.querySelector('i');
+            if (direction === 'asc') {
+                icon.classList.remove('fa-caret-down');
+                icon.classList.add('fa-caret-up');
+            } else {
+                icon.classList.remove('fa-caret-up');
+                icon.classList.add('fa-caret-down');
+            }
+        }
 
-        renderSuggestions();
+        // 根據分類、關鍵字和排序條件進行搜尋
+        function search() {
+            const category = document.getElementById("category").value;  // 獲取分類
+            const keyword = document.getElementById("search").value;  // 獲取關鍵字
+            const sortHot = currentSort.hot;
+            const sortNew = currentSort.new;
+
+            // 構建查詢參數
+            const url = new URL('advice_order.php');
+            url.searchParams.set('category', category);
+            url.searchParams.set('keyword', keyword);
+            url.searchParams.set('sort_hot', sortHot);
+            url.searchParams.set('sort_new', sortNew);
+
+            // 發送請求到後端
+            fetch(url)
+                .then(response => response.json())
+                .then(data => renderSuggestions(data))
+                .catch(error => console.error('Error fetching suggestions:', error));
+        }
+
+        // 渲染建議項目
+        function renderSuggestions(suggestions) {
+            const suggestionContainer = document.getElementById('suggestion-list');
+            suggestionContainer.innerHTML = '';  // 清空現有內容
+
+            suggestions.forEach(suggestion => {
+                const suggestionElement = document.createElement('div');
+                suggestionElement.className = 'suggestion-item';
+                suggestionElement.innerHTML = `
+            <h3>${suggestion.title}</h3>
+            <p>${suggestion.content}</p>
+            <span>${suggestion.publishDate}</span>
+        `;
+                suggestionContainer.appendChild(suggestionElement);
+            });
+        }
+
+        // 請求 '進行中或未處理' 建言
+        fetch(`advice_get.php?page=1&status=active&sort=new`)
+            .then(response => response.json())
+            .then(data => {
+                // 顯示進行中的建言
+            });
+
+        // 請求 '已結束' 建言
+        fetch(`advice_get.php?page=1&status=ended&sort=new`)
+            .then(response => response.json())
+            .then(data => {
+                // 顯示已結束的建言
+            });
+
+
+
+
+
+
+
     </script>
 </body>
 
