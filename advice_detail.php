@@ -9,7 +9,7 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <link rel="stylesheet" href="css/advice_detail.css">
+    <link rel="stylesheet" href="css/advice_search.css">
     <!-- Swiper -->
     <link rel="stylesheet" href="https://unpkg.com/swiper@11/swiper-bundle.min.css">
 
@@ -66,8 +66,8 @@
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
                     <a href="submitadvice.php">發布建言</a>
-                    <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                    <a href="advice_search.php">熱門建言</a>
+                    <a href="">最新建言</a><!--之後要設(不知道是前端還後端)-->
+                    <a href="#">熱門建言</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -82,263 +82,241 @@
         </div>
     </nav>
 
+
+
+
     <div class="container">
-        <main class="suggestion-detail">
-            <!-- 標題 -->
-            <h1 class="title" id="advice-title">建言標題</h1>
-            <span id="suggestion-status" class="suggestion-status status-pending">進行中</span>
-
-            <!-- 進度條區域 -->
-            <section class="progress-section">
-                <div class="dates">
-                    <span id="announce-date">發布日：2025/01/01</span>
-                    <span id="deadline-date">截止日：2025/02/01</span>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 65%"></div>
-                    </div>
-                    <div class="progress-info">
-                        目前 1234 人 / 還差 766 人
-                        <span class="percent">65%</span>
-                    </div>
-                </div>
-            </section>
-            <div class="advice">
-                <!-- 發布人與分類 -->
-                <section class="meta">
-                    <p id="advice-author">發布人：?</p>
-                    <p id="advice-category">分類：學術發展</p>
-                </section>
-
-                <!-- 圖片或 PDF -->
-                <section class="media">
-                    <img id="advice-image"
-                        src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg"
-                        alt="建言圖片" />
-                    <a id="advice-pdf-link" class="pdf-link" href="file.pdf" target="_blank">查看 PDF</a>
-                </section>
-
-                <!-- 內文 -->
-                <section class="content">
-                    <p id="advice-content">這裡是建言內文...呵呵</p>
-                </section>
+        <!-- 快要達標 -->
+        <div class="highlight">
+            <div class="highlight_content">快要達標的建言</div>
+            <div class="highlight_btn">去覆議</div>
+        </div>
+        <div class="highlight_title">
+            <center>
+                <p>快要達標的建言，還剩php人</p>
+            </center>
+        </div>
+        <div class="advice_space">
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('active')">進行中</div>
+                <div class="tab" onclick="switchTab('ended')">已結束</div>
             </div>
             <hr style="width=70%; border-color:black;">
 
-            <section class="comments">
-                <div class="comment-header">
-                    <h4>留言區</h4>
-                    <select id="sort-comments">
-                        <option value="latest">留言時間：最新</option>
-                        <option value="oldest">留言時間：最舊</option>
+            <!-- 選單 + 搜尋 -->
+            <div class="filter-bar">
+                <div class="search_text">
+                    <select id="category">
+                        <option value="all">全部分類</option>
+                        <option value="equipment">設施改善</option>
+                        <option value="academic">學術發展</option>
+                        <option value="environment">社團活動</option>
+                        <option value="welfare">公益關懷</option>
+                        <option value="sustainability">環保永續</option>
+                        <option value="other">其他</option>
                     </select>
+
+                    <input type="text" id="search" placeholder="請輸入關鍵字">
+                    <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="search_sort">
+                    <button onclick="toggleSort('hot', this)">HOT <i class="fa-solid fa-caret-down"></i></button>
+                    <button onclick="toggleSort('new', this)">NEW <i class="fa-solid fa-caret-down"></i></button>
                 </div>
 
-                <div class="comment-input">
-                    <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                    <textarea id="comment-text" placeholder="我要留言..."></textarea>
-                    <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
+            </div>
 
-                <ul class="comment-list"></ul>
+            <!-- 建言列表 -->
+            <div id="suggestion-list"></div>
 
-
-                <div class="pagination">
-                    <button id="prev-page">上一頁</button>
-                    <span id="page-indicator"></span>
-                    <button id="next-page">下一頁</button>
-                </div>
-            </section>
-
-        </main>
+            <!-- 分頁 -->
+            <div class="pagination" id="pagination"></div>
+        </div>
     </div>
-
-
-    <!-- Fixed 按鈕 -->
-    <div class="fixed-buttons">
-        <button class="back-btn" onclick="history.back()">上一頁 </button>
-        <a href="#" class="reply-btn" id="agree-btn">附議</a>
-
-        <a href="#top" class="top-btn">Top</a>
-    </div>
-
-    <footer class="footer"> footer</footer>
+    <div class="footer">footer</div>
 
     <script>
 
+    // 點擊漢堡切換 menu
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        document.getElementById('mobile-menu').classList.toggle('active');
+    });
 
-        const statusEl = document.getElementById('suggestion-status');
-        const status = 'pending'; // 假資料，可改為 'passed' 或 'failed'
+    // 手機 dropdown 點擊展開
+    document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault(); // 防止跳頁
+            const parent = btn.parentElement;
+            parent.classList.toggle('active');
+        });
+    });
 
-        const statusMap = {
-            passed: { text: '通過', class: 'status-passed' },
-            failed: { text: '未通過', class: 'status-failed' },
-            pending: { text: '進行中', class: 'status-pending' }
-        };
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentTab = 'active'; // 預設顯示進行中的建議
+        let currentPage = 1; // 預設顯示第1頁
+        const itemsPerPage = 10; // 每頁顯示的項目數
+        let sortType = 'new';  // 預設排序類型
+        let sortOrder = 'desc';  // 預設排序方向
 
-        if (statusMap[status]) {
-            statusEl.textContent = statusMap[status].text;
-            statusEl.className = `suggestion-status ${statusMap[status].class}`;
+        // 切換標籤
+        function switchTab(tab) {
+            currentTab = tab; // 更新當前選擇的狀態
+            currentPage = 1;  // 切換時回到第1頁
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab')[tab === 'active' ? 0 : 1].classList.add('active');
+            renderSuggestions(); // 重新渲染建議列表
         }
 
+        // 渲染建議列表
+        function renderSuggestions() {
+            const list = document.getElementById('suggestion-list');
+            list.innerHTML = ''; // 清空現有的列表
 
-        const commentList = document.querySelector('.comment-list');
-        const pageIndicator = document.getElementById('page-indicator');
-        const prevBtn = document.getElementById('prev-page');
-        const nextBtn = document.getElementById('next-page');
-        const sortSelect = document.getElementById('sort-comments');
-        const submitBtn = document.getElementById('submit-comment');
-        const textarea = document.getElementById('comment-text');
+            // 從後端獲取資料，傳送當前頁數、狀態、排序類型及排序方向
+            fetch(`advice_get.php?page=${currentPage}&status=${currentTab}&sort=${sortType}&order=${sortOrder}`)
+                .then(response => response.json())
+                .then(data => {
+                    const suggestions = data.suggestions;
+                    if (suggestions.length === 0) {
+                        list.innerHTML = `<div class="no-data">目前沒有資料顯示</div>`;
+                    } else {
+                        suggestions.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'suggestion';
+                            div.onclick = () => {
+                                window.location.href = `advice_detail.php?id=${item.id}`;
+                            };
 
-        // ✨ 假資料：加上 username
-        let allComments = Array.from({ length: 30 }, (_, i) => ({
-            username: `使用者${i + 1}`,
-            text: `這是留言 #${i + 1}`,
-            time: new Date(2025, 2, 29, 12, i).toLocaleString(),
-        }));
+                            if (currentTab === 'active') {
+                                div.innerHTML = `
+                                    <img src="https://placekitten.com/300/169" alt="建言圖">
+                                    <div class="suggestion-content">
+                                        <div class="suggestion-title">${item.title}</div>
+                                        <div class="suggestion-meta">
+                                            <div class="data">
+                                                <span>附議數：${item.comments}</span>
+                                                <span><i class="fa-solid fa-comment"></i>：${Math.floor(item.comments / 2)}</span>
+                                            </div>
+                                            <div class="date">
+                                                <i class="fa-solid fa-clock"></i>
+                                                <span>${item.deadline}</span>
+                                                <span>發布日：${item.publishDate}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                div.innerHTML = `
+                                    <img src="https://placekitten.com/300/169" alt="建言圖">
+                                    <div class="suggestion-content">
+                                        <div class="suggestion-title">${item.title}</div>
+                                        <div class="suggestion-meta">
+                                            <span class="suggestion-status ${item.passed ? 'status-passed' : 'status-failed'}">
+                                                ${item.passed ? '通過' : '未通過'}
+                                            </span>
+                                            <span>發布日：${item.publishDate}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }
 
-        const commentsPerPage = 10;
-        let currentPage = 1;
-        let currentSort = 'latest';
+                            list.appendChild(div);
+                        });
+                    }
 
-        // 計算留言與現在的時間差
-        function timeAgo(dateString) {
-            const now = new Date();
-            const past = new Date(dateString);
-            const diff = Math.floor((now - past) / 1000); // 秒數差
-
-            if (diff < 60) return '剛剛';
-            if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
-            if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
-            return `${Math.floor(diff / 86400)} 天前`;
-        }
-
-
-        function renderComments() {
-            let sortedComments = [...allComments];
-            if (currentSort === 'latest') {
-                sortedComments.reverse();
-            }
-
-            const start = (currentPage - 1) * commentsPerPage;
-            const paginatedComments = sortedComments.slice(start, start + commentsPerPage);
-
-            commentList.innerHTML = '';
-            paginatedComments.forEach(comment => {
-                const li = document.createElement('li');
-                li.classList.add('comment-item');
-                li.innerHTML = `
-      <div class="user-avatar">👤</div>
-      <div class="comment-content">
-        <p class="comment-meta">
-          <strong>${comment.username}</strong>
-          <span class="comment-time">${timeAgo(comment.time)}</span>
-        </p>
-        <p class="comment-text">${comment.text}</p>
-      </div>
-    `;
-                commentList.appendChild(li);
-            });
-
-            const totalPages = Math.ceil(allComments.length / commentsPerPage);
-            pageIndicator.textContent = `第 ${currentPage} / ${totalPages} 頁`;
-            prevBtn.disabled = currentPage === 1;
-            nextBtn.disabled = currentPage === totalPages;
-        }
-
-        prevBtn.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderComments();
-            }
-        });
-
-        nextBtn.addEventListener('click', () => {
-            const totalPages = Math.ceil(allComments.length / commentsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderComments();
-            }
-        });
-
-        sortSelect.addEventListener('change', () => {
-            currentSort = sortSelect.value;
-            currentPage = 1;
-            renderComments();
-        });
-
-        submitBtn.addEventListener('click', () => {
-            const text = textarea.value.trim();
-            if (text) {
-                const now = new Date().toLocaleString();
-                allComments.push({
-                    username: '我自己', //  未來從登入使用者資料取得
-                    text,
-                    time: now
+                    renderPagination(data.totalPages); // 渲染分頁
+                })
+                .catch(error => {
+                    console.error('Error fetching suggestions:', error);
+                    const list = document.getElementById('suggestion-list');
+                    list.innerHTML = `<div class="no-data">載入資料時發生錯誤</div>`;
                 });
-                textarea.value = '';
-                currentSort = 'latest';
-                currentPage = 1;
-                sortSelect.value = 'latest';
-                renderComments();
+        }
+
+        // 渲染分頁功能
+        function renderPagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = ''; // 清空現有的分頁
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.onclick = () => {
+                    currentPage = i;
+                    renderSuggestions(); // 重新渲染列表
+                };
+                pagination.appendChild(pageButton);
             }
+        }
+
+        // 初始化：綁定 tab 按鈕的事件
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                switchTab(this.innerText === '進行中' ? 'active' : 'ended'); // 根據 tab 的文字切換
+            });
         });
 
+        // 初始化排序功能
+        document.querySelectorAll('.search_sort button').forEach(btn => {
+            btn.addEventListener('click', function () {
+                toggleSort(btn);
+            });
+        });
 
-        renderComments();
+        // 控制排序
+        function toggleSort(btn) {
+            // 取得所有排序按鈕
+            let buttons = document.querySelectorAll('.search_sort button');
+
+            // 取消所有按鈕的選中狀態
+            buttons.forEach(b => b.classList.remove('active'));
+
+            // 切換當前按鈕的狀態
+            btn.classList.add('active');
+
+            // 取得排序類型
+            sortType = btn.getAttribute('data-sort-type');
+            // 取得排序方向（預設是降冪 desc）
+            sortOrder = btn.getAttribute('data-sort-order') === 'desc' ? 'asc' : 'desc';
+
+            // 切換排序方向
+            btn.setAttribute('data-sort-order', sortOrder);
+
+            // 更新箭頭圖示
+            const arrowIcon = btn.querySelector('i');
+            if (sortOrder === 'asc') {
+                arrowIcon.classList.remove('fa-caret-down');
+                arrowIcon.classList.add('fa-caret-up');
+            } else {
+                arrowIcon.classList.remove('fa-caret-up');
+                arrowIcon.classList.add('fa-caret-down');
+            }
+
+            
+
+            renderSuggestions(); // 重新渲染建議列表
+        }
+
+        // 初次載入時渲染建議
+        renderSuggestions();
+    });
 
 
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const adviceId = urlParams.get('id');
-
-        // 確保在 API 請求中傳遞 id 參數
-        fetch(`advice_pull.php?id=${adviceId}`)
+        // 請求 '進行中或未處理' 建言
+        fetch(`advice_get.php?page=1&status=active&sort=new`)
             .then(response => response.json())
             .then(data => {
-                if (data.length > 0) {
-                    const advice = data[0]; // 假設只返回一條資料
-                    // 更新建言標題
-                    document.getElementById('advice-title').textContent = advice.advice_title;
-                    // 更新發布人
-                    document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
-                    // 更新建言分類
-                    document.getElementById('advice-category').textContent = `分類：${advice.category}`;
-                    // 更新建言內文
-                    document.getElementById('advice-content').textContent = advice.advice_content;
-                    // 更新發布日與截止日
-                    document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
-                    document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
+                // 顯示進行中的建言
+            });
 
-                    // 更新建言狀態
-                    document.getElementById('suggestion-status').textContent =
-                        advice.advice_state === '未處理' ? '未處理' :
-                            (advice.advice_state === '進行中' ? '進行中' : '已結束');
-
-                    // 如果有圖片，顯示圖片
-                    if (advice.image_url) {
-                        document.getElementById('advice-image').src = advice.image_url;
-                    }
-
-                    // 如果有PDF連結，顯示PDF連結
-                    if (advice.pdf_url) {
-                        document.getElementById('advice-pdf-link').href = advice.pdf_url;
-                    }
-                }
-            })
-            .catch(error => console.error('Error:', error));
-
-
-
-
-
-
-
-
-
+        // 請求 '已結束' 建言
+        fetch(`advice_get.php?page=1&status=ended&sort=new`)
+            .then(response => response.json())
+            .then(data => {
+                // 顯示已結束的建言
+            });
     </script>
-
 
 </body>
 
