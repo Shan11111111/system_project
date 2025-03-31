@@ -85,14 +85,14 @@
     <div class="container">
         <main class="suggestion-detail">
             <!-- 標題 -->
-            <h1 class="title">建言標題</h1>
+            <h1 class="title" id="advice-title">建言標題</h1>
             <span id="suggestion-status" class="suggestion-status status-pending">進行中</span>
 
             <!-- 進度條區域 -->
             <section class="progress-section">
                 <div class="dates">
-                    <span>發布日：2025/01/01</span>
-                    <span>截止日：2025/02/01</span>
+                    <span id="announce-date">發布日：2025/01/01</span>
+                    <span id="deadline-date">截止日：2025/02/01</span>
                 </div>
                 <div class="progress-bar-container">
                     <div class="progress-bar">
@@ -107,19 +107,21 @@
             <div class="advice">
                 <!-- 發布人與分類 -->
                 <section class="meta">
-                    <p>發布人：?</p>
-                    <p>分類：學術發展</p>
+                    <p id="advice-author">發布人：?</p>
+                    <p id="advice-category">分類：學術發展</p>
                 </section>
 
                 <!-- 圖片或 PDF -->
                 <section class="media">
-                    <img src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg" alt="建言圖片" /><!--也許擇一-->
-                    <a class="pdf-link" href="file.pdf" target="_blank">查看 PDF</a>
+                    <img id="advice-image"
+                        src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg"
+                        alt="建言圖片" />
+                    <a id="advice-pdf-link" class="pdf-link" href="file.pdf" target="_blank">查看 PDF</a>
                 </section>
 
                 <!-- 內文 -->
                 <section class="content">
-                    <p>這裡是建言內文...呵呵</p>
+                    <p id="advice-content">這裡是建言內文...呵呵</p>
                 </section>
             </div>
             <hr style="width=70%; border-color:black;">
@@ -140,7 +142,7 @@
                 </div>
 
                 <ul class="comment-list"></ul>
-                
+
 
                 <div class="pagination">
                     <button id="prev-page">上一頁</button>
@@ -156,7 +158,8 @@
     <!-- Fixed 按鈕 -->
     <div class="fixed-buttons">
         <button class="back-btn" onclick="history.back()">上一頁 </button>
-        <a href="#" class="reply-btn">附議</a>
+        <a href="#" class="reply-btn" id="agree-btn">附議</a>
+
         <a href="#top" class="top-btn">Top</a>
     </div>
 
@@ -200,32 +203,32 @@
         let currentSort = 'latest';
 
         // 計算留言與現在的時間差
-function timeAgo(dateString) {
-  const now = new Date();
-  const past = new Date(dateString);
-  const diff = Math.floor((now - past) / 1000); // 秒數差
+        function timeAgo(dateString) {
+            const now = new Date();
+            const past = new Date(dateString);
+            const diff = Math.floor((now - past) / 1000); // 秒數差
 
-  if (diff < 60) return '剛剛';
-  if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
-  return `${Math.floor(diff / 86400)} 天前`;
-}
+            if (diff < 60) return '剛剛';
+            if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
+            return `${Math.floor(diff / 86400)} 天前`;
+        }
 
 
         function renderComments() {
-  let sortedComments = [...allComments];
-  if (currentSort === 'latest') {
-    sortedComments.reverse();
-  }
+            let sortedComments = [...allComments];
+            if (currentSort === 'latest') {
+                sortedComments.reverse();
+            }
 
-  const start = (currentPage - 1) * commentsPerPage;
-  const paginatedComments = sortedComments.slice(start, start + commentsPerPage);
+            const start = (currentPage - 1) * commentsPerPage;
+            const paginatedComments = sortedComments.slice(start, start + commentsPerPage);
 
-  commentList.innerHTML = '';
-  paginatedComments.forEach(comment => {
-    const li = document.createElement('li');
-    li.classList.add('comment-item');
-    li.innerHTML = `
+            commentList.innerHTML = '';
+            paginatedComments.forEach(comment => {
+                const li = document.createElement('li');
+                li.classList.add('comment-item');
+                li.innerHTML = `
       <div class="user-avatar">👤</div>
       <div class="comment-content">
         <p class="comment-meta">
@@ -235,14 +238,14 @@ function timeAgo(dateString) {
         <p class="comment-text">${comment.text}</p>
       </div>
     `;
-    commentList.appendChild(li);
-  });
+                commentList.appendChild(li);
+            });
 
-  const totalPages = Math.ceil(allComments.length / commentsPerPage);
-  pageIndicator.textContent = `第 ${currentPage} / ${totalPages} 頁`;
-  prevBtn.disabled = currentPage === 1;
-  nextBtn.disabled = currentPage === totalPages;
-}
+            const totalPages = Math.ceil(allComments.length / commentsPerPage);
+            pageIndicator.textContent = `第 ${currentPage} / ${totalPages} 頁`;
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+        }
 
         prevBtn.addEventListener('click', () => {
             if (currentPage > 1) {
@@ -282,7 +285,58 @@ function timeAgo(dateString) {
             }
         });
 
+
         renderComments();
+
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const adviceId = urlParams.get('id');
+
+        // 確保在 API 請求中傳遞 id 參數
+        fetch(`advice_pull.php?id=${adviceId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const advice = data[0]; // 假設只返回一條資料
+                    // 更新建言標題
+                    document.getElementById('advice-title').textContent = advice.advice_title;
+                    // 更新發布人
+                    document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
+                    // 更新建言分類
+                    document.getElementById('advice-category').textContent = `分類：${advice.category}`;
+                    // 更新建言內文
+                    document.getElementById('advice-content').textContent = advice.advice_content;
+                    // 更新發布日與截止日
+                    document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
+                    document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
+
+                    // 更新建言狀態
+                    document.getElementById('suggestion-status').textContent =
+                        advice.advice_state === '未處理' ? '未處理' :
+                            (advice.advice_state === '進行中' ? '進行中' : '已結束');
+
+                    // 如果有圖片，顯示圖片
+                    if (advice.image_url) {
+                        document.getElementById('advice-image').src = advice.image_url;
+                    }
+
+                    // 如果有PDF連結，顯示PDF連結
+                    if (advice.pdf_url) {
+                        document.getElementById('advice-pdf-link').href = advice.pdf_url;
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+
+
+
+
+
+
+
+
     </script>
 
 
