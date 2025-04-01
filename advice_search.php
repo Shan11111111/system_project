@@ -386,6 +386,10 @@
                 pagination.appendChild(next);
             }
         }
+        //搜尋做完自己刪
+        // function search() {
+        //     alert("沒做");
+        // }
 
         // 初始化排序狀態
         let currentSort = {
