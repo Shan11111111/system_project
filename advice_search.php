@@ -34,8 +34,8 @@
         <div class="nav-container">
             <!-- LOGO -->
             <div class="logo">
-                    <img src="img/logo.png" style="width: 90px;">
-                </div>
+                <img src="img/logo.png" style="width: 90px;">
+            </div>
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
 
@@ -201,7 +201,7 @@
             <!-- 選單 + 搜尋 -->
             <div class="filter-bar">
                 <div class="search_text">
-                    <select id="category" onchange="search()">
+                    <select id="category">
                         <option value="">全部分類</option>
                         <option value="設施改善">設施改善</option>
                         <option value="學術發展">學術發展</option>
@@ -221,8 +221,92 @@
 
             </div>
 
+            <?php
+            // Step 1: 連接資料庫
+            $link = mysqli_connect('localhost', 'root');
+            mysqli_select_db($link, "system_project");
+
+            // Step 2: 處理搜尋功能
+            $search = isset($_GET['search']) ? mysqli_real_escape_string($link, $_GET['search']) : '';
+            $category = isset($_GET['category']) ? mysqli_real_escape_string($link, $_GET['category']) : '';
+
+            ?>
             <!-- 建言列表 -->
             <div id="suggestion-list"></div>
+            <div class="filter-bar">
+                <form method="GET" action="">
+                    <select id="category" name="category">
+                        <option value=""><?php echo $category ? htmlspecialchars($category) : '全部分類'; ?></option>
+                        <option value="設施改善">設施改善</option>
+                        <option value="學術發展">學術發展</option>
+                        <option value="社團活動">社團活動</option>
+                        <option value="公益活動">公益活動</option>
+                        <option value="環保永續">環保永續</option>
+                        <option value="其他">其他</option>
+                    </select>
+                    <input type="text" name="search" placeholder="搜尋公告"
+                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+
+            <?php
+
+            // Step 3: 查詢公告資料，根據搜尋關鍵字來篩選標題或內容
+            $sql = "SELECT a.advice_id,user_id,advice_title,advice_content,agree,category,advice_state,announce_date,img_data FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id";
+            $whereClauses = [];
+            if ($search) {
+                $whereClauses[] = "(advice_title LIKE '%$search%' OR advice_content LIKE '%$search%')";
+            }
+            if ($category) {
+                $whereClauses[] = "category = '$category'";
+            }
+            if (count($whereClauses) > 0) {
+                $sql .= " WHERE " . implode(" AND ", $whereClauses);
+            }
+
+            $result = mysqli_query($link, $sql);
+
+            // Step 4: 顯示公告
+            while ($row = mysqli_fetch_assoc($result)) {
+                $advice_id = $row['advice_id'];
+                $comment = 0; // 如果有評論，這裡可以改為從資料庫讀取
+                $remainingDays = ceil((strtotime($row['announce_date'] . ' +30 days') - time()) / 86400);
+                $remainingDays = max(0, $remainingDays); // 確保不會顯示負天數
+            
+                echo '<div class="suggestion" onclick="location.href=\'advice_detail.php?advice_id='.htmlspecialchars($row['advice_id']).'\'">
+            <img src="img/homepage.png" alt="建言圖">
+            <div class="suggestion-content">
+                <div class="suggestion-title">'.$row['advice_id'] . htmlspecialchars($row['advice_title']) . '</div>
+                <div class="suggestion-meta">
+                    <div class="data">
+                        <span>附議數：' . (isset($row['agree']) ? $row['agree'] : 0) . '</span>
+                        <span><i class="fa-solid fa-comment"></i>：' . $comment . '</span>
+                    </div>
+                    <div class="date">
+                        <i class="fa-solid fa-clock"></i>
+                        <span>' . $remainingDays . '</span>
+                        <span>發布日：' . htmlspecialchars($row['announce_date']) . '</span>
+                    </div>
+                </div>
+            </div>';
+
+                // 顯示標籤
+                $tags = explode(' ', $row['category']);
+                foreach ($tags as $tag) {
+                    if (!empty($tag)) {
+                        echo '<span class="tag">' . htmlspecialchars($tag) . '</span>';
+                    }
+                }
+
+                echo '</div>';
+            }
+            ?>
+
+
+
+
+
 
             <!-- 分頁 -->
             <div class="pagination" id="pagination"></div>
@@ -387,10 +471,7 @@
                 pagination.appendChild(next);
             }
         }
-        //搜尋做完自己刪
-        // function search() {
-        //     alert("沒做");
-        // }
+
 
         // 初始化排序狀態
         let currentSort = {
@@ -423,30 +504,22 @@
             const sortHot = currentSort?.hot === 'asc' ? 'asc' : 'desc'; // 確保值為 asc 或 desc
             const sortNew = currentSort?.new === 'asc' ? 'asc' : 'desc';
 
-            const url = `advice_order.php?category=${encodeURIComponent(category)}&keyword=${encodeURIComponent(keyword)}&sort_hot=${sortHot}&sort_new=${sortNew}`;
-            console.log("請求的 URL:", url);
+            // 根據篩選條件過濾資料
+            const filteredSuggestions = suggestions.filter(suggestion => {
+                const matchesCategory = category === "" || suggestion.category.includes(category);
+                const matchesKeyword = keyword === "" || suggestion.title.toLowerCase().includes(keyword.toLowerCase());
+                const matchesSortHot = sortHot === 'asc' ? suggestion.hot : !suggestion.hot;
+                const matchesSortNew = sortNew === 'asc' ? suggestion.new : !suggestion.new;
 
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("後端回傳的資料:", data); // 檢查後端回傳的資料
-                    if (Array.isArray(data.suggestions)) {
-                        renderSuggestions(data.suggestions);
-                    } else {
-                        console.error('Invalid data format:', data);
-                        document.getElementById('suggestion-list').innerHTML = '<div class="no-data">無法載入建議列表</div>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching suggestions:', error);
-                    document.getElementById('suggestion-list').innerHTML = '<div class="no-data">伺服器發生錯誤，請稍後再試</div>';
-                });
+                return matchesCategory && matchesKeyword && matchesSortHot && matchesSortNew;
+            });
+
+            renderSuggestions(filteredSuggestions); // 渲染篩選後的結果
         }
+
+
+
+
 
         // 請求 '進行中或未處理' 建言
         fetch(`advice_get.php?page=1&status=active&sort=new`)

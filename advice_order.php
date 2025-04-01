@@ -1,61 +1,106 @@
 <?php
-require 'db_connection.php'; // 確保資料庫連線
 
-header('Content-Type: application/json');
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// 資料庫連線設定
+$host = 'localhost';  // 資料庫伺服器
+$dbname = 'system_project';  // 資料庫名稱
+$username = 'root';  // 資料庫使用者名稱
+$password = '';  // 資料庫密碼
 
 try {
-    // 獲取請求參數
-    $category = isset($_GET['category']) ? trim($_GET['category']) : '';
-    $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
-    $sortHot = isset($_GET['sort_hot']) ? strtolower($_GET['sort_hot']) : 'desc';
-    $sortNew = isset($_GET['sort_new']) ? strtolower($_GET['sort_new']) : 'desc';
-
-    // 驗證排序參數
-    $validSortOptions = ['asc', 'desc'];
-    if (!in_array($sortHot, $validSortOptions)) {
-        $sortHot = 'desc';
-    }
-    if (!in_array($sortNew, $validSortOptions)) {
-        $sortNew = 'desc';
-    }
-
-    // 構建 SQL 語句
-    $sql = "SELECT * FROM advice WHERE 1=1";
-    $params = [];
-
-    if (!empty($category)) {
-        $sql .= " AND category = ?";
-        $params[] = $category;
-    }
-
-    if (!empty($keyword)) {
-        $sql .= " AND (title LIKE ? OR content LIKE ?)";
-        $params[] = "%$keyword%";
-        $params[] = "%$keyword%";
-    }
-
-    // 排序條件，先按 agree（讚數）排序，再按 advice_id（最新排序）
-    $sql .= " ORDER BY agree $sortHot, advice_id $sortNew";
-
-    // 準備 SQL 語句
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("SQL 準備錯誤: " . $conn->error);
-    }
-
-    // 綁定參數
-    if (!empty($params)) {
-        $paramTypes = str_repeat("s", count($params)); // 根據參數數量建立對應的類型
-        $stmt->bind_param($paramTypes, ...$params);
-    }
-
-    // 執行 SQL
-    $stmt->execute();
-    $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
-    echo json_encode(['suggestions' => $result]);
-
-} catch (Exception $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
+
+
+// 獲取查詢參數
+$category = isset($_GET['category']) ? htmlspecialchars($_GET['category'], ENT_QUOTES, 'UTF-8') : '';
+$keyword = isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword'], ENT_QUOTES, 'UTF-8') : '';
+$sortHot = isset($_GET['sort_hot']) ? $_GET['sort_hot'] : 'desc';
+$sortNew = isset($_GET['sort_new']) ? $_GET['sort_new'] : 'desc';
+$itemsPerPage = 10;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$offset = ($page - 1) * $itemsPerPage;
+
+// 構建查詢條件
+$where = [];
+$params = [];
+
+if ($category) {
+    $where[] = "category = :category";
+    $params[':category'] = $category;
+}
+
+if ($keyword) {
+    $where[] = "title LIKE :keyword";
+    $params[':keyword'] = '%' . $keyword . '%';
+}
+
+// 構建 WHERE 子句
+$whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
+
+// 設定排序條件
+$sortSql = "ORDER BY ";
+if ($sortHot === 'asc') {
+    $sortSql .= "agree ASC";
+} else {
+    $sortSql .= "agree DESC";
+}
+
+if ($sortNew === 'asc') {
+    $sortSql .= ", announce_date ASC";
+} else {
+    $sortSql .= ", announce_date DESC";
+}
+
+// SQL 查詢建議，注意使用 LIMIT 來分頁
+$query = "SELECT * FROM advice $whereSql $sortSql LIMIT :offset, :itemsPerPage";
+$stmt = $pdo->prepare($query);
+
+// 綁定參數
+foreach ($params as $key => $value) {
+    $stmt->bindParam($key, $value);
+}
+$stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+$stmt->bindParam(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
+
+// 執行查詢
+if (!$stmt->execute()) {
+    // 如果 SQL 執行失敗，返回錯誤信息
+    echo json_encode(['error' => 'SQL query execution failed']);
+    exit;
+}
+
+$suggestions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// 獲取總項目數量，並計算總頁數
+$countQuery = "SELECT COUNT(*) FROM advice $whereSql";
+$countStmt = $pdo->prepare($countQuery);
+
+// 綁定參數
+foreach ($params as $key => $value) {
+    $countStmt->bindParam($key, $value);
+}
+
+if (!$countStmt->execute()) {
+    // 如果 SQL 執行失敗，返回錯誤信息
+    echo json_encode(['error' => 'Count query execution failed']);
+    exit;
+}
+
+$totalItems = $countStmt->fetchColumn();
+$totalPages = ceil($totalItems / $itemsPerPage);
+
+// 設置回應的內容類型為 JSON
+header('Content-Type: application/json');
+
+// 回傳結果
+echo json_encode([
+    'suggestions' => $suggestions,
+    'totalPages' => $totalPages
+]);
 ?>

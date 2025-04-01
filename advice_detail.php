@@ -31,8 +31,8 @@
         <div class="nav-container">
             <!-- LOGO -->
             <div class="logo">
-                    <img src="img/logo.png" style="width: 90px;">
-                </div>
+                <img src="img/logo.png" style="width: 90px;">
+            </div>
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
 
@@ -82,77 +82,121 @@
             <a href="register.php" class="nav-item">註冊</a>
         </div>
     </nav>
+    <?php
+    // 從網址中取得建言的 ID
+    $advice_id = isset($_GET['advice_id']) ? $_GET['advice_id'] : 0;
 
-    <div class="container">
-        <main class="suggestion-detail">
-            <!-- 標題 -->
-            <h1 class="title" id="advice-title">建言標題</h1>
-            <span id="suggestion-status" class="suggestion-status status-pending">進行中</span>
+    // Step 1: 連接資料庫
+    $link = mysqli_connect('localhost', 'root');
+    mysqli_select_db($link, "system_project");
 
-            <!-- 進度條區域 -->
-            <section class="progress-section">
-                <div class="dates">
-                    <span id="announce-date">發布日：2025/01/01</span>
-                    <span id="deadline-date">截止日：2025/02/01</span>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 65%"></div>
+    // Step 3: 查詢公告資料，根據建言 ID 查詢
+    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.advice_content, a.agree, a.category, a.advice_state, a.announce_date, ai.img_data 
+            FROM advice a 
+            LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id 
+            WHERE a.advice_id = $advice_id";
+
+    // 執行查詢
+    $result = mysqli_query($link, $sql);
+
+    // Step 4: 顯示公告
+    if ($row = mysqli_fetch_assoc($result)) {
+        ?>
+
+        <div class="container">
+            <main class="suggestion-detail">
+                <!-- 標題 -->
+                <h1 class="title" id="advice-title"><?php echo htmlspecialchars($row['advice_title']); ?></h1>
+                <span id="suggestion-status" class="suggestion-status status-pending">
+                    <?php echo htmlspecialchars($row['advice_state']); ?> <!-- 顯示建言狀態 -->
+                </span>
+
+                <!-- 進度條區域 -->
+                <section class="progress-section">
+                    <div class="dates">
+                        <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
+                        <span
+                            id="deadline-date">截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?></span>
+                        <!-- 預設截止日為發布日後 30 天 -->
                     </div>
-                    <div class="progress-info">
-                        目前 1234 人 / 還差 766 人
-                        <span class="percent">65%</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: <?php echo (min(100, ($row['agree'] / 2000) * 100)); ?>%">
+                            </div> <!-- 假設目標為 2000 人附議 -->
+                        </div>
+                        <div class="progress-info">
+                            目前 <?php echo $row['agree']; ?> 人 / 還差 <?php echo max(0, 2000 - $row['agree']); ?> 人
+                            <span class="percent"><?php echo (min(100, ($row['agree'] / 2000) * 100)); ?>%</span>
+                        </div>
                     </div>
-                </div>
-            </section>
-            <div class="advice">
-                <!-- 發布人與分類 -->
-                <section class="meta">
-                    <p id="advice-author">發布人：?</p>
-                    <p id="advice-category">分類：學術發展</p>
                 </section>
 
-                <!-- 圖片或 PDF -->
-                <section class="media">
-                    <img id="advice-image"
-                        src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg"
-                        alt="建言圖片" />
-                    <a id="advice-pdf-link" class="pdf-link" href="file.pdf" target="_blank">查看 PDF</a>
-                </section>
+                <div class="advice">
+                    <!-- 發布人與分類 -->
+                    <section class="meta">
+                        <p id="advice-author">發布人：<?php echo htmlspecialchars($row['user_id']); ?></p>
+                        <!-- 假設 user_id 是發布人 -->
+                        <p id="advice-category">分類：<?php echo htmlspecialchars($row['category']); ?></p>
+                    </section>
 
-                <!-- 內文 -->
-                <section class="content">
-                    <p id="advice-content">這裡是建言內文...呵呵</p>
-                </section>
-            </div>
-            <hr style="width=70%; border-color:black;">
+                    <!-- 圖片或 PDF -->
+                    <section class="media">
+                        <?php if ($row['img_data']) { ?>
+                            <img id="advice-image" src="data:image/jpeg;base64,<?php echo base64_encode($row['img_data']); ?>"
+                                alt="建言圖片" />
+                        <?php } else { ?>
+                            <img id="advice-image"
+                                src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg"
+                                alt="建言圖片" />
+                        <?php } ?>
+                        <!-- <a id="advice-pdf-link" class="pdf-link" href="file.pdf" target="_blank">查看 PDF</a> -->
+                    </section>
 
-            <section class="comments">
-                <div class="comment-header">
-                    <h4>留言區</h4>
-                    <select id="sort-comments">
-                        <option value="latest">留言時間：最新</option>
-                        <option value="oldest">留言時間：最舊</option>
-                    </select>
+                    <!-- 內文 -->
+                    <section class="content">
+                        <p id="advice-content"><?php echo nl2br(htmlspecialchars($row['advice_content'])); ?></p>
+                    </section>
                 </div>
+            </main>
+        </div>
 
-                <div class="comment-input">
-                    <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                    <textarea id="comment-text" placeholder="我要留言..."></textarea>
-                    <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
+        <?php
+    } else {
+        echo "沒有找到相關建言。";
+    }
 
-                <ul class="comment-list"></ul>
+    // 關閉資料庫連接
+    mysqli_close($link);
+    ?>
+
+    <hr style="width=70%; border-color:black;">
+
+    <section class="comments">
+        <div class="comment-header">
+            <h4>留言區</h4>
+            <select id="sort-comments">
+                <option value="latest">留言時間：最新</option>
+                <option value="oldest">留言時間：最舊</option>
+            </select>
+        </div>
+
+        <div class="comment-input">
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <textarea id="comment-text" placeholder="我要留言..."></textarea>
+            <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+
+        <ul class="comment-list"></ul>
 
 
-                <div class="pagination">
-                    <button id="prev-page">上一頁</button>
-                    <span id="page-indicator"></span>
-                    <button id="next-page">下一頁</button>
-                </div>
-            </section>
+        <div class="pagination">
+            <button id="prev-page">上一頁</button>
+            <span id="page-indicator"></span>
+            <button id="next-page">下一頁</button>
+        </div>
+    </section>
 
-        </main>
+    </main>
     </div>
 
 
