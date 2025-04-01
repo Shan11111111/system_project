@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     // 執行語句
                     if (mysqli_stmt_execute($stmt_image)) {
-                        echo "圖片已成功存入資料庫！";
+                        // echo "圖片已成功存入資料庫！";
                     } else {
                         die("圖片存入資料庫失敗: " . mysqli_error($link));
                     }
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="logo-container">
                 <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
 
-                <p id="myobject">資料處理中~~~</p>
+                <p id="myobject">上傳成功! 資料處理中~~~</p>
             </div>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
