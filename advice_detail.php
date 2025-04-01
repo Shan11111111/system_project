@@ -301,6 +301,7 @@
     <!-- Fixed 按鈕 -->
     <div class="fixed-buttons">
         <button class="back-btn" onclick="history.back()">上一頁 </button>
+<<<<<<< HEAD
 
         <form id="insertForm" action="agree_insert.php" method="POST">
             <input type="hidden" name="advice_id" value="<?php echo isset($advice_id) ? $advice_id : ''; ?>">
@@ -346,6 +347,12 @@
             });
         </script>
 
+=======
+        <a class="reply-btn agree-btn" id="agree-btn"
+            data-advice-id="<?= htmlspecialchars($_GET['advice_id'] ?? '') ?>">附議</a>
+
+
+>>>>>>> 5f1e380dd08e585f596d2a7bbf9dfcc100f5380d
 
 
         <a href="#top" class="top-btn">Top</a>
@@ -482,6 +489,7 @@
         const adviceId = urlParams.get('id');
 
         // 確保在 API 請求中傳遞 id 參數
+<<<<<<< HEAD
         fetch(`advice_pull.php?id=${adviceId}`)
             .then(response => response.json())
             .then(data => {
