@@ -22,6 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $check_stmt->bind_result($count);
     $check_stmt->fetch();
     $check_stmt->close();
+
+
     ?>
     <?php
     if ($count > 0) {
@@ -78,7 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ss", $advice_id, $user_id);
 
     if ($stmt->execute()) {
-        echo "附議成功";
+        // 更新 advice 表中的 agree 欄位
+        $update_stmt = $conn->prepare("UPDATE advice SET agree = agree + 1 WHERE advice_id = ?");
+        $update_stmt->bind_param("i", $advice_id);
+        $update_stmt->execute();
+        $update_stmt->close();
+
+        // echo "附議成功";
         ?>
         <!DOCTYPE html>
         <html lang="zh-Hant">
@@ -94,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="logo-container">
                 <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
 
-                <p id="myobject">上傳成功! 資料處理中~~~</p>
+                <p id="myobject">收到您的附議了! 附議成功!</p>
             </div>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {

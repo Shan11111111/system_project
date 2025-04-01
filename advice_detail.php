@@ -309,7 +309,6 @@
     <!-- Fixed 按鈕 -->
     <div class="fixed-buttons">
         <button class="back-btn" onclick="history.back()">上一頁 </button>
-<<<<<<< HEAD
 
         <form id="insertForm" action="agree_insert.php" method="POST">
             <input type="hidden" name="advice_id" value="<?php echo isset($advice_id) ? $advice_id : ''; ?>">
@@ -343,7 +342,7 @@
         </form>
 
 
-        <script>
+        <!-- <script>
             document.addEventListener("DOMContentLoaded", function () {
                 let agreeBtn = document.querySelector(".agree-btn");
                 agreeBtn.addEventListener("click", function (event) {
@@ -353,14 +352,8 @@
                     document.getElementById("insertForm").submit(); // 提交表單
                 });
             });
-        </script>
+        </script> -->
 
-=======
-        <a class="reply-btn agree-btn" id="agree-btn"
-            data-advice-id="<?= htmlspecialchars($_GET['advice_id'] ?? '') ?>">附議</a>
-
-
->>>>>>> 5f1e380dd08e585f596d2a7bbf9dfcc100f5380d
 
 
         <a href="#top" class="top-btn">Top</a>
