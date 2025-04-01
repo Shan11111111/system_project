@@ -6,7 +6,7 @@
   --color-orange-brown: #D9A679;
   /* 溫柔橘棕 - 強調/按鈕  */
   --color-dark-brown: #7c4d2b;
-  /* 深咖啡 - 導航、標題 * 文字的hover/ 
+  /* 深咖啡 - 導航、標題 * 文字的hover*/
 
   /* 輔助色 */
   --color-soft-green: #dddfab7f;
@@ -18,7 +18,7 @@
   --color-text: #4B3F2F;
   /* 深褐灰 - 內文字體 */
   --color-line: #D7CBB8;
-  --navbar-text: #fff6da
+  --navbar-text: #fff6da;
     /* 淡褐線條 */
 
     /* 狀態/互動 */
@@ -48,7 +48,6 @@ body {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-
 }
 
 /* 滾動後的 navbar 樣式 */
@@ -236,6 +235,7 @@ body {
 .container{
     width: 75%;
     margin-bottom: 30px;
+    margin-top: 80px;
 }
   
 
@@ -273,7 +273,7 @@ body {
   
   
   .progress-section {
-    background: #fffba8;
+    background: var(--color-soft-green);
     border-radius: 8px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -301,7 +301,7 @@ body {
   
   .progress {
     height: 100%;
-    background: linear-gradient(90deg, #f6fa07, #ceb600);
+    background: linear-gradient(90deg, #f3f56c, #ceb600);
   }
   
   .progress-info {
@@ -319,6 +319,7 @@ body {
  .advice{
     border: 1px solid#99999982 ;
     border-radius: 8px;
+    background-color: var(--color-yellow)
   
 
  }
@@ -335,7 +336,6 @@ body {
   
   .media {
     display: flex;
-    background: #fff;
     padding-left: 1rem;
     margin-top: 0rem;
     margin-bottom: 1rem;
@@ -359,14 +359,13 @@ body {
   }
 
   .content {
-    background: #f7f7f7;
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: 8px;
   }
 
   .comments {
-    background: #d1d1d16c;
+    background: var(--color-yellow);
     padding: 1.5rem;
     margin: auto;
     border-radius: 8px;
@@ -379,6 +378,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    color: var(--color-dark-brown);
   }
   
   .comment-header select {
@@ -496,7 +496,8 @@ body {
   
   .pagination button {
     padding: 0.4rem 0.8rem;
-    background-color: #ddd;
+    background-color: var(--color-dark-brown);
+    color: #eaeaea;
     border: none;
     border-radius: 6px;
     cursor: pointer;
