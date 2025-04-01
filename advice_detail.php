@@ -548,8 +548,72 @@
         //         })
         //         .catch(error => console.error("錯誤:", error));
         // });
+=======
+        /*    fetch(`advice_pull.php?id=${adviceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const advice = data[0]; // 假設只返回一條資料
+                        // 更新建言標題
+                        document.getElementById('advice-title').textContent = advice.advice_title;
+                        // 更新發布人
+                        document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
+                        // 更新建言分類
+                        document.getElementById('advice-category').textContent = `分類：${advice.category}`;
+                        // 更新建言內文
+                        document.getElementById('advice-content').textContent = advice.advice_content;
+                        // 更新發布日與截止日
+                        document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
+                        document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
+    
+                        // 更新建言狀態
+                        document.getElementById('suggestion-status').textContent =
+                            advice.advice_state === '未處理' ? '未處理' :
+                                (advice.advice_state === '進行中' ? '進行中' : '已結束');
+    
+                        // 如果有圖片，顯示圖片
+                        if (advice.image_url) {
+                            document.getElementById('advice-image').src = advice.image_url;
+                        }
+    
+                        // 如果有PDF連結，顯示PDF連結
+                        if (advice.pdf_url) {
+                            document.getElementById('advice-pdf-link').href = advice.pdf_url;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));*/
 
 
+
+
+        document.getElementById('agree-btn').addEventListener('click', function (e) {
+            e.preventDefault(); // 防止頁面跳轉
+
+            const adviceId = this.getAttribute('data-advice-id'); // 讀取 data-advice-id
+            console.log('附議的建言ID:', adviceId);
+
+            const formData = new FormData();
+            formData.append('advice_id', adviceId);
+
+            // 發送 AJAX 請求
+            fetch('update_agree.php', {  // 假設後端檔案是 update_agree.php
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())  // 確保後端返回 JSON 格式
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('成功附議！');
+                    } else {
+                        alert('附議失敗：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('發生錯誤:', error);
+                });
+        });
+>>>>>>> 5f1e380dd08e585f596d2a7bbf9dfcc100f5380d
 
 
 
