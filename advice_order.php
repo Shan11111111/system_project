@@ -1,75 +1,61 @@
 <?php
-ini_set('display_errors', 0); // 禁止直接顯示錯誤
-ini_set('log_errors', 1); // 啟用錯誤日誌
-ini_set('error_log', __DIR__ . '/error_log.txt'); // 設定錯誤日誌路徑
-
-require 'db_connection.php'; // 確保你有一個資料庫連線文件
+require 'db_connection.php'; // 確保資料庫連線
 
 header('Content-Type: application/json');
 
-// 獲取請求參數
-$category = isset($_GET['category']) ? $_GET['category'] : '';
-$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-$sortHot = isset($_GET['sort_hot']) ? $_GET['sort_hot'] : 'desc';
-$sortNew = isset($_GET['sort_new']) ? $_GET['sort_new'] : 'desc';
+try {
+    // 獲取請求參數
+    $category = isset($_GET['category']) ? trim($_GET['category']) : '';
+    $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+    $sortHot = isset($_GET['sort_hot']) ? strtolower($_GET['sort_hot']) : 'desc';
+    $sortNew = isset($_GET['sort_new']) ? strtolower($_GET['sort_new']) : 'desc';
 
-// 驗證排序參數是否有效
-$validSortOptions = ['asc', 'desc'];
-if (!in_array(strtolower($sortHot), $validSortOptions)) {
-    $sortHot = 'desc';
-}
-if (!in_array(strtolower($sortNew), $validSortOptions)) {
-    $sortNew = 'desc';
-}
-
-// 構建 SQL 語句
-$sql = "SELECT * FROM advice WHERE 1=1";
-if (!empty($category)) {
-    $sql .= " AND category = ?";
-}
-if (!empty($keyword)) {
-    $sql .= " AND (title LIKE ? OR content LIKE ?)";
-}
-$sql .= " ORDER BY hot $sortHot, advice_id $sortNew";
-
-// 記錄生成的 SQL 語句
-error_log("Generated SQL: " . $sql);
-
-// 準備 SQL 語句
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    error_log("SQL Prepare failed: " . $conn->error);
-    die(json_encode(['error' => 'SQL Prepare failed']));
-}
-
-// 綁定參數
-$params = [];
-if (!empty($category)) {
-    $params[] = $category;
-}
-if (!empty($keyword)) {
-    $params[] = "%$keyword%";
-    $params[] = "%$keyword%";
-}
-
-// 執行 SQL 語句
-if (!$stmt->execute($params)) {
-    error_log("SQL Execute failed: " . $stmt->error);
-    die(json_encode(['error' => 'SQL Execute failed']));
-}
-
-// 獲取結果
-$result = [];
-$res = $stmt->get_result();
-if ($res) {
-    while ($row = $res->fetch_assoc()) {
-        $result[] = $row;
+    // 驗證排序參數
+    $validSortOptions = ['asc', 'desc'];
+    if (!in_array($sortHot, $validSortOptions)) {
+        $sortHot = 'desc';
     }
-} else {
-    error_log("Fetching result failed: " . $stmt->error);
-    die(json_encode(['error' => 'Fetching result failed']));
-}
+    if (!in_array($sortNew, $validSortOptions)) {
+        $sortNew = 'desc';
+    }
 
-// 回傳 JSON 結果
-echo json_encode(['suggestions' => $result]);
+    // 構建 SQL 語句
+    $sql = "SELECT * FROM advice WHERE 1=1";
+    $params = [];
+
+    if (!empty($category)) {
+        $sql .= " AND category = ?";
+        $params[] = $category;
+    }
+
+    if (!empty($keyword)) {
+        $sql .= " AND (title LIKE ? OR content LIKE ?)";
+        $params[] = "%$keyword%";
+        $params[] = "%$keyword%";
+    }
+
+    // 排序條件，先按 agree（讚數）排序，再按 advice_id（最新排序）
+    $sql .= " ORDER BY agree $sortHot, advice_id $sortNew";
+
+    // 準備 SQL 語句
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("SQL 準備錯誤: " . $conn->error);
+    }
+
+    // 綁定參數
+    if (!empty($params)) {
+        $paramTypes = str_repeat("s", count($params)); // 根據參數數量建立對應的類型
+        $stmt->bind_param($paramTypes, ...$params);
+    }
+
+    // 執行 SQL
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+    echo json_encode(['suggestions' => $result]);
+
+} catch (Exception $e) {
+    echo json_encode(['error' => $e->getMessage()]);
+}
 ?>

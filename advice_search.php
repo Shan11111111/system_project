@@ -300,7 +300,7 @@
                             `;
                                 } else { // 如果是已結束的建議
                                     div.innerHTML = `
-                                <img src="https://placekitten.com/300/169" alt="建言圖">
+                                <img src="${item.images || 'img/homepage.png'}"  alt="建言圖">
                                 <div class="suggestion-content">
                                     <div class="suggestion-title">${item.title}</div>
                                     <div class="suggestion-meta">
