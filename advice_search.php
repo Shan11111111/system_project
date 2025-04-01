@@ -32,13 +32,18 @@ session_start();
 
 <body>
 
-    <!--navbar -->
+    <!-- Navbar -->
+
     <nav class="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-            <div class="logo">
-                <img src="img/logo.png" style="width: 90px;">
-            </div>
+            <a href="homepage.php">
+                <div class="logo">
+                    <img src="img/logo.png" style="width: 90px;">
+                </div>
+            </a>
+
+
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
 
@@ -78,7 +83,7 @@ session_start();
                         <?php } ?>
 
                         <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_hot.php">熱門建言</a>
+                        <a href="advice_search.php">熱門建言</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -146,7 +151,7 @@ session_start();
                     <?php } ?>
 
                     <a href="advice_search.php">最新建言</a>
-                    <a href="advice_search.php">熱門建言</a>
+                    <a href="advice_hot.php">熱門建言</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -156,6 +161,9 @@ session_start();
                     <a href="#">成功案例</a>
                 </div>
             </div>
+
+
+
 
             <?php if (isset($_SESSION['user_id'])) { ?>
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>

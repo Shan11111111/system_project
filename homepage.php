@@ -147,8 +147,8 @@
                         </script>
                     <?php } ?>
 
-                    <a href="#">最新建言</a>
-                    <a href="#">熱門建言</a>
+                    <a href="advice_search.php">最新建言</a>
+                    <a href="advice_hot.php">熱門建言</a>
                 </div>
             </div>
             <div class="dropdown">
