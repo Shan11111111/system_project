@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -22,6 +24,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 
+    <!-- 引入 SweetAlert2 :美觀彈出未登入警告圖示-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </head>
 
 <body>
@@ -41,9 +48,38 @@
                 <div class="dropdown">
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
-                        <a href="submitadvice.php">發布建言</a>
+                        <?php if (isset($_SESSION['user_id'])) { ?>
+                            <a href="submitadvice.php">提交建言</a>
+                        <?php } else { ?>
+                            <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                            <script>
+                                function showLoginAlert() {
+
+                                    Swal.fire({
+                                        icon: 'warning', // 圖示類型
+                                        title: '請先登入',
+                                        text: '發布建言為學生與教職人員專屬功能！',
+                                        confirmButtonText: '確定',
+                                        confirmButtonColor: '#3085d6',
+                                        focusConfirm: false, // 禁用自動聚焦
+                                        didOpen: () => {
+                                            // 禁用滾動
+                                            document.body.style.overflow = 'hidden';
+
+                                        },
+                                        didClose: () => {
+                                            // 恢復滾動
+                                            document.body.style.overflow = '';
+                                            // 恢復滾動位置
+
+                                        }
+                                    });
+                                }
+                            </script>
+                        <?php } ?>
+
                         <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_search.php">熱門建言</a>
+                        <a href="advice_hot.php">熱門建言</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -56,8 +92,24 @@
             </div>
 
             <div class="nav-right desktop-menu">
-                <a href="login.php" class="nav-item">登入</a>
-                <a href="register.php" class="nav-item">註冊</a>
+                <?php if (isset($_SESSION['user_id'])) { ?>
+                    <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <script>
+                        document.getElementById('logout-link').addEventListener('click', function () {
+                            // 彈出確認視窗
+                            const confirmLogout = confirm("確定要登出嗎？");
+                            if (confirmLogout) {
+                                // 如果用戶選擇確定，導向登出頁面
+                                window.location.href = "logout.php";
+                            }
+                            // 如果用戶選擇取消，什麼都不做
+                        });
+                    </script>
+                <?php } else { ?>
+                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="register.php" class="nav-item">註冊</a>
+                <?php } ?>
             </div>
         </div>
 
@@ -66,8 +118,35 @@
             <div class="dropdown">
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
-                    <a href="submitadvice.php">發布建言</a>
-                    <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
+                    <?php if (isset($_SESSION['user_id'])) { ?>
+                        <a href="submitadvice.php">提交建言</a>
+                    <?php } else { ?>
+                        <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                        <script>
+                            function showLoginAlert() {
+                                Swal.fire({
+                                    icon: 'warning', // 圖示類型
+                                    title: '請先登入',
+                                    text: '發布建言為學生與教職人員專屬功能！',
+                                    confirmButtonText: '確定',
+                                    confirmButtonColor: '#3085d6',
+                                    focusConfirm: false, // 禁用自動聚焦
+                                    didOpen: () => {
+                                        // 禁用滾動
+                                        document.body.style.overflow = 'hidden';
+                                    },
+                                    didClose: () => {
+                                        // 恢復滾動
+                                        document.body.style.overflow = '';
+                                        // 恢復滾動位置
+                                        window.scrollTo(0, scrollTop);
+                                    }
+                                });
+                            }
+                        </script>
+                    <?php } ?>
+
+                    <a href="advice_search.php">最新建言</a>
                     <a href="advice_search.php">熱門建言</a>
                 </div>
             </div>
@@ -78,10 +157,30 @@
                     <a href="#">成功案例</a>
                 </div>
             </div>
-            <a href="login.php" class="nav-item">登入</a>
-            <a href="register.php" class="nav-item">註冊</a>
+
+            <?php if (isset($_SESSION['user_id'])) { ?>
+                <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                <a class="nav-item" id="logout-link-mobile">登出</a>
+                <script>
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                        // 彈出確認視窗
+                        const confirmLogout = confirm("確定要登出嗎？");
+                        if (confirmLogout) {
+                            // 如果用戶選擇確定，導向登出頁面
+                            window.location.href = "logout.php";
+                        }
+                        // 如果用戶選擇取消，什麼都不做
+                    });
+                </script>
+            <?php } else { ?>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
+            <?php } ?>
+
         </div>
     </nav>
+
+
     <?php
     // 從網址中取得建言的 ID
     $advice_id = isset($_GET['advice_id']) ? $_GET['advice_id'] : 0;
@@ -165,8 +264,7 @@
         echo "沒有找到相關建言。";
     }
 
-    // 關閉資料庫連接
-    mysqli_close($link);
+
     ?>
 
     <hr style="width=70%; border-color:black;">
@@ -203,7 +301,51 @@
     <!-- Fixed 按鈕 -->
     <div class="fixed-buttons">
         <button class="back-btn" onclick="history.back()">上一頁 </button>
-        <a href="#" class="reply-btn agree-btn" id="agree-btn" data-advice-id="">附議</a>
+
+        <form id="insertForm" action="agree_insert.php" method="POST">
+            <input type="hidden" name="advice_id" value="<?php echo isset($advice_id) ? $advice_id : ''; ?>">
+
+            <?php if (isset($_SESSION['user_id'])) { ?>
+                <input type="submit" id="agree-btn" class="reply-btn agree-btn" data-advice-id="<?php echo $advice_id; ?>"
+                    value="附議">
+            <?php } else { ?>
+                <a href="javascript:void(0);" id="agree-btn" class="reply-btn agree-btn" onclick="showLoginAlert()">附議</a>
+
+                <script>
+                    function showLoginAlert() {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '請先登入',
+                            text: '附議為學生與教職人員專屬功能！',
+                            confirmButtonText: '確定',
+                            confirmButtonColor: '#3085d6',
+                            focusConfirm: false, // 禁用自動聚焦
+                            didOpen: () => {
+                                document.body.style.overflow = 'hidden'; // 禁止滾動
+                            },
+                            didClose: () => {
+                                document.body.style.overflow = ''; // 恢復滾動
+                                window.scrollTo(0, 0); // 避免滾動位置錯誤
+                            }
+                        });
+                    }
+                </script>
+            <?php } ?>
+        </form>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let agreeBtn = document.querySelector(".agree-btn");
+                agreeBtn.addEventListener("click", function (event) {
+                    event.preventDefault(); // 防止 a 標籤跳轉
+                    let adviceId = this.getAttribute("data-advice-id");
+                    document.getElementById("advice_id").value = adviceId;
+                    document.getElementById("insertForm").submit(); // 提交表單
+                });
+            });
+        </script>
+
 
 
         <a href="#top" class="top-btn">Top</a>
@@ -380,32 +522,32 @@
 
 
 
-        document.getElementById("agree-btn").addEventListener("click", function (event) {
-            event.preventDefault(); // 防止超連結跳轉
+        // document.getElementById("agree-btn").addEventListener("click", function (event) {
+        //     event.preventDefault(); // 防止超連結跳轉
 
-            // 從網址中取得 'id' 參數
-            const urlParams = new URLSearchParams(window.location.search);
-            const adviceId = urlParams.get('id'); // 取得 'id' 參數
+        //     // 從網址中取得 'id' 參數
+        //     const urlParams = new URLSearchParams(window.location.search);
+        //     const adviceId = urlParams.get('id'); // 取得 'id' 參數
 
-            if (!adviceId) {
-                alert("無效的 advice_id！");
-                return;
-            }
+        //     if (!adviceId) {
+        //         alert("無效的 advice_id！");
+        //         return;
+        //     }
 
-            console.log("附議的 advice_id:", adviceId); // 測試用
+        //     console.log("附議的 advice_id:", adviceId); // 測試用
 
-            // 發送 AJAX 請求到後端
-            fetch("update_agree.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `advice_id=${adviceId}` // 傳送 advice_id 到後端
-            })
-                .then(response => response.text())
-                .then(data => {
-                    alert("附議成功！");
-                })
-                .catch(error => console.error("錯誤:", error));
-        });
+        //     // 發送 AJAX 請求到後端
+        //     fetch("update_agree.php", {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        //         body: `advice_id=${adviceId}` // 傳送 advice_id 到後端
+        //     })
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             alert("附議成功！");
+        //         })
+        //         .catch(error => console.error("錯誤:", error));
+        // });
 
 
 
