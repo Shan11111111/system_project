@@ -35,7 +35,7 @@ session_start();
                 <div class="top-bar">
                     <button class="back-btn" >
                         <a href="homepage.php">← Back</a> </button>
-                    
+                        <div class="logo"><img src="img\logo.png" style="width: 90px;"></div>
                 </div>
 
                 <h2>註冊</h2>

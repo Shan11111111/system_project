@@ -1,3 +1,30 @@
+:root {
+  /* 主色調 */
+  --color-yellow: #fff6da;
+  /* 鵝黃色 - 小雞感 */
+  /*navbar*/
+  --color-orange-brown: #D9A679;
+  /* 溫柔橘棕 - 強調/按鈕  */
+  --color-dark-brown: #7c4d2b;
+  /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+  --color-soft-green: #dddfab7f;
+  /* 嫩綠色 - 自然感 */
+  --color-cream: #fff8ed;
+  /* 奶油白 - 背景 */
+
+  /* 字體與邊線 */
+  --color-text: #4B3F2F;
+  /* 深褐灰 - 內文字體 */
+  --color-line: #D7CBB8;
+  --navbar-text: #fff6da
+    /* 淡褐線條 */
+
+    /* 狀態/互動 */
+    --color-hover: #EFC89C;
+  /* hover/active 狀態用的柔橘 */
+}
 * {
     box-sizing: border-box;
     margin: 0;
@@ -8,7 +35,7 @@
   body {
     display: flex;
     min-height: 100vh;
-    background-color: #fff;
+    background-color: #f5eacb;
   }
   
   .container1 {
@@ -43,12 +70,16 @@
     background: none;
     border: none;
     font-size: 16px;
-    color: #00796b;
     cursor: pointer;
     font-weight: bold;
     padding: 5px 10px;
     border-radius: 8px;
     transition: background 0.2s;
+  }
+
+  .back-btn a {
+    color:var(--color-dark-brown);
+    text-decoration: none;
   }
   
   .back-btn:hover {
@@ -66,14 +97,19 @@
     width: 100%;
   }
   
-  .login-content h1,
+  .login-content h2
   .login-content p,
   form {
     padding-top: 20px;
     width: 100%;
     text-align: left;
+    
   }
   
+  .login-content h2{
+    color: var(--color-dark-brown);
+  }
+
   .top-bar {
     display: flex;
     justify-content: space-between;
@@ -94,7 +130,7 @@
   }
 
   .back-btn a {
-    color: #00796b;
+    color:var(--color-dark-brown);
     text-decoration: none;
   }
   
@@ -113,8 +149,8 @@
   padding: 8px 36px 8px 16px; /* 跟 select 對齊 */
   font-size: 14px;
   border-radius: 25px;
-  border: 1px solid #eee;
-  background: #f1f9f6;
+  border: 1px solid #d8cccc;
+  background: white;
   margin-bottom: 15px;
   }
 
@@ -157,9 +193,9 @@
   }
   
   .sign-in-btn {
-    background: #25b89a;
+    background: var(--color-dark-brown);
     border: none;
-    padding: 12px;
+    padding: 14px;
     width: 100%;
     color: white;
     border-radius: 25px;
@@ -176,7 +212,8 @@
   /* 右側區塊 */
   .signup-section {
     width: 35%;
-    background: linear-gradient(to bottom right, #23bfa0, #36b8d8);
+    background-image: 
+  url('../img/homepage.png');
     color: white;
     display: flex;
     flex-direction: column;
@@ -189,12 +226,14 @@
   .signup-section h2 {
     font-size: 32px;
     margin-bottom: 20px;
+    color: var(--color-dark-brown);
   }
   
   .signup-section p {
     font-size: 16px;
     margin-bottom: 30px;
     max-width: 300px;
+    color: var(--color-dark-brown);
   }
   
   .signup-btn {
@@ -211,11 +250,11 @@
 
   .signup-btn a {
     text-decoration: none;
-    color: #36b8d8;
+    color: var(--color-dark-brown);
   }
   
   .signup-btn:hover {
-    background: #f2f2f2;
+    background: #858585;
   }
   
   /* ------------------- RWD ------------------- */
