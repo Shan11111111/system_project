@@ -200,14 +200,14 @@
             <!-- 選單 + 搜尋 -->
             <div class="filter-bar">
                 <div class="search_text">
-                    <select id="category">
-                        <option value="all">全部分類</option>
-                        <option value="equipment">設施改善</option>
-                        <option value="academic">學術發展</option>
-                        <option value="environment">社團活動</option>
-                        <option value="welfare">公益關懷</option>
-                        <option value="sustainability">環保永續</option>
-                        <option value="other">其他</option>
+                    <select id="category" onchange="search()">
+                        <option value="">全部分類</option>
+                        <option value="設施改善">設施改善</option>
+                        <option value="學術發展">學術發展</option>
+                        <option value="社團活動">社團活動</option>
+                        <option value="公益活動">公益活動</option>
+                        <option value="環保永續">環保永續</option>
+                        <option value="其他">其他</option>
                     </select>
 
                     <input type="text" id="search" placeholder="請輸入關鍵字">
@@ -386,10 +386,6 @@
                 pagination.appendChild(next);
             }
         }
-        //搜尋做完自己刪
-        function search() {
-            alert("沒做");
-        }
 
         // 初始化排序狀態
         let currentSort = {
@@ -416,42 +412,35 @@
             }
         }
 
-        // 根據分類、關鍵字和排序條件進行搜尋
         function search() {
-            const category = document.getElementById("category").value;  // 獲取分類
-            const keyword = document.getElementById("search").value;  // 獲取關鍵字
-            const sortHot = currentSort.hot;
-            const sortNew = currentSort.new;
+            const category = document.getElementById("category").value.trim();
+            const keyword = document.getElementById("search").value.trim();
+            const sortHot = currentSort?.hot === 'asc' ? 'asc' : 'desc'; // 確保值為 asc 或 desc
+            const sortNew = currentSort?.new === 'asc' ? 'asc' : 'desc';
 
-            // 構建查詢參數
-            const url = new URL('advice_order.php');
-            url.searchParams.set('category', category);
-            url.searchParams.set('keyword', keyword);
-            url.searchParams.set('sort_hot', sortHot);
-            url.searchParams.set('sort_new', sortNew);
+            const url = `advice_order.php?category=${encodeURIComponent(category)}&keyword=${encodeURIComponent(keyword)}&sort_hot=${sortHot}&sort_new=${sortNew}`;
+            console.log("請求的 URL:", url);
 
-            // 發送請求到後端
             fetch(url)
-                .then(response => response.json())
-                .then(data => renderSuggestions(data))
-                .catch(error => console.error('Error fetching suggestions:', error));
-        }
-
-        // 渲染建議項目
-        function renderSuggestions(suggestions) {
-            const suggestionContainer = document.getElementById('suggestion-list');
-            suggestionContainer.innerHTML = '';  // 清空現有內容
-
-            suggestions.forEach(suggestion => {
-                const suggestionElement = document.createElement('div');
-                suggestionElement.className = 'suggestion-item';
-                suggestionElement.innerHTML = `
-            <h3>${suggestion.title}</h3>
-            <p>${suggestion.content}</p>
-            <span>${suggestion.publishDate}</span>
-        `;
-                suggestionContainer.appendChild(suggestionElement);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("後端回傳的資料:", data); // 檢查後端回傳的資料
+                    if (Array.isArray(data.suggestions)) {
+                        renderSuggestions(data.suggestions);
+                    } else {
+                        console.error('Invalid data format:', data);
+                        document.getElementById('suggestion-list').innerHTML = '<div class="no-data">無法載入建議列表</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching suggestions:', error);
+                    document.getElementById('suggestion-list').innerHTML = '<div class="no-data">伺服器發生錯誤，請稍後再試</div>';
+                });
         }
 
         // 請求 '進行中或未處理' 建言
