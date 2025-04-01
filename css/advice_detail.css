@@ -1,27 +1,65 @@
+:root {
+  /* 主色調 */
+  --color-yellow: #fff6da;
+  /* 鵝黃色 - 小雞感 */
+  /*navbar*/
+  --color-orange-brown: #D9A679;
+  /* 溫柔橘棕 - 強調/按鈕  */
+  --color-dark-brown: #7c4d2b;
+  /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+  --color-soft-green: #dddfab7f;
+  /* 嫩綠色 - 自然感 */
+  --color-cream: #fff8ed;
+  /* 奶油白 - 背景 */
+
+  /* 字體與邊線 */
+  --color-text: #4B3F2F;
+  /* 深褐灰 - 內文字體 */
+  --color-line: #D7CBB8;
+  --navbar-text: #fff6da
+    /* 淡褐線條 */
+
+    /* 狀態/互動 */
+    --color-hover: #EFC89C;
+  /* hover/active 狀態用的柔橘 */
+}
+
 html,
 body {
   font-family: Arial, sans-serif;
   height: 100%;
   margin: 0;
-  padding-top: 45px;
-  /* 舉例：navbar 高度為 80px */
-
+  background-color: var(--color-cream);
 }
 
-
+/* Navbar */
+/* Navbar 基本設定 */
 /* Navbar 基本樣式 */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: white;
+  background: var(--color-yellow);
   padding: 10px 170px;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   display: flex;
   flex-direction: column;
 
+}
+
+/* 滾動後的 navbar 樣式 */
+.navbar.scrolled {
+  width: 100% !important;
+  left: 0 !important;
+  transform: none !important;
+  border-radius: 0;
+  top: 0;
+  padding: 10px 150px;
+  transition: all 0.3s ease;
 }
 
 /* nav-container 三欄佈局 */
@@ -77,7 +115,7 @@ body {
 }
 
 .dropbtn:hover {
-  color: #d6ae57;
+  color: var(--color-dark-brown);
 }
 
 /* 修正 dropdown 選單位置 & 寬度 */
@@ -87,7 +125,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   top: 100%;
-  background-color: white;
+  background-color: var(--color-yellow);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   min-width: 150px;
@@ -109,6 +147,10 @@ body {
   white-space: nowrap;
 }
 
+.dropdown-content a:hover {
+  color: var(--color-dark-brown);
+}
+
 /* 登入、註冊樣式 */
 .nav-item {
   text-decoration: none;
@@ -116,6 +158,10 @@ body {
   font-size: 16px;
   font-weight: bold;
   padding: 8px 12px;
+}
+
+.nav-item:hover {
+  color: var(--color-dark-brown);
 }
 
 /* 漢堡按鈕 */
@@ -184,9 +230,8 @@ body {
   .dropdown-content {
     display: none;
   }
-  
-  
 }
+
 
 .container{
     width: 75%;
@@ -198,6 +243,7 @@ body {
     font-size: 1.8rem;
     margin: 1.0rem 0;
     font-weight: bold;
+    color: var(--color-dark-brown);
   }
 
   .suggestion-status {

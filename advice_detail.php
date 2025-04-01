@@ -30,8 +30,9 @@
     <nav class="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-            <div class="logo">LOGO</div>
-
+            <div class="logo">
+                    <img src="img/logo.png" style="width: 90px;">
+                </div>
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
 
