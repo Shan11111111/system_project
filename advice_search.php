@@ -221,6 +221,11 @@
 
             </div>
 
+
+
+
+            <!-- 新的建言表展示 -->
+
             <?php
             // Step 1: 連接資料庫
             $link = mysqli_connect('localhost', 'root');
@@ -235,6 +240,25 @@
             <div id="suggestion-list"></div>
             <div class="filter-bar">
                 <form method="GET" action="">
+                    <pre>
+
+
+
+
+
+                    </pre>
+                    
+                    
+                    <div class="tabs">
+                        <div
+                            class="tab <?php echo (!isset($_GET['status']) || $_GET['status'] == 'active') ? 'active' : ''; ?>">
+                            <a href="?status=active">進行中</a>
+                        </div>
+                        <div
+                            class="tab <?php echo (isset($_GET['status']) && $_GET['status'] == 'ended') ? 'active' : ''; ?>">
+                            <a href="?status=ended">已結束</a>
+                        </div>
+                    </div>
                     <select id="category" name="category">
                         <option value=""><?php echo $category ? htmlspecialchars($category) : '全部分類'; ?></option>
                         <option value="設施改善">設施改善</option>
@@ -247,10 +271,14 @@
                     <input type="text" name="search" placeholder="搜尋公告"
                         value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
                     <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+
                 </form>
             </div>
 
             <?php
+
+            $status = isset($_GET['status']) ? $_GET['status'] : 'active';
 
             // Step 3: 查詢公告資料，根據搜尋關鍵字來篩選標題或內容
             $sql = "SELECT a.advice_id,user_id,advice_title,advice_content,agree,category,advice_state,announce_date,img_data FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id";
@@ -274,30 +302,38 @@
                 $remainingDays = ceil((strtotime($row['announce_date'] . ' +30 days') - time()) / 86400);
                 $remainingDays = max(0, $remainingDays); // 確保不會顯示負天數
             
-                echo '<div class="suggestion" onclick="location.href=\'advice_detail.php?advice_id='.htmlspecialchars($row['advice_id']).'\'">
-            <img src="img/homepage.png" alt="建言圖">
-            <div class="suggestion-content">
-                <div class="suggestion-title">'.$row['advice_id'] . htmlspecialchars($row['advice_title']) . '</div>
-                <div class="suggestion-meta">
-                    <div class="data">
-                        <span>附議數：' . (isset($row['agree']) ? $row['agree'] : 0) . '</span>
-                        <span><i class="fa-solid fa-comment"></i>：' . $comment . '</span>
-                    </div>
-                    <div class="date">
-                        <i class="fa-solid fa-clock"></i>
-                        <span>' . $remainingDays . '</span>
-                        <span>發布日：' . htmlspecialchars($row['announce_date']) . '</span>
-                    </div>
-                </div>
-            </div>';
+                // 根據 status 過濾
+                if (($status == "active" && $remainingDays > 0) || ($status == "ended" && $remainingDays == 0)) {
+                    echo '<div class="suggestion" onclick="location.href=\'advice_detail.php?advice_id=' . htmlspecialchars($row['advice_id']) . '\'">
+                        <img src="img/homepage.png" alt="建言圖">
+                        <div class="suggestion-content">
+                            <div class="suggestion-title">' . htmlspecialchars($row['advice_title']) . '</div>
+                            <div class="suggestion-meta">
+                                <div class="data">
+                                    <span>附議數：' . (isset($row['agree']) ? $row['agree'] : 0) . '</span>
+                                    <span><i class="fa-solid fa-comment"></i>：' . $comment . '</span>
+                                </div>
+                                <div class="date">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <span>' . $remainingDays . '</span>
+                                    <span>發布日：' . htmlspecialchars($row['announce_date']) . '</span>
+                                </div>
+                            </div>
+                        </div>';
 
-                // 顯示標籤
-                $tags = explode(' ', $row['category']);
-                foreach ($tags as $tag) {
-                    if (!empty($tag)) {
-                        echo '<span class="tag">' . htmlspecialchars($tag) . '</span>';
+                    // 顯示標籤
+                    $tags = explode(' ', $row['category']);
+                    foreach ($tags as $tag) {
+                        if (!empty($tag)) {
+                            echo '<span class="tag">' . htmlspecialchars($tag) . '</span>';
+                        }
                     }
                 }
+
+
+
+
+
 
                 echo '</div>';
             }
