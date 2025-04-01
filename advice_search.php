@@ -281,12 +281,12 @@
                                 // 如果是進行中的建議
                                 if (currentTab === 'active') {
                                     div.innerHTML = `
-                                <img src="https://placekitten.com/300/169" alt="建言圖">
+                                <img src="${item.images || 'img/homepage.png'}"  alt="建言圖">
                                 <div class="suggestion-content">
                                     <div class="suggestion-title">${item.title}</div>
                                     <div class="suggestion-meta">
                                         <div class="data">
-                                            <span>附議數：${item.comments}</span>
+                                            <span>附議數：${item.agree}</span>
                                             <span><i class="fa-solid fa-comment"></i>：${Math.floor(item.comments / 2)}</span>
                                         </div>
                                         <div class="date">

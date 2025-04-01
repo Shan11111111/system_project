@@ -37,11 +37,14 @@ $sortColumn = (in_array($sort, $allowedSortColumns)) ? $sort : 'announce_date';
 $statusCondition = ($status == 'active') ? "WHERE advice_state IN ('進行中', '未處理')" : "WHERE advice_state = '已結束'";
 
 // 執行 SQL 查詢
-$sql = "SELECT advice_id, user_id, advice_title, advice_content, agree, category, advice_state, announce_date 
-        FROM advice 
+$sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.advice_content, a.agree, 
+       a.category, a.advice_state, a.announce_date, ai.img_data
+FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id
         $statusCondition 
         ORDER BY $sortColumn $order 
         LIMIT ?, ?";
+
+
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $offset, $itemsPerPage);
@@ -54,16 +57,19 @@ while ($row = $result->fetch_assoc()) {
     $remainingDays = ceil((strtotime($row['announce_date'] . ' +30 days') - time()) / 86400);
     $remainingDays = max(0, $remainingDays); // 確保不會顯示負天數
 
+
     $suggestions[] = [
         'id' => $row['advice_id'],
         'userId' => $row['user_id'],
         'title' => $row['advice_title'],
         'content' => $row['advice_content'],
-        'comments' => $row['agree'],  // 這裡仍然使用 agree 代表贊成數
+        'agree' => $row['agree'],  // 這裡仍然使用 agree 代表贊成數
+        'comments' => 0, // 假設沒有評論數據
         'category' => $row['category'],
         'status' => $row['advice_state'],
         'publishDate' => $row['announce_date'],
         'deadline' => $remainingDays . ' 天',
+        'image' => $row['img_data'] ? base64_encode($row['img_data']) : null, // 將圖片轉為 Base64 編碼
     ];
 }
 
