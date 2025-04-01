@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -78,7 +75,7 @@ session_start();
                         <?php } ?>
 
                         <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_hot.php">熱門建言</a>
+                        <a href="advice_search.php">熱門建言</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -243,6 +240,9 @@ session_start();
 
         <div class="filter-bar">
             <form method="GET" action="">
+                <pre>
+
+                    </pre>
 
 
                 <div class="tabs">
@@ -289,8 +289,8 @@ session_start();
             $sql .= " WHERE " . implode(" AND ", $whereClauses);
         }
 
-        $sql .= " ORDER BY announce_date DESC"; // 根據公告日期排序
-        
+        $sql .= " ORDER BY agree DESC"; // 根據公告日期排序
+
         $result = mysqli_query($link, $sql);
 
         // Step 4: 顯示公告
