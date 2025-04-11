@@ -256,7 +256,8 @@
                                 die("資料庫連線失敗: " . mysqli_connect_error());
                             }
                             // 查詢資料庫中的建言資料
-                            $sql = "SELECT * FROM advice ORDER BY agree DESC"; // 查詢最新的建言
+                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+               ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.agree DESC"; // 查詢最熱門的建言
                             
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
@@ -278,8 +279,10 @@
                                     $progress_width = $progress . "%"; // 計算進度條的寬度
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
                                     // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
-                                    $image_url = "https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg"; // 模擬圖片網址
-                            
+                                    // 獲取圖片路徑，若無圖片則使用預設圖片
+                                    $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+
+
 
 
                                     ?>
@@ -288,7 +291,7 @@
                                         <div class="adv_content_block">
                                             <div class="adv_content_img">
                                                 <img
-                                                    src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
+                                                    src="<?php echo htmlspecialchars($image_url); ?>" />
                                             </div>
                                             <div class="adv_content_goal">
                                                 <div class="adv_content_text"><?php echo "$advice_title" ?></div>
@@ -304,9 +307,9 @@
                                     </div>
 
                                 <?php }
-                            } 
-                ?>
-<?php mysqli_close($link); ?>
+                            }
+                            ?>
+                            <?php mysqli_close($link); ?>
 
                             <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
@@ -467,7 +470,7 @@
 
 
 
-                        <?php
+                            <?php
                             $link = mysqli_connect('localhost', 'root');
                             mysqli_select_db($link, "system_project");
 
@@ -476,7 +479,8 @@
                                 die("資料庫連線失敗: " . mysqli_connect_error());
                             }
                             // 查詢資料庫中的建言資料
-                            $sql = "SELECT * FROM advice ORDER BY announce_date DESC"; // 查詢最新的建言
+                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+               ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
                             
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
@@ -497,34 +501,32 @@
                                     }
                                     $progress_width = $progress . "%"; // 計算進度條的寬度
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
-                                    // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
-                                    $image_url = "https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg"; // 模擬圖片網址
                             
+                                    // 獲取圖片路徑，若無圖片則使用預設圖片
+                                    $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
 
-
-                                    ?>        
+                                    ?>
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text"><?php echo "$advice_title" ?></div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width:<?php echo "$progress_width" ?>;"></div>
+                                    <div class="swiper-slide">
+                                        <div class="adv_content_block">
+                                            <div class="adv_content_img">
+                                                <img src="<?php echo htmlspecialchars($image_url); ?>" />
+                                            </div>
+                                            <div class="adv_content_goal">
+                                                <div class="adv_content_text"><?php echo "$advice_title" ?></div>
+                                                <div class="progress-line">
+                                                    <div class="progress" style="width:<?php echo "$progress_width" ?>;"></div>
+                                                </div>
+                                                <div class="card-data">
+                                                    <span><i class="fa-regular fa-user"></i><?php echo "$agree" ?></span>
+                                                    <span><?php echo "$progress_width" ?></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i><?php echo"$agree" ?></span>
-                                            <span><?php echo"$progress_width" ?></span>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
-<?php }
-}?>
+                                <?php }
+                            } ?>
                             <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
