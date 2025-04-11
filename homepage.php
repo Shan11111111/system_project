@@ -97,7 +97,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -166,7 +166,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -247,28 +247,68 @@
                     </div>
                     <div class="swiper mySwiper1">
                         <div class="swiper-wrapper">
+                            <?php
+                            $link = mysqli_connect('localhost', 'root');
+                            mysqli_select_db($link, "system_project");
 
+                            // 檢查連線是否成功
+                            if (!$link) {
+                                die("資料庫連線失敗: " . mysqli_connect_error());
+                            }
+                            // 查詢資料庫中的建言資料
+                            $sql = "SELECT * FROM advice ORDER BY agree DESC"; // 查詢最新的建言
+                            
+                            $result = mysqli_query($link, $sql);
+                            if (!$result) {
+                                die("查詢失敗: " . mysqli_error($link));
+                            }
+                            // 檢查是否有資料
+                            if (mysqli_num_rows($result) > 0) {
+                                // 輸出每一筆資料
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $advice_id = $row['advice_id'];
+                                    $advice_title = $row['advice_title'];
+                                    $advice_content = $row['advice_content'];
+                                    $category = $row['category'];
+                                    $agree = $row['agree'];
+                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
+                                    if ($progress > 100) {
+                                        $progress = 100; // 確保進度不超過 100%
+                                    }
+                                    $progress_width = $progress . "%"; // 計算進度條的寬度
+                                    // 這裡可以根據需要顯示建言的內容，例如標題、進度等
+                                    // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
+                                    $image_url = "https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg"; // 模擬圖片網址
+                            
+
+
+                                    ?>
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">操場的圍欄破了，會危險拜託快修奛嗎寶半</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 60%;"></div>
+                                    <div class="swiper-slide">
+                                        <div class="adv_content_block">
+                                            <div class="adv_content_img">
+                                                <img
+                                                    src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
+                                            </div>
+                                            <div class="adv_content_goal">
+                                                <div class="adv_content_text"><?php echo "$advice_title" ?></div>
+                                                <div class="progress-line">
+                                                    <div class="progress" style="width:<?php echo "$progress_width" ?>;"></div>
+                                                </div>
+                                                <div class="card-data">
+                                                    <span><i class="fa-regular fa-user"></i><?php echo "$agree" ?></span>
+                                                    <span><?php echo "$progress_width" ?></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>25</span>
-                                            <span>60%</span>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="swiper-slide">
+                                <?php }
+                            } 
+                ?>
+<?php mysqli_close($link); ?>
+
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -285,9 +325,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -323,9 +363,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -342,9 +382,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -380,9 +420,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -399,7 +439,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>
@@ -424,6 +464,45 @@
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
 
+
+
+
+                        <?php
+                            $link = mysqli_connect('localhost', 'root');
+                            mysqli_select_db($link, "system_project");
+
+                            // 檢查連線是否成功
+                            if (!$link) {
+                                die("資料庫連線失敗: " . mysqli_connect_error());
+                            }
+                            // 查詢資料庫中的建言資料
+                            $sql = "SELECT * FROM advice ORDER BY announce_date DESC"; // 查詢最新的建言
+                            
+                            $result = mysqli_query($link, $sql);
+                            if (!$result) {
+                                die("查詢失敗: " . mysqli_error($link));
+                            }
+                            // 檢查是否有資料
+                            if (mysqli_num_rows($result) > 0) {
+                                // 輸出每一筆資料
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $advice_id = $row['advice_id'];
+                                    $advice_title = $row['advice_title'];
+                                    $advice_content = $row['advice_content'];
+                                    $category = $row['category'];
+                                    $agree = $row['agree'];
+                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
+                                    if ($progress > 100) {
+                                        $progress = 100; // 確保進度不超過 100%
+                                    }
+                                    $progress_width = $progress . "%"; // 計算進度條的寬度
+                                    // 這裡可以根據需要顯示建言的內容，例如標題、進度等
+                                    // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
+                                    $image_url = "https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg"; // 模擬圖片網址
+                            
+
+
+                                    ?>        
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                             <div class="swiper-slide">
@@ -433,19 +512,20 @@
                                             src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
                                     </div>
                                     <div class="adv_content_goal">
-                                        <div class="adv_content_text">操場的圍欄破了，會危險拜託快修奛嗎寶半</div>
+                                        <div class="adv_content_text"><?php echo "$advice_title" ?></div>
                                         <div class="progress-line">
-                                            <div class="progress" style="width: 60%;"></div>
+                                            <div class="progress" style="width:<?php echo "$progress_width" ?>;"></div>
                                         </div>
                                         <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>25</span>
-                                            <span>60%</span>
+                                            <span><i class="fa-regular fa-user"></i><?php echo"$agree" ?></span>
+                                            <span><?php echo"$progress_width" ?></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="swiper-slide">
+<?php }
+}?>
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -462,9 +542,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -481,9 +561,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -500,9 +580,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -519,9 +599,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -538,9 +618,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -557,9 +637,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -576,7 +656,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -828,19 +908,19 @@
     <!-- 初始化 Swiper -->
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
@@ -851,15 +931,15 @@
 
         /*CARD SLIDER*/
         const swiperConfigs = [{
-                container: ".mySwiper1",
-                next: ".swiper-button-next-1",
-                prev: ".swiper-button-prev-1"
-            },
-            {
-                container: ".mySwiper2",
-                next: ".swiper-button-next-2",
-                prev: ".swiper-button-prev-2"
-            }
+            container: ".mySwiper1",
+            next: ".swiper-button-next-1",
+            prev: ".swiper-button-prev-1"
+        },
+        {
+            container: ".mySwiper2",
+            next: ".swiper-button-next-2",
+            prev: ".swiper-button-prev-2"
+        }
         ];
 
         swiperConfigs.forEach(config => {
