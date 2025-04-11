@@ -87,7 +87,7 @@ session_destroy();
                 progressText.textContent = `${progress}%`;
                 progressBarInner.style.width = `${progress}%`;
                 progress++;
-                setTimeout(simulateLoading, 30); // 模擬加載速度
+                setTimeout(simulateLoading, 5); // 模擬加載速度
             } else {
                 // 加載完成後跳轉到 homepage.php
                 window.location.href = 'homepage.php';
