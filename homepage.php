@@ -242,7 +242,7 @@
                                     style="color: #a5a0a0;"></i></div>
                             <div class="swiper-button-next-1"><i class="fa-solid fa-arrow-right"
                                     style="color: #a5a0a0;"></i></div>
-                            <div class="more"><a href="">更多</a></div>
+                            <div class="more"><a href="advice_search.php">更多</a></div>
                         </div>
                     </div>
                     <div class="swiper mySwiper1">
@@ -418,7 +418,7 @@
                             <div class="swiper-button-next-2"><i class="fa-solid fa-arrow-right"
                                     style="color: #a5a0a0;"></i>
                             </div>
-                            <div class="more"><a href="">更多</a></div>
+                            <div class="more"><a href="advice_search.php">更多</a></div>
                         </div>
                     </div>
                     <div class="swiper mySwiper2">
