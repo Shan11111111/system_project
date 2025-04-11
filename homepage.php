@@ -527,6 +527,8 @@
                                     </div>
                                 <?php }
                             } ?>
+
+                            <?php mysqli_close($link) ?>
                             <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
