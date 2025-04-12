@@ -38,7 +38,7 @@ if ($category !== 'all') {
 
 // 如果有輸入關鍵字，則同時搜尋 title 或 content
 if (!empty($keyword)) {
-    $sql .= " AND (a.advice_title LIKE :keyword OR a.advice_content LIKE :keyword) ";
+    $sql .= " AND (a.advice_title LIKE :keyword ) ";
 }
 
 // 先 group 再做排序
