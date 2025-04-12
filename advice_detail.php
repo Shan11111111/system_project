@@ -194,21 +194,34 @@
     $advice_id = isset($_GET['advice_id']) ? $_GET['advice_id'] : 0;
 
     // Step 1: 連接資料庫
-    $link = mysqli_connect('localhost', 'root');
-    mysqli_select_db($link, "system_project");
+    $link = mysqli_connect('localhost', 'root', '', 'system_project');
+
+    // 檢查資料庫連線是否成功
+    if (!$link) {
+        die("資料庫連線失敗: " . mysqli_connect_error());
+    }
 
     // Step 3: 查詢公告資料，根據建言 ID 查詢
-    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.advice_content, a.agree, a.category, a.advice_state, a.announce_date, ai.img_data 
-            FROM advice a 
-            LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id 
-            WHERE a.advice_id = $advice_id";
+    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.advice_content, a.advice_state, a.announce_date, a.agree, ai.img_path
+    FROM advice a
+    LEFT JOIN advice_image ai ON ai.advice_id = a.advice_id
+    WHERE a.advice_id = $advice_id";
+
+    $advice_id = isset($_GET['advice_id']) ? intval($_GET['advice_id']) : 0;
+    $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
+
 
     // 執行查詢
     $result = mysqli_query($link, $sql);
 
+    // 檢查查詢是否成功
+    if (!$result) {
+        die("查詢錯誤: " . mysqli_error($link));
+    }
+
     // Step 4: 顯示公告
     if ($row = mysqli_fetch_assoc($result)) {
-        ?>
+    ?>
 
         <div class="container">
             <main class="suggestion-detail">
@@ -248,16 +261,15 @@
 
                     <!-- 圖片或 PDF -->
                     <section class="media">
-                        <?php if ($row['img_data']) { ?>
-                            <img id="advice-image" src="data:image/jpeg;base64,<?php echo base64_encode($row['img_data']); ?>"
-                                alt="建言圖片" />
+                        <?php if (!empty($row['img_path'])) { ?>
+                            <img id="advice-image" src="<?php echo htmlspecialchars($row['img_path']); ?>" alt="建言圖片" />
                         <?php } else { ?>
                             <img id="advice-image"
                                 src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg"
-                                alt="建言圖片" />
+                                alt="預設建言圖片" />
                         <?php } ?>
-                        <!-- <a id="advice-pdf-link" class="pdf-link" href="file.pdf" target="_blank">查看 PDF</a> -->
                     </section>
+
 
                     <!-- 內文 -->
                     <section class="content">
@@ -267,15 +279,14 @@
             </main>
         </div>
 
-        <?php
+    <?php
     } else {
         echo "沒有找到相關建言。";
     }
-
-
     ?>
 
-    <hr style="width=70%; border-color:black;">
+
+    <hr style="width:70%; border-color:black;">
 
     <section class="comments">
         <div class="comment-header">
@@ -362,69 +373,89 @@
     <footer class="footer"> footer</footer>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const status = <?php echo json_encode($status); ?>;
 
+            const statusMap = {
+                passed: {
+                    text: '通過',
+                    class: 'status-passed'
+                },
+                failed: {
+                    text: '未通過',
+                    class: 'status-failed'
+                },
+                pending: {
+                    text: '未處理',
+                    class: 'status-pending'
+                }
+            };
 
-        const statusEl = document.getElementById('suggestion-status');
-        const status = 'pending'; // 假資料，可改為 'passed' 或 'failed'
-
-        const statusMap = {
-            passed: { text: '通過', class: 'status-passed' },
-            failed: { text: '未通過', class: 'status-failed' },
-            pending: { text: '進行中', class: 'status-pending' }
-        };
-
-        if (statusMap[status]) {
-            statusEl.textContent = statusMap[status].text;
-            statusEl.className = `suggestion-status ${statusMap[status].class}`;
-        }
-
-
-        const commentList = document.querySelector('.comment-list');
-        const pageIndicator = document.getElementById('page-indicator');
-        const prevBtn = document.getElementById('prev-page');
-        const nextBtn = document.getElementById('next-page');
-        const sortSelect = document.getElementById('sort-comments');
-        const submitBtn = document.getElementById('submit-comment');
-        const textarea = document.getElementById('comment-text');
-
-        // ✨ 假資料：加上 username
-        let allComments = Array.from({ length: 30 }, (_, i) => ({
-            username: `使用者${i + 1}`,
-            text: `這是留言 #${i + 1}`,
-            time: new Date(2025, 2, 29, 12, i).toLocaleString(),
-        }));
-
-        const commentsPerPage = 10;
-        let currentPage = 1;
-        let currentSort = 'latest';
-
-        // 計算留言與現在的時間差
-        function timeAgo(dateString) {
-            const now = new Date();
-            const past = new Date(dateString);
-            const diff = Math.floor((now - past) / 1000); // 秒數差
-
-            if (diff < 60) return '剛剛';
-            if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
-            if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
-            return `${Math.floor(diff / 86400)} 天前`;
-        }
-
-
-        function renderComments() {
-            let sortedComments = [...allComments];
-            if (currentSort === 'latest') {
-                sortedComments.reverse();
+            const statusEl = document.getElementById('suggestion-status');
+            if (statusEl) {
+                if (statusMap[status]) {
+                    statusEl.textContent = statusMap[status].text;
+                    statusEl.className = `suggestion-status ${statusMap[status].class}`;
+                } else {
+                    statusEl.textContent = '未知狀態';
+                    statusEl.className = 'suggestion-status status-unknown';
+                }
+            } else {
+                console.error('找不到 suggestion-status 元素');
             }
 
-            const start = (currentPage - 1) * commentsPerPage;
-            const paginatedComments = sortedComments.slice(start, start + commentsPerPage);
 
-            commentList.innerHTML = '';
-            paginatedComments.forEach(comment => {
-                const li = document.createElement('li');
-                li.classList.add('comment-item');
-                li.innerHTML = `
+
+
+
+            const commentList = document.querySelector('.comment-list');
+            const pageIndicator = document.getElementById('page-indicator');
+            const prevBtn = document.getElementById('prev-page');
+            const nextBtn = document.getElementById('next-page');
+            const sortSelect = document.getElementById('sort-comments');
+            const submitBtn = document.getElementById('submit-comment');
+            const textarea = document.getElementById('comment-text');
+
+            // ✨ 假資料：加上 username
+            let allComments = Array.from({
+                length: 30
+            }, (_, i) => ({
+                username: `使用者${i + 1}`,
+                text: `這是留言 #${i + 1}`,
+                time: new Date(2025, 2, 29, 12, i).toLocaleString(),
+            }));
+
+            const commentsPerPage = 10;
+            let currentPage = 1;
+            let currentSort = 'latest';
+
+            // 計算留言與現在的時間差
+            function timeAgo(dateString) {
+                const now = new Date();
+                const past = new Date(dateString);
+                const diff = Math.floor((now - past) / 1000); // 秒數差
+
+                if (diff < 60) return '剛剛';
+                if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
+                if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
+                return `${Math.floor(diff / 86400)} 天前`;
+            }
+
+
+            function renderComments() {
+                let sortedComments = [...allComments];
+                if (currentSort === 'latest') {
+                    sortedComments.reverse();
+                }
+
+                const start = (currentPage - 1) * commentsPerPage;
+                const paginatedComments = sortedComments.slice(start, start + commentsPerPage);
+
+                commentList.innerHTML = '';
+                paginatedComments.forEach(comment => {
+                    const li = document.createElement('li');
+                    li.classList.add('comment-item');
+                    li.innerHTML = `
       <div class="user-avatar">👤</div>
       <div class="comment-content">
         <p class="comment-meta">
@@ -434,99 +465,98 @@
         <p class="comment-text">${comment.text}</p>
       </div>
     `;
-                commentList.appendChild(li);
+                    commentList.appendChild(li);
+                });
+
+                const totalPages = Math.ceil(allComments.length / commentsPerPage);
+                pageIndicator.textContent = `第 ${currentPage} / ${totalPages} 頁`;
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages;
+            }
+
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderComments();
+                }
             });
 
-            const totalPages = Math.ceil(allComments.length / commentsPerPage);
-            pageIndicator.textContent = `第 ${currentPage} / ${totalPages} 頁`;
-            prevBtn.disabled = currentPage === 1;
-            nextBtn.disabled = currentPage === totalPages;
-        }
+            nextBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(allComments.length / commentsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderComments();
+                }
+            });
 
-        prevBtn.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
+            sortSelect.addEventListener('change', () => {
+                currentSort = sortSelect.value;
+                currentPage = 1;
                 renderComments();
-            }
-        });
+            });
 
-        nextBtn.addEventListener('click', () => {
-            const totalPages = Math.ceil(allComments.length / commentsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderComments();
-            }
-        });
+            submitBtn.addEventListener('click', () => {
+                const text = textarea.value.trim();
+                if (text) {
+                    const now = new Date().toLocaleString();
+                    allComments.push({
+                        username: '我自己', //  未來從登入使用者資料取得
+                        text,
+                        time: now
+                    });
+                    textarea.value = '';
+                    currentSort = 'latest';
+                    currentPage = 1;
+                    sortSelect.value = 'latest';
+                    renderComments();
+                }
+            });
 
-        sortSelect.addEventListener('change', () => {
-            currentSort = sortSelect.value;
-            currentPage = 1;
+
             renderComments();
         });
 
-        submitBtn.addEventListener('click', () => {
-            const text = textarea.value.trim();
-            if (text) {
-                const now = new Date().toLocaleString();
-                allComments.push({
-                    username: '我自己', //  未來從登入使用者資料取得
-                    text,
-                    time: now
-                });
-                textarea.value = '';
-                currentSort = 'latest';
-                currentPage = 1;
-                sortSelect.value = 'latest';
-                renderComments();
-            }
-        });
-
-
-        renderComments();
-
-
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const adviceId = urlParams.get('id');
-
-        // 確保在 API 請求中傳遞 id 參數
-<<<<<<< HEAD
-        fetch(`advice_pull.php?id=${adviceId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const advice = data[0]; // 假設只返回一條資料
-                    // 更新建言標題
-                    document.getElementById('advice-title').textContent = advice.advice_title;
-                    // 更新發布人
-                    document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
-                    // 更新建言分類
-                    document.getElementById('advice-category').textContent = `分類：${advice.category}`;
-                    // 更新建言內文
-                    document.getElementById('advice-content').textContent = advice.advice_content;
-                    // 更新發布日與截止日
-                    document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
-                    document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
-
-                    // 更新建言狀態
-                    document.getElementById('suggestion-status').textContent =
-                        advice.advice_state === '未處理' ? '未處理' :
-                            (advice.advice_state === '進行中' ? '進行中' : '已結束');
-
-                    // 如果有圖片，顯示圖片
-                    if (advice.image_url) {
-                        document.getElementById('advice-image').src = advice.image_url;
-                    }
-
-                    // 如果有PDF連結，顯示PDF連結
-                    if (advice.pdf_url) {
-                        document.getElementById('advice-pdf-link').href = advice.pdf_url;
-                    }
-                }
-            })
-            .catch(error => console.error('Error:', error));
-
-
+        /*     document.addEventListener('DOMContentLoaded', function () {
+                 const urlParams = new URLSearchParams(window.location.search);
+                 const adviceId = urlParams.get('id');
+     
+                 // 確保在 API 請求中傳遞 id 參數
+                 fetch(`advice_pull.php?id=${adviceId}`)
+                     .then(response => response.json())
+                     .then(data => {
+                         if (data.length > 0) {
+                             const advice = data[0]; // 假設只返回一條資料
+                             // 更新建言標題
+                             document.getElementById('advice-title').textContent = advice.advice_title;
+                             // 更新發布人
+                             document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
+                             // 更新建言分類
+                             document.getElementById('advice-category').textContent = `分類：${advice.category}`;
+                             // 更新建言內文
+                             document.getElementById('advice-content').textContent = advice.advice_content;
+                             // 更新發布日與截止日
+                             document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
+                             document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
+     
+                             // 更新建言狀態
+                             document.getElementById('suggestion-status').textContent =
+                                 advice.advice_state === '未處理' ? '未處理' :
+                                     (advice.advice_state === '進行中' ? '進行中' : '已結束');
+     
+                             // 如果有圖片，顯示圖片
+                             if (advice.image_url) {
+                                 document.getElementById('advice-image').src = advice.image_url;
+                             }
+     
+                             // 如果有PDF連結，顯示PDF連結
+                             if (advice.pdf_url) {
+                                 document.getElementById('advice-pdf-link').href = advice.pdf_url;
+                             }
+                         }
+                     })
+                     .catch(error => console.error('Error:', error));
+             });
+     */
 
 
 
@@ -557,77 +587,6 @@
         //         })
         //         .catch(error => console.error("錯誤:", error));
         // });
-=======
-        /*    fetch(`advice_pull.php?id=${adviceId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        const advice = data[0]; // 假設只返回一條資料
-                        // 更新建言標題
-                        document.getElementById('advice-title').textContent = advice.advice_title;
-                        // 更新發布人
-                        document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
-                        // 更新建言分類
-                        document.getElementById('advice-category').textContent = `分類：${advice.category}`;
-                        // 更新建言內文
-                        document.getElementById('advice-content').textContent = advice.advice_content;
-                        // 更新發布日與截止日
-                        document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
-                        document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
-    
-                        // 更新建言狀態
-                        document.getElementById('suggestion-status').textContent =
-                            advice.advice_state === '未處理' ? '未處理' :
-                                (advice.advice_state === '進行中' ? '進行中' : '已結束');
-    
-                        // 如果有圖片，顯示圖片
-                        if (advice.image_url) {
-                            document.getElementById('advice-image').src = advice.image_url;
-                        }
-    
-                        // 如果有PDF連結，顯示PDF連結
-                        if (advice.pdf_url) {
-                            document.getElementById('advice-pdf-link').href = advice.pdf_url;
-                        }
-                    }
-                })
-                .catch(error => console.error('Error:', error));*/
-
-
-
-
-        document.getElementById('agree-btn').addEventListener('click', function (e) {
-            e.preventDefault(); // 防止頁面跳轉
-
-            const adviceId = this.getAttribute('data-advice-id'); // 讀取 data-advice-id
-            console.log('附議的建言ID:', adviceId);
-
-            const formData = new FormData();
-            formData.append('advice_id', adviceId);
-
-            // 發送 AJAX 請求
-            fetch('update_agree.php', {  // 假設後端檔案是 update_agree.php
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())  // 確保後端返回 JSON 格式
-                .then(data => {
-                    if (data.status === 'success') {
-                        alert('成功附議！');
-                    } else {
-                        alert('附議失敗：' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('發生錯誤:', error);
-                });
-        });
->>>>>>> 5f1e380dd08e585f596d2a7bbf9dfcc100f5380d
-
-
-
-
-
     </script>
 
 
