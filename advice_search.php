@@ -183,191 +183,229 @@
 
 
     <div class="container">
-        <!-- 快要達標 -->
-        <div class="highlight">
-            <div class="highlight_content">快要達標的建言</div>
-            <div class="highlight_btn">去覆議</div>
-        </div>
-        <div class="highlight_title">
-            <center>
-                <p>快要達標的建言，還剩php人</p>
-            </center>
-        </div>
-        <div class="advice_space">
-            <!-- Tabs -->
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('active')">進行中</div>
-                <div class="tab" onclick="switchTab('ended')">已結束</div>
-            </div>
-            <hr style="width=70%; border-color:black;">
+    <div class="highlight">
+  <div class="highlight_content" id="highlight-title">快要達標的建言</div>
+  <div class="highlight_btn" id="highlight-action">去附議</div>
+</div>
+<div class="highlight_title">
+  <center><p id="highlight-count">快要達標的建言，還剩 ? 人</p></center>
+</div>
 
-            <!-- 選單 + 搜尋 -->
-            <div class="filter-bar">
-                <div class="search_text">
-                    <select id="category">
-                        <option value="all">全部分類</option>
-                        <option value="equipment">設施改善</option>
-                        <option value="academic">學術發展</option>
-                        <option value="environment">社團活動</option>
-                        <option value="welfare">公益關懷</option>
-                        <option value="environment">環保永續</option>
-                        <option value="other">其他</option>
-                    </select>
-                    <input type="text" id="search" placeholder="請輸入關鍵字">
-                    <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-                <div class="search_sort">
-                    <!--按鈕按下去後箭頭改變 牽涉到後端 所以留給你們 這裡有倒敘正敘的箭頭icon-->
-                    <button onclick="toggleArrow(this)">HOT<i class="fa-solid fa-caret-up"></i></button>
-                    <button onclick="toggleArrow(this)">NEW<i class="fa-solid fa-caret-up"></i></button>
-                </div>
-            </div>
-
-            <!-- 建言列表 -->
-            <div id="suggestion-list"></div>
-
-            <!-- 分頁 -->
-            <div class="pagination" id="pagination"></div>
+    <div class="advice_space">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('active')">進行中</div>
+        <div class="tab" onclick="switchTab('ended')">已結束</div>
+      </div>
+      <hr style="width=70%; border-color:black;" />
+      <div class="filter-bar">
+        <div class="search_text">
+          <select id="category">
+            <option value="all">全部分類</option>
+            <option value="equipment">設施改善</option>
+            <option value="academic">學術發展</option>
+            <option value="environment">社團活動</option>
+            <option value="welfare">公益關懷</option>
+            <option value="environment">環保永續</option>
+            <option value="other">其他</option>
+          </select>
+          <input type="text" id="search" placeholder="請輸入關鍵字" />
+          <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
+        <div class="search_sort">
+          <button onclick="toggleArrow(this)">HOT<i class="fa-solid fa-caret-up"></i></button>
+          <button onclick="toggleArrow(this)">NEW<i class="fa-solid fa-caret-up"></i></button>
+        </div>
+      </div>
+
+      <div id="suggestion-list"></div>
+      <div class="pagination" id="pagination"></div>
     </div>
-    <div class="footer">footer</div>
+  </div>
 
-    <script>
-        // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
-            document.getElementById('mobile-menu').classList.toggle('active');
-        });
+  <div class="footer">footer</div>
 
-        // 手機 dropdown 點擊展開
-        document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
-                e.preventDefault(); // 防止跳頁
-                const parent = btn.parentElement;
-                parent.classList.toggle('active');
-            });
-        });
-        //後端這邊自己調內容，我用array的方式建立十五條建言，title那些會直接加到下面寫的html框架中喔
-        const data = Array.from({ length: 25 }, (_, i) => ({
-            title: `建言標題 ${i + 1}`,
-            comments: Math.floor(Math.random() * 80),
-            deadline: '剩約天',
-            status: i % 2 === 0 ? 'active' : 'ended',
-            passed: i % 3 === 0, // 每三個通過一次(後端之後要改，通過不通過)
-            publishDate: 'date'
-        }));
-        //後端應該不用動這邊，這是每十條建言跳頁
-        let currentTab = 'active';
-        let currentPage = 1;
-        const itemsPerPage = 10;
-
-        function switchTab(tab) {
-            currentTab = tab;
-            currentPage = 1;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab')[tab === 'active' ? 0 : 1].classList.add('active');
-            renderSuggestions();
-        }
+  <!-- Templates -->
+  <template id="suggestion-active-template">
+  <img src="{{imgSrc}}" alt="建言圖">
+  <div class="suggestion-content">
+    <div class="suggestion-title">{{title}}</div>
+    <div class="suggestion-meta">
+      <div class="data">
+        <span>附議數：{{comments}}</span>
+        <span><i class="fa-solid fa-comment"></i>：{{commentCount}}</span>
+        <span>分類: {{category}}</span>
+      </div>
+      <div class="date">
+        <i class="fa-solid fa-clock"></i>
+        <span>{{deadline}}</span>
+        <span>發布日：{{publishDate}}</span>
+      </div>
+    </div>
+  </div>
+</template>
 
 
-
-        function renderSuggestions() {
-            const list = document.getElementById('suggestion-list');
-            list.innerHTML = '';
-            const filtered = data.filter(item => item.status === currentTab);
-            const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-            //連去advice_detail.php
-            paginated.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'suggestion';
-                div.onclick = () => {
-                    window.location.href = `advice_detail.php`;//後端好像要加這個:?id=${item.id || ((currentPage - 1) * itemsPerPage + index + 1)
-                };
-
-                //上面那個是已結束的格式，下面是進行中
-                if (currentTab === 'ended') {
-                    div.innerHTML = `
-                    
-            <img src="https://placekitten.com/300/169" alt="建言圖">
-            <div class="suggestion-content">
-              <div class="suggestion-title">${item.title}</div>
-              <div class="suggestion-meta">
-                <span class="suggestion-status ${item.passed ? 'status-passed' : 'status-failed'}">
-                  ${item.passed ? '通過' : '未通過'}
-                </span>
-                <span>發布日：${item.publishDate}</span>
-              </div>
-            </div>
-           
-          `;
-                } else {
-                    div.innerHTML = `
-            <img src="https://daebak.tokyo/wp-content/uploads/2025/03/nmixx-20250312-001333-364x252.jpg" alt="建言圖">
-            <div class="suggestion-content">
-              <div class="suggestion-title">${item.title}</div>
-              <div class="suggestion-meta">
-              <div class="data">
-                <span>附議數：${item.comments}</span>
-                <span><i class="fa-solid fa-comment"></i>：${Math.floor(item.comments / 2)}</span>
-                <span>分類:</span>
-                </div>
-                
-                <div class="date">
-                <i class="fa-solid fa-clock"></i>
-                <span>${item.deadline}</span>
-                <span>發布日：${item.publishDate}</span>
-                </div>
-              </div>
-            </div>
-          `;
-                }
-
-                list.appendChild(div);
-            });
-
-            renderPagination(filtered.length);
-        }
-        //控制換頁(後端應該不用動這邊)
-        function renderPagination(totalItems) {
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-
-            if (currentPage > 1) {
-                const prev = document.createElement('button');
-                prev.textContent = '上一頁';
-                prev.onclick = () => { currentPage--; renderSuggestions(); };
-                pagination.appendChild(prev);
-            }
-
-            for (let i = 1; i <= totalPages; i++) {
-                const btn = document.createElement('button');
-                btn.textContent = i;
-                if (i === currentPage) btn.disabled = true;
-                btn.onclick = () => { currentPage = i; renderSuggestions(); };
-                pagination.appendChild(btn);
-            }
-
-            if (currentPage < totalPages) {
-                const next = document.createElement('button');
-                next.textContent = '下一頁';
-                next.onclick = () => { currentPage++; renderSuggestions(); };
-                pagination.appendChild(next);
-            }
-        }
-        //搜尋做完自己刪
-        function search() {
-            alert("沒做");
-        }
-        //最新最舊箭頭控制        
-        function toggleArrow(btn) {
-            const icon = btn.querySelector("i");
-            icon.classList.toggle("fa-caret-up");
-            icon.classList.toggle("fa-caret-down");
-        }
+<template id="suggestion-ended-template">
+  <img src="{{imgSrc}}" alt="建言圖">
+  <div class="suggestion-content">
+    <div class="suggestion-title">{{title}}</div>
+    <div class="suggestion-meta">
+      <span class="suggestion-status {{statusClass}}">{{statusText}}</span>
+      <span>發布日：{{publishDate}}</span>
+      
+    </div>
+  </div>
+</template>
 
 
-        renderSuggestions();
-    </script>
+  <!-- Script -->
+  <script>
+  let data = [];
+  let currentTab = 'active';
+  let currentPage = 1;
+  const itemsPerPage = 10;
+
+  fetch('advice_function/dealwith_advice_date.php')
+    .then(response => response.json())
+    .then(json => {
+      console.log("取得建言資料：", json);
+      data = json;
+      renderSuggestions();
+      renderHighlight(); //  更新快達標區塊
+    })
+    .catch(error => {
+      console.error("載入建言資料失敗：", error);
+    });
+
+  function switchTab(tab) {
+    currentTab = tab;
+    currentPage = 1;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab')[tab === 'active' ? 0 : 1].classList.add('active');
+    renderSuggestions();
+  }
+
+  function renderSuggestions() {
+    const list = document.getElementById('suggestion-list');
+    list.innerHTML = '';
+
+    const filtered = data.filter(item => {
+      return currentTab === 'active'
+        ? item.status === 'active'
+        : item.status === 'ended-passed' || item.status === 'ended-notpassed';
+    });
+
+    const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    paginated.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'suggestion';
+      div.onclick = () => { window.location.href = `advice_detail.php?id=${item.advice_id}`; };
+
+      const imagePath = item.img_path || 'uploads/homepage.png';
+      const remainingDays = Math.max(0, 30 - item.days_elapsed); // 不會出現負數
+      const publishDate = item.announce_date || '未知';
+      const categoryText = item.category || '無';
+
+      let template = '';
+      if (currentTab === 'ended') {
+        template = document.getElementById('suggestion-ended-template').innerHTML
+          .replace('{{imgSrc}}', imagePath)
+          .replace('{{title}}', item.advice_title)
+          .replace('{{statusClass}}', item.status === 'ended-passed' ? 'status-passed' : 'status-failed')
+          .replace('{{statusText}}', item.status === 'ended-passed' ? '通過' : '未通過')
+          .replace('{{publishDate}}', publishDate);
+      } else {
+        template = document.getElementById('suggestion-active-template').innerHTML
+          .replace('{{imgSrc}}', imagePath)
+          .replace('{{title}}', item.advice_title)
+          .replace('{{comments}}', item.support_count)
+          .replace('{{commentCount}}', item.comment_count)
+          .replace('{{category}}', categoryText)
+          .replace('{{deadline}}', `剩 ${remainingDays} 天`)
+          .replace('{{publishDate}}', publishDate);
+      }
+
+      div.innerHTML = template;
+      list.appendChild(div);
+    });
+
+    renderPagination(filtered.length);
+  }
+
+  function renderPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    if (currentPage > 1) {
+      const prev = document.createElement('button');
+      prev.textContent = '上一頁';
+      prev.onclick = () => { currentPage--; renderSuggestions(); };
+      pagination.appendChild(prev);
+    }
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      if (i === currentPage) btn.disabled = true;
+      btn.onclick = () => { currentPage = i; renderSuggestions(); };
+      pagination.appendChild(btn);
+    }
+
+    if (currentPage < totalPages) {
+      const next = document.createElement('button');
+      next.textContent = '下一頁';
+      next.onclick = () => { currentPage++; renderSuggestions(); };
+      pagination.appendChild(next);
+    }
+  }
+
+  function search() {
+    alert("搜尋功能尚未實作");
+  }
+
+  function toggleArrow(btn) {
+    const icon = btn.querySelector("i");
+    icon.classList.toggle("fa-caret-up");
+    icon.classList.toggle("fa-caret-down");
+  }
+
+  // ✅ 快達標建言顯示
+  function renderHighlight() {
+    const target = data
+      .filter(item => item.status === 'active' && item.support_count < 100)
+      .sort((a, b) => b.support_count - a.support_count)[0];
+
+    if (target) {
+      const remain = 10 - target.support_count;
+      document.getElementById('highlight-title').textContent = `快要達標的建言：${target.advice_title}`;
+      document.getElementById('highlight-count').textContent = `還差 ${remain} 人即可達成`;
+      document.getElementById('highlight-action').style.display = 'inline-block';
+      document.getElementById('highlight-action').onclick = () => {
+        window.location.href = `advice_detail.php?id=${target.advice_id}`;
+      };
+    } else {
+      document.getElementById('highlight-title').textContent = '目前沒有快要達標的建言';
+      document.getElementById('highlight-count').textContent = '';
+      document.getElementById('highlight-action').style.display = 'none';
+    }
+  }
+
+  document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('active');
+  });
+
+  document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      btn.parentElement.classList.toggle('active');
+    });
+  });
+</script>
+
+
+
 </body>
 
 </html>
