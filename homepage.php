@@ -97,7 +97,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -166,7 +166,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -258,7 +258,7 @@
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
                ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.agree DESC"; // 查詢最熱門的建言
-                            
+
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -281,12 +281,8 @@
                                     // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
-
-
-
-
-                                    ?>
-                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                            ?>
+                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
                                     <div class="swiper-slide">
                                         <div class="adv_content_block">
                                             <div class="adv_content_img">
@@ -306,7 +302,7 @@
                                         </div>
                                     </div>
 
-                                <?php }
+                            <?php }
                             }
                             ?>
                             <?php mysqli_close($link); ?>
@@ -443,7 +439,6 @@
                                     </div>
                                 </div>
                             </div> -->
-
                         </div>
                     </div>
                 </div>
@@ -466,10 +461,6 @@
                     </div>
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
-
-
-
-
                             <?php
                             $link = mysqli_connect('localhost', 'root');
                             mysqli_select_db($link, "system_project");
@@ -481,7 +472,7 @@
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
                ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
-                            
+
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -501,12 +492,12 @@
                                     }
                                     $progress_width = $progress . "%"; // 計算進度條的寬度
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
-                            
+
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
 
-                                    ?>
-                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                            ?>
+                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                                     <div class="swiper-slide">
                                         <div class="adv_content_block">
@@ -525,7 +516,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                <?php }
+                            <?php }
                             } ?>
 
                             <?php mysqli_close($link) ?>
@@ -912,19 +903,19 @@
     <!-- 初始化 Swiper -->
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
@@ -935,15 +926,15 @@
 
         /*CARD SLIDER*/
         const swiperConfigs = [{
-            container: ".mySwiper1",
-            next: ".swiper-button-next-1",
-            prev: ".swiper-button-prev-1"
-        },
-        {
-            container: ".mySwiper2",
-            next: ".swiper-button-next-2",
-            prev: ".swiper-button-prev-2"
-        }
+                container: ".mySwiper1",
+                next: ".swiper-button-next-1",
+                prev: ".swiper-button-prev-1"
+            },
+            {
+                container: ".mySwiper2",
+                next: ".swiper-button-next-2",
+                prev: ".swiper-button-prev-2"
+            }
         ];
 
         swiperConfigs.forEach(config => {
