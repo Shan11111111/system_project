@@ -182,8 +182,7 @@
         <div class="left-panel">
             <h1 class="main-title">提出建言</h1>
             <p class="subtitle">提出建言，讓校園更好</p>
-            <div class="image-placeholder"><img
-                    src="https://tse3.mm.bing.net/th?id=OIP.4rzwr9GyOUhE1mh2oS5oegHaGa&pid=Api&P=0&h=180"></div>
+            <!--<div class="image-placeholder"><img src="#"></div>-->
         </div>
 
         <!-- 右側表單 -->
@@ -198,12 +197,12 @@
                 <!-- 分類按鈕 -->
                 <label>分類</label>
                 <div class="category-buttons">
-                    <button type="button" class="category" data-value="設施改善">設施改善</button>
-                    <button type="button" class="category" data-value="學術發展">學術發展</button>
-                    <button type="button" class="category" data-value="公益活動">公益活動</button>
-                    <button type="button" class="category" data-value="環保永續">環保永續</button>
-                    <button type="button" class="category" data-value="社團活動">社團活動</button>
-                    <button type="button" class="category" data-value="其他">其他</button>
+                    <button type="button" class="category" data-value="equipment">設施改善</button>
+                    <button type="button" class="category" data-value="academic">學術發展</button>
+                    <button type="button" class="category" data-value="welfare">公益活動</button>
+                    <button type="button" class="category" data-value="environment">環保永續</button>
+                    <button type="button" class="category" data-value="club">社團活動</button>
+                    <button type="button" class="category" data-value="other">其他</button>
                 </div>
                 <input type="hidden" name="category" id="selected-category" required>
 
