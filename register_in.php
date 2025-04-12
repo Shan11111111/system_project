@@ -64,61 +64,78 @@ $name = $_POST['name'];
 
 //Step 1
 $link = mysqli_connect('localhost', 'root', '', 'system_project');
-//Step 3
-$sql = "insert into users (user_id, password, level, department, email, name) values ('$user_id', '$password', '$level', '$department', '$email', '$name')";
-$result = mysqli_query($link, $sql);
 
-// Step 3: 檢查 INSERT 是否成功
-if ($result) {
-    // 註冊成功，將用戶資訊存入 Session
-    $_SESSION['user_id'] = $user_id;
-    $_SESSION['name'] = $name;
-    $_SESSION['level'] = $level;
-    $_SESSION['department'] = $department;
-    $_SESSION['email'] = $email;
+// 檢查連線是否成功
+if (!$link) {
+    die("資料庫連線失敗: " . mysqli_connect_error());
+}
 
-    // 顯示加載畫面並跳轉
-    ?>
-    <div id="loading-screen">
-        <div id="progress-text">1%</div>
-        <div id="progress-bar">
-            <div id="progress-bar-inner"></div>
-        </div>
-        <div id="loading-message">即將進入孵仁...</div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // 初始化 Three.js 場景
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+// 檢查 user_id 是否已存在
+$check_sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+$check_result = mysqli_query($link, $check_sql);
 
-        // 模擬加載進度
-        let progress = 1;
-        const progressText = document.getElementById('progress-text');
-        const progressBarInner = document.getElementById('progress-bar-inner');
-        const loadingScreen = document.getElementById('loading-screen');
-
-        function simulateLoading() {
-            if (progress <= 100) {
-                progressText.textContent = `${progress}%`;
-                progressBarInner.style.width = `${progress}%`;
-                progress++;
-                setTimeout(simulateLoading, 30); // 模擬加載速度
-            } else {
-                                window.location.href = 'homepage.php';
-            }
-        }
-
-        // 開始模擬加載
-        simulateLoading();
-    </script>
-    </body>
-    <?php
-}else{
-    echo "<script>alert('註冊失敗，請檢查學號或密碼');</script>";
+if (mysqli_num_rows($check_result) > 0) {
+    // user_id 已存在
+    echo "<script>alert('註冊失敗，該學號已被使用');</script>";
     echo "<script>window.location.href='register.php';</script>";
+} else {
+    // user_id 不存在，執行 INSERT
+    $sql = "INSERT INTO users (user_id, password, level, department, email, name) 
+            VALUES ('$user_id', '$password', '$level', '$department', '$email', '$name')";
+    $result = mysqli_query($link, $sql);
+
+    // 檢查 INSERT 是否成功
+    if ($result) {
+        // 註冊成功，將用戶資訊存入 Session
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['name'] = $name;
+        $_SESSION['level'] = $level;
+        $_SESSION['department'] = $department;
+        $_SESSION['email'] = $email;
+
+        // 顯示加載畫面並跳轉
+        ?>
+        <div id="loading-screen">
+            <div id="progress-text">1%</div>
+            <div id="progress-bar">
+                <div id="progress-bar-inner"></div>
+            </div>
+            <div id="loading-message">即將進入孵仁...</div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script>
+            // 初始化 Three.js 場景
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // 模擬加載進度
+            let progress = 1;
+            const progressText = document.getElementById('progress-text');
+            const progressBarInner = document.getElementById('progress-bar-inner');
+            const loadingScreen = document.getElementById('loading-screen');
+
+            function simulateLoading() {
+                if (progress <= 100) {
+                    progressText.textContent = `${progress}%`;
+                    progressBarInner.style.width = `${progress}%`;
+                    progress++;
+                    setTimeout(simulateLoading, 30); // 模擬加載速度
+                } else {
+                    window.location.href = 'homepage.php';
+                }
+            }
+
+            // 開始模擬加載
+            simulateLoading();
+        </script>
+        </body>
+        <?php
+    } else {
+        echo "<script>alert('註冊失敗，請檢查學號或密碼');</script>";
+        echo "<script>window.location.href='register.php';</script>";
+    }
 }
 ?>
