@@ -163,7 +163,7 @@
             <div class="filter-bar">
                 <div class="search_text">
                     <!-- 修正後的下拉選單 -->
-                    <全部分類 id="category">
+                    <select id="category">
                         <option value="all">全部分類</option>
                         <option value="equipment">設施改善</option>
                         <option value="academic">學術發展</option>
