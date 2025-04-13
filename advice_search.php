@@ -330,7 +330,8 @@
             const div = document.createElement('div');
             div.className = 'suggestion';
             div.onclick = () => {
-                window.location.href = `advice_detail.php?id=${item.advice_id}`;
+                window.location.href = `advice_detail.php?advice_id=${item.advice_id}`;
+
             };
 
             const imagePath = item.img_path || 'uploads/homepage.png';

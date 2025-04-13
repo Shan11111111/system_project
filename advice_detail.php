@@ -202,7 +202,7 @@
     }
 
     // Step 3: 查詢公告資料，根據建言 ID 查詢
-    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.advice_content, a.advice_state, a.announce_date, a.agree, ai.img_path
+    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.category, a.advice_content, a.advice_state, a.announce_date, a.agree, ai.img_path
     FROM advice a
     LEFT JOIN advice_image ai ON ai.advice_id = a.advice_id
     WHERE a.advice_id = $advice_id";
