@@ -256,7 +256,7 @@
                                 die("資料庫連線失敗: " . mysqli_connect_error());
                             }
                             // 查詢資料庫中的建言資料
-                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, a.advice_state, 
                ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.agree DESC"; // 查詢最熱門的建言
 
                             $result = mysqli_query($link, $sql);
@@ -272,6 +272,7 @@
                                     $advice_content = $row['advice_content'];
                                     $category = $row['category'];
                                     $agree = $row['agree'];
+                                    $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
                                     $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
@@ -284,23 +285,26 @@
                             ?>
                                     <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
                                     <div class="swiper-slide">
-                                        <div class="adv_content_block">
-                                            <div class="adv_content_img">
-                                                <img
-                                                    src="<?php echo htmlspecialchars($image_url); ?>" />
-                                            </div>
-                                            <div class="adv_content_goal">
-                                                <div class="adv_content_text"><?php echo "$advice_title" ?></div>
-                                                <div class="progress-line">
-                                                    <div class="progress" style="width:<?php echo "$progress_width" ?>;"></div>
+                                        <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>" style="text-decoration: none; color: inherit;">
+
+                                            <div class="adv_content_block">
+                                                <div class="adv_content_img">
+                                                    <img src="<?php echo htmlspecialchars($image_url); ?>" />
                                                 </div>
-                                                <div class="card-data">
-                                                    <span><i class="fa-regular fa-user"></i><?php echo "$agree" ?></span>
-                                                    <span><?php echo "$progress_width" ?></span>
+                                                <div class="adv_content_goal">
+                                                    <div class="adv_content_text"><?php echo htmlspecialchars($advice_title); ?></div>
+                                                    <div class="progress-line">
+                                                        <div class="progress" style="width:<?php echo htmlspecialchars($progress_width); ?>;"></div>
+                                                    </div>
+                                                    <div class="card-data">
+                                                        <span><i class="fa-regular fa-user"></i><?php echo htmlspecialchars($agree); ?></span>
+                                                        <span><?php echo htmlspecialchars($progress_width); ?></span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
+
 
                             <?php }
                             }
@@ -500,22 +504,25 @@
                                     <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                                     <div class="swiper-slide">
-                                        <div class="adv_content_block">
-                                            <div class="adv_content_img">
-                                                <img src="<?php echo htmlspecialchars($image_url); ?>" />
-                                            </div>
-                                            <div class="adv_content_goal">
-                                                <div class="adv_content_text"><?php echo "$advice_title" ?></div>
-                                                <div class="progress-line">
-                                                    <div class="progress" style="width:<?php echo "$progress_width" ?>;"></div>
+                                        <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>" style="text-decoration: none; color: inherit;">
+                                            <div class="adv_content_block">
+                                                <div class="adv_content_img">
+                                                    <img src="<?php echo htmlspecialchars($image_url); ?>" />
                                                 </div>
-                                                <div class="card-data">
-                                                    <span><i class="fa-regular fa-user"></i><?php echo "$agree" ?></span>
-                                                    <span><?php echo "$progress_width" ?></span>
+                                                <div class="adv_content_goal">
+                                                    <div class="adv_content_text"><?php echo htmlspecialchars($advice_title); ?></div>
+                                                    <div class="progress-line">
+                                                        <div class="progress" style="width:<?php echo htmlspecialchars($progress_width); ?>;"></div>
+                                                    </div>
+                                                    <div class="card-data">
+                                                        <span><i class="fa-regular fa-user"></i><?php echo htmlspecialchars($agree); ?></span>
+                                                        <span><?php echo htmlspecialchars($progress_width); ?></span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
+
                             <?php }
                             } ?>
 

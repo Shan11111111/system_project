@@ -374,6 +374,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 從 URL 的上頁連結中獲取 status
+            const statusFromPreviousPage = new URLSearchParams(window.location.search).get('id');
             const status = <?php echo json_encode($status); ?>;
 
             const statusMap = {
