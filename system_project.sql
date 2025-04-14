@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-12 04:00:43
+-- 產生時間： 2025-04-14 13:10:42
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -111,6 +111,7 @@ CREATE TABLE `comments` (
   `advice_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `comment_content` text NOT NULL,
+  `reply_to` int(11) NOT NULL DEFAULT 0 COMMENT '留言回覆給誰',
   `comment_time` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -137,7 +138,8 @@ CREATE TABLE `funding_people` (
   `funding_people_id` int(11) NOT NULL,
   `people_name` varchar(20) NOT NULL,
   `donate_money` int(11) NOT NULL,
-  `funding_id` int(11) NOT NULL
+  `funding_id` int(11) NOT NULL,
+  `check_login` int(1) NOT NULL DEFAULT 0 COMMENT '確定是否為訪客:0為訪客、1為已登入'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -151,8 +153,8 @@ CREATE TABLE `users` (
   `password` varchar(20) NOT NULL,
   `name` varchar(20) NOT NULL,
   `level` varchar(20) NOT NULL,
-  `email` text DEFAULT NULL,
-  `department` varchar(20) DEFAULT NULL
+  `email` varchar(50) NOT NULL,
+  `department` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用戶表';
 
 --
