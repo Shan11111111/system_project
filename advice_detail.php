@@ -221,8 +221,19 @@
 
     // Step 4: 顯示公告
     if ($row = mysqli_fetch_assoc($result)) {
-    ?>
 
+        $categoryMap = [
+            "all" => "全部分類",
+            "equipment" => "設施改善",
+            "academic" => "學術發展",
+            "club" => "社團活動",
+            "welfare" => "公益關懷",
+            "environment" => "環保永續",
+            "other" => "其他"
+        ];
+        $categoryKey = $row['category'];
+        $categoryName = isset($categoryMap[$categoryKey]) ? $categoryMap[$categoryKey] : '未知分類';
+    ?>
         <div class="container">
             <main class="suggestion-detail">
                 <!-- 標題 -->
@@ -256,7 +267,7 @@
                     <section class="meta">
                         <p id="advice-author">發布人：<?php echo htmlspecialchars($row['user_id']); ?></p>
                         <!-- 假設 user_id 是發布人 -->
-                        <p id="advice-category">分類：<?php echo htmlspecialchars($row['category']); ?></p>
+                        <p id="advice-category">分類：<?php echo htmlspecialchars($categoryName); ?></p>
                     </section>
 
                     <!-- 圖片或 PDF -->
