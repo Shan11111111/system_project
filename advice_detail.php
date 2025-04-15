@@ -54,33 +54,33 @@
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])) { ?>
-                                            <a href="submitadvice.php">提交建言</a>
+                            <a href="submitadvice.php">提交建言</a>
                         <?php } else { ?>
-                                            <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
-                                            <script>
-                                                function showLoginAlert() {
+                            <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                            <script>
+                                function showLoginAlert() {
 
-                                                    Swal.fire({
-                                                        icon: 'warning', // 圖示類型
-                                                        title: '請先登入',
-                                                        text: '發布建言為學生與教職人員專屬功能！',
-                                                        confirmButtonText: '確定',
-                                                        confirmButtonColor: '#3085d6',
-                                                        focusConfirm: false, // 禁用自動聚焦
-                                                        didOpen: () => {
-                                                            // 禁用滾動
-                                                            document.body.style.overflow = 'hidden';
+                                    Swal.fire({
+                                        icon: 'warning', // 圖示類型
+                                        title: '請先登入',
+                                        text: '發布建言為學生與教職人員專屬功能！',
+                                        confirmButtonText: '確定',
+                                        confirmButtonColor: '#3085d6',
+                                        focusConfirm: false, // 禁用自動聚焦
+                                        didOpen: () => {
+                                            // 禁用滾動
+                                            document.body.style.overflow = 'hidden';
 
-                                                        },
-                                                        didClose: () => {
-                                                            // 恢復滾動
-                                                            document.body.style.overflow = '';
-                                                            // 恢復滾動位置
+                                        },
+                                        didClose: () => {
+                                            // 恢復滾動
+                                            document.body.style.overflow = '';
+                                            // 恢復滾動位置
 
-                                                        }
-                                                    });
-                                                }
-                                            </script>
+                                        }
+                                    });
+                                }
+                            </script>
                         <?php } ?>
 
                         <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
@@ -98,22 +98,22 @@
 
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
-                                    <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
-                                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
-                                    <script>
-                                        document.getElementById('logout-link').addEventListener('click', function() {
-                                            // 彈出確認視窗
-                                            const confirmLogout = confirm("確定要登出嗎？");
-                                            if (confirmLogout) {
-                                                // 如果用戶選擇確定，導向登出頁面
-                                                window.location.href = "logout.php";
-                                            }
-                                            // 如果用戶選擇取消，什麼都不做
-                                        });
-                                    </script>
+                    <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <script>
+                        document.getElementById('logout-link').addEventListener('click', function() {
+                            // 彈出確認視窗
+                            const confirmLogout = confirm("確定要登出嗎？");
+                            if (confirmLogout) {
+                                // 如果用戶選擇確定，導向登出頁面
+                                window.location.href = "logout.php";
+                            }
+                            // 如果用戶選擇取消，什麼都不做
+                        });
+                    </script>
                 <?php } else { ?>
-                                    <a href="login.php" class="nav-item">登入</a>
-                                    <a href="register.php" class="nav-item">註冊</a>
+                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="register.php" class="nav-item">註冊</a>
                 <?php } ?>
             </div>
         </div>
@@ -124,31 +124,31 @@
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
                     <?php if (isset($_SESSION['user_id'])) { ?>
-                                        <a href="submitadvice.php">提交建言</a>
+                        <a href="submitadvice.php">提交建言</a>
                     <?php } else { ?>
-                                        <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
-                                        <script>
-                                            function showLoginAlert() {
-                                                Swal.fire({
-                                                    icon: 'warning', // 圖示類型
-                                                    title: '請先登入',
-                                                    text: '發布建言為學生與教職人員專屬功能！',
-                                                    confirmButtonText: '確定',
-                                                    confirmButtonColor: '#3085d6',
-                                                    focusConfirm: false, // 禁用自動聚焦
-                                                    didOpen: () => {
-                                                        // 禁用滾動
-                                                        document.body.style.overflow = 'hidden';
-                                                    },
-                                                    didClose: () => {
-                                                        // 恢復滾動
-                                                        document.body.style.overflow = '';
-                                                        // 恢復滾動位置
-                                                        window.scrollTo(0, scrollTop);
-                                                    }
-                                                });
-                                            }
-                                        </script>
+                        <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                        <script>
+                            function showLoginAlert() {
+                                Swal.fire({
+                                    icon: 'warning', // 圖示類型
+                                    title: '請先登入',
+                                    text: '發布建言為學生與教職人員專屬功能！',
+                                    confirmButtonText: '確定',
+                                    confirmButtonColor: '#3085d6',
+                                    focusConfirm: false, // 禁用自動聚焦
+                                    didOpen: () => {
+                                        // 禁用滾動
+                                        document.body.style.overflow = 'hidden';
+                                    },
+                                    didClose: () => {
+                                        // 恢復滾動
+                                        document.body.style.overflow = '';
+                                        // 恢復滾動位置
+                                        window.scrollTo(0, scrollTop);
+                                    }
+                                });
+                            }
+                        </script>
                     <?php } ?>
 
                     <a href="advice_search.php">建言瀏覽</a>
@@ -166,22 +166,22 @@
 
 
             <?php if (isset($_SESSION['user_id'])) { ?>
-                                <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
-                                <a class="nav-item" id="logout-link-mobile">登出</a>
-                                <script>
-                                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
-                                        // 彈出確認視窗
-                                        const confirmLogout = confirm("確定要登出嗎？");
-                                        if (confirmLogout) {
-                                            // 如果用戶選擇確定，導向登出頁面
-                                            window.location.href = "logout.php";
-                                        }
-                                        // 如果用戶選擇取消，什麼都不做
-                                    });
-                                </script>
+                <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                <a class="nav-item" id="logout-link-mobile">登出</a>
+                <script>
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                        // 彈出確認視窗
+                        const confirmLogout = confirm("確定要登出嗎？");
+                        if (confirmLogout) {
+                            // 如果用戶選擇確定，導向登出頁面
+                            window.location.href = "logout.php";
+                        }
+                        // 如果用戶選擇取消，什麼都不做
+                    });
+                </script>
             <?php } else { ?>
-                                <a href="login.php" class="nav-item">登入</a>
-                                <a href="register.php" class="nav-item">註冊</a>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
             <?php } ?>
 
         </div>
@@ -232,149 +232,156 @@
         ];
         $categoryKey = $row['category'];
         $categoryName = isset($categoryMap[$categoryKey]) ? $categoryMap[$categoryKey] : '未知分類';
-        ?>
-                        <div class="container">
-                            <main class="suggestion-detail">
-                                <!-- 標題 -->
-                                <h1 class="title" id="advice-title"><?php echo htmlspecialchars($row['advice_title']); ?></h1>
-                                <span id="suggestion-status" class="suggestion-status status-pending">
-                                    <?php echo htmlspecialchars($row['advice_state']); ?> <!-- 顯示建言狀態 -->
-                                </span>
+        $target = 3; // 附議目標人數
+        $agree = $row['agree'];
+        $percent = min(100, ($agree / $target) * 100);
+        $remain = max(0, $target - $agree);
+        $color = $percent >= 100 ? '#4caf50' : '#2196f3'; // 綠或藍
+    ?>
+        <div class="container">
+            <main class="suggestion-detail">
+                <!-- 標題 -->
+                <h1 class="title" id="advice-title"><?php echo htmlspecialchars($row['advice_title']); ?></h1>
+                <span id="suggestion-status" class="suggestion-status status-pending">
+                    <?php echo htmlspecialchars($row['advice_state']); ?> <!-- 顯示建言狀態 -->
+                </span>
 
-                                <!-- 進度條區域 -->
-                                <section class="progress-section">
-                                    <div class="dates">
-                                        <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
-                                        <span
-                                            id="deadline-date">截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?></span>
-                                        <!-- 預設截止日為發布日後 30 天 -->
-                                    </div>
-                                    <div class="progress-bar-container">
-                                        <div class="progress-bar">
-                                            <div class="progress" style="width: <?php echo (min(100, ($row['agree'] / 2000) * 100)); ?>%">
-                                            </div> <!-- 假設目標為 2000 人附議 -->
-                                        </div>
-                                        <div class="progress-info">
-                                            目前 <?php echo $row['agree']; ?> 人 / 還差 <?php echo max(0, 2000 - $row['agree']); ?> 人
-                                            <span class="percent"><?php echo (min(100, ($row['agree'] / 2000) * 100)); ?>%</span>
-                                        </div>
-                                    </div>
-                                </section>
+                <!-- 進度條區域 -->
+                <section class="progress-section">
+                    <div class="dates">
+                        <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
+                        <span id="deadline-date">
+                            截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?>
+                        </span>
+                    </div>
+                    <div class="progress-bar-container" style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; height: 20px; margin: 10px 0;">
+                        <div class="progress-bar" style="width: 100%; height: 100%; position: relative;">
+                            <div class="progress"
+                                style="width: <?php echo $percent . '%'; ?>; background-color: <?php echo $color; ?>; height: 100%; transition: width 1s ease;">
+                            </div>
 
-                                <div class="advice">
-                                    <!-- 發布人與分類 -->
-                                    <section class="meta">
-                                        <p id="advice-author">發布人：<?php echo htmlspecialchars($row['user_id']); ?></p>
-                                        <!-- 假設 user_id 是發布人 -->
-                                        <p id="advice-category">分類：<?php echo htmlspecialchars($categoryName); ?></p>
-                                    </section>
+                        </div>
+                    </div>
+                    <div class="progress-info" style="font-size: 14px; margin-top: 5px;">
+                        目前 <?php echo $agree; ?> 人 / 還差 <?php echo $remain; ?> 人
+                        <span class="percent" style="float: right; font-weight: bold;"><?php echo $percent; ?>%</span>
+                    </div>
+                </section>
 
-                                    <!-- 圖片或 PDF -->
-                                    <section class="media">
-                                        <?php if (!empty($row['img_path'])) { ?>
-                                                            <img id="advice-image" src="<?php echo htmlspecialchars($row['img_path']); ?>" alt="建言圖片" />
-                                        <?php } else { ?>
-                                                            <img id="advice-image"
-                                                                src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg"
-                                                                alt="預設建言圖片" />
-                                        <?php } ?>
-                                    </section>
+                <div class="advice">
+                    <!-- 發布人與分類 -->
+                    <section class="meta">
+                        <p id="advice-author">發布人：<?php echo htmlspecialchars($row['user_id']); ?></p>
+                        <!-- 假設 user_id 是發布人 -->
+                        <p id="advice-category">分類：<?php echo htmlspecialchars($categoryName); ?></p>
+                    </section>
+
+                    <!-- 圖片或 PDF -->
+                    <section class="media">
+                        <?php if (!empty($row['img_path'])) { ?>
+                            <img id="advice-image" src="<?php echo htmlspecialchars($row['img_path']); ?>" alt="建言圖片" />
+                        <?php } else { ?>
+                            <img id="advice-image"
+                                src="./uploads/homepage.png"
+                                alt="預設建言圖片" />
+                        <?php } ?>
+                    </section>
 
 
-                                    <!-- 內文 -->
-                                    <section class="content">
-                                        <p id="advice-content"><?php echo nl2br(htmlspecialchars($row['advice_content'])); ?></p>
-                                    </section>
-                                </div>
-                            </main>
-                
-                         
-                    <?php
+                    <!-- 內文 -->
+                    <section class="content">
+                        <p id="advice-content"><?php echo nl2br(htmlspecialchars($row['advice_content'])); ?></p>
+                    </section>
+                </div>
+            </main>
+
+
+        <?php
     } else {
         echo "沒有找到相關建言。";
     }
-    ?>
+        ?>
 
 
-    
-    <section class="comments">
-        <div class="comment-header">
-            <h4>留言區</h4>
-            <select id="sort-comments">
-                <option value="latest">留言時間：最新</option>
-                <option value="oldest">留言時間：最舊</option>
-            </select>
+
+        <section class="comments">
+            <div class="comment-header">
+                <h4>留言區</h4>
+                <select id="sort-comments">
+                    <option value="latest">留言時間：最新</option>
+                    <option value="oldest">留言時間：最舊</option>
+                </select>
+            </div>
+
+            <div class="comment-input">
+                <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                <textarea id="comment-text" placeholder="我要留言...(最多150字)"></textarea>
+                <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+
+            <ul class="comment-list"></ul>
+
+
+            <div class="pagination">
+                <button id="prev-page">上一頁</button>
+                <span id="page-indicator"></span>
+                <button id="next-page">下一頁</button>
+            </div>
+        </section>
+
+        </main>
         </div>
-
-        <div class="comment-input">
-            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-            <textarea id="comment-text" placeholder="我要留言...(最多150字)"></textarea>
-            <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-
-        <ul class="comment-list"></ul>
-
-
-        <div class="pagination">
-            <button id="prev-page">上一頁</button>
-            <span id="page-indicator"></span>
-            <button id="next-page">下一頁</button>
-        </div>
-    </section>
-
-    </main>
-    </div>
-    </div>
-    </body>
+</body>
 
 
-    <!-- Fixed 按鈕 -->
-    <div class="fixed-buttons">
-        <button class="back-btn" onclick="window.location.href='advice_search.php'"><i class="fa-solid fa-arrow-left"></i>
-            <span>返回</span>
+<!-- Fixed 按鈕 -->
+<div class="fixed-buttons">
+    <button class="back-btn" onclick="window.location.href='advice_search.php'"><i class="fa-solid fa-arrow-left"></i>
+        <span>返回</span>
+    </button>
+
+    <form id="insertForm" action="agree_insert.php" method="POST">
+        <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
+
+        <!-- 單一按鈕 -->
+        <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
+            <i class="fa-solid fa-stamp"></i>
+            <span>附議</span>
         </button>
+    </form>
 
-        <form id="insertForm" action="agree_insert.php" method="POST">
-            <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
+    <script>
+        function handleAgree() {
+            // 從 PHP 將登入狀態帶入 JavaScript
+            const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
 
-            <!-- 單一按鈕 -->
-            <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
-                <i class="fa-solid fa-stamp"></i>
-                <span>附議</span>
-            </button>
-        </form>
-
-        <script>
-            function handleAgree() {
-                // 從 PHP 將登入狀態帶入 JavaScript
-                const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
-
-                if (!isLoggedIn) {
-                    // 若未登入，跳出提醒
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '請先登入',
-                        text: '附議為學生與教職人員專屬功能！',
-                        confirmButtonText: '確定',
-                        confirmButtonColor: '#3085d6',
-                        focusConfirm: false, // 禁用自動聚焦
-                        didOpen: () => {
-                            document.body.style.overflow = 'hidden'; // 禁止滾動
-                        },
-                        didClose: () => {
-                            document.body.style.overflow = ''; // 恢復滾動
-                            window.scrollTo(0, 0); // 避免滾動位置錯誤
-                        }
-                    });
-                } else {
-                    // 已登入，送出表單
-                    document.getElementById('insertForm').submit();
-                }
+            if (!isLoggedIn) {
+                // 若未登入，跳出提醒
+                Swal.fire({
+                    icon: 'warning',
+                    title: '請先登入',
+                    text: '附議為學生與教職人員專屬功能！',
+                    confirmButtonText: '確定',
+                    confirmButtonColor: '#3085d6',
+                    focusConfirm: false, // 禁用自動聚焦
+                    didOpen: () => {
+                        document.body.style.overflow = 'hidden'; // 禁止滾動
+                    },
+                    didClose: () => {
+                        document.body.style.overflow = ''; // 恢復滾動
+                        window.scrollTo(0, 0); // 避免滾動位置錯誤
+                    }
+                });
+            } else {
+                // 已登入，送出表單
+                document.getElementById('insertForm').submit();
             }
-        </script>
+        }
+    </script>
 
 
-        <!-- <script>
+    <!-- <script>
             document.addEventListener("DOMContentLoaded", function () {
                 let agreeBtn = document.querySelector(".agree-btn");
                 agreeBtn.addEventListener("click", function (event) {
@@ -388,97 +395,97 @@
 
 
 
-        <a href="#top" class="top-btn">Top</a>
-    </div>
+    <a href="#top" class="top-btn">Top</a>
+</div>
 
-    <footer class="footer"> footer</footer>
+<footer class="footer"> footer</footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 從 URL 的上頁連結中獲取 status
-            const statusFromPreviousPage = new URLSearchParams(window.location.search).get('id');
-            const status = <?php echo json_encode($status); ?>;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 從 URL 的上頁連結中獲取 status
+        const statusFromPreviousPage = new URLSearchParams(window.location.search).get('id');
+        const status = <?php echo json_encode($status); ?>;
 
-            const statusMap = {
-                passed: {
-                    text: '通過',
-                    class: 'status-passed'
-                },
-                failed: {
-                    text: '未通過',
-                    class: 'status-failed'
-                },
-                pending: {
-                    text: '未處理',
-                    class: 'status-pending'
-                }
-            };
+        const statusMap = {
+            passed: {
+                text: '通過',
+                class: 'status-passed'
+            },
+            failed: {
+                text: '未通過',
+                class: 'status-failed'
+            },
+            pending: {
+                text: '未處理',
+                class: 'status-pending'
+            }
+        };
 
-            const statusEl = document.getElementById('suggestion-status');
-            if (statusEl) {
-                if (statusMap[status]) {
-                    statusEl.textContent = statusMap[status].text;
-                    statusEl.className = `suggestion-status ${statusMap[status].class}`;
-                } else {
-                    statusEl.textContent = '未知狀態';
-                    statusEl.className = 'suggestion-status status-unknown';
-                }
+        const statusEl = document.getElementById('suggestion-status');
+        if (statusEl) {
+            if (statusMap[status]) {
+                statusEl.textContent = statusMap[status].text;
+                statusEl.className = `suggestion-status ${statusMap[status].class}`;
             } else {
-                console.error('找不到 suggestion-status 元素');
+                statusEl.textContent = '未知狀態';
+                statusEl.className = 'suggestion-status status-unknown';
+            }
+        } else {
+            console.error('找不到 suggestion-status 元素');
+        }
+
+
+
+
+
+        const commentList = document.querySelector('.comment-list');
+        const pageIndicator = document.getElementById('page-indicator');
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+        const sortSelect = document.getElementById('sort-comments');
+        const submitBtn = document.getElementById('submit-comment');
+        const textarea = document.getElementById('comment-text');
+
+        // ✨ 假資料：加上 username
+        let allComments = Array.from({
+            length: 30
+        }, (_, i) => ({
+            username: `使用者${i + 1}`,
+            text: `這是留言 #${i + 1}`,
+            time: new Date(2025, 2, 29, 12, i).toLocaleString(),
+        }));
+
+        const commentsPerPage = 10;
+        let currentPage = 1;
+        let currentSort = 'latest';
+
+        // 計算留言與現在的時間差
+        function timeAgo(dateString) {
+            const now = new Date();
+            const past = new Date(dateString);
+            const diff = Math.floor((now - past) / 1000); // 秒數差
+
+            if (diff < 60) return '剛剛';
+            if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
+            return `${Math.floor(diff / 86400)} 天前`;
+        }
+
+
+        function renderComments() {
+            let sortedComments = [...allComments];
+            if (currentSort === 'latest') {
+                sortedComments.reverse();
             }
 
+            const start = (currentPage - 1) * commentsPerPage;
+            const paginatedComments = sortedComments.slice(start, start + commentsPerPage);
 
-
-
-
-            const commentList = document.querySelector('.comment-list');
-            const pageIndicator = document.getElementById('page-indicator');
-            const prevBtn = document.getElementById('prev-page');
-            const nextBtn = document.getElementById('next-page');
-            const sortSelect = document.getElementById('sort-comments');
-            const submitBtn = document.getElementById('submit-comment');
-            const textarea = document.getElementById('comment-text');
-
-            // ✨ 假資料：加上 username
-            let allComments = Array.from({
-                length: 30
-            }, (_, i) => ({
-                username: `使用者${i + 1}`,
-                text: `這是留言 #${i + 1}`,
-                time: new Date(2025, 2, 29, 12, i).toLocaleString(),
-            }));
-
-            const commentsPerPage = 10;
-            let currentPage = 1;
-            let currentSort = 'latest';
-
-            // 計算留言與現在的時間差
-            function timeAgo(dateString) {
-                const now = new Date();
-                const past = new Date(dateString);
-                const diff = Math.floor((now - past) / 1000); // 秒數差
-
-                if (diff < 60) return '剛剛';
-                if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
-                if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
-                return `${Math.floor(diff / 86400)} 天前`;
-            }
-
-
-            function renderComments() {
-                let sortedComments = [...allComments];
-                if (currentSort === 'latest') {
-                    sortedComments.reverse();
-                }
-
-                const start = (currentPage - 1) * commentsPerPage;
-                const paginatedComments = sortedComments.slice(start, start + commentsPerPage);
-
-                commentList.innerHTML = '';
-                paginatedComments.forEach(comment => {
-                    const li = document.createElement('li');
-                    li.classList.add('comment-item');
-                    li.innerHTML = `
+            commentList.innerHTML = '';
+            paginatedComments.forEach(comment => {
+                const li = document.createElement('li');
+                li.classList.add('comment-item');
+                li.innerHTML = `
       <div class="user-avatar">👤</div>
       <div class="comment-content">
         <p class="comment-meta">
@@ -488,58 +495,58 @@
         <p class="comment-text">${comment.text}</p>
       </div>
     `;
-                    commentList.appendChild(li);
-                });
-
-                const totalPages = Math.ceil(allComments.length / commentsPerPage);
-                pageIndicator.textContent = `第 ${currentPage} / ${totalPages} 頁`;
-                prevBtn.disabled = currentPage === 1;
-                nextBtn.disabled = currentPage === totalPages;
-            }
-
-            prevBtn.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderComments();
-                }
+                commentList.appendChild(li);
             });
 
-            nextBtn.addEventListener('click', () => {
-                const totalPages = Math.ceil(allComments.length / commentsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderComments();
-                }
-            });
+            const totalPages = Math.ceil(allComments.length / commentsPerPage);
+            pageIndicator.textContent = `第 ${currentPage} / ${totalPages} 頁`;
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+        }
 
-            sortSelect.addEventListener('change', () => {
-                currentSort = sortSelect.value;
-                currentPage = 1;
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
                 renderComments();
-            });
+            }
+        });
 
-            submitBtn.addEventListener('click', () => {
-                const text = textarea.value.trim();
-                if (text) {
-                    const now = new Date().toLocaleString();
-                    allComments.push({
-                        username: '我自己', //  未來從登入使用者資料取得
-                        text,
-                        time: now
-                    });
-                    textarea.value = '';
-                    currentSort = 'latest';
-                    currentPage = 1;
-                    sortSelect.value = 'latest';
-                    renderComments();
-                }
-            });
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(allComments.length / commentsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderComments();
+            }
+        });
 
-
+        sortSelect.addEventListener('change', () => {
+            currentSort = sortSelect.value;
+            currentPage = 1;
             renderComments();
         });
 
-        /*     document.addEventListener('DOMContentLoaded', function () {
+        submitBtn.addEventListener('click', () => {
+            const text = textarea.value.trim();
+            if (text) {
+                const now = new Date().toLocaleString();
+                allComments.push({
+                    username: '我自己', //  未來從登入使用者資料取得
+                    text,
+                    time: now
+                });
+                textarea.value = '';
+                currentSort = 'latest';
+                currentPage = 1;
+                sortSelect.value = 'latest';
+                renderComments();
+            }
+        });
+
+
+        renderComments();
+    });
+
+    /*     document.addEventListener('DOMContentLoaded', function () {
                  const urlParams = new URLSearchParams(window.location.search);
                  const adviceId = urlParams.get('id');
      
@@ -584,33 +591,33 @@
 
 
 
-        // document.getElementById("agree-btn").addEventListener("click", function (event) {
-        //     event.preventDefault(); // 防止超連結跳轉
+    // document.getElementById("agree-btn").addEventListener("click", function (event) {
+    //     event.preventDefault(); // 防止超連結跳轉
 
-        //     // 從網址中取得 'id' 參數
-        //     const urlParams = new URLSearchParams(window.location.search);
-        //     const adviceId = urlParams.get('id'); // 取得 'id' 參數
+    //     // 從網址中取得 'id' 參數
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const adviceId = urlParams.get('id'); // 取得 'id' 參數
 
-        //     if (!adviceId) {
-        //         alert("無效的 advice_id！");
-        //         return;
-        //     }
+    //     if (!adviceId) {
+    //         alert("無效的 advice_id！");
+    //         return;
+    //     }
 
-        //     console.log("附議的 advice_id:", adviceId); // 測試用
+    //     console.log("附議的 advice_id:", adviceId); // 測試用
 
-        //     // 發送 AJAX 請求到後端
-        //     fetch("update_agree.php", {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        //         body: `advice_id=${adviceId}` // 傳送 advice_id 到後端
-        //     })
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             alert("附議成功！");
-        //         })
-        //         .catch(error => console.error("錯誤:", error));
-        // });
-    </script>
+    //     // 發送 AJAX 請求到後端
+    //     fetch("update_agree.php", {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //         body: `advice_id=${adviceId}` // 傳送 advice_id 到後端
+    //     })
+    //         .then(response => response.text())
+    //         .then(data => {
+    //             alert("附議成功！");
+    //         })
+    //         .catch(error => console.error("錯誤:", error));
+    // });
+</script>
 
 
 </body>
