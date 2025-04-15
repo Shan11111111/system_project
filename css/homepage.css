@@ -1026,7 +1026,7 @@ a {
 
 .help_title ,.info_title{
   display: flex;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: bold;
   color: var(--color-dark-brown);
 }

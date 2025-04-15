@@ -702,7 +702,7 @@
                     <div>意見箱</div>
                 </div>
                 <div class="connection">
-                    <div>242新北市新莊區中正路510號</div>
+                    <div>242新北市新莊區中正路510號.</div>
                     <div>電話:(02)2905-2000</div>
                 </div>
             </div>
