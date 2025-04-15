@@ -319,38 +319,48 @@
 
     <!-- Fixed 按鈕 -->
     <div class="fixed-buttons">
-        <button class="back-btn" onclick="history.back()">上一頁 </button>
+        <button class="back-btn" onclick="window.location.href='advice_search.php'"><i class="fa-solid fa-arrow-left"></i>
+            <span>返回</span>
+        </button>
 
         <form id="insertForm" action="agree_insert.php" method="POST">
-            <input type="hidden" name="advice_id" value="<?php echo isset($advice_id) ? $advice_id : ''; ?>">
+            <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
 
-            <?php if (isset($_SESSION['user_id'])) { ?>
-                <input type="submit" id="agree-btn" class="reply-btn agree-btn" data-advice-id="<?php echo $advice_id; ?>"
-                    value="附議">
-            <?php } else { ?>
-                <a href="javascript:void(0);" id="agree-btn" class="reply-btn agree-btn" onclick="showLoginAlert()">附議</a>
-
-                <script>
-                    function showLoginAlert() {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: '請先登入',
-                            text: '附議為學生與教職人員專屬功能！',
-                            confirmButtonText: '確定',
-                            confirmButtonColor: '#3085d6',
-                            focusConfirm: false, // 禁用自動聚焦
-                            didOpen: () => {
-                                document.body.style.overflow = 'hidden'; // 禁止滾動
-                            },
-                            didClose: () => {
-                                document.body.style.overflow = ''; // 恢復滾動
-                                window.scrollTo(0, 0); // 避免滾動位置錯誤
-                            }
-                        });
-                    }
-                </script>
-            <?php } ?>
+            <!-- 單一按鈕 -->
+            <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
+                <i class="fa-solid fa-stamp"></i>
+                <span>附議</span>
+            </button>
         </form>
+
+        <script>
+            function handleAgree() {
+                // 從 PHP 將登入狀態帶入 JavaScript
+                const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+                if (!isLoggedIn) {
+                    // 若未登入，跳出提醒
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '請先登入',
+                        text: '附議為學生與教職人員專屬功能！',
+                        confirmButtonText: '確定',
+                        confirmButtonColor: '#3085d6',
+                        focusConfirm: false, // 禁用自動聚焦
+                        didOpen: () => {
+                            document.body.style.overflow = 'hidden'; // 禁止滾動
+                        },
+                        didClose: () => {
+                            document.body.style.overflow = ''; // 恢復滾動
+                            window.scrollTo(0, 0); // 避免滾動位置錯誤
+                        }
+                    });
+                } else {
+                    // 已登入，送出表單
+                    document.getElementById('insertForm').submit();
+                }
+            }
+        </script>
 
 
         <!-- <script>

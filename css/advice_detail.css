@@ -3,7 +3,7 @@
   --color-yellow: #fff6da;
   /* 鵝黃色 - 小雞感 */
   /*navbar*/
-  --color-orange-brown: #D9A679;
+  --color-orange-brown: #d9a679;
   /* 溫柔橘棕 - 強調/按鈕  */
   --color-dark-brown: #7c4d2b;
   /* 深咖啡 - 導航、標題 * 文字的hover*/
@@ -15,14 +15,14 @@
   /* 奶油白 - 背景 */
 
   /* 字體與邊線 */
-  --color-text: #4B3F2F;
+  --color-text: #4b3f2f;
   /* 深褐灰 - 內文字體 */
-  --color-line: #D7CBB8;
+  --color-line: #d7cbb8;
   --navbar-text: #fff6da;
-    /* 淡褐線條 */
+  /* 淡褐線條 */
 
-    /* 狀態/互動 */
-    --color-hover: #EFC89C;
+  /* 狀態/互動 */
+  --color-hover: #efc89c;
   /* hover/active 狀態用的柔橘 */
 }
 
@@ -231,350 +231,392 @@ body {
   }
 }
 
-
-.container{
-    width: 75%;
-    margin-bottom: 30px;
-    margin-top: 80px;
+.container {
+  width: 75%;
+  margin-bottom: 30px;
+  margin-top: 80px;
 }
-  
 
 .title {
-    font-size: 1.8rem;
-    margin: 1.0rem 0;
-    font-weight: bold;
-    color: var(--color-dark-brown);
-  }
+  font-size: 1.8rem;
+  margin: 1rem 0;
+  font-weight: bold;
+  color: var(--color-dark-brown);
+}
 
-  .suggestion-status {
-    display: inline-block;
-    margin-top: 0.5rem;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: white;
-    background-color: gray;
-    margin-bottom: 1.0rem;
-  }
-  
-  /* 狀態顏色區分 */
-  .status-passed {
-    background-color: #4caf50; 
-  }
-  
-  .status-failed {
-    background-color: #f44336; 
-  }
-  
-  .status-pending {
-    background-color: #ff9800; 
-  }
-  
-  
-  .progress-section {
-    background: var(--color-soft-green);
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  }
-  
-  .dates {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 0.5rem;
-  }
-  
-  .progress-bar-container {
-    position: relative;
-  }
-  
-  .progress-bar {
-    height: 20px;
-    background: #e2e2e2;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  .progress {
-    height: 100%;
-    background: linear-gradient(90deg, #f3f56c, #ceb600);
-  }
-  
-  .progress-info {
-    margin-top: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-  }
-  
-  .percent {
-    font-weight: bold;
-    color: #ceb600;
-  }
-  
- .advice{
-    border: 1px solid#99999982 ;
-    border-radius: 8px;
-    background-color: var(--color-yellow)
-  
+.suggestion-status {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: white;
+  background-color: gray;
+  margin-bottom: 1rem;
+}
 
- }
+/* 狀態顏色區分 */
+.status-passed {
+  background-color: #4caf50;
+}
 
-  .meta{
-    padding-left: 1rem;
-    padding-top: 1rem;
-    margin-bottom: 0px;
-    
-    color: #666;
-  }
+.status-failed {
+  background-color: #f44336;
+}
 
-  
-  
-  .media {
-    display: flex;
-    padding-left: 1rem;
-    margin-top: 0rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-  
-  .media img {
-    width: 600px;
+.status-pending {
+  background-color: #ff9800;
+}
+
+.progress-section {
+  background: var(--color-soft-green);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.dates {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-container {
+  position: relative;
+}
+
+.progress-bar {
+  height: 20px;
+  background: #e2e2e2;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #f3f56c, #ceb600);
+}
+
+.progress-info {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.percent {
+  font-weight: bold;
+  color: #ceb600;
+}
+
+.advice {
+  border: 1px solid#99999982;
+  border-radius: 8px;
+  background-color: var(--color-yellow);
+}
+
+.meta {
+  padding-left: 1rem;
+  padding-top: 1rem;
+  margin-bottom: 0px;
+
+  color: #666;
+}
+
+.media {
+  display: flex;
+  padding-left: 1rem;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.media img {
+  width: 600px;
   height: 300px;
   object-fit: cover;
   border-radius: 8px;
-  }
-  
-  .pdf-link {
-    display: inline-block;
-    margin-top: 0.5rem;
-    color: #007bff;
-    text-decoration: underline;
-  }
+}
 
-  .content {
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-  }
+.pdf-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: #007bff;
+  text-decoration: underline;
+}
 
-  .comments {
-    background: var(--color-yellow);
-    padding: 1.5rem;
-    margin: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    animation: fadeIn 0.6s ease-in;
-  }
-  
-  .comment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    color: var(--color-dark-brown);
-  }
-  
-  .comment-header select {
-    padding: 0.4rem 0.6rem;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    background: #f0f0f0;
-    font-size: 0.9rem;
-  }
-  
-  .comment-input {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    align-items: center;
-  }
-  
-  .comment-input .user-avatar {
-    font-size: 1.5rem;
-    margin-top: 0.4rem;
-  }
-  
-  .comment-input textarea {
-    flex: 1;
-    height: 45px;
-    padding: 0.6rem;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    resize: vertical;
-    transition: all 0.2s ease;
-  }
-  
-  .comment-input textarea:focus {
-    border-color: #4caf50;
-    outline: none;
-  }
-  
-  .comment-input button {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .comment-input button:hover {
-    background-color: #43a047;
-  }
-  
-  .comment-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  
-  
-  .comment-item .user-avatar {
-    font-size: 1.5rem;
-  }
-  
-  .comment-content {
-    flex: 1;
-  }
-  
-  .comment-text {
-    margin: 0;
-  }
-  
- .comment-meta{
-    display: flex;
-    align-items: center;
- }
-  
-  .comment-meta .comment-time {
-    color: #999;
-    font-size: 0.85rem;
-    margin-left: 0.5rem;
-  }
+.content {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
 
-  .comment-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid #adadad5b; /* 分界線 */
-    animation: slideIn 0.4s ease;
-  }
-  
-  .comment-meta {
-    margin: 0 0 0.3rem;
-    font-size: 0.95rem;
-  }
-  
-  .comment-meta .comment-time {
-    color: #999;
-    font-size: 0.85rem;
-    margin-left: 0.5rem;
-  }
-  
-  
+.comments {
+  background: var(--color-yellow);
+  padding: 1.5rem;
+  margin: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.6s ease-in;
+}
 
-  
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-  }
-  
-  .pagination button {
-    padding: 0.4rem 0.8rem;
-    background-color: var(--color-dark-brown);
-    color: #eaeaea;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .pagination button:hover {
-    background-color: #bbb;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-  
-  
-  .fixed-buttons {
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: var(--color-dark-brown);
+}
 
-  .back-btn{
-    width: 50px;
-    height: 50px;
-    background: #df6060;
-    color: white;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 50px;
-    font-weight: bold;
-    text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    font-size: 10px;
-    display: flex;
-    align-items: center;
+.comment-header select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background: #f0f0f0;
+  font-size: 0.9rem;
+}
 
-  }
+.comment-input {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
 
-  .back-btn:hover {
-    background: #b9841a;
-  }
-  
-  .fixed-buttons a {
-    width: 50px;
-    height: 50px;
-    color: white;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 50px;
-    font-weight: bold;
-    text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
+.comment-input .user-avatar {
+  font-size: 1.5rem;
+  margin-top: 0.4rem;
+}
 
-  .reply-btn{
-    background: #4caf50;
-  }
-  .reply-btn:hover {
-    background: #b9841a;
-  }
-  .top-btn{
-    background-color: #ceb600;
-  }
+.comment-input textarea {
+  flex: 1;
+  height: 45px;
+  padding: 0.6rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
 
-  .top-btn:hover {
-    background: #b9841a;
-  }
+.comment-input textarea:focus {
+  border-color: #4caf50;
+  outline: none;
+}
 
-  .footer{
-    background-color: #ceb600;
+.comment-input button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.comment-input button:hover {
+  background-color: #43a047;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-item .user-avatar {
+  font-size: 1.5rem;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-text {
+  margin: 0;
+}
+
+.comment-meta {
+  display: flex;
+  align-items: center;
+}
+
+.comment-meta .comment-time {
+  color: #999;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.comment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #adadad5b; /* 分界線 */
+  animation: slideIn 0.4s ease;
+}
+
+.comment-meta {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.comment-meta .comment-time {
+  color: #999;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.pagination button {
+  padding: 0.4rem 0.8rem;
+  background-color: var(--color-dark-brown);
+  color: #eaeaea;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #bbb;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fixed-buttons {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.back-btn {
+  width: 50px;
+  height: 50px;
+  background: #df6060;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;  /* 控制上下間距，讓文字不壓到底 */
+  line-height: 1.4; /* 縮短文字與圖示的距離 */
+}
+
+.back-btn i {
+  font-size: 16px;
+}
+
+.back-btn span {
+  margin-top: 1px; /* 控制圖示與文字間距 */
+  font-size: 12px;
+}
+
+
+.back-btn:hover {
+  background: #b9841a;
+}
+
+.fixed-buttons a {
+  width: 50px;
+  height: 50px;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.agree-fixed-btn {
+  background: #4caf50;
+  width: 50px;
+  height: 50px;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;  /* 控制上下間距，讓文字不壓到底 */
+  line-height: 1.4; /* 縮短文字與圖示的距離 */
+
+}
+
+.agree-fixed-btn i {
+  font-size: 16px;
+}
+
+.agree-fixed-btn span {
+  margin-top: 2px; /* 控制圖示與文字間距 */
+  font-size: 12px;
+}
+
+.agree-fixed-btn,
+.back-btn,
+.top-btn {
+  box-shadow: none; /* 移除黑邊陰影 */
+  border: none;     /* 如果還有黑邊可能是 border */
+}
+
+
+
+.agree-fixed-btn:hover {
+  background: #b9841a;
+}
+.top-btn {
+  background-color: #ceb600;
+}
+
+.top-btn:hover {
+  background: #b9841a;
+}
+
+.footer {
+  background-color: #ceb600;
+}

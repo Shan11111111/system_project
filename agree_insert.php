@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         setTimeout(() => {
                             window.location.href = "advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"; // Redirect to homepage.php
                         }, 1000); // Wait for fade-out duration before redirecting
-                    }, 3000); // Duration of rotation
+                    }, 1000); // Duration of rotation
                 });
             </script>
         </body>
@@ -117,9 +117,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         logo.classList.add("fade-out");
                         myobject.classList.add("fade-out");
                         setTimeout(() => {
-                            window.location.href = "homepage.php"; // Redirect to homepage.php
+                            window.location.href = "advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>";
                         }, 1000); // Wait for fade-out duration before redirecting
-                    }, 3000); // Duration of rotation
+                    }, 1000); // Duration of rotation
                 });
             </script>
         </body>
