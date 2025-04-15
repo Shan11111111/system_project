@@ -79,8 +79,7 @@
                             </script>
                         <?php } ?>
 
-                        <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_hot.php">熱門建言</a>
+                        <a href="advice_search.php">建言瀏覽</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -146,10 +145,8 @@
                             }
                         </script>
                     <?php } ?>
-
-                    <a href="advice_search.php">最新建言</a>
-                    <a href="advice_hot.php">熱門建言</a>
-                </div>
+                    <a href="advice_search.php">建言瀏覽</a>
+                    </div>
             </div>
             <div class="dropdown">
                 <button class="dropbtn">募資</button>

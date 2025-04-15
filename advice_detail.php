@@ -151,8 +151,7 @@
                         </script>
                     <?php } ?>
 
-                    <a href="advice_search.php">最新建言</a>
-                    <a href="advice_hot.php">熱門建言</a>
+                    <a href="advice_search.php">建言瀏覽</a>
                 </div>
             </div>
             <div class="dropdown">

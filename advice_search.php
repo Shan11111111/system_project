@@ -35,9 +35,9 @@
     <nav class="navbar">
         <div class="nav-container">
             <!-- LOGO -->
-            <div class="logo">
+            <a href="homepage.php" class="logo">
                 <img src="img/logo.png" style="width: 90px;">
-            </div>
+            </a>
             <!-- 漢堡按鈕 -->
             <div class="menu-toggle" id="mobile-menu-toggle">☰</div>
 
@@ -72,8 +72,7 @@
                             </script>
                         <?php } ?>
 
-                        <a href="advice_search.php">最新建言</a>
-                        <a href="advice_search.php">熱門建言</a>
+                        <a href="advice_search.php">建言瀏覽</a>
                     </div>
                 </div>
                 <div class="dropdown">
