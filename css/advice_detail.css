@@ -584,7 +584,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 8px 0;  /* 控制上下間距，讓文字不壓到底 */
-  line-height: 1.4; /* 縮短文字與圖示的距離 */
+  line-height: 1.35; /* 縮短文字與圖示的距離 */
 
 }
 

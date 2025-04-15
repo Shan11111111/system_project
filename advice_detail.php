@@ -339,7 +339,7 @@
             <!-- 單一按鈕 -->
             <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
                 <i class="fa-solid fa-stamp"></i>
-                <span>附議</span>
+                <span>覆議</span>
             </button>
         </form>
 
