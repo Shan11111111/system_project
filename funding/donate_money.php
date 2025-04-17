@@ -1,0 +1,38 @@
+<!-- 捐贈表單傳值 -->
+<?php
+session_start();
+if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+    $funding_id = $_POST['funding_id'];
+    $people_name = $_POST['people_name'];
+    $donate_money = $_POST['donate_money'];
+} else {
+    echo "錯誤傳送";
+    header("Location: homepage.php");
+    exit();
+}
+
+$link = new mysqli("localhost", "root", "", "system_project");
+
+if ($link->connect_error) {
+    die("Connection failed: " . $link->connect_error);
+}
+// 檢查捐款金額是否為數字
+if (!is_numeric($donate_money) || $donate_money < 0) {
+    echo "<script>alert('金額必須是正整數的數字');</script>";
+    header("Location: homepage.php");
+    exit();
+}
+
+$stmt = $link->prepare("INSERT INTO funding_people (people_name, donate_money, funding_id) VALUES (?, ?, ?)");
+$stmt->bind_param("sii", $people_name, $donate_money, $funding_id);
+if ($stmt->execute()) {
+    echo "<script>alert('捐款成功');</script>";
+    echo "<script>window.location.href='homepage.php';</script>";
+} else {
+    echo "<script>alert('捐款失敗');</script>";
+    echo "<script>window.location.href='homepage.php';</script>";
+}
+$stmt->close();
+$link->close();
+
+?>
