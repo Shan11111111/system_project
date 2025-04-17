@@ -427,7 +427,7 @@
                 document.getElementById('highlight-count').textContent = `還差 ${remain} 人即可達成`;
                 document.getElementById('highlight-action').style.display = 'inline-block';
                 document.getElementById('highlight-action').onclick = () => {
-                    window.location.href = `advice_detail.php?id=${target.advice_id}`;
+                    window.location.href = `advice_detail.php?advice_id=${target.advice_id}`;
                 };
             } else {
                 document.getElementById('highlight-title').textContent = '目前沒有快要達標的建言';
