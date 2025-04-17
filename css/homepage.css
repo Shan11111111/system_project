@@ -234,14 +234,17 @@ body {
   }
 }
 
-.banner { 
+.banner {
   height: 100%;
-  background-image: 
-  linear-gradient(to bottom, rgba(0, 0, 0, 0),#b0a99894),
-  url('../img/homepage.png');
-  background-size: cover;          /* 背景圖全屏覆蓋 */
-  background-repeat: no-repeat;    /* 禁止重複 */
-  background-position: center;     /* 居中對齊 */
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0), #b0a99894),
+    url('../img/homepage.png');
+  background-size: cover;
+  /* 背景圖全屏覆蓋 */
+  background-repeat: no-repeat;
+  /* 禁止重複 */
+  background-position: center;
+  /* 居中對齊 */
   object-fit: fill;
   display: flex;
 }
@@ -253,7 +256,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap:10px
+  gap: 10px
 }
 
 .hot_propose {
@@ -271,7 +274,8 @@ body {
 }
 
 .chicken {
-  position: relative; /* 一定要有這行！ */
+  position: relative;
+  /* 一定要有這行！ */
   width: 180px;
   height: 180px;
   border-radius: 50%;
@@ -280,23 +284,27 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .chicken_tag {
   position: absolute;
   bottom: 10px;
   width: 100%;
   text-align: center;
-  font-size:px;
+  font-size: px;
   color: white;
-  text-shadow: 0px 0px 5px rgba(0,0,0,0.5); /* 讓白字更清楚 */
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  /* 讓白字更清楚 */
 }
+
 .banner2 .chicken_tag {
   font-size: 20px;
 }
 
-.banner2 .chicken  {
+.banner2 .chicken {
   width: 220px;
   height: 220px;
 }
+
 .chicken:hover {
   transform: scale(1.1);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -318,7 +326,9 @@ body {
 
 }
 
-.banner1 img, .banner2 img ,.banner3 img{
+.banner1 img,
+.banner2 img,
+.banner3 img {
   max-width: 100%;
   object-fit: cover;
 }
@@ -327,7 +337,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
   margin-top: 20px;
 
 }
@@ -348,11 +358,13 @@ body {
 }
 
 .new_propose .chicken {
-  transform: translateX(70px); /* 向內靠近中心 */
+  transform: translateX(70px);
+  /* 向內靠近中心 */
 }
 
 .new_fund .chicken {
-  transform: translateX(-70px); /* 向內靠近中心 */
+  transform: translateX(-70px);
+  /* 向內靠近中心 */
 }
 
 
@@ -608,7 +620,8 @@ a {
 .progress-line {
   width: 100%;
   height: 10px;
-  background-color: #e0e0e0; /* 背景條顏色 */
+  background-color: #e0e0e0;
+  /* 背景條顏色 */
   border-radius: 6px;
   overflow: hidden;
   margin-bottom: 5px;
@@ -616,10 +629,14 @@ a {
 
 .progress-line .progress {
   height: 100%;
-  background-color: #4caf50; /* 進度條顏色 */
-  width: 0%; /* 由 inline style 控制，例如 style="width: 60%;" */
-  border-radius: 6px 0 0 6px; /* 左圓角，右邊如果是滿的才會圓角 */
-  transition: width 0.3s ease; /* 平滑動畫效果 */
+  background-color: #4caf50;
+  /* 進度條顏色 */
+  width: 0%;
+  /* 由 inline style 控制，例如 style="width: 60%;" */
+  border-radius: 6px 0 0 6px;
+  /* 左圓角，右邊如果是滿的才會圓角 */
+  transition: width 0.3s ease;
+  /* 平滑動畫效果 */
 }
 
 .card-data {
@@ -630,7 +647,7 @@ a {
   gap: 10px;
 }
 
-.card-data  i { 
+.card-data i {
   margin-left: 4px;
   gap: 10px;
 }
@@ -663,7 +680,7 @@ a {
   padding: 5px 10px;
   font-size: 16px;
   border-radius: 15px;
-  border: 1,5px solid #a5a0a0;
+  border: 1, 5px solid #a5a0a0;
 
 }
 
@@ -831,7 +848,7 @@ a {
   /* ✅ 貼底對齊（若需要） */
 }
 
-.footer{
+.footer {
   background-color: var(--color-orange-brown);
 }
 
@@ -967,3 +984,71 @@ a {
     color: #555;
   }
 }
+
+.footer {
+  display: flex;
+  height: 240px;
+  background-color:var(--color-yellow);
+  padding-left: 200px;
+  padding-right: 200px;
+  
+}
+
+.logo_space {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  margin-right: 1rem; /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
+}
+
+
+
+.help {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  padding-top: 30px;
+  margin-right: 1rem; /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
+}
+
+.help_content{
+  padding-top: 5px;
+}
+
+
+.footer_info{
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
+  margin-right: 0rem; /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
+}
+
+.help_title ,.info_title{
+  display: flex;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-dark-brown);
+}
+
+.info_content{
+  display: flex;
+  flex-direction: row;
+  padding: 5px 0 0 0px ;
+  gap:10px;
+}
+.school_info {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+}
+
+.connection {
+  display: flex;
+  flex: 3;
+  flex-direction: column;
+
+}
+
+
+

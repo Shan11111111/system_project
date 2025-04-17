@@ -329,7 +329,7 @@ button {
 }
 
 button:hover {
-  background-color: #f4dc69;
+  background-color: #183fcc;
 
 }
 
@@ -360,7 +360,7 @@ button:hover {
 }
 
 .suggestion-content {
-  padding: 10px;
+  padding: 12px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -372,6 +372,7 @@ button:hover {
   font-weight: bold;
   color: #333;
   margin-bottom: 8px;
+  padding-left: 5px ;
 }
 
 .suggestion-meta {
@@ -386,7 +387,7 @@ button:hover {
 }
 
 .data span {
- 
+  
   padding: 3px 6px;
   border-radius: 4px;
 }
@@ -400,6 +401,7 @@ button:hover {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding-right: 15px;
   gap: 10px;
 }
 
@@ -443,6 +445,7 @@ button:hover {
 
 .footer {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 400px;
   background-color: #d6ae57;
+  
 }

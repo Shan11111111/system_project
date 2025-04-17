@@ -79,8 +79,7 @@
                             </script>
                         <?php } ?>
 
-                        <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_search.php">熱門建言</a>
+                        <a href="advice_search.php">建言瀏覽</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -97,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -146,9 +145,7 @@
                             }
                         </script>
                     <?php } ?>
-
-                    <a href="advice_search.php">最新建言</a>
-                    <a href="advice_hot.php">熱門建言</a>
+                    <a href="advice_search.php">建言瀏覽</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -166,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -190,13 +187,13 @@
             <div class="hot_propose">
                 <div class="chicken">
                     <img src="img\image2333.jpg">
-                    <div class="chicken_tag"> 熱門建言瀏覽</div>
+                    <div class="chicken_tag"> 建言瀏覽</div>
                 </div>
             </div>
             <div class="new_propose">
                 <div class="chicken">
                     <img src="img\6A7933B2-AA2E-498F-964B-259E5C7ACB2B.png">
-                    <div class="chicken_tag">最新建言瀏覽 </div>
+                    <div class="chicken_tag">關於我們</div>
                 </div>
 
             </div>
@@ -211,13 +208,13 @@
             <div class="hot_fund">
                 <div class="chicken">
                     <img src="img\10C332BB-804B-48D6-B909-50720AD3B2B5.png">
-                    <div class="chicken_tag">熱門募資專案</div>
+                    <div class="chicken_tag">募資專案</div>
                 </div>
             </div>
             <div class="new_fund">
                 <div class="chicken">
                     <img src="img\D8904374-10AE-4B6B-B6FB-355FEA8C7B44.png">
-                    <div class="chicken_tag">最新募資專案</div>
+                    <div class="chicken_tag">成功專案</div>
                 </div>
 
             </div>
@@ -242,33 +239,81 @@
                                     style="color: #a5a0a0;"></i></div>
                             <div class="swiper-button-next-1"><i class="fa-solid fa-arrow-right"
                                     style="color: #a5a0a0;"></i></div>
-                            <div class="more"><a href="">更多</a></div>
+                            <div class="more"><a href="advice_search.php">更多</a></div>
                         </div>
                     </div>
                     <div class="swiper mySwiper1">
                         <div class="swiper-wrapper">
+                            <?php
+                            $link = mysqli_connect('localhost', 'root');
+                            mysqli_select_db($link, "system_project");
 
+                            // 檢查連線是否成功
+                            if (!$link) {
+                                die("資料庫連線失敗: " . mysqli_connect_error());
+                            }
+                            // 查詢資料庫中的建言資料
+                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, a.advice_state, 
+               ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.agree DESC"; // 查詢最熱門的建言
+                            
+                            $result = mysqli_query($link, $sql);
+                            if (!$result) {
+                                die("查詢失敗: " . mysqli_error($link));
+                            }
+                            // 檢查是否有資料
+                            if (mysqli_num_rows($result) > 0) {
+                                // 輸出每一筆資料
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $advice_id = $row['advice_id'];
+                                    $advice_title = $row['advice_title'];
+                                    $advice_content = $row['advice_content'];
+                                    $category = $row['category'];
+                                    $agree = $row['agree'];
+                                    $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
+                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
+                                    if ($progress > 100) {
+                                        $progress = 100; // 確保進度不超過 100%
+                                    }
+                                    $progress_width = $progress . "%"; // 計算進度條的寬度
+                                    // 這裡可以根據需要顯示建言的內容，例如標題、進度等
+                                    // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
+                                    // 獲取圖片路徑，若無圖片則使用預設圖片
+                                    $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+                                    ?>
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">操場的圍欄破了，會危險拜託快修奛嗎寶半</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 60%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>25</span>
-                                            <span>60%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    <div class="swiper-slide">
+                                        <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
+                                            style="text-decoration: none; color: inherit;">
 
-                            <div class="swiper-slide">
+                                            <div class="adv_content_block">
+                                                <div class="adv_content_img">
+                                                    <img src="<?php echo htmlspecialchars($image_url); ?>" />
+                                                </div>
+                                                <div class="adv_content_goal">
+                                                    <div class="adv_content_text"><?php echo htmlspecialchars($advice_title); ?>
+                                                    </div>
+                                                    <div class="progress-line">
+                                                        <div class="progress"
+                                                            style="width:<?php echo htmlspecialchars($progress_width); ?>;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-data">
+                                                        <span><i
+                                                                class="fa-regular fa-user"></i><?php echo htmlspecialchars($agree); ?></span>
+                                                        <span><?php echo htmlspecialchars($progress_width); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+
+
+                                <?php }
+                            }
+                            ?>
+                            <?php mysqli_close($link); ?>
+
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -285,121 +330,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">公園缺少遮蔭處，希望增加休息涼亭</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 70%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>34</span>
-                                            <span>70%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">人行道磁磚凸起，長者容易跌倒</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 80%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>40</span>
-                                            <span>80%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">希望社區增設寵物友善空間</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 50%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>21</span>
-                                            <span>50%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">籃球場地板破損，打球容易受傷</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 30%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>12</span>
-                                            <span>30%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">車流多但沒紅綠燈，建議設置號誌</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 65%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>28</span>
-                                            <span>65%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">垃圾桶不足，常造成街道髒亂</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 90%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>50</span>
-                                            <span>90%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>
@@ -418,34 +349,79 @@
                             <div class="swiper-button-next-2"><i class="fa-solid fa-arrow-right"
                                     style="color: #a5a0a0;"></i>
                             </div>
-                            <div class="more"><a href="">更多</a></div>
+                            <div class="more"><a href="advice_search.php">更多</a></div>
                         </div>
                     </div>
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
+                            <?php
+                            $link = mysqli_connect('localhost', 'root');
+                            mysqli_select_db($link, "system_project");
 
+                            // 檢查連線是否成功
+                            if (!$link) {
+                                die("資料庫連線失敗: " . mysqli_connect_error());
+                            }
+                            // 查詢資料庫中的建言資料
+                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+               ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
+                            
+                            $result = mysqli_query($link, $sql);
+                            if (!$result) {
+                                die("查詢失敗: " . mysqli_error($link));
+                            }
+                            // 檢查是否有資料
+                            if (mysqli_num_rows($result) > 0) {
+                                // 輸出每一筆資料
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $advice_id = $row['advice_id'];
+                                    $advice_title = $row['advice_title'];
+                                    $advice_content = $row['advice_content'];
+                                    $category = $row['category'];
+                                    $agree = $row['agree'];
+                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
+                                    if ($progress > 100) {
+                                        $progress = 100; // 確保進度不超過 100%
+                                    }
+                                    $progress_width = $progress . "%"; // 計算進度條的寬度
+                                    // 這裡可以根據需要顯示建言的內容，例如標題、進度等
+                            
+                                    // 獲取圖片路徑，若無圖片則使用預設圖片
+                                    $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+
+                                    ?>
                             <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
+                                    <div class="swiper-slide">
+                                        <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
+                                            style="text-decoration: none; color: inherit;">
+                                            <div class="adv_content_block">
+                                                <div class="adv_content_img">
+                                                    <img src="<?php echo htmlspecialchars($image_url); ?>" />
+                                                </div>
+                                                <div class="adv_content_goal">
+                                                    <div class="adv_content_text"><?php echo htmlspecialchars($advice_title); ?>
+                                                    </div>
+                                                    <div class="progress-line">
+                                                        <div class="progress"
+                                                            style="width:<?php echo htmlspecialchars($progress_width); ?>;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-data">
+                                                        <span><i
+                                                                class="fa-regular fa-user"></i><?php echo htmlspecialchars($agree); ?></span>
+                                                        <span><?php echo htmlspecialchars($progress_width); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">操場的圍欄破了，會危險拜託快修奛嗎寶半</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 60%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>25</span>
-                                            <span>60%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="swiper-slide">
+                                <?php }
+                            } ?>
+
+                            <?php mysqli_close($link) ?>
+                            <!-- <div class="swiper-slide">
                                 <div class="adv_content_block">
                                     <div class="adv_content_img">
                                         <img
@@ -462,121 +438,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">公園缺少遮蔭處，希望增加休息涼亭</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 70%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>34</span>
-                                            <span>70%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">人行道磁磚凸起，長者容易跌倒</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 80%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>40</span>
-                                            <span>80%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">希望社區增設寵物友善空間</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 50%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>21</span>
-                                            <span>50%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">籃球場地板破損，打球容易受傷</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 30%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>12</span>
-                                            <span>30%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">車流多但沒紅綠燈，建議設置號誌</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 65%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>28</span>
-                                            <span>65%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="adv_content_block">
-                                    <div class="adv_content_img">
-                                        <img
-                                            src="https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg" />
-                                    </div>
-                                    <div class="adv_content_goal">
-                                        <div class="adv_content_text">垃圾桶不足，常造成街道髒亂</div>
-                                        <div class="progress-line">
-                                            <div class="progress" style="width: 90%;"></div>
-                                        </div>
-                                        <div class="card-data">
-                                            <span><i class="fa-regular fa-user"></i>50</span>
-                                            <span>90%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -817,7 +680,33 @@
     </div>
 
     <footer class="footer">
-        footer
+        <div class="logo_space">
+            <img src="img\logo.png" style="width: 150px;">
+        </div>
+        <div class="help">
+            <div class="help_title">幫助</div>
+            <hr style="width: 150px;">
+            <div class="help_content">
+                <div>常見問題</div>
+                <div>使用條款</div>
+                <div>隱私條款</div>
+            </div>
+        </div>
+        <div class="footer_info">
+            <div class="info_title">相關資訊</div>
+            <hr>
+            <div class="info_content">
+                <div class="school_info">
+                    <div>關於我們</div>
+                    <div>學校處室</div>
+                    <div>意見箱</div>
+                </div>
+                <div class="connection">
+                    <div>242新北市新莊區中正路510號.</div>
+                    <div>電話:(02)2905-2000</div>
+                </div>
+            </div>
+        </div>
 
     </footer>
 
@@ -828,19 +717,19 @@
     <!-- 初始化 Swiper -->
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
@@ -851,15 +740,15 @@
 
         /*CARD SLIDER*/
         const swiperConfigs = [{
-                container: ".mySwiper1",
-                next: ".swiper-button-next-1",
-                prev: ".swiper-button-prev-1"
-            },
-            {
-                container: ".mySwiper2",
-                next: ".swiper-button-next-2",
-                prev: ".swiper-button-prev-2"
-            }
+            container: ".mySwiper1",
+            next: ".swiper-button-next-1",
+            prev: ".swiper-button-prev-1"
+        },
+        {
+            container: ".mySwiper2",
+            next: ".swiper-button-next-2",
+            prev: ".swiper-button-prev-2"
+        }
         ];
 
         swiperConfigs.forEach(config => {

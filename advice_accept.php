@@ -39,36 +39,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 
             if (in_array($fileExt, $allowedExtensions)) {
-                // 讀取圖片的二進位資料
-                $imageData = file_get_contents($imageTmpName);
+                // 設定上傳目錄
+                $uploadDir = 'uploads/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true); // 建立目錄（如果不存在）
+                }
 
-                // 插入圖片到 advice_images 表
-                $sql_image = "INSERT INTO advice_image (img_name, img_data, advice_id) VALUES (?, ?, ?)";
-                $stmt_image = mysqli_prepare($link, $sql_image);
+                // 生成唯一檔案名稱
+                $uniqueFileName = uniqid('img_', true) . '.' . $fileExt;
+                $uploadPath = $uploadDir . $uniqueFileName;
 
-                if ($stmt_image) {
-                    // 綁定參數
-                    mysqli_stmt_bind_param($stmt_image, "sbi", $imageName, $null, $advice_id);
+                // 移動檔案到上傳目錄
+                if (move_uploaded_file($imageTmpName, $uploadPath)) {
+                    // 插入圖片路徑到 advice_images 表
+                    $sql_image = "INSERT INTO advice_image (img_name, img_path, advice_id) VALUES (?, ?, ?)";
+                    $stmt_image = mysqli_prepare($link, $sql_image);
+                    mysqli_stmt_bind_param($stmt_image, "ssi", $imageName, $uploadPath, $advice_id);
 
-                    // 使用 mysqli_stmt_send_long_data 傳送二進位資料
-                    mysqli_stmt_send_long_data($stmt_image, 1, $imageData);
-
-                    // 執行語句
                     if (mysqli_stmt_execute($stmt_image)) {
-                        // echo "圖片已成功存入資料庫！";
+                        // echo "圖片已成功存入資料夾並記錄到資料庫！";
                     } else {
-                        die("圖片存入資料庫失敗: " . mysqli_error($link));
+                        die("圖片記錄到資料庫失敗: " . mysqli_error($link));
                     }
 
-                    // 關閉語句
                     mysqli_stmt_close($stmt_image);
                 } else {
-                    die("SQL 語法錯誤: " . mysqli_error($link));
+                    die("圖片上傳失敗！");
                 }
             } else {
                 die("不支援的圖片格式，請上傳 JPG, JPEG, PNG 或 GIF 檔案!");
             }
-        } else {
         }
         ?>
 

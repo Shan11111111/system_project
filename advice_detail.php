@@ -84,7 +84,7 @@
                         <?php } ?>
 
                         <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_search.php">熱門建言</a>
+                        <a href="advice_hot.php">熱門建言</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -151,8 +151,7 @@
                         </script>
                     <?php } ?>
 
-                    <a href="advice_search.php">最新建言</a>
-                    <a href="advice_hot.php">熱門建言</a>
+                    <a href="advice_search.php">建言瀏覽</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -194,22 +193,51 @@
     $advice_id = isset($_GET['advice_id']) ? $_GET['advice_id'] : 0;
 
     // Step 1: 連接資料庫
-    $link = mysqli_connect('localhost', 'root');
-    mysqli_select_db($link, "system_project");
+    $link = mysqli_connect('localhost', 'root', '', 'system_project');
+
+    // 檢查資料庫連線是否成功
+    if (!$link) {
+        die("資料庫連線失敗: " . mysqli_connect_error());
+    }
 
     // Step 3: 查詢公告資料，根據建言 ID 查詢
-    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.advice_content, a.agree, a.category, a.advice_state, a.announce_date, ai.img_data 
-            FROM advice a 
-            LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id 
-            WHERE a.advice_id = $advice_id";
+    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.category, a.advice_content, a.advice_state, a.announce_date, a.agree, ai.img_path
+    FROM advice a
+    LEFT JOIN advice_image ai ON ai.advice_id = a.advice_id
+    WHERE a.advice_id = $advice_id";
+
+    $advice_id = isset($_GET['advice_id']) ? intval($_GET['advice_id']) : 0;
+    $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
+
 
     // 執行查詢
     $result = mysqli_query($link, $sql);
 
+    // 檢查查詢是否成功
+    if (!$result) {
+        die("查詢錯誤: " . mysqli_error($link));
+    }
+
     // Step 4: 顯示公告
     if ($row = mysqli_fetch_assoc($result)) {
-        ?>
 
+        $categoryMap = [
+            "all" => "全部分類",
+            "設施改善" => "設施改善",
+            "學術發展" => "學術發展",
+            "社團活動" => "社團活動",
+            "公益關懷" => "公益關懷",
+            "環保永續" => "環保永續",
+            "其他" => "其他"
+        ];
+        $categoryKey = $row['category'];
+        $categoryName = isset($categoryMap[$categoryKey]) ? $categoryMap[$categoryKey] : '未知分類';
+        $target = 3; // 附議目標人數
+        $agree = $row['agree'];
+        $percent = min(100, ($agree / $target) * 100);
+        $remain = max(0, $target - $agree);
+        $color = $percent >= 100 ? '#4caf50' : '#2196f3'; // 綠或藍
+    ?>
         <div class="container">
             <main class="suggestion-detail">
                 <!-- 標題 -->
@@ -222,19 +250,21 @@
                 <section class="progress-section">
                     <div class="dates">
                         <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
-                        <span
-                            id="deadline-date">截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?></span>
-                        <!-- 預設截止日為發布日後 30 天 -->
+                        <span id="deadline-date">
+                            截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?>
+                        </span>
                     </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar">
-                            <div class="progress" style="width: <?php echo (min(100, ($row['agree'] / 2000) * 100)); ?>%">
-                            </div> <!-- 假設目標為 2000 人附議 -->
+                    <div class="progress-bar-container" style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; height: 20px; margin: 10px 0;">
+                        <div class="progress-bar" style="width: 100%; height: 100%; position: relative;">
+                            <div class="progress"
+                                style="width: <?php echo $percent . '%'; ?>; background-color: <?php echo $color; ?>; height: 100%; transition: width 1s ease;">
+                            </div>
+
                         </div>
-                        <div class="progress-info">
-                            目前 <?php echo $row['agree']; ?> 人 / 還差 <?php echo max(0, 2000 - $row['agree']); ?> 人
-                            <span class="percent"><?php echo (min(100, ($row['agree'] / 2000) * 100)); ?>%</span>
-                        </div>
+                    </div>
+                    <div class="progress-info" style="font-size: 14px; margin-top: 5px;">
+                        目前 <?php echo $agree; ?> 人 / 還差 <?php echo $remain; ?> 人
+                        <span class="percent" style="float: right; font-weight: bold;"><?php echo $percent; ?>%</span>
                     </div>
                 </section>
 
@@ -243,21 +273,20 @@
                     <section class="meta">
                         <p id="advice-author">發布人：<?php echo htmlspecialchars($row['user_id']); ?></p>
                         <!-- 假設 user_id 是發布人 -->
-                        <p id="advice-category">分類：<?php echo htmlspecialchars($row['category']); ?></p>
+                        <p id="advice-category">分類：<?php echo htmlspecialchars($categoryName); ?></p>
                     </section>
 
                     <!-- 圖片或 PDF -->
                     <section class="media">
-                        <?php if ($row['img_data']) { ?>
-                            <img id="advice-image" src="data:image/jpeg;base64,<?php echo base64_encode($row['img_data']); ?>"
-                                alt="建言圖片" />
+                        <?php if (!empty($row['img_path'])) { ?>
+                            <img id="advice-image" src="<?php echo htmlspecialchars($row['img_path']); ?>" alt="建言圖片" />
                         <?php } else { ?>
                             <img id="advice-image"
-                                src="https://afpbb.ismcdn.jp/mwimgs/1/4/810mw/img_1409ea76cc56c3d005d7abda3c4e67e288902.jpg"
-                                alt="建言圖片" />
+                                src="./uploads/homepage.png"
+                                alt="預設建言圖片" />
                         <?php } ?>
-                        <!-- <a id="advice-pdf-link" class="pdf-link" href="file.pdf" target="_blank">查看 PDF</a> -->
                     </section>
+
 
                     <!-- 內文 -->
                     <section class="content">
@@ -265,84 +294,94 @@
                     </section>
                 </div>
             </main>
-        </div>
+
 
         <?php
     } else {
         echo "沒有找到相關建言。";
     }
+        ?>
 
 
-    ?>
 
-    <hr style="width=70%; border-color:black;">
+        <section class="comments">
+            <div class="comment-header">
+                <h4>留言區</h4>
+                <select id="sort-comments">
+                    <option value="latest">留言時間：最新</option>
+                    <option value="oldest">留言時間：最舊</option>
+                </select>
+            </div>
 
-    <section class="comments">
-        <div class="comment-header">
-            <h4>留言區</h4>
-            <select id="sort-comments">
-                <option value="latest">留言時間：最新</option>
-                <option value="oldest">留言時間：最舊</option>
-            </select>
+            <div class="comment-input">
+                <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                <textarea id="comment-text" placeholder="我要留言...(最多150字)"></textarea>
+                <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+
+            <ul class="comment-list"></ul>
+
+
+            <div class="pagination">
+                <button id="prev-page">上一頁</button>
+                <span id="page-indicator"></span>
+                <button id="next-page">下一頁</button>
+            </div>
+        </section>
+
+        </main>
         </div>
-
-        <div class="comment-input">
-            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-            <textarea id="comment-text" placeholder="我要留言..."></textarea>
-            <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-
-        <ul class="comment-list"></ul>
-
-
-        <div class="pagination">
-            <button id="prev-page">上一頁</button>
-            <span id="page-indicator"></span>
-            <button id="next-page">下一頁</button>
-        </div>
-    </section>
-
-    </main>
-    </div>
+</body>
 
 
-    <!-- Fixed 按鈕 -->
-    <div class="fixed-buttons">
-        <button class="back-btn" onclick="history.back()">上一頁 </button>
+<!-- Fixed 按鈕 -->
+<div class="fixed-buttons">
+    <button class="back-btn" onclick="window.location.href='advice_search.php'"><i class="fa-solid fa-arrow-left"></i>
+        <span>返回</span>
+    </button>
 
-        <form id="insertForm" action="agree_insert.php" method="POST">
-            <input type="hidden" name="advice_id" value="<?php echo isset($advice_id) ? $advice_id : ''; ?>">
+    <form id="insertForm" action="agree_insert.php" method="POST">
+        <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
 
-            <?php if (isset($_SESSION['user_id'])) { ?>
-                <input type="submit" id="agree-btn" class="reply-btn agree-btn" data-advice-id="<?php echo $advice_id; ?>"
-                    value="附議">
-            <?php } else { ?>
-                <a href="javascript:void(0);" id="agree-btn" class="reply-btn agree-btn" onclick="showLoginAlert()">附議</a>
+        <!-- 單一按鈕 -->
+        <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
+            <i class="fa-solid fa-stamp"></i>
+            <span>附議</span>
+        </button>
+    </form>
 
-                <script>
-                    function showLoginAlert() {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: '請先登入',
-                            text: '附議為學生與教職人員專屬功能！',
-                            confirmButtonText: '確定',
-                            confirmButtonColor: '#3085d6',
-                            focusConfirm: false, // 禁用自動聚焦
-                            didOpen: () => {
-                                document.body.style.overflow = 'hidden'; // 禁止滾動
-                            },
-                            didClose: () => {
-                                document.body.style.overflow = ''; // 恢復滾動
-                                window.scrollTo(0, 0); // 避免滾動位置錯誤
-                            }
-                        });
+    <script>
+        function handleAgree() {
+            // 從 PHP 將登入狀態帶入 JavaScript
+            const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+            if (!isLoggedIn) {
+                // 若未登入，跳出提醒
+                Swal.fire({
+                    icon: 'warning',
+                    title: '請先登入',
+                    text: '附議為學生與教職人員專屬功能！',
+                    confirmButtonText: '確定',
+                    confirmButtonColor: '#3085d6',
+                    focusConfirm: false, // 禁用自動聚焦
+                    didOpen: () => {
+                        document.body.style.overflow = 'hidden'; // 禁止滾動
+                    },
+                    didClose: () => {
+                        document.body.style.overflow = ''; // 恢復滾動
+                        window.scrollTo(0, 0); // 避免滾動位置錯誤
                     }
-                </script>
-            <?php } ?>
-        </form>
+                });
+            } else {
+                // 已登入，送出表單
+                document.getElementById('insertForm').submit();
+            }
+        }
+    </script>
 
 
-        <!-- <script>
+    <!-- <script>
             document.addEventListener("DOMContentLoaded", function () {
                 let agreeBtn = document.querySelector(".agree-btn");
                 agreeBtn.addEventListener("click", function (event) {
@@ -356,27 +395,47 @@
 
 
 
-        <a href="#top" class="top-btn">Top</a>
-    </div>
+    <a href="#top" class="top-btn">Top</a>
+</div>
 
-    <footer class="footer"> footer</footer>
+<footer class="footer"> footer</footer>
 
-    <script>
-
-
-        const statusEl = document.getElementById('suggestion-status');
-        const status = 'pending'; // 假資料，可改為 'passed' 或 'failed'
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 從 URL 的上頁連結中獲取 status
+        const statusFromPreviousPage = new URLSearchParams(window.location.search).get('id');
+        const status = <?php echo json_encode($status); ?>;
 
         const statusMap = {
-            passed: { text: '通過', class: 'status-passed' },
-            failed: { text: '未通過', class: 'status-failed' },
-            pending: { text: '進行中', class: 'status-pending' }
+            passed: {
+                text: '通過',
+                class: 'status-passed'
+            },
+            failed: {
+                text: '未通過',
+                class: 'status-failed'
+            },
+            pending: {
+                text: '未處理',
+                class: 'status-pending'
+            }
         };
 
-        if (statusMap[status]) {
-            statusEl.textContent = statusMap[status].text;
-            statusEl.className = `suggestion-status ${statusMap[status].class}`;
+        const statusEl = document.getElementById('suggestion-status');
+        if (statusEl) {
+            if (statusMap[status]) {
+                statusEl.textContent = statusMap[status].text;
+                statusEl.className = `suggestion-status ${statusMap[status].class}`;
+            } else {
+                statusEl.textContent = '未知狀態';
+                statusEl.className = 'suggestion-status status-unknown';
+            }
+        } else {
+            console.error('找不到 suggestion-status 元素');
         }
+
+
+
 
 
         const commentList = document.querySelector('.comment-list');
@@ -388,7 +447,9 @@
         const textarea = document.getElementById('comment-text');
 
         // ✨ 假資料：加上 username
-        let allComments = Array.from({ length: 30 }, (_, i) => ({
+        let allComments = Array.from({
+            length: 30
+        }, (_, i) => ({
             username: `使用者${i + 1}`,
             text: `這是留言 #${i + 1}`,
             time: new Date(2025, 2, 29, 12, i).toLocaleString(),
@@ -483,152 +544,80 @@
 
 
         renderComments();
+    });
 
-
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const adviceId = urlParams.get('id');
-
-        // 確保在 API 請求中傳遞 id 參數
-<<<<<<< HEAD
-        fetch(`advice_pull.php?id=${adviceId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const advice = data[0]; // 假設只返回一條資料
-                    // 更新建言標題
-                    document.getElementById('advice-title').textContent = advice.advice_title;
-                    // 更新發布人
-                    document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
-                    // 更新建言分類
-                    document.getElementById('advice-category').textContent = `分類：${advice.category}`;
-                    // 更新建言內文
-                    document.getElementById('advice-content').textContent = advice.advice_content;
-                    // 更新發布日與截止日
-                    document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
-                    document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
-
-                    // 更新建言狀態
-                    document.getElementById('suggestion-status').textContent =
-                        advice.advice_state === '未處理' ? '未處理' :
-                            (advice.advice_state === '進行中' ? '進行中' : '已結束');
-
-                    // 如果有圖片，顯示圖片
-                    if (advice.image_url) {
-                        document.getElementById('advice-image').src = advice.image_url;
-                    }
-
-                    // 如果有PDF連結，顯示PDF連結
-                    if (advice.pdf_url) {
-                        document.getElementById('advice-pdf-link').href = advice.pdf_url;
-                    }
-                }
-            })
-            .catch(error => console.error('Error:', error));
-
-
-
-
-
-
-        // document.getElementById("agree-btn").addEventListener("click", function (event) {
-        //     event.preventDefault(); // 防止超連結跳轉
-
-        //     // 從網址中取得 'id' 參數
-        //     const urlParams = new URLSearchParams(window.location.search);
-        //     const adviceId = urlParams.get('id'); // 取得 'id' 參數
-
-        //     if (!adviceId) {
-        //         alert("無效的 advice_id！");
-        //         return;
-        //     }
-
-        //     console.log("附議的 advice_id:", adviceId); // 測試用
-
-        //     // 發送 AJAX 請求到後端
-        //     fetch("update_agree.php", {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        //         body: `advice_id=${adviceId}` // 傳送 advice_id 到後端
-        //     })
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             alert("附議成功！");
-        //         })
-        //         .catch(error => console.error("錯誤:", error));
-        // });
-=======
-        /*    fetch(`advice_pull.php?id=${adviceId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        const advice = data[0]; // 假設只返回一條資料
-                        // 更新建言標題
-                        document.getElementById('advice-title').textContent = advice.advice_title;
-                        // 更新發布人
-                        document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
-                        // 更新建言分類
-                        document.getElementById('advice-category').textContent = `分類：${advice.category}`;
-                        // 更新建言內文
-                        document.getElementById('advice-content').textContent = advice.advice_content;
-                        // 更新發布日與截止日
-                        document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
-                        document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
-    
-                        // 更新建言狀態
-                        document.getElementById('suggestion-status').textContent =
-                            advice.advice_state === '未處理' ? '未處理' :
-                                (advice.advice_state === '進行中' ? '進行中' : '已結束');
-    
-                        // 如果有圖片，顯示圖片
-                        if (advice.image_url) {
-                            document.getElementById('advice-image').src = advice.image_url;
-                        }
-    
-                        // 如果有PDF連結，顯示PDF連結
-                        if (advice.pdf_url) {
-                            document.getElementById('advice-pdf-link').href = advice.pdf_url;
-                        }
-                    }
-                })
-                .catch(error => console.error('Error:', error));*/
+    /*     document.addEventListener('DOMContentLoaded', function () {
+                 const urlParams = new URLSearchParams(window.location.search);
+                 const adviceId = urlParams.get('id');
+     
+                 // 確保在 API 請求中傳遞 id 參數
+                 fetch(`advice_pull.php?id=${adviceId}`)
+                     .then(response => response.json())
+                     .then(data => {
+                         if (data.length > 0) {
+                             const advice = data[0]; // 假設只返回一條資料
+                             // 更新建言標題
+                             document.getElementById('advice-title').textContent = advice.advice_title;
+                             // 更新發布人
+                             document.getElementById('advice-author').textContent = `發布人：${advice.user_id}`;
+                             // 更新建言分類
+                             document.getElementById('advice-category').textContent = `分類：${advice.category}`;
+                             // 更新建言內文
+                             document.getElementById('advice-content').textContent = advice.advice_content;
+                             // 更新發布日與截止日
+                             document.getElementById('announce-date').textContent = `發布日：${advice.announce_date}`;
+                             document.getElementById('deadline-date').textContent = `截止日：${advice.deadline_date}`; // 假設有 deadline_date 欄位
+     
+                             // 更新建言狀態
+                             document.getElementById('suggestion-status').textContent =
+                                 advice.advice_state === '未處理' ? '未處理' :
+                                     (advice.advice_state === '進行中' ? '進行中' : '已結束');
+     
+                             // 如果有圖片，顯示圖片
+                             if (advice.image_url) {
+                                 document.getElementById('advice-image').src = advice.image_url;
+                             }
+     
+                             // 如果有PDF連結，顯示PDF連結
+                             if (advice.pdf_url) {
+                                 document.getElementById('advice-pdf-link').href = advice.pdf_url;
+                             }
+                         }
+                     })
+                     .catch(error => console.error('Error:', error));
+             });
+     */
 
 
 
 
-        document.getElementById('agree-btn').addEventListener('click', function (e) {
-            e.preventDefault(); // 防止頁面跳轉
+    // document.getElementById("agree-btn").addEventListener("click", function (event) {
+    //     event.preventDefault(); // 防止超連結跳轉
 
-            const adviceId = this.getAttribute('data-advice-id'); // 讀取 data-advice-id
-            console.log('附議的建言ID:', adviceId);
+    //     // 從網址中取得 'id' 參數
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const adviceId = urlParams.get('id'); // 取得 'id' 參數
 
-            const formData = new FormData();
-            formData.append('advice_id', adviceId);
+    //     if (!adviceId) {
+    //         alert("無效的 advice_id！");
+    //         return;
+    //     }
 
-            // 發送 AJAX 請求
-            fetch('update_agree.php', {  // 假設後端檔案是 update_agree.php
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())  // 確保後端返回 JSON 格式
-                .then(data => {
-                    if (data.status === 'success') {
-                        alert('成功附議！');
-                    } else {
-                        alert('附議失敗：' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('發生錯誤:', error);
-                });
-        });
->>>>>>> 5f1e380dd08e585f596d2a7bbf9dfcc100f5380d
+    //     console.log("附議的 advice_id:", adviceId); // 測試用
 
-
-
-
-
-    </script>
+    //     // 發送 AJAX 請求到後端
+    //     fetch("update_agree.php", {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //         body: `advice_id=${adviceId}` // 傳送 advice_id 到後端
+    //     })
+    //         .then(response => response.text())
+    //         .then(data => {
+    //             alert("附議成功！");
+    //         })
+    //         .catch(error => console.error("錯誤:", error));
+    // });
+</script>
 
 
 </body>
