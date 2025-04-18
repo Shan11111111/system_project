@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-18 12:58:06
+-- 產生時間： 2025-04-18 13:02:55
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -250,7 +250,7 @@ CREATE TABLE `funding_people` (
   `funding_people_id` int(11) NOT NULL,
   `people_name` varchar(20) NOT NULL,
   `donate_money` int(11) NOT NULL,
-  `gmail` text NOT NULL,
+  `gmail` text DEFAULT NULL,
   `funding_id` int(11) NOT NULL,
   `check_login` int(1) NOT NULL DEFAULT 0 COMMENT '確定是否為訪客:0為訪客、1為已登入'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
