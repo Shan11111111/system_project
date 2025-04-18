@@ -59,10 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 使用 mysqli 的 affected_rows
     if ($stmt->affected_rows > 0) {
         echo "<script>alert('留言成功');</script>";
-        echo "<script>window.location.href='homepage.php';</script>";
+        // echo "<script>window.location.href='homepage.php';</script>";
     } else {
         echo "<script>alert('留言失敗');</script>";
-        echo "<script>window.location.href='homepage.php';</script>";
+        // echo "<script>window.location.href='homepage.php';</script>";
     }
     $stmt->close();
     $pdo->close();

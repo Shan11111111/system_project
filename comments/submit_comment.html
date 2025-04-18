@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提交留言</title>
+</head>
+
+<body>
+    <h1>提交留言</h1>
+    <form id="commentForm">
+        <label for="advice_id">建議 ID:</label>
+        <input type="number" id="advice_id" name="advice_id" required>
+        <br><br>
+        <label for="comment_text">留言內容:</label>
+        <textarea id="comment_text" name="comment_text" rows="4" required></textarea>
+        <br><br>
+        <button type="submit">提交留言</button>
+    </form>
+
+    <div id="responseMessage" style="margin-top: 20px;"></div>
+
+    <script>
+        document.getElementById('commentForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const adviceId = document.getElementById('advice_id').value;
+            const commentText = document.getElementById('comment_text').value;
+
+            const responseMessage = document.getElementById('responseMessage');
+            responseMessage.textContent = '提交中...';
+
+            try {
+                const response = await fetch('submit_comment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        advice_id: adviceId,
+                        comment_text: commentText
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    responseMessage.style.color = 'green';
+                    responseMessage.textContent = result.message;
+                } else {
+                    responseMessage.style.color = 'red';
+                    responseMessage.textContent = result.message;
+                }
+            } catch (error) {
+                responseMessage.style.color = 'red';
+                responseMessage.textContent = '提交失敗，請稍後再試。';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

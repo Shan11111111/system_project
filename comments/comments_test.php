@@ -12,7 +12,8 @@
 
     <script>
         // 使用 fetch API 獲取資料
-        fetch('sent_to_manager.php')
+        // 假設你要獲取的建議ID為24
+        fetch('comments/comments_show.php?advice_id=24')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -31,7 +32,7 @@
                             <h2>${item.comment_content}</h2>
                             <p>${item.user_id}</p>
                             <p>建議ID: ${item.advice_id}</p>
-                            <p>回覆對象: ${item.reply_to}</p>
+                            
                             <p>留言時間: ${item.comment_time}</p>
                         `;
                         container.appendChild(adviceDiv);
@@ -42,6 +43,7 @@
                 console.error('發生錯誤:', error);
                 const container = document.getElementById('comment-container');
                 container.innerHTML = `<p>無法載入資料。錯誤訊息: ${error.message}</p>`;
+                console.log('請求的 URL:', 'comments/comments_show.php?advice_id=24');
             });
     </script>
 </body>

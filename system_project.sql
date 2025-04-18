@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-14 13:10:42
+-- 產生時間： 2025-04-18 09:43:47
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -45,16 +45,16 @@ CREATE TABLE `advice` (
 INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, `agree`, `category`, `advice_state`, `announce_date`) VALUES
 (3, 412402002, '123', '學校廁所施工很吵! 希望學校能在假日的時候施工', 1, '設施改善', '未處理', '2025-03-30'),
 (4, 412402002, '456', 'redvsgg', 0, '學術發展', '未處理', '2025-03-30'),
-(8, 412402002, 'gggg', 'chicken', 0, '設施改善', '未處理', '2025-03-30'),
 (9, 412402002, '111', '111', 0, '環保永續', '未處理', '2025-03-30'),
 (16, 412402002, '55', 'qggo', 0, '學術發展', '未處理', '2025-03-30'),
 (17, 412402002, '55', 'qggo', 0, '環保永續', '未處理', '2025-03-30'),
 (18, 333333, '55', '33', 1, '設施改善', '未處理', '2025-03-30'),
-(19, 333333, '教室好熱', '建議配備新冷氣', 3, '設施改善', '未處理', '2025-04-01'),
+(19, 333333, '教室好熱', '建議配備新冷氣', 3, '設施改善', '募資中', '2025-04-01'),
 (20, 333333, '教室好臭', '學校應該買天然空氣清新器在教室', 1, '設施改善', '未處理', '2025-04-01'),
 (21, 333333, '7899', '777777', 0, '學術發展', '未處理', '2025-04-08'),
 (22, 333333, '6666', '666666', 0, '公益活動', '未處理', '2025-04-08'),
-(23, 333333, '測試', '測試圖片', 0, '學術發展', '未處理', '2025-04-11');
+(23, 333333, '測試', '測試圖片', 0, '學術發展', '未處理', '2025-04-11'),
+(24, 333333, 'gggg', '社團需要被企業看到，希望學校可以和更多企業合作', 2, 'club', '未處理', '2025-04-15');
 
 -- --------------------------------------------------------
 
@@ -74,7 +74,8 @@ CREATE TABLE `advice_image` (
 --
 
 INSERT INTO `advice_image` (`img_id`, `img_name`, `img_path`, `advice_id`) VALUES
-(5, 'messageImage_1682701968425.jpg', 'uploads/img_67f8f4ee2435c0.39011411.jpg', 23);
+(5, 'messageImage_1682701968425.jpg', 'uploads/img_67f8f4ee2435c0.39011411.jpg', 23),
+(6, '06.png', 'uploads/img_67fdfac3e5ea40.69014083.png', 24);
 
 -- --------------------------------------------------------
 
@@ -98,7 +99,9 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (10, 333333, 20),
 (11, 333333, 3),
 (12, 412402141, 19),
-(13, 412402141, 18);
+(13, 412402141, 18),
+(14, 333333, 24),
+(15, 345678, 24);
 
 -- --------------------------------------------------------
 
@@ -111,8 +114,20 @@ CREATE TABLE `comments` (
   `advice_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `comment_content` text NOT NULL,
-  `reply_to` int(11) NOT NULL DEFAULT 0 COMMENT '留言回覆給誰',
   `comment_time` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `files`
+--
+
+CREATE TABLE `files` (
+  `file_id` int(11) NOT NULL,
+  `file_name` text NOT NULL,
+  `file_path` text NOT NULL,
+  `advice_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -126,6 +141,27 @@ CREATE TABLE `funding` (
   `advice_id` int(11) NOT NULL,
   `money` int(11) NOT NULL DEFAULT 0,
   `target` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `funding`
+--
+
+INSERT INTO `funding` (`funding_id`, `advice_id`, `money`, `target`) VALUES
+(3, 19, 0, 200);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `funding_comments`
+--
+
+CREATE TABLE `funding_comments` (
+  `funding_comments_id` int(11) NOT NULL,
+  `funding_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `content` text DEFAULT NULL,
+  `comment_time` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -205,11 +241,26 @@ ALTER TABLE `comments`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- 資料表索引 `files`
+--
+ALTER TABLE `files`
+  ADD PRIMARY KEY (`file_id`),
+  ADD KEY `advice_id` (`advice_id`);
+
+--
 -- 資料表索引 `funding`
 --
 ALTER TABLE `funding`
   ADD PRIMARY KEY (`funding_id`),
   ADD KEY `advice_id` (`advice_id`);
+
+--
+-- 資料表索引 `funding_comments`
+--
+ALTER TABLE `funding_comments`
+  ADD PRIMARY KEY (`funding_comments_id`),
+  ADD KEY `funding_id` (`funding_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- 資料表索引 `funding_people`
@@ -232,19 +283,19 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice`
 --
 ALTER TABLE `advice`
-  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
 --
 ALTER TABLE `advice_image`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
@@ -253,10 +304,22 @@ ALTER TABLE `comments`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `files`
+--
+ALTER TABLE `files`
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding`
 --
 ALTER TABLE `funding`
-  MODIFY `funding_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `funding_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `funding_comments`
+--
+ALTER TABLE `funding_comments`
+  MODIFY `funding_comments_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_people`
@@ -302,10 +365,23 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
+-- 資料表的限制式 `files`
+--
+ALTER TABLE `files`
+  ADD CONSTRAINT `files_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`);
+
+--
 -- 資料表的限制式 `funding`
 --
 ALTER TABLE `funding`
   ADD CONSTRAINT `funding_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE;
+
+--
+-- 資料表的限制式 `funding_comments`
+--
+ALTER TABLE `funding_comments`
+  ADD CONSTRAINT `funding_comments_ibfk_1` FOREIGN KEY (`funding_id`) REFERENCES `funding` (`funding_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `funding_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- 資料表的限制式 `funding_people`

@@ -20,7 +20,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
     <!-- 引入 SweetAlert2 :美觀彈出未登入警告圖示-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -144,6 +143,403 @@
         </div>
     </nav>
 
+    <!--主內容-->
+    <div class="container">
+        <div class="filter-bar">
+            <!-- 左邊：分類 -->
+            <div class="category-select">
+                <select id="category">
+                    <option value="all">全部分類</option>
+                    <option value="equipment">設施改善</option>
+                    <option value="academic">學術發展</option>
+                    <option value="club">社團活動</option>
+                    <option value="welfare">公益關懷</option>
+                    <option value="environment">環保永續</option>
+                    <option value="other">其他</option>
+                </select>
+            </div>
+
+            <!-- 右邊：搜尋 + 排序 -->
+            <div class="search_text">
+                <input type="text" id="search" placeholder="請輸入關鍵字" />
+                <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                <button class="sort" id="sortBtn" onclick="toggleSortMenu()">
+                    <span id="sortLabel">排序</span> <i class="fa-solid fa-filter"></i>
+                </button>
+
+                <div id="sortMenu" class="sort-menu">
+                    <div onclick="sortBy('hot')">最熱門</div>
+                    <div onclick="sortBy('new')">最新</div>
+                    <div onclick="sortBy('deadline')">結束日期</div>
+                </div>
+
+                <!-- 排序選單js -->
+                <script>
+                    function toggleSortMenu() {
+                        const menu = document.getElementById("sortMenu");
+                        menu.style.display = menu.style.display === "block" ? "none" : "block";
+                    }
+
+                    // 點擊項目排序
+                    function sortBy(type) {
+                        const labelMap = {
+                            hot: "最熱門",
+                            new: "最新",
+                            deadline: "結束日期"
+                        };
+
+                        // 更新按鈕文字顯示
+                        document.getElementById("sortLabel").textContent = labelMap[type];
+
+                        // 關閉選單
+                        document.getElementById("sortMenu").style.display = "none";
+                    }
+                    // 點擊外部關閉 sortMenu
+                    document.addEventListener("click", function(event) {
+                        const sortBtn = document.getElementById("sortBtn");
+                        const sortMenu = document.getElementById("sortMenu");
+
+                        if (!sortBtn.contains(event.target) && !sortMenu.contains(event.target)) {
+                            sortMenu.style.display = "none";
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+        <div class="funding_project_region">
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="pagination">
+        <button onclick="changePage('prev')">上一頁</button>
+        <span id="page-indicator">第 1 頁</span>
+        <button onclick="changePage('next')">下一頁</button>
+    </div>
+    <script>
+        let currentPage = 1;
+        let currentSort = 'new';
+
+        function search() {
+            currentPage = 1;
+            fetchData();
+        }
+
+        function sortBy(type) {
+            currentSort = type;
+            currentPage = 1;
+            fetchData();
+        }
+
+        function changePage(direction) {
+            if (direction === 'prev' && currentPage > 1) currentPage--;
+            else if (direction === 'next') currentPage++;
+            fetchData();
+        }
+
+        function fetchData() {
+            const keyword = document.getElementById('search').value;
+            const category = document.getElementById('category').value;
+
+            const params = new URLSearchParams({
+                keyword: keyword,
+                category: category,
+                sort: currentSort,
+                page: currentPage
+            });
+
+            fetch(`fetch_funding_data.php?${params}`)
+                .then(res => res.json())
+                .then(data => {
+                    renderCards(data.cards);
+                    document.getElementById("page-indicator").textContent = `第 ${currentPage} 頁`;
+                });
+        }
+
+        function renderCards(cards) {
+            const container = document.getElementById('funding-cards');
+            container.innerHTML = '';
+
+            cards.forEach(card => {
+                container.innerHTML += `
+      <div class="project-card">
+        <div class="card-image">
+          <div class="category"><span>${card.category_name}</span></div>
+          <img src="${card.image}">
+        </div>
+        <div class="card-info">
+          <div class="card-title">${card.title}</div>
+          <div class="progress-bar">
+            <div class="progress" style="width: ${card.progress}%"></div>
+          </div>
+          <div class="card-meta">
+            <div><span>NT$ ${card.raised}</span> / <span>${card.progress}%</span></div>
+            <div><span>${card.supporter} <i class="fa-regular fa-user"></i></span></div>
+          </div>
+        </div>
+      </div>`;
+            });
+        }
+
+        // 預設載入第一頁
+        window.onload = fetchData;
+    </script>
+
+    <footer class="footer">
+        <div class="logo_space">
+            <img src="img\logo.png" style="width: 150px;">
+        </div>
+        <div class="help">
+            <div class="help_title">幫助</div>
+            <hr style="width: 150px;">
+            <div class="help_content">
+                <div>常見問題</div>
+                <div>使用條款</div>
+                <div>隱私條款</div>
+            </div>
+        </div>
+        <div class="footer_info">
+            <div class="info_title">相關資訊</div>
+            <hr>
+            <div class="info_content">
+                <div class="school_info">
+                    <div>關於我們</div>
+                    <div>學校處室</div>
+                    <div>意見箱</div>
+                </div>
+                <div class="connection">
+                    <div>242新北市新莊區中正路510號.</div>
+                    <div>電話:(02)2905-2000</div>
+                </div>
+            </div>
+        </div>
+
+    </footer>
 
 </body>
 

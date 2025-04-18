@@ -1,4 +1,4 @@
-<!-- 展示留言 -->
+
 <?php
 session_start();
 
