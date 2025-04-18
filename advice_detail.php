@@ -346,6 +346,28 @@
                 document.getElementById('commentForm').addEventListener('submit', async function (event) {
                     event.preventDefault();
 
+                    // 從 PHP 將登入狀態帶入 JavaScript
+                    const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+                    if (!isLoggedIn) {
+                        // 若未登入，跳出提醒
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '請先登入',
+                            text: '留言功能為會員專屬功能！',
+                            confirmButtonText: '確定',
+                            confirmButtonColor: '#3085d6',
+                            focusConfirm: false, // 禁用自動聚焦
+                            didOpen: () => {
+                                document.body.style.overflow = 'hidden'; // 禁止滾動
+                            },
+                            didClose: () => {
+                                document.body.style.overflow = ''; // 恢復滾動
+                            }
+                        });
+                        return; // 阻止表單提交
+                    }
+
                     const adviceId = document.getElementById('advice_id').value;
                     const commentText = document.getElementById('comment_text').value;
 
