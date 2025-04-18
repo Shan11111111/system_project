@@ -76,8 +76,8 @@
                 <div class="dropdown">
                     <button class="dropbtn">募資</button>
                     <div class="dropdown-content">
-                        <a href="#">進行中計畫</a>
-                        <a href="#">成功案例</a>
+                        <a href="#">進行中募資</a>
+                        <a href="#">已結束募資</a>
                     </div>
                 </div>
             </div>
@@ -143,8 +143,8 @@
             <div class="dropdown">
                 <button class="dropbtn">募資</button>
                 <div class="dropdown-content">
-                    <a href="#">進行中計畫</a>
-                    <a href="#">成功案例</a>
+                    <a href="#">進行中募資</a>
+                    <a href="#">已結束募資</a>
                 </div>
             </div>
 
@@ -210,8 +210,10 @@
 
                 <!-- 上傳按鈕 -->
                 <label>檔案 / 照片上傳</label>
-                <button type="button" class="upload-btn" id="uploadBox">上傳</button>
+                <button type="button" class="upload-btn" id="uploadBox">照片上傳</button>
                 <input type="file" id="fileInput" name="file" accept="image/*" hidden>
+                <button type="button" class="upload-btn" id="uploadBox">文件上傳</button>
+                <input type="file" id="fileInput" name="file" accept="image/*" hidden><!--要改-->
 
 
                 <!-- 提交按鈕 -->
