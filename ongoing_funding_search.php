@@ -146,8 +146,8 @@
     <!--主內容-->
     <div class="container">
         <div class="filter-bar">
-            <div class="search_text">
-                <!-- 下拉選單與搜尋 -->
+            <!-- 左邊：分類 -->
+            <div class="category-select">
                 <select id="category">
                     <option value="all">全部分類</option>
                     <option value="equipment">設施改善</option>
@@ -157,20 +157,23 @@
                     <option value="environment">環保永續</option>
                     <option value="other">其他</option>
                 </select>
+            </div>
+
+            <!-- 右邊：搜尋 + 排序 -->
+            <div class="search_text">
                 <input type="text" id="search" placeholder="請輸入關鍵字" />
                 <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
 
-                <!-- 排序按鈕 -->
                 <button class="sort" id="sortBtn" onclick="toggleSortMenu()">
                     <span id="sortLabel">排序</span> <i class="fa-solid fa-filter"></i>
                 </button>
 
-                <!-- 排序選單 -->
                 <div id="sortMenu" class="sort-menu">
                     <div onclick="sortBy('hot')">最熱門</div>
                     <div onclick="sortBy('new')">最新</div>
                     <div onclick="sortBy('deadline')">結束日期</div>
                 </div>
+
                 <!-- 排序選單js -->
                 <script>
                     function toggleSortMenu() {
@@ -230,7 +233,57 @@
                     </div>
                 </div>
             </div>
-  
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="card-image">
+                    <div class="category">
+                        <span>社團活動</span>
+                    </div>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Geef Hayat een kans hikfgituhgjirfkekjhjkdllllllllllytthhhhhhhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrll</div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="card-meta">
+                        <div>
+                            <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                            <span class="divider">/</span>
+                            <span>100%</span>
+                        </div>
+                        <div>
+                            <span>25 <i class="fa-regular fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
     </div>
