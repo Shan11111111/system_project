@@ -372,6 +372,22 @@
 
                             // 清空 comment_text
                             document.getElementById('comment_text').value = '';
+
+                            // 動態新增留言到列表
+                            const commentList = document.querySelector('.comment-list');
+                            const newComment = document.createElement('li');
+                            newComment.classList.add('comment-item');
+                            newComment.innerHTML = `
+                                <div class="user-avatar">👤</div>
+                                <div class="comment-content">
+                                    <p class="comment-meta">
+                                        <strong>${result.username}</strong>
+                                        <span class="comment-time">剛剛</span>
+                                    </p>
+                                    <p class="comment-text">${result.comment_text}</p>
+                                </div>
+                            `;
+                            commentList.prepend(newComment); // 新留言插入到最前面
                         } else {
                             responseMessage.style.color = 'red';
                             responseMessage.textContent = result.message;
