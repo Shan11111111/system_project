@@ -1,14 +1,19 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>提交建言</title>
+    <title>孵仁</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="css/submit_advice.css">
+
+    <link rel="stylesheet" href="css/pay.css">
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@11/swiper-bundle.min.css">
+
     <!-- cdn link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -16,10 +21,14 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- 引入 SweetAlert2 :美觀彈出未登入警告圖示-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-    <?php session_start(); ?>
+
     <!-- Navbar -->
 
     <nav class="navbar">
@@ -76,8 +85,8 @@
                 <div class="dropdown">
                     <button class="dropbtn">募資</button>
                     <div class="dropdown-content">
-                        <a href="#">進行中募資</a>
-                        <a href="#">已結束募資</a>
+                        <a href="#">進行中計畫</a>
+                        <a href="#">成功案例</a>
                     </div>
                 </div>
             </div>
@@ -136,15 +145,14 @@
                             }
                         </script>
                     <?php } ?>
-
                     <a href="advice_search.php">建言瀏覽</a>
-                    </div>
+                </div>
             </div>
             <div class="dropdown">
                 <button class="dropbtn">募資</button>
                 <div class="dropdown-content">
-                    <a href="#">進行中募資</a>
-                    <a href="#">已結束募資</a>
+                    <a href="#">進行中計畫</a>
+                    <a href="#">成功案例</a>
                 </div>
             </div>
 
@@ -172,100 +180,94 @@
 
         </div>
     </nav>
+    <button class="back-btn" onclick="history.back()">← Back</button>
 
 
-    
-    <div class="container1">
-        <!-- 左側標題與圖片 -->
-        <div class="left-panel">
-            <h1 class="main-title">提出建言</h1>
-            <p class="subtitle">提出建言，讓校園更好</p>
-            <!--<div class="image-placeholder"><img src="#"></div>-->
+    <div class="donate-wrapper">
+        <div class="donate-header">
+        <h3 class="title">募資標題</hˇ>
+            <h5 class="donate-title">支持這個提案</h5>
         </div>
+<hr>
+        <form class="donate-form">
+            <label class="section-label">選擇金額</label>
+            <div class="amount-options">
+                <button type="button" onclick="setAmount(100)">100</button>
+                <button type="button" onclick="setAmount(500)">500</button>
+                <button type="button" onclick="setAmount(1000)">1000</button>
+                <button type="button" onclick="setAmount(2000)">2000</button>
+            </div>
 
-        <!-- 右側表單 -->
-        <div class="right-panel">
+            <div class="custom-amount">
+                <span>NT$</span>
+                <input type="number" id="customAmount" placeholder="自訂金額">
+            </div>
 
-            <form action="advice_accept.php" method="post" enctype="multipart/form-data">
+            <label class="section-label">信用卡付款</label>
+            <input type="text" id="cardNumber" maxlength="19" placeholder="卡號 1234 5678 9012 3456">
+            <div class="card-row">
+            <input type="text" id="expirationDate" placeholder="MM/YY" maxlength="5">
 
-                <!-- 標題輸入 -->
-                <label for="title">標題</label>
-                <input type="text" id="title" name="advice_title" class="inpuu" required>
+                <input type="text" maxlength="3" placeholder="CVC">
+            </div>
 
-                <!-- 分類按鈕 -->
-                <label>分類</label>
-                <div class="category-buttons">
-                    <button type="button" class="category" data-value="equipment">設施改善</button>
-                    <button type="button" class="category" data-value="academic">學術發展</button>
-                    <button type="button" class="category" data-value="welfare">公益活動</button>
-                    <button type="button" class="category" data-value="environment">環保永續</button>
-                    <button type="button" class="category" data-value="club">社團活動</button>
-                    <button type="button" class="category" data-value="other">其他</button>
-                </div>
-                <input type="hidden" name="category" id="selected-category" required>
+            <label class="section-label">Email（選填，我們將通知您募資專案的後續進度）</label>
+            <input type="email" placeholder="your@email.com">
 
-                <!-- 內容輸入 -->
-                <label for="content">內容</label>
-                <textarea id="content" name="advice_content" class="inpuu" required></textarea>
-
-                <!-- 上傳按鈕 -->
-                <label>檔案 / 照片上傳</label>
-                <button type="button" class="upload-btn" id="uploadBox">照片上傳</button>
-                <input type="file" id="fileInput" name="file" accept="image/*" hidden>
-                <button type="button" class="upload-btn" id="uploadBox">文件上傳</button>
-                <input type="file" id="fileInput" name="file" accept="image/*" hidden><!--要改-->
-
-
-                <!-- 提交按鈕 -->
-                <button type="submit" class="submit">提交</button>
-            </form>
-
-        </div>
+            <button class="donate-btn" type="submit">送出付款</button>
+        </form>
     </div>
+
+
     <script>
-        function toggleMobileMenu() {
-            var mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('active');
-        }
+  function setAmount(value) {
+    // 設定自訂金額輸入框（如果你有的話）
+    const input = document.querySelector('#customAmount');
+    if (input) input.value = value;
 
-        // 手機 dropdown 點擊展開
-        document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
-                e.preventDefault(); // 防止跳頁
-                const parent = btn.parentElement;
-                parent.classList.toggle('active');
-            });
-        });
+    // 清除所有按鈕的 .selected
+    document.querySelectorAll('.amount-options button').forEach(btn => {
+      btn.classList.remove('selected');
+    });
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const categoryButtons = document.querySelectorAll(".category");
-            const selectedCategoryInput = document.getElementById("selected-category");
-            const uploadBox = document.getElementById("uploadBox");
-            const fileInput = document.getElementById("fileInput");
+    // 將被點擊的按鈕加上 .selected
+    const buttons = document.querySelectorAll('.amount-options button');
+    buttons.forEach(btn => {
+      if (btn.textContent.trim() == value) {
+        btn.classList.add('selected');
+      }
+    });
+  }
+</script>
 
-            // 分類按鈕選擇
-            categoryButtons.forEach(button => {
-                button.addEventListener("click", function () {
-                    categoryButtons.forEach(btn => btn.classList.remove("selected"));
-                    this.classList.add("selected");
-                    selectedCategoryInput.value = this.getAttribute("data-value");
-                });
-            });
+<script>
+  const cardInput = document.getElementById('cardNumber');
 
-            // 點擊上傳按鈕
-            uploadBox.addEventListener("click", function () {
-                fileInput.click();
-            });
+  cardInput.addEventListener('input', function (e) {
+    let value = e.target.value;
+    // 移除所有非數字
+    value = value.replace(/\D/g, '');
+    // 分成4碼一組
+    value = value.replace(/(.{4})/g, '$1 ').trim();
+    e.target.value = value;
+  });
 
-            // 顯示選擇的文件名稱
-            fileInput.addEventListener("change", function () {
-                if (fileInput.files.length > 0) {
-                    uploadBox.textContent = fileInput.files[0].name;
-                }
-            });
-        });
+  const expirationInput = document.getElementById('expirationDate');
 
-    </script>
+expirationInput.addEventListener('input', function (e) {
+  let value = e.target.value.replace(/\D/g, ''); // 移除非數字
+  if (value.length >= 3) {
+    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+  }
+  e.target.value = value;
+
+});
+</script>
+
+
+
+
+
 </body>
 
 </html>
