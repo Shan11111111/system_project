@@ -244,13 +244,13 @@
     align-items: center;
     flex-wrap: wrap;
     margin-top: 100px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     gap: 10px;
     }
-    .category-select {
-      display: flex;
-      align-items: center;
-    }
+  .category-select {
+    display: flex;
+    align-items: center;
+  }
     
   .search_text {
     display: flex;
