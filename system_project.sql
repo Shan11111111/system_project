@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-18 09:06:36
+-- 產生時間： 2025-04-18 09:37:10
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -160,6 +160,7 @@ INSERT INTO `funding` (`funding_id`, `advice_id`, `money`, `target`) VALUES
 CREATE TABLE `funding_comments` (
   `funding_comments_id` int(11) NOT NULL,
   `funding_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `content` text DEFAULT NULL,
   `comment_time` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -259,7 +260,8 @@ ALTER TABLE `funding`
 --
 ALTER TABLE `funding_comments`
   ADD PRIMARY KEY (`funding_comments_id`),
-  ADD KEY `funding_id` (`funding_id`);
+  ADD KEY `funding_id` (`funding_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- 資料表索引 `funding_people`
@@ -379,7 +381,8 @@ ALTER TABLE `funding`
 -- 資料表的限制式 `funding_comments`
 --
 ALTER TABLE `funding_comments`
-  ADD CONSTRAINT `funding_comments_ibfk_1` FOREIGN KEY (`funding_id`) REFERENCES `funding` (`funding_id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `funding_comments_ibfk_1` FOREIGN KEY (`funding_id`) REFERENCES `funding` (`funding_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `funding_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- 資料表的限制式 `funding_people`
