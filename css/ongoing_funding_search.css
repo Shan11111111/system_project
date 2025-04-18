@@ -473,7 +473,37 @@
   color: #555;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
 
+.pagination button {
+  padding: 8px 14px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff9da;
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #ffe08a;
+}
+
+.pagination button.active {
+  background-color: #f1cb61; /* 橘色 */
+  font-weight: bold;
+  border-color: #e0b84c;
+  color: #333;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+}
 
 
 
@@ -483,9 +513,8 @@
     background-color:var(--color-yellow);
     padding-left: 200px;
     padding-right: 200px;
-    margin-top: 10px; 
-
-    
+    margin-bottom: 0; 
+    bottom: 0;
   }
   
   .logo_space {
