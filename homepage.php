@@ -254,7 +254,7 @@
                             }
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, a.advice_state, 
-               ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.agree DESC"; // 查詢最熱門的建言
+               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.agree DESC"; // 查詢最熱門的建言
 
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
@@ -278,7 +278,7 @@
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
                                     // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
-                                    $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
                             ?>
                                     <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
                                     <div class="swiper-slide">
@@ -364,7 +364,7 @@
                             }
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
-               ai.img_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
+               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
 
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
@@ -387,7 +387,7 @@
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
 
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
-                                    $image_url = !empty($row['img_path']) ? $row['img_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
 
                             ?>
                                     <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
