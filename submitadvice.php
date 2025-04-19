@@ -210,11 +210,14 @@
 
                 <!-- 上傳按鈕 -->
                 <label>檔案 / 照片上傳</label>
-                <button type="button" class="upload-btn" id="uploadBox">照片上傳</button>
-                <input type="file" id="fileInput" name="file" accept="image/*" hidden>
-                <button type="button" class="upload-btn" id="uploadBox">文件上傳</button>
-                <input type="file" id="fileInput" name="file" accept="image/*" hidden><!--要改-->
 
+                <!-- 照片上傳 -->
+                <button type="button" class="upload-btn" id="photoUploadBox">照片上傳</button>
+                <input type="file" id="photoFileInput" name="file" accept="image/*" hidden>
+
+                <!-- 文件上傳 -->
+                <button type="button" class="upload-btn" id="fileUploadBox">文件上傳</button>
+                <input type="file" id="fileFileInput" name="file2" accept=".pdf, .doc, .docx, .ppt, .pptx" hidden>
 
                 <!-- 提交按鈕 -->
                 <button type="submit" class="submit">提交</button>
@@ -240,8 +243,6 @@
         document.addEventListener("DOMContentLoaded", function () {
             const categoryButtons = document.querySelectorAll(".category");
             const selectedCategoryInput = document.getElementById("selected-category");
-            const uploadBox = document.getElementById("uploadBox");
-            const fileInput = document.getElementById("fileInput");
 
             // 分類按鈕選擇
             categoryButtons.forEach(button => {
@@ -251,20 +252,38 @@
                     selectedCategoryInput.value = this.getAttribute("data-value");
                 });
             });
+        });
 
-            // 點擊上傳按鈕
-            uploadBox.addEventListener("click", function () {
-                fileInput.click();
+        document.addEventListener("DOMContentLoaded", function () {
+            const photoUploadBox = document.getElementById("photoUploadBox");
+            const photoFileInput = document.getElementById("photoFileInput");
+            const fileUploadBox = document.getElementById("fileUploadBox");
+            const fileFileInput = document.getElementById("fileFileInput");
+
+            // 點擊照片上傳按鈕
+            photoUploadBox.addEventListener("click", function () {
+                photoFileInput.click();
+            });
+
+            // 顯示選擇的照片名稱
+            photoFileInput.addEventListener("change", function () {
+                if (photoFileInput.files.length > 0) {
+                    photoUploadBox.textContent = photoFileInput.files[0].name;
+                }
+            });
+
+            // 點擊文件上傳按鈕
+            fileUploadBox.addEventListener("click", function () {
+                fileFileInput.click();
             });
 
             // 顯示選擇的文件名稱
-            fileInput.addEventListener("change", function () {
-                if (fileInput.files.length > 0) {
-                    uploadBox.textContent = fileInput.files[0].name;
+            fileFileInput.addEventListener("change", function () {
+                if (fileFileInput.files.length > 0) {
+                    fileUploadBox.textContent = fileFileInput.files[0].name;
                 }
             });
         });
-
     </script>
 </body>
 
