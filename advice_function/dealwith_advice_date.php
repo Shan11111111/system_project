@@ -18,7 +18,7 @@ $sql = "
         DATEDIFF(CURDATE(), a.announce_date) AS days_elapsed,
         COUNT(DISTINCT ar.agree_record_id) AS support_count,
         COUNT(DISTINCT c.comment_id)       AS comment_count,
-        img.img_path,
+        img.file_path,
         CASE
             WHEN COUNT(DISTINCT ar.agree_record_id) >= 100 THEN 'ended-passed'
             WHEN DATEDIFF(CURDATE(), a.announce_date) > 30 THEN 'ended-notpassed'

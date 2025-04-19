@@ -345,7 +345,7 @@
 
                 };
 
-                const imagePath = item.img_path || 'uploads/homepage.png';
+                const imagePath = item.file_path || 'uploads/homepage.png';
                 const remainingDays = Math.max(0, 30 - item.days_elapsed);
                 const publishDate = item.announce_date || '未知';
                 const categoryText = categoryMap[item.category] || item.category || '無';
