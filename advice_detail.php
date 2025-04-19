@@ -223,12 +223,12 @@
 
         $categoryMap = [
             "all" => "全部分類",
-            "設施改善" => "設施改善",
-            "學術發展" => "學術發展",
-            "社團活動" => "社團活動",
-            "公益關懷" => "公益關懷",
-            "環保永續" => "環保永續",
-            "其他" => "其他"
+            "equipment" => "設施改善",
+            "academic" => "學術發展",
+            "club" => "社團活動",
+            "welfare" => "公益關懷",
+            "environment" => "環保永續",
+            "other" => "其他"
         ];
         $categoryKey = $row['category'];
         $categoryName = isset($categoryMap[$categoryKey]) ? $categoryMap[$categoryKey] : '未知分類';
