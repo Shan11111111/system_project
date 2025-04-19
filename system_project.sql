@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-19 09:30:42
+-- 產生時間： 2025-04-19 11:55:08
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -58,13 +58,19 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (25, 333333, '學術發展', '我們應該積極讓我們的學生去比賽，如果學校沒供給錢做研究，大學會沒有競爭力', 0, 'academic', '未處理', '2025-04-18'),
 (26, 333333, '55', '超愛丟垃圾', 0, 'environment', '未處理', '2025-04-19'),
 (27, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
-(28, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
-(29, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
-(30, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
-(31, 333333, 'ppp', 'ppp', 0, 'club', '未處理', '2025-04-19'),
 (32, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
 (33, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
-(34, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19');
+(34, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
+(35, 333333, '改善廁所', '清潔太差了', 0, 'equipment', '未處理', '2025-04-19'),
+(36, 333333, '延長開館', '讀書時間短', 0, 'equipment', '未處理', '2025-04-19'),
+(37, 333333, '設立寫作班', '缺乏論文訓練', 0, 'academic', '未處理', '2025-04-19'),
+(38, 333333, '開放研究室', '設備難借用', 0, 'academic', '未處理', '2025-04-19'),
+(39, 333333, '舉辦淨灘', '環保很重要', 0, 'welfare', '未處理', '2025-04-19'),
+(40, 333333, '交友', '舉辦聚餐交友', 0, 'other', '未處理', '2025-04-19'),
+(41, 333333, '綠色校園', '綠色校園', 0, 'environment', '未處理', '2025-04-19'),
+(42, 333333, '社團博覽會', '宣傳太少', 0, 'club', '未處理', '2025-04-19'),
+(43, 333333, '設立休息區', '休息沒空間', 0, 'other', '未處理', '2025-04-19'),
+(44, 333333, '舉辦文化週', '交流太少', 1, 'other', '未處理', '2025-04-19');
 
 -- --------------------------------------------------------
 
@@ -87,7 +93,16 @@ INSERT INTO `advice_image` (`img_id`, `file_name`, `file_path`, `advice_id`) VAL
 (5, 'messageImage_1682701968425.jpg', 'uploads/img_67f8f4ee2435c0.39011411.jpg', 23),
 (6, '06.png', 'uploads/img_67fdfac3e5ea40.69014083.png', 24),
 (7, '10.png', 'uploads/img_680227fa7f3479.36734974.png', 25),
-(8, 'time_complexity.png', 'uploads/680350d5721402.04523504.png', 34);
+(8, 'time_complexity.png', 'uploads/680350d5721402.04523504.png', 34),
+(9, '大頭貼.png', 'uploads/68036d038fa925.59403508.png', 35),
+(10, '台大.jpg', 'uploads/68036d521ad146.54521166.jpg', 36),
+(11, '女孩圖片.png', 'uploads/68036d82a39e01.78827698.png', 37),
+(12, '女孩圖片.png', 'uploads/68036dab4c52b6.03091380.png', 38),
+(13, 'Zitronenpresse_JuicySalif.jpg', 'uploads/68036ddc082fb0.18389448.jpg', 39),
+(14, '男孩圖片.png', 'uploads/68036e09147ab0.60753746.png', 40),
+(15, '台大.jpg', 'uploads/68036e60d02710.40235568.jpg', 41),
+(16, '09.png', 'uploads/68036e7f4644e2.13730019.png', 42),
+(17, '02.png', 'uploads/68036ef7ea0d94.98225831.png', 44);
 
 -- --------------------------------------------------------
 
@@ -118,7 +133,8 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (17, 333333, 9),
 (18, 412402141, 24),
 (19, 412402141, 21),
-(20, 412402001, 23);
+(20, 412402001, 23),
+(21, 333333, 44);
 
 -- --------------------------------------------------------
 
@@ -202,7 +218,12 @@ INSERT INTO `comments` (`comment_id`, `advice_id`, `user_id`, `comment_content`,
 (63, 4, 412402141, 'y04', '2025-04-18'),
 (64, 4, 412402141, 'svvjojg', '2025-04-18'),
 (65, 4, 412402141, 'fjaof', '2025-04-18'),
-(66, 4, 412402141, 'dddddddd', '2025-04-18');
+(66, 4, 412402141, 'dddddddd', '2025-04-18'),
+(67, 44, 333333, '超讚', '2025-04-19'),
+(68, 44, 333333, '沒錯', '2025-04-19'),
+(69, 44, 333333, '多一點交流', '2025-04-19'),
+(70, 44, 333333, '好多蝴蝶', '2025-04-19'),
+(71, 44, 333333, '好好笑', '2025-04-19');
 
 -- --------------------------------------------------------
 
@@ -252,10 +273,10 @@ INSERT INTO `funding` (`funding_id`, `advice_id`, `money`, `target`) VALUES
 
 CREATE TABLE `funding_comments` (
   `funding_comments_id` int(11) NOT NULL,
-  `funding_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `content` text DEFAULT NULL,
-  `comment_time` datetime DEFAULT current_timestamp()
+  `funding_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `comment_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -378,25 +399,25 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice`
 --
 ALTER TABLE `advice`
-  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
 --
 ALTER TABLE `advice_image`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
