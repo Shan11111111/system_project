@@ -201,7 +201,7 @@
     }
 
     // Step 3: 查詢公告資料，根據建言 ID 查詢
-    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.category, a.advice_content, a.advice_state, a.announce_date, a.agree, ai.img_path
+    $sql = "SELECT a.advice_id, a.user_id, a.advice_title, a.category, a.advice_content, a.advice_state, a.announce_date, a.agree, ai.file_path
     FROM advice a
     LEFT JOIN advice_image ai ON ai.advice_id = a.advice_id
     WHERE a.advice_id = $advice_id";
@@ -278,8 +278,8 @@
 
                                     <!-- 圖片或 PDF -->
                                     <section class="media">
-                                        <?php if (!empty($row['img_path'])) { ?>
-                                                            <img id="advice-image" src="<?php echo htmlspecialchars($row['img_path']); ?>" alt="建言圖片" />
+                                        <?php if (!empty($row['file_path'])) { ?>
+                                                            <img id="advice-image" src="<?php echo htmlspecialchars($row['file_path']); ?>" alt="建言圖片" />
                                         <?php } else { ?>
                                                             <img id="advice-image"
                                                                 src="./uploads/homepage.png"
