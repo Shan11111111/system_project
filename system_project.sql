@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-18 13:02:55
+-- 產生時間： 2025-04-19 09:30:42
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -32,7 +32,7 @@ CREATE TABLE `advice` (
   `user_id` int(11) NOT NULL,
   `advice_title` varchar(20) DEFAULT NULL,
   `advice_content` text DEFAULT NULL,
-  `agree` int(11) DEFAULT 0 COMMENT '是否同意匿名?',
+  `agree` int(11) DEFAULT 0,
   `category` varchar(20) DEFAULT NULL,
   `advice_state` varchar(20) DEFAULT '未處理',
   `announce_date` date NOT NULL DEFAULT current_timestamp()
@@ -53,9 +53,18 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (20, 333333, '教室好臭', '學校應該買天然空氣清新器在教室', 1, '設施改善', '未處理', '2025-04-01'),
 (21, 333333, '7899', '777777', 1, '學術發展', '未處理', '2025-04-08'),
 (22, 333333, '6666', '666666', 0, '公益活動', '未處理', '2025-04-08'),
-(23, 333333, '測試', '測試圖片', 1, '學術發展', '未處理', '2025-04-11'),
+(23, 333333, '測試', '測試圖片', 2, '學術發展', '未處理', '2025-04-11'),
 (24, 333333, 'gggg', '社團需要被企業看到，希望學校可以和更多企業合作', 3, 'club', '未處理', '2025-04-15'),
-(25, 333333, '學術發展', '我們應該積極讓我們的學生去比賽，如果學校沒供給錢做研究，大學會沒有競爭力', 0, 'academic', '未處理', '2025-04-18');
+(25, 333333, '學術發展', '我們應該積極讓我們的學生去比賽，如果學校沒供給錢做研究，大學會沒有競爭力', 0, 'academic', '未處理', '2025-04-18'),
+(26, 333333, '55', '超愛丟垃圾', 0, 'environment', '未處理', '2025-04-19'),
+(27, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
+(28, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
+(29, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
+(30, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 0, 'environment', '未處理', '2025-04-19'),
+(31, 333333, 'ppp', 'ppp', 0, 'club', '未處理', '2025-04-19'),
+(32, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
+(33, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
+(34, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19');
 
 -- --------------------------------------------------------
 
@@ -65,8 +74,8 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 
 CREATE TABLE `advice_image` (
   `img_id` int(11) NOT NULL,
-  `img_name` varchar(255) NOT NULL,
-  `img_path` text NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
   `advice_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -74,10 +83,11 @@ CREATE TABLE `advice_image` (
 -- 傾印資料表的資料 `advice_image`
 --
 
-INSERT INTO `advice_image` (`img_id`, `img_name`, `img_path`, `advice_id`) VALUES
+INSERT INTO `advice_image` (`img_id`, `file_name`, `file_path`, `advice_id`) VALUES
 (5, 'messageImage_1682701968425.jpg', 'uploads/img_67f8f4ee2435c0.39011411.jpg', 23),
 (6, '06.png', 'uploads/img_67fdfac3e5ea40.69014083.png', 24),
-(7, '10.png', 'uploads/img_680227fa7f3479.36734974.png', 25);
+(7, '10.png', 'uploads/img_680227fa7f3479.36734974.png', 25),
+(8, 'time_complexity.png', 'uploads/680350d5721402.04523504.png', 34);
 
 -- --------------------------------------------------------
 
@@ -107,7 +117,8 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (16, 333333, 23),
 (17, 333333, 9),
 (18, 412402141, 24),
-(19, 412402141, 21);
+(19, 412402141, 21),
+(20, 412402001, 23);
 
 -- --------------------------------------------------------
 
@@ -201,10 +212,17 @@ INSERT INTO `comments` (`comment_id`, `advice_id`, `user_id`, `comment_content`,
 
 CREATE TABLE `files` (
   `file_id` int(11) NOT NULL,
-  `file_name` text NOT NULL,
-  `file_path` text NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
   `advice_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `files`
+--
+
+INSERT INTO `files` (`file_id`, `file_name`, `file_path`, `advice_id`) VALUES
+(1, '公設檢查表.pdf', 'file_upload/680350d573a4d1.89863904.pdf', 34);
 
 -- --------------------------------------------------------
 
@@ -360,19 +378,19 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice`
 --
 ALTER TABLE `advice`
-  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
 --
 ALTER TABLE `advice_image`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
@@ -384,7 +402,7 @@ ALTER TABLE `comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
 --
 ALTER TABLE `files`
-  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding`
