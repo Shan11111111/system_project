@@ -462,70 +462,67 @@
                     </div>
                 </div>
 
-                <?php  
-                
+                <?php
                 $link = mysqli_connect('localhost', 'root');
-                            mysqli_select_db($link, "system_project");
+                mysqli_select_db($link, "system_project");
 
-                            // 檢查連線是否成功
-                            if (!$link) {
-                                die("資料庫連線失敗: " . mysqli_connect_error());
-                            }
-                            // 查詢資料庫中的建言資料
-                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
-               ai.file_path FROM funding f inner join advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
+                // 檢查連線是否成功
+                if (!$link) {
+                    die("資料庫連線失敗: " . mysqli_connect_error());
+                }
 
-                            $result = mysqli_query($link, $sql);
-                            if (!$result) {
-                                die("查詢失敗: " . mysqli_error($link));
-                            }
-                            // 檢查是否有資料
-                            if (mysqli_num_rows($result) > 0) {
-                                // 輸出每一筆資料
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $advice_id = $row['advice_id'];
-                                    $advice_title = $row['advice_title'];
-                                    $advice_content = $row['advice_content'];
-                                    $category = $row['category'];
-                                    $agree = $row['agree'];
-                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
-                                    if ($progress > 100) {
-                                        $progress = 100; // 確保進度不超過 100%
-                                    }
-                                    $progress_width = $progress . "%"; // 計算進度條的寬度
-                                    // 這裡可以根據需要顯示建言的內容，例如標題、進度等
+                // 查詢資料庫中的募資資料
+                $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+                        ai.file_path FROM funding f 
+                        INNER JOIN advice a ON f.advice_id = a.advice_id 
+                        LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id 
+                        ORDER BY a.announce_date DESC";
 
-                                    // 獲取圖片路徑，若無圖片則使用預設圖片
-                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+                $result = mysqli_query($link, $sql);
+                if (!$result) {
+                    die("查詢失敗: " . mysqli_error($link));
+                }
 
-                            
-                
+                // 檢查是否有資料
+                if (mysqli_num_rows($result) > 0) {
+                    $data = [];
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $data[] = $row;
+                    }
+
+                    // 獲取第一筆資料作為大圖
+                    $bigCard = array_shift($data);
+                    $bigCardImage = !empty($bigCard['file_path']) ? $bigCard['file_path'] : 'default_big_image.jpg';
+                    $bigCardTitle = htmlspecialchars($bigCard['advice_title']);
+                    $bigCardAgree = htmlspecialchars($bigCard['agree']);
+
+                    // 剩下的資料作為小圖
+                    $smallCards = $data;
+                }
+                mysqli_close($link);
                 ?>
 
-                <!-- Swiper 區塊 -->
                 <div class="swiper mySwiper3">
                     <div class="swiper-wrapper">
-                        <!-- 一筆 swiper-slide（含1大圖 + 4小圖） -->
+                        <!-- 大圖 -->
                         <div class="swiper-slide">
                             <div class="fund-section">
                                 <div class="fund-content">
-                                    <!-- 左側大卡片 -->
                                     <div class="left-big-card">
                                         <div class="fundraiser-card">
                                             <div class="card-image">
-                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s"
-                                                    alt="" />
+                                                <img src="<?php echo $bigCardImage; ?>" alt="大圖">
                                             </div>
                                             <div class="card-info">
-                                                <div class="card-title">Support the Marco Family</div>
+                                                <div class="card-title"><?php echo $bigCardTitle; ?></div>
                                                 <div class="progress-bar">
                                                     <div class="progress" style="width: 100%;"></div>
                                                 </div>
                                                 <div class="card-meta">
                                                     <div>
-                                                        <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
+                                                        <span>NT$ <?php echo $bigCardAgree; ?></span>
                                                         <span class="divider">/</span>
-                                                        <span>300%</span>
+                                                        <span>100%</span>
                                                     </div>
                                                     <div>
                                                         <span>335 <i class="fa-regular fa-user"></i></span>
@@ -534,223 +531,33 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- 右側四張小卡片 -->
+                                    <!-- 小圖 -->
                                     <div class="right-small-cards">
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Frank’s Battle Against Leukemia
+                                        <?php foreach ($smallCards as $smallCard): ?>
+                                            <div class="fundraiser-card small-card">
+                                                <div class="card-image">
+                                                    <img src="<?php echo !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'default_small_image.jpg'; ?>" alt="小圖">
                                                 </div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 90%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <div>
-                                                        <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
-                                                        <span class="divider">/</span>
-                                                        <span>100%</span>
+                                                <div class="card-info">
+                                                    <div class="card-title"><?php echo htmlspecialchars($smallCard['advice_title']); ?></div>
+                                                    <div class="progress-bar">
+                                                        <div class="progress" style="width: 80%;"></div>
                                                     </div>
-                                                    <div>
-                                                        <span>25 <i class="fa-regular fa-user"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <?php }
-                            } ?>
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                                <div class="donation-count">1K donations</div>
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Unterstützung für Ehefrau</div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 80%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <div>
-                                                        <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
-                                                        <span class="divider">/</span>
-                                                        <span>100%</span>
-                                                    </div>
-                                                    <div>
-                                                        <span>25 <i class="fa-regular fa-user"></i></span>
+                                                    <div class="card-meta">
+                                                        <div>
+                                                            <span>NT$ <?php echo htmlspecialchars($smallCard['agree']); ?></span>
+                                                            <span class="divider">/</span>
+                                                            <span>100%</span>
+                                                        </div>
+                                                        <div>
+                                                            <span>25 <i class="fa-regular fa-user"></i></span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Geef Hayat een kans</div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 70%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <div>
-                                                        <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
-                                                        <span class="divider">/</span>
-                                                        <span>100%</span>
-                                                    </div>
-                                                    <div>
-                                                        <span>25 <i class="fa-regular fa-user"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-<?php 
-                                
-
-?>
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Behandeling in het buitenland
-                                                </div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 60%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <div>
-                                                        <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
-                                                        <span class="divider">/</span>
-                                                        <span>100%</span>
-                                                    </div>
-                                                    <div>
-                                                        <span>25 <i class="fa-regular fa-user"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
-                                <!-- fund-content 結束 -->
-                            </div>
-                        </div>
-                        <!-- 如果有第2組資料可以複製整個 swiper-slide 再放下來 -->
-                        <div class="swiper-slide">
-                            <div class="fund-section">
-                                <div class="fund-content">
-                                    <!-- 左側大卡片 -->
-                                    <div class="left-big-card">
-                                        <div class="fundraiser-card">
-                                            <div class="card-image">
-                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-Wz1T6Cnb7gv2ySD2yrcstftNSGrM4ZA1vA&s"
-                                                    alt="" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Support the Marco Family</div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 100%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <div>
-                                                        <span>NT$ 155,819 </span> <!--現在募到的錢 %數 可以超過100%(超過目標金額的意思)-->
-                                                        <span class="divider">/</span>
-                                                        <span>100%</span>
-                                                    </div>
-                                                    <div>
-                                                        <span>25 <i class="fa-regular fa-user"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 右側四張小卡片 -->
-                                    <div class="right-small-cards">
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Frank’s Battle Against Leukemia
-                                                </div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 90%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <span>$321,619</span>
-                                                    <span>90%</span>
-                                                    <span>25 <i class="fa-regular fa-user"></i></span>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Unterstützung für Ehefrau</div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 80%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <span>$321,619</span>
-                                                    <span>80%</span>
-                                                    <span>25 <i class="fa-regular fa-user"></i></span>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Geef Hayat een kans</div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 70%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <span>$321,619</span>
-                                                    <span>70%</span>
-                                                    <span>25 <i class="fa-regular fa-user"></i></span>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="fundraiser-card small-card">
-                                            <div class="card-image">
-                                                <img
-                                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s" />
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title">Behandeling in het buitenland
-                                                </div>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width: 60%;"></div>
-                                                </div>
-                                                <div class="card-meta">
-                                                    <span>$321,619</span>
-                                                    <span>60%</span>
-                                                    <span>25 <i class="fa-regular fa-user"></i></span>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- fund-content 結束 -->
                             </div>
                         </div>
                     </div>
