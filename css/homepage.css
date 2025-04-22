@@ -112,7 +112,6 @@ body {
   outline: none;
   box-shadow: none;
   appearance: none;
-  border-bottom: #000000 2px solid;
 }
 
 .dropbtn:hover {
