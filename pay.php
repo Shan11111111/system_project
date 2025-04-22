@@ -210,7 +210,10 @@
 
                 <input type="text" maxlength="3" placeholder="CVC">
             </div>
-
+            <hr>
+            <label class="section-label">姓名（選填，我們將通知您募資專案的後續進度）</label>
+            <input type="name" placeholder="輸入您的姓名">
+            
             <label class="section-label">Email（選填，我們將通知您募資專案的後續進度）</label>
             <input type="email" placeholder="your@email.com">
 
