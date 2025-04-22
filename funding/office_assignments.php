@@ -84,7 +84,7 @@
                 $office_id = $_SESSION['user_id'];
 
                 // 查詢分派給該處所的建言
-                $sql = "SELECT sa.suggestion_assignments_id, sa.advice_id, a.advice_title, sa.status 
+                $sql = "SELECT sa.suggestion_assignments_id, sa.advice_id, a.advice_title, sa.status, sa.notification 
                         FROM suggestion_assignments sa
                         JOIN advice a ON sa.advice_id = a.advice_id
                         WHERE sa.office_id = ?";
@@ -100,6 +100,14 @@
                         echo "<td>" . htmlspecialchars($row['advice_title']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['status']) . "</td>";
                         echo "<td>";
+                        if ($row['notification']) {
+                            echo "<span style='color: red;'>有新的審核結果</span>";
+                            // 重置通知狀態
+                            $reset_sql = "UPDATE suggestion_assignments SET notification = FALSE WHERE suggestion_assignments_id = ?";
+                            $reset_stmt = $conn->prepare($reset_sql);
+                            $reset_stmt->bind_param("i", $row['suggestion_assignments_id']);
+                            $reset_stmt->execute();
+                        }
                         if ($row['status'] === '被退回') {
                             echo "<a class='btn' href='submit_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>重新提交</a>";
                         } elseif ($row['status'] === '審核中') {
