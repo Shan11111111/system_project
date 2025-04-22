@@ -12,7 +12,7 @@ if (isset($_GET['suggestion_assignments_id'])) {
 
     // 更新提案狀態為 "已通過"
     $sql = "UPDATE suggestion_assignments 
-            SET status = '已通過', reviewed_at = NOW(), approved_by_admin = TRUE 
+            SET status = '已通過', reviewed_at = NOW(), approved_by_admin = TRUE, notification = TRUE 
             WHERE suggestion_assignments_id = ?";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {

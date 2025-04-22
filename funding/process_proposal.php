@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("檔案上傳失敗");
     }
 
-    // 更新 suggestion_assignments 表
+    // 更新提案內容
     $sql = "UPDATE suggestion_assignments 
             SET proposal_text = ?, funding_amount = ?, proposal_file_path = ?, submitted = TRUE, submitted_at = NOW(), status = '審核中' 
             WHERE suggestion_assignments_id = ?";
@@ -31,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt->bind_param("sisi", $proposal_text, $funding_amount, $file_path, $suggestion_assignments_id);
     if ($stmt->execute()) {
-        echo "<script>alert('提案已成功提交');</script>";
+        echo "<script>alert('提案已成功重新提交');</script>";
         echo "<script>window.location.href = 'office_assignments.php';</script>";
     } else {
-        die("提案提交失敗: " . $stmt->error);
+        die("提案重新提交失敗: " . $stmt->error);
     }
 
     $stmt->close();

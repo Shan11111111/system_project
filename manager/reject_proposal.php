@@ -10,9 +10,9 @@ if ($conn->connect_error) {
 if (isset($_GET['suggestion_assignments_id'])) {
     $suggestion_assignments_id = intval($_GET['suggestion_assignments_id']);
 
-    // 更新提案狀態為 "被退回"
+    // 更新提案狀態為 "已通過"
     $sql = "UPDATE suggestion_assignments 
-            SET status = '被退回', reviewed_at = NOW(), approved_by_admin = FALSE 
+            SET status = '已通過', reviewed_at = NOW(), approved_by_admin = TRUE, notification = TRUE 
             WHERE suggestion_assignments_id = ?";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
@@ -21,10 +21,10 @@ if (isset($_GET['suggestion_assignments_id'])) {
 
     $stmt->bind_param("i", $suggestion_assignments_id);
     if ($stmt->execute()) {
-        echo "<script>alert('提案已退回');</script>";
+        echo "<script>alert('提案已通過');</script>";
         echo "<script>window.location.href = 'review_proposals.php';</script>";
     } else {
-        die("退回提案失敗: " . $stmt->error);
+        die("通過提案失敗: " . $stmt->error);
     }
 
     $stmt->close();
