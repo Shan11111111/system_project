@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言展示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .comment {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .comment-author {
+            font-weight: bold;
+        }
+
+        .comment-content {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>留言展示</h1>
+    <div id="comments-container">載入中...</div>
+
+    <script>
+        // 假設從 URL 中取得 advice_id
+        const urlParams = new URLSearchParams(window.location.search);
+        // const adviceId = urlParams.get('advice_id'); 
+        const adviceId = '24';
+
+        if (!adviceId) {
+            document.getElementById('comments-container').innerText = '未提供建議 ID';
+        } else {
+            // 呼叫後端 API 獲取留言資料
+            fetch(`comments_show.php?advice_id=${adviceId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('無法獲取留言資料');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const container = document.getElementById('comments-container');
+                    container.innerHTML = ''; // 清空載入中的文字
+
+                    if (data.error) {
+                        container.innerText = data.error;
+                        return;
+                    }
+
+                    if (data.length === 0) {
+                        container.innerText = '目前沒有留言';
+                        return;
+                    }
+
+                    // 顯示留言
+                    data.forEach(comment => {
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = 'comment';
+
+                        const authorDiv = document.createElement('div');
+                        authorDiv.className = 'comment-author';
+                        authorDiv.innerText = `作者: ${comment.user_id || '匿名'}`;
+
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'comment-content';
+                        contentDiv.innerText = comment.comment_content;
+
+                        // 有時間戳記，顯示時間
+                        const timeDiv = document.createElement('div');
+                        contentDiv.className = 'comment-content';
+                        contentDiv.innerText = comment.comment_time;
+
+                        commentDiv.appendChild(authorDiv);
+                        commentDiv.appendChild(contentDiv);
+                        container.appendChild(commentDiv);
+                        container.appendChild(timeDiv);
+                    });
+                })
+                .catch(error => {
+                    document.getElementById('comments-container').innerText = '發生錯誤: ' + error.message;
+                });
+        }
+    </script>
+</body>
+
+</html>

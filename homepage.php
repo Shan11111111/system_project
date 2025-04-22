@@ -462,6 +462,46 @@
                     </div>
                 </div>
 
+                <?php  
+                
+                $link = mysqli_connect('localhost', 'root');
+                            mysqli_select_db($link, "system_project");
+
+                            // 檢查連線是否成功
+                            if (!$link) {
+                                die("資料庫連線失敗: " . mysqli_connect_error());
+                            }
+                            // 查詢資料庫中的建言資料
+                            $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+               ai.file_path FROM funding f inner join advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
+
+                            $result = mysqli_query($link, $sql);
+                            if (!$result) {
+                                die("查詢失敗: " . mysqli_error($link));
+                            }
+                            // 檢查是否有資料
+                            if (mysqli_num_rows($result) > 0) {
+                                // 輸出每一筆資料
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $advice_id = $row['advice_id'];
+                                    $advice_title = $row['advice_title'];
+                                    $advice_content = $row['advice_content'];
+                                    $category = $row['category'];
+                                    $agree = $row['agree'];
+                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
+                                    if ($progress > 100) {
+                                        $progress = 100; // 確保進度不超過 100%
+                                    }
+                                    $progress_width = $progress . "%"; // 計算進度條的寬度
+                                    // 這裡可以根據需要顯示建言的內容，例如標題、進度等
+
+                                    // 獲取圖片路徑，若無圖片則使用預設圖片
+                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+
+                            
+                
+                ?>
+
                 <!-- Swiper 區塊 -->
                 <div class="swiper mySwiper3">
                     <div class="swiper-wrapper">
@@ -520,6 +560,8 @@
                                             </div>
                                         </div>
 
+                                        <?php }
+                            } ?>
                                         <div class="fundraiser-card small-card">
                                             <div class="card-image">
                                                 <img
@@ -566,7 +608,10 @@
                                                 </div>
                                             </div>
                                         </div>
+<?php 
+                                
 
+?>
                                         <div class="fundraiser-card small-card">
                                             <div class="card-image">
                                                 <img
