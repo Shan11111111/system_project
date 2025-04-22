@@ -27,21 +27,8 @@ if ($conn->connect_error) {
     die("連線失敗: " . $conn->connect_error);
 }
 
-// 處理篩選條件
-$filter_level = isset($_GET['level']) ? $_GET['level'] : '';
-$search_query = isset($_GET['search']) ? $_GET['search'] : '';
-
-// 動態生成 SQL 查詢
-$sql = "SELECT user_id, name, level, email, department FROM users WHERE level != 'manager'";
-if (!empty($filter_level)) {
-    $sql .= " AND level = '" . $conn->real_escape_string($filter_level) . "'";
-}
-if (!empty($search_query)) {
-    $sql .= " AND (name LIKE '%" . $conn->real_escape_string($search_query) . "%' 
-                OR email LIKE '%" . $conn->real_escape_string($search_query) . "%' 
-                OR department LIKE '%" . $conn->real_escape_string($search_query) . "%'
-                OR user_id LIKE '%" . $conn->real_escape_string($search_query) . "%')";
-}
+// 從 advice 表中抓取覆議次數超過 3 的建言
+$sql = "SELECT user_id,advice_state,announce_date,advice_id, advice_title, agree FROM advice WHERE agree >= 3 and advice_state='未處理'";
 $result = $conn->query($sql);
 ?>
 
@@ -51,7 +38,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人員管理頁面</title>
+    <title>Funding 管理頁面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -204,9 +191,9 @@ $result = $conn->query($sql);
     <div class="sidebar">
         <h2>管理系統</h2>
         <a href="../homepage.php">孵仁首頁</a>
-        <a href="advice_manager.php">建言管理</a>
-        <a href="assign_office.php">達標建言分配處所</a>
-        <a href="people_manager.php">人員處理</a>
+        <a href="../manager/advice_manager.php">建言管理</a>
+        <a href="funding_check.php">達標建言金額處理</a>
+        <a href="../manager/people_manager.php">人員處理</a>
         <a href="#">數據分析</a>
     </div>
 
@@ -224,35 +211,17 @@ $result = $conn->query($sql);
             </div>
         </div>
 
-        <!-- 篩選表單 -->
-        <h1>人員管理頁面</h1>
-        <form method="GET" action="people_manager.php" style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; background-color: #f9f9f9; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-            <div style="display: flex; flex-direction: column;">
-                <label for="level" style="font-weight: bold; margin-bottom: 5px;">篩選身分:</label>
-                <select name="level" id="level" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 200px;">
-                    <option value="">全部</option>
-                    <option value="student" <?php if ($filter_level == 'student') echo 'selected'; ?>>學生</option>
-                    <option value="teacher" <?php if ($filter_level == 'teacher') echo 'selected'; ?>>教職員</option>
-                </select>
-            </div>
-            <div style="display: flex; flex-direction: column;">
-                <label for="search" style="font-weight: bold; margin-bottom: 5px;">查詢:</label>
-                <input type="text" name="search" id="search" placeholder="輸入學號、名字、email或科系" value="<?php echo htmlspecialchars($search_query); ?>" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
-            </div>
-            <div>
-                <button type="submit" style="padding: 10px 20px 10px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">篩選</button>
-            </div>
-        </form>
-
         <!-- 表格內容 -->
+        <h1>分配建言處理處所</h1>
         <table>
             <thead>
                 <tr>
-                    <th>學號ID/教職員編號</th>
-                    <th>名字</th>
-                    <th>科系</th>
-                    <th>email</th>
-                    <th>身分</th>
+                    <th>建言 ID</th>
+                    <th>建言人</th>
+                    <th>建言內容</th>
+                    <th>覆議次數</th>
+                    <th>建言狀態</th>
+                    <th>建言時間</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -261,21 +230,19 @@ $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
+                        echo "<td>" . $row['advice_id'] . "</td>";
                         echo "<td>" . $row['user_id'] . "</td>";
-                        echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['department']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                        echo "<td>" . $row['level'] . "</td>";
+                        echo "<td>" . htmlspecialchars($row['advice_title']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['agree']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['advice_state']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['announce_date']) . "</td>";
                         echo "<td>";
-                        echo "<form action='delete_people.php' method='POST' style='display:inline-block; margin-left:10px;'>";
-                        echo "<input type='hidden' name='user_id' value='" . $row['user_id'] . "'>";
-                        echo "<button type='submit' onclick='return confirm(\"確定要刪除這個使用者嗎？\");'>刪除</button>";
-                        echo "</form>";
+                        echo "<a href='assign_detail.php?advice_id=" . $row['advice_id'] . "' class='btn btn-primary'>分派</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='6'>沒有符合條件的使用者</td></tr>";
+                    echo "<tr><td colspan='6'>沒有符合條件的建言</td></tr>";
                 }
                 ?>
             </tbody>
