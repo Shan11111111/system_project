@@ -1,4 +1,3 @@
-<!-- filepath: c:\xampp\htdocs\analysis_project\manager\review_proposals.php -->
 <!DOCTYPE html>
 <html lang="zh-tw">
 
@@ -10,38 +9,83 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f4f6f9;
         }
 
-        .content {
+        /* 左側導覽列 */
+        .sidebar {
+            width: 250px;
+            background-color: #007BFF;
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
             padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #0056b3;
+        }
+
+        /* 頁面內容 */
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            background-color: #f4f6f9;
+            min-height: 100vh;
+        }
+
+        .content h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            padding: 15px;
             text-align: left;
         }
 
         table th {
             background-color: #007BFF;
             color: #fff;
+            font-weight: bold;
         }
 
         table tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #f9f9f9;
         }
 
         table tr:hover {
-            background-color: #ddd;
+            background-color: #f1f1f1;
         }
 
         .btn {
@@ -57,10 +101,30 @@
         .btn:hover {
             background-color: #0056b3;
         }
+
+        .btn.reject {
+            background-color: #FF4D4D;
+        }
+
+        .btn.reject:hover {
+            background-color: #CC0000;
+        }
     </style>
 </head>
 
 <body>
+    <!-- 左側導覽列 -->
+    <div class="sidebar">
+        <h2>管理系統</h2>
+        <a href="../homepage.php">孵仁首頁</a>
+        <a href="../manager/advice_manager.php">建言管理</a>
+        <a href="assign_office.php">達標建言分配處所</a>
+        <a href="review_proposals.php">審核</a>
+        <a href="../manager/people_manager.php">人員處理</a>
+        <a href="#">數據分析</a>
+    </div>
+
+    <!-- 頁面內容 -->
     <div class="content">
         <h1>審核提案</h1>
         <table>
@@ -99,8 +163,18 @@
                         echo "<td><a href='" . htmlspecialchars($row['proposal_file_path']) . "' download>下載檔案</a></td>";
                         echo "<td>" . htmlspecialchars($row['status']) . "</td>";
                         echo "<td>
-                                <a class='btn' href='approve_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>批准</a>
-                                <a class='btn' href='reject_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>退回</a>
+                                <form action='approve_proposal.php' method='POST'>
+                                    <input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>
+                                    <label for='admin_feedback'>回饋意見:</label>
+                                    <textarea name='admin_feedback' id='admin_feedback' rows='3' placeholder='請輸入回饋意見...'></textarea>
+                                    <button type='submit'>批准</button>
+                                </form>
+                                <form action='reject_proposal.php' method='POST' style='margin-top: 10px;'>
+                                    <input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>
+                                    <label for='admin_feedback'>回饋意見:</label>
+                                    <textarea name='admin_feedback' id='admin_feedback' rows='3' placeholder='請輸入拒絕原因...'></textarea>
+                                    <button type='submit' class='btn reject'>退回</button>
+                                </form>
                               </td>";
                         echo "</tr>";
                     }
