@@ -355,7 +355,16 @@
   }
   
   input[type="text"],
-  input[type="email"] {
+  input[type="email"],
+  input[type="name"] {
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+    border: 1px solid #333;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  input[type="name"] {
     margin-top: 0.5rem;
     padding: 0.6rem;
     border: 1px solid #333;
