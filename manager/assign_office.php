@@ -38,7 +38,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funding 管理頁面</title>
+    <title>達標建言處理</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -192,7 +192,7 @@ $result = $conn->query($sql);
         <h2>管理系統</h2>
         <a href="../homepage.php">孵仁首頁</a>
         <a href="../manager/advice_manager.php">建言管理</a>
-        <a href="funding_check.php">達標建言金額處理</a>
+        <a href="funding_check.php">達標建言處理</a>
         <a href="../manager/people_manager.php">人員處理</a>
         <a href="#">數據分析</a>
     </div>
