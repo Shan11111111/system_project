@@ -311,12 +311,8 @@
 
         <div class="sidebar">
             <div class="progress-info-box">
-                <div class="progress-ring">
-                    <svg width="120" height="120">
-                        <circle class="bg" r="50" cx="60" cy="60"></circle>
-                        <circle class="progress" r="50" cx="60" cy="60"></circle>
-                    </svg>
-                    <div class="percent-center">30%</div>
+                <div class="circular-progress" style="--progress-percent: 30%; --progress-color: #f9a825;">
+                    <div class="progress-text">30%</div>
                 </div>
 
                 <div class="money">
