@@ -192,7 +192,7 @@
     <div class="banner">
         <div class="banner1">
             <div class="hot_propose">
-                <div class="chicken">
+                <div class="chicken"  data-hover="🥚">
                     <img src="img\image2333.jpg">
                     <div class="chicken_tag"> 建言瀏覽</div>
                 </div>
