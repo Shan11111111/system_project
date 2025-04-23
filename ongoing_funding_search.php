@@ -226,11 +226,15 @@
                     }
 
                     res.data.forEach(card => {
-                        container.innerHTML += `
-                        <div class="project-card">
+
+
+
+
+                        container.innerHTML += `                       
+                       <div class="project-card" data-id="${card.id}">
                             <div class="card-image">
                                 <div class="category"><span>${categoryMap[card.category] || card.category}</span></div>
-                                <img src="${card.image}" />
+                                <img src="${card.file_path}" />
                             </div>
                             <div class="card-info">
                                 <div class="card-title">${card.title}</div>
@@ -244,7 +248,7 @@
                                         <span>${card.progress}%</span>
                                     </div>
                                     <div>
-                                        <span>${card.supporter} <i class="fa-regular fa-user"></i></span>
+                                         <span>${card.supporter} <i class="fa-regular fa-user"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -253,6 +257,15 @@
                     });
 
                     renderPagination(res.totalPages);
+                    // 綁定每一張卡片的點擊事件
+                    document.querySelectorAll(".project-card").forEach(cardEl => {
+                        const id = cardEl.getAttribute("data-id");
+                        cardEl.onclick = () => {
+                            window.location.href = `funding_detail.php?id=${id}`;
+                        };
+                    });
+
+
                 });
         }
 

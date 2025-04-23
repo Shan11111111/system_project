@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+include '../db_connection.php'; // 換成你資料庫連線檔案的正確路徑
 
 $total = 100;
 $perPage = 12;
@@ -12,21 +13,33 @@ $sort     = $_GET['sort'] ?? 'new';
 
 $cards = [];
 
-$categoryOptions = ['equipment', 'academic', 'club', 'welfare', 'environment', 'other'];
+// 查詢資料庫中的募資資料
+$sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+                        ai.file_path FROM funding f 
+                        INNER JOIN advice a ON f.advice_id = a.advice_id 
+                        LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id 
+                        ORDER BY a.announce_date DESC";
 
-for ($i = 1; $i <= $total; $i++) {
+$stmt = $pdo->query($sql);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC); // 這裡直接拿到所有資料列
+
+foreach ($result as $row) {
+
+    $supporter = rand(50, 200);  // 假設支持者數量隨機範圍從 50 到 200
+
+    // 將需要的數據提取到卡片陣列
     $cards[] = [
-        'id' => $i,
-        'title' => "範例募資專案 #{$i}",
-        'category' => $categoryOptions[$i % 6],
-        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_5XgR2ZDah4v8eTfVCvgYJ4amCbsXWZt8g&s',
-        'progress' => rand(30, 120),
-        'raised' => number_format(rand(50000, 300000)),
-        'supporter' => rand(10, 120),
-        'date' => date('Y-m-d', strtotime("-{$i} days")),
-        'deadline' => date('Y-m-d', strtotime("+".rand(5, 60)." days"))
+        'id' => $row['advice_id'],  // 使用advice_id作為識別ID
+        'title' => $row['advice_title'],  // 建議標題
+        'content' => $row['advice_content'],  // 建議內容
+        'category' => $row['category'],  // 類別
+        'agree' => $row['agree'],  // 同意數
+        'file_path' => $row['file_path'] ? $row['file_path'] : '',  // 檔案路徑，若無則為空字串
+        'supporter' => $supporter // 假設支持者數量
     ];
 }
+
+
 
 // 篩選
 if ($category !== 'all') {
@@ -37,7 +50,7 @@ if ($keyword !== '') {
 }
 
 // 排序
-usort($cards, function($a, $b) use ($sort) {
+usort($cards, function ($a, $b) use ($sort) {
     if ($sort === 'hot') return $b['supporter'] - $a['supporter'];
     if ($sort === 'deadline') return strtotime($a['deadline']) - strtotime($b['deadline']);
     return strtotime($b['date']) - strtotime($a['date']);
