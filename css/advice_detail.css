@@ -607,6 +607,57 @@ body {
   border-radius: 8px;
 }
 
+.school-reply-card {
+  background: #ffffff;
+  border-left: 6px solid #4caf50;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-top: 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+.school-reply-card:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reply-status {
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.reply-status.replied {
+  background-color: #e0f8eb;
+  color: #2e7d32;
+}
+
+.reply-status.pending {
+  background-color: #fff5e6;
+  color: #d17f00;
+}
+
+.reply-time {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.reply-content p {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+
 .comments {
   background: var(--color-yellow);
   padding: 1.5rem;

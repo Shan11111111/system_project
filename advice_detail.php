@@ -371,6 +371,48 @@
                 </div>
             </main>
 
+            <?php
+            $advice_id = $_GET['advice_id']; // 從網址取得建言 ID
+        
+            // 查主建言的狀態
+            $stmt1 = $link->prepare("SELECT advice_state FROM advice WHERE advice_id = ?");
+            $stmt1->bind_param("i", $advice_id);
+            $stmt1->execute();
+            $result1 = $stmt1->get_result();
+            $advice = $result1->fetch_assoc();
+            $state = $advice['advice_state'] ?? '未處理';
+
+            // 查校方最新處理內容
+            $stmt2 = $link->prepare("SELECT content, state_time FROM advice_state WHERE advice_id = ? ORDER BY state_time DESC LIMIT 1");
+            $stmt2->bind_param("i", $advice_id);
+            $stmt2->execute();
+            $result2 = $stmt2->get_result();
+            $response = $result2->fetch_assoc();
+
+            $content = $response['content'] ?? null;
+            $update_time = $response['state_time'] ?? null;
+            ?>
+
+
+
+            <div class="school-reply-card">
+                <div class="reply-header">
+                    <span class="reply-status <?= $state === '已回覆' ? 'replied' : 'pending' ?>">
+                        <?= $state === '已回覆' ? '🟢 已回覆' : '🟡 尚未回覆' ?>
+                    </span>
+                    <?php if ($update_time): ?>
+                        <span class="reply-time">最後更新：<?= $update_time ?></span>
+                    <?php endif; ?>
+                </div>
+
+                <div class="reply-content">
+                    <p>
+                        <?= $content ? htmlspecialchars($content) : '本建言尚待校方回覆，請耐心等候。' ?>
+                    </p>
+                </div>
+            </div>
+
+
 
             <?php
     } else {
