@@ -372,7 +372,7 @@
             </main>
 
             <?php
-            $advice_id = $_GET['advice_id']; // 從網址取得建言 ID
+            $advice_id = $_GET['advice_id']; 
         
             // 查主建言的狀態
             $stmt1 = $link->prepare("SELECT advice_state FROM advice WHERE advice_id = ?");
