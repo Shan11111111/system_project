@@ -211,6 +211,8 @@
             } = getFilters();
             const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}`;
 
+            
+
             fetch(url)
                 .then(res => res.json())
                 .then(res => {
@@ -226,9 +228,6 @@
                     }
 
                     res.data.forEach(card => {
-
-
-
 
                         container.innerHTML += `                       
                        <div class="project-card" data-id="${card.id}">
