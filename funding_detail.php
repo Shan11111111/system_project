@@ -96,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -163,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -181,13 +181,120 @@
         </div>
     </nav>
 
+    <?php
+    $project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+    $link = mysqli_connect('localhost', 'root', '', 'system_project');
+
+    if (!$link) {
+        die("資料庫連線失敗: " . mysqli_connect_error());
+    }
+
+    // 取得專案基本資料 + 建議 ID + 關聯欄位
+    $sql = "SELECT 
+            p.project_id,
+            p.title AS project_title,
+            p.description AS project_description,
+            p.funding_goal,
+            p.start_date,
+            p.end_date,
+            p.status,
+            p.suggestion_assignments_id, 
+            a.advice_id
+        FROM fundraising_projects p
+        LEFT JOIN advice a ON a.advice_id = p.suggestion_assignments_id
+        WHERE p.project_id = $project_id";
+
+    $result = mysqli_query($link, $sql);
+
+    if (!$result) {
+        die("SQL 查詢錯誤: " . mysqli_error($link));
+    }
+
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
+        $suggestion_assignments_id = $row['suggestion_assignments_id'] ?? 0;
+        $start_date = $row['start_date'];
+
+        // 處理日期與剩餘天數
+        $start_date_obj = new DateTime($start_date);
+        $start_date_obj->modify('+6 months');
+        $end_date = $start_date_obj->format('Y/m/d H:i');
+
+        $today = new DateTime();
+        $end_date_obj = new DateTime($end_date);
+        $interval = $today->diff($end_date_obj);
+        $days_remaining = $interval->invert ? 0 : $interval->days;
+
+        // 查圖片：先拿到 advice_id
+        if (!empty($suggestion_assignments_id)) {
+            $sql_advice = "SELECT advice_id FROM suggestion_assignments WHERE suggestion_assignments_id = $suggestion_assignments_id";
+            $result_advice = mysqli_query($link, $sql_advice);
+
+            if ($result_advice && mysqli_num_rows($result_advice) > 0) {
+                $advice_row = mysqli_fetch_assoc($result_advice);
+                $advice_id = $advice_row['advice_id'];
+
+                // 查圖片檔案路徑
+                $image_sql = "SELECT file_path FROM advice_image WHERE advice_id = $advice_id";
+                $image_result = mysqli_query($link, $image_sql);
+
+                if ($image_result && mysqli_num_rows($image_result) > 0) {
+                    $image_row = mysqli_fetch_assoc($image_result);
+                    $image_path = $image_row['file_path'];
+                } else {
+                    $image_path = 'homepage.png';
+                }
+            } else {
+                $image_path = 'homepage.png';
+            }
+        } else {
+            $image_path = 'homepage.png';
+        }
+
+        $row['image_path'] = $image_path;
+
+        // 募資金額總和
+        $fund_sql = "SELECT SUM(donate_money) AS current_amount FROM funding_people WHERE funding_id = $project_id";
+        $fund_result = mysqli_query($link, $fund_sql);
+        if ($fund_result && mysqli_num_rows($fund_result) > 0) {
+            $fund_row = mysqli_fetch_assoc($fund_result);
+            $row['current_amount'] = $fund_row['current_amount'] ?? 0;
+        } else {
+            $row['current_amount'] = 0;
+        }
+
+        // 參與者統計
+        $participant_count = 0;
+        $count_sql = "SELECT COUNT(*) AS total FROM funding_people WHERE funding_id = $project_id";
+        $count_result = mysqli_query($link, $count_sql);
+        if ($count_result && mysqli_num_rows($count_result) > 0) {
+            $count_row = mysqli_fetch_assoc($count_result);
+            $participant_count = $count_row['total'];
+        }
+
+        // 計算募資百分比
+        $funding_goal = $row['funding_goal'];
+        $current_amount = $row['current_amount'];
+        $progress_percent = ($funding_goal > 0) ? ($current_amount / $funding_goal) * 100 : 0;
+    } else {
+        echo "查無專案資料";
+        exit;
+    }
+    ?>
+
+
     <div class="main-container">
         <div class="left">
-            <h1 class="title">專案標題</h1>
-            <img src="img\homepage.png" alt="專案圖片" class="project-image">
+            <h1 class="title"><?php echo htmlspecialchars($row['project_title']); ?></h1>
+            <img src="<?php echo htmlspecialchars($row['image_path']); ?>" alt="專案圖片" class="project-image">
+
+
+
+
             <div class="progress-text-box">
                 <p><strong>專案募資成功！</strong></p>
-                <p>在 <strong>2025/05/11 23:59</strong> 募資結束前，您都可以持續贊助此計畫。</p>
+                <p>在 <strong><?php echo htmlspecialchars($end_date); ?></strong> 募資結束前，您都可以持續贊助此計畫。</p>
             </div>
             <div class="tabs">
                 <div class="tab active" onclick="showTab(0)">專案內容</div>
@@ -197,9 +304,11 @@
             </div>
 
             <div class="tab-content active">
-                <p>這裡是專案內容說明...</p>
+                <p><?php echo nl2br(htmlspecialchars($row['project_description'])); ?></p>
                 <p>附件：<a href="file/專案說明.pdf" download>專案說明.pdf</a></p>
             </div>
+
+
             <div class="tab-content">
 
                 <div class="progress-card">
@@ -311,20 +420,19 @@
 
         <div class="sidebar">
             <div class="progress-info-box">
-                <div class="circular-progress" style="--progress-percent: 30%; --progress-color: #f9a825;">
-                    <div class="progress-text">30%</div>
+                <div class="circular-progress" style="--progress-percent: <?php echo $progress_percent; ?>%; --progress-color: #f9a825;">
+                    <div class="progress-text"><?php echo round($progress_percent); ?>%</div>
                 </div>
 
                 <div class="money">
-                    <h3><strong>NT$3,000</strong></h3>
-                    <p>目標<strong>NT$10,000</strong></p>
+                    <h3><strong>NT$<?php echo number_format($row['current_amount']); ?></strong></h3>
+                    <p>目標 <strong>NT$<?php echo number_format($row['funding_goal']); ?></strong></p>
                 </div>
             </div>
 
             <div class="text-info">
-                <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong>30</strong> 人參與募資</p>
-                <p><i class="fa-solid fa-hourglass-half  icon-circle"></i></i>剩餘 <strong>12</strong> 天</p>
-
+                <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong> 人參與募資</p>
+                <p><i class="fa-solid fa-hourglass-half icon-circle"></i>剩餘 <strong><?php echo $days_remaining; ?></strong> 天</p>
             </div>
 
             <div class="button-group">

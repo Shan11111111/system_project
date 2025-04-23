@@ -12,32 +12,62 @@ $keyword  = $_GET['keyword'] ?? '';
 $sort     = $_GET['sort'] ?? 'new';
 
 $cards = [];
+// 查詢募資專案資料 
+$sql_projects = "SELECT 
+    p.project_id, 
+    p.title, 
+    p.description, 
+    p.funding_goal, 
+    p.start_date, 
+    p.end_date, 
+    p.status,
+    p.suggestion_assignments_id,
+    COUNT(fp.funding_people_id) AS supporter
+FROM fundraising_projects p
+LEFT JOIN funding_people fp ON p.project_id = fp.funding_id
+GROUP BY p.project_id
+ORDER BY p.start_date DESC";
 
-// 查詢資料庫中的募資資料
-$sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
-                        ai.file_path FROM funding f 
-                        INNER JOIN advice a ON f.advice_id = a.advice_id 
-                        LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id 
-                        ORDER BY a.announce_date DESC";
+$stmt_projects = $pdo->query($sql_projects);
+$projects = $stmt_projects->fetchAll(PDO::FETCH_ASSOC); // 取得所有募資專案資料
 
-$stmt = $pdo->query($sql);
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC); // 這裡直接拿到所有資料列
+$cards = []; // 初始化卡片資料
 
-foreach ($result as $row) {
+foreach ($projects as $project) {
+    $advice = null;
+    $image_url = 'uploads/homepage.png'; // 預設圖片
 
-    $supporter = rand(50, 200);  // 假設支持者數量隨機範圍從 50 到 200
+    if (!empty($project['suggestion_assignments_id'])) {
+        $sql_advice = "SELECT a.advice_id, a.category, ai.file_path 
+                       FROM suggestion_assignments sa
+                       LEFT JOIN advice a ON sa.advice_id = a.advice_id
+                       LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id
+                       WHERE sa.suggestion_assignments_id = ?";
 
-    // 將需要的數據提取到卡片陣列
+        $stmt_advice = $pdo->prepare($sql_advice);
+        $stmt_advice->execute([$project['suggestion_assignments_id']]);
+        $advice = $stmt_advice->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($advice['file_path'])) {
+            $image_url = $advice['file_path'];
+        }
+    }
+
     $cards[] = [
-        'id' => $row['advice_id'],  // 使用advice_id作為識別ID
-        'title' => $row['advice_title'],  // 建議標題
-        'content' => $row['advice_content'],  // 建議內容
-        'category' => $row['category'],  // 類別
-        'agree' => $row['agree'],  // 同意數
-        'file_path' => $row['file_path'] ? $row['file_path'] : '',  // 檔案路徑，若無則為空字串
-        'supporter' => $supporter // 假設支持者數量
+        'id' => $project['project_id'],
+        'title' => $project['title'],
+        'description' => $project['description'],
+        'raised' => $project['funding_goal'],
+        'start_date' => $project['start_date'],
+        'end_date' => $project['end_date'],
+        'status' => $project['status'],
+        'supporter' => $project['supporter'],
+        'file_path' => $image_url,
+        'category' => !empty($advice['category']) ? $advice['category'] : '未分類'
     ];
 }
+
+
 
 
 
