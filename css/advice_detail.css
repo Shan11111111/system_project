@@ -232,7 +232,7 @@ body {
 }
 
 .container {
-  width: 75%;
+  width: 85%;
   margin-bottom: 30px;
   margin-top: 80px;
 }
@@ -243,6 +243,7 @@ body {
   font-weight: bold;
   color: var(--color-dark-brown);
 }
+
 
 .suggestion-status {
   display: inline-block;
@@ -268,6 +269,8 @@ body {
 .status-pending {
   background-color: #ff9800;
 }
+
+
 
 .progress-section {
   background: var(--color-soft-green);
@@ -313,6 +316,73 @@ body {
   color: #ceb600;
 }
 
+
+
+
+/*新版狀態條*/
+.progress-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-soft-green);
+  padding: 40px 20px;
+  border-radius: 12px;
+  font-family: "Segoe UI", sans-serif;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+  text-align: center;
+}
+
+.circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #bbb;
+  z-index: 1;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.date {
+  font-size: 13px;
+  color: #777;
+}
+
+.bar {
+  flex: 1;
+  height: 6px;
+  background-color: #bbb;
+  border-radius: 3px;
+  margin: 0 6px;
+}
+
+.step.completed .circle,
+.bar.completed {
+  background-color: #f6d94c;
+}
+
+.step.active .circle {
+  background-color: #f6d94c;
+  box-shadow: 0 0 0 4px rgba(246, 218, 76, 0.539);
+}
+
+/*內容*/
+
 .advice {
   border: 1px solid#99999982;
   border-radius: 8px;
@@ -327,6 +397,25 @@ body {
   color: #666;
 }
 
+.media-sidebar-wrapper {
+  display: flex;
+  gap: 2rem; /* 圖片與 sidebar 間距 */
+  align-items: flex-start;
+  flex-wrap: wrap; 
+  margin-bottom: 2rem;
+ 
+}
+
+.media-sidebar-wrapper .media {
+  flex: 2 2 55%;
+  max-width: 720px;
+}
+
+.media-sidebar-wrapper .sidebar {
+  flex: 1 1 25%;
+}
+
+
 .media {
   display: flex;
   padding-left: 1rem;
@@ -338,8 +427,8 @@ body {
 }
 
 .media img {
-  width: 600px;
-  height: 300px;
+  width: 700px;
+  height: 370px;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -350,6 +439,167 @@ body {
   color: #007bff;
   text-decoration: underline;
 }
+
+.sidebar {
+  min-width: 250px;
+  height: 370px;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-right: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.progress-info-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 17px;
+}
+
+.circular-progress {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(var(--color-dark-brown) var(--progress-percent), #eee 0);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circular-progress::before {
+  content: "";
+  position: absolute;
+  width: 87px;
+  height: 87px;
+  background-color: white;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.circular-progress .progress-text {
+  position: relative;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+.percent-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #333;
+  pointer-events: none; /* 防止文字阻擋點擊 */
+}
+
+
+
+.people {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.people p {
+  margin: 0.4rem 0;
+  text-align: left;
+}
+
+.deadline{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 17px;
+}
+
+.deadline p{
+  font-size: 20px;
+  color: #000;
+}
+
+
+
+.icon-circle {
+  background-color: var(--color-yellow); /* 自訂背景色 */
+  border-radius: 50%;
+  padding-left: 12.5px;   
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;       /* 控制圓的大小與內距 */
+  color:var(--color-dark-brown);              /* icon 顏色 */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px; 
+  margin-right: 7px;          /* icon 大小 */
+}
+
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.agree-btn,
+.share-btn,
+.collect-btn {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  
+}
+
+.agree-btn {
+  width: 85%;
+  background-color: #ffbb33;
+  color: #000;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.agree-btn:hover {
+  background-color: #f6a623;
+}
+
+.collect_share{
+  display: flex;
+  margin: auto;
+  gap: 5px;
+  width: 85%;
+}
+
+.share-btn,
+.collect-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  color: #f6a623;
+  border: 2px solid #f6a623;
+  
+}
+
+.share-btn:hover {
+  background-color: #fff9f0;
+}
+
 
 .content {
   padding: 1rem;

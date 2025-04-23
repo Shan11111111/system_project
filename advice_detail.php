@@ -54,33 +54,33 @@
                     <button class="dropbtn">建言</button>
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])) { ?>
-                                            <a href="submitadvice.php">提交建言</a>
+                            <a href="submitadvice.php">提交建言</a>
                         <?php } else { ?>
-                                            <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
-                                            <script>
-                                                function showLoginAlert() {
+                            <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                            <script>
+                                function showLoginAlert() {
 
-                                                    Swal.fire({
-                                                        icon: 'warning', // 圖示類型
-                                                        title: '請先登入',
-                                                        text: '發布建言為學生與教職人員專屬功能！',
-                                                        confirmButtonText: '確定',
-                                                        confirmButtonColor: '#3085d6',
-                                                        focusConfirm: false, // 禁用自動聚焦
-                                                        didOpen: () => {
-                                                            // 禁用滾動
-                                                            document.body.style.overflow = 'hidden';
+                                    Swal.fire({
+                                        icon: 'warning', // 圖示類型
+                                        title: '請先登入',
+                                        text: '發布建言為學生與教職人員專屬功能！',
+                                        confirmButtonText: '確定',
+                                        confirmButtonColor: '#3085d6',
+                                        focusConfirm: false, // 禁用自動聚焦
+                                        didOpen: () => {
+                                            // 禁用滾動
+                                            document.body.style.overflow = 'hidden';
 
-                                                        },
-                                                        didClose: () => {
-                                                            // 恢復滾動
-                                                            document.body.style.overflow = '';
-                                                            // 恢復滾動位置
+                                        },
+                                        didClose: () => {
+                                            // 恢復滾動
+                                            document.body.style.overflow = '';
+                                            // 恢復滾動位置
 
-                                                        }
-                                                    });
-                                                }
-                                            </script>
+                                        }
+                                    });
+                                }
+                            </script>
                         <?php } ?>
 
                         <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
@@ -98,22 +98,22 @@
 
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
-                                    <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
-                                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
-                                    <script>
-                                        document.getElementById('logout-link').addEventListener('click', function() {
-                                            // 彈出確認視窗
-                                            const confirmLogout = confirm("確定要登出嗎？");
-                                            if (confirmLogout) {
-                                                // 如果用戶選擇確定，導向登出頁面
-                                                window.location.href = "logout.php";
-                                            }
-                                            // 如果用戶選擇取消，什麼都不做
-                                        });
-                                    </script>
+                    <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <script>
+                        document.getElementById('logout-link').addEventListener('click', function () {
+                            // 彈出確認視窗
+                            const confirmLogout = confirm("確定要登出嗎？");
+                            if (confirmLogout) {
+                                // 如果用戶選擇確定，導向登出頁面
+                                window.location.href = "logout.php";
+                            }
+                            // 如果用戶選擇取消，什麼都不做
+                        });
+                    </script>
                 <?php } else { ?>
-                                    <a href="login.php" class="nav-item">登入</a>
-                                    <a href="register.php" class="nav-item">註冊</a>
+                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="register.php" class="nav-item">註冊</a>
                 <?php } ?>
             </div>
         </div>
@@ -124,31 +124,31 @@
                 <button class="dropbtn">建言</button>
                 <div class="dropdown-content">
                     <?php if (isset($_SESSION['user_id'])) { ?>
-                                        <a href="submitadvice.php">提交建言</a>
+                        <a href="submitadvice.php">提交建言</a>
                     <?php } else { ?>
-                                        <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
-                                        <script>
-                                            function showLoginAlert() {
-                                                Swal.fire({
-                                                    icon: 'warning', // 圖示類型
-                                                    title: '請先登入',
-                                                    text: '發布建言為學生與教職人員專屬功能！',
-                                                    confirmButtonText: '確定',
-                                                    confirmButtonColor: '#3085d6',
-                                                    focusConfirm: false, // 禁用自動聚焦
-                                                    didOpen: () => {
-                                                        // 禁用滾動
-                                                        document.body.style.overflow = 'hidden';
-                                                    },
-                                                    didClose: () => {
-                                                        // 恢復滾動
-                                                        document.body.style.overflow = '';
-                                                        // 恢復滾動位置
-                                                        window.scrollTo(0, scrollTop);
-                                                    }
-                                                });
-                                            }
-                                        </script>
+                        <a href="javascript:void(0);" onclick="showLoginAlert()">提交建言</a>
+                        <script>
+                            function showLoginAlert() {
+                                Swal.fire({
+                                    icon: 'warning', // 圖示類型
+                                    title: '請先登入',
+                                    text: '發布建言為學生與教職人員專屬功能！',
+                                    confirmButtonText: '確定',
+                                    confirmButtonColor: '#3085d6',
+                                    focusConfirm: false, // 禁用自動聚焦
+                                    didOpen: () => {
+                                        // 禁用滾動
+                                        document.body.style.overflow = 'hidden';
+                                    },
+                                    didClose: () => {
+                                        // 恢復滾動
+                                        document.body.style.overflow = '';
+                                        // 恢復滾動位置
+                                        window.scrollTo(0, scrollTop);
+                                    }
+                                });
+                            }
+                        </script>
                     <?php } ?>
 
                     <a href="advice_search.php">建言瀏覽</a>
@@ -166,22 +166,22 @@
 
 
             <?php if (isset($_SESSION['user_id'])) { ?>
-                                <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
-                                <a class="nav-item" id="logout-link-mobile">登出</a>
-                                <script>
-                                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
-                                        // 彈出確認視窗
-                                        const confirmLogout = confirm("確定要登出嗎？");
-                                        if (confirmLogout) {
-                                            // 如果用戶選擇確定，導向登出頁面
-                                            window.location.href = "logout.php";
-                                        }
-                                        // 如果用戶選擇取消，什麼都不做
-                                    });
-                                </script>
+                <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                <a class="nav-item" id="logout-link-mobile">登出</a>
+                <script>
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                        // 彈出確認視窗
+                        const confirmLogout = confirm("確定要登出嗎？");
+                        if (confirmLogout) {
+                            // 如果用戶選擇確定，導向登出頁面
+                            window.location.href = "logout.php";
+                        }
+                        // 如果用戶選擇取消，什麼都不做
+                    });
+                </script>
             <?php } else { ?>
-                                <a href="login.php" class="nav-item">登入</a>
-                                <a href="register.php" class="nav-item">註冊</a>
+                <a href="login.php" class="nav-item">登入</a>
+                <a href="register.php" class="nav-item">註冊</a>
             <?php } ?>
 
         </div>
@@ -238,65 +238,141 @@
         $remain = max(0, $target - $agree);
         $color = $percent >= 100 ? '#4caf50' : '#2196f3'; // 綠或藍
         ?>
-                        <div class="container">
-                            <main class="suggestion-detail">
-                                <!-- 標題 -->
-                                <h1 class="title" id="advice-title"><?php echo htmlspecialchars($row['advice_title']); ?></h1>
-                                <span id="suggestion-status" class="suggestion-status status-pending">
-                                    <?php echo htmlspecialchars($row['advice_state']); ?> <!-- 顯示建言狀態 -->
-                                </span>
+        <div class="container">
+            <main class="suggestion-detail">
+                <!-- 標題 -->
+                <h1 class="title" id="advice-title"><?php echo htmlspecialchars($row['advice_title']); ?></h1>
 
-                                <!-- 進度條區域 -->
-                                <section class="progress-section">
-                                    <div class="dates">
-                                        <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
-                                        <span id="deadline-date">
-                                            截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?>
-                                        </span>
-                                    </div>
-                                    <div class="progress-bar-container" style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; height: 20px; margin: 10px 0;">
-                                        <div class="progress-bar" style="width: 100%; height: 100%; position: relative;">
-                                            <div class="progress"
-                                                style="width: <?php echo $percent . '%'; ?>; background-color: <?php echo $color; ?>; height: 100%; transition: width 1s ease;">
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="progress-info" style="font-size: 14px; margin-top: 5px;">
-                                        目前 <?php echo $agree; ?> 人 / 還差 <?php echo $remain; ?> 人
-                                        <span class="percent" style="float: right; font-weight: bold;"><?php echo $percent; ?>%</span>
-                                    </div>
-                                </section>
-
-                                <div class="advice">
-                                    <!-- 發布人與分類 -->
-                                    <section class="meta">
-                                        <p id="advice-author">發布人：<?php echo htmlspecialchars($row['user_id']); ?></p>
-                                        <!-- 假設 user_id 是發布人 -->
-                                        <p id="advice-category">分類：<?php echo htmlspecialchars($categoryName); ?></p>
-                                    </section>
-
-                                    <!-- 圖片或 PDF -->
-                                    <section class="media">
-                                        <?php if (!empty($row['file_path'])) { ?>
-                                                            <img id="advice-image" src="<?php echo htmlspecialchars($row['file_path']); ?>" alt="建言圖片" />
-                                        <?php } else { ?>
-                                                            <img id="advice-image"
-                                                                src="./uploads/homepage.png"
-                                                                alt="預設建言圖片" />
-                                        <?php } ?>
-                                    </section>
+                <span id="suggestion-status" class="suggestion-status status-pending">
+                    <?php echo htmlspecialchars($row['advice_state']); ?> <!-- 顯示建言狀態 -->
+                </span>
 
 
-                                    <!-- 內文 -->
-                                    <section class="content">
-                                        <p id="advice-content"><?php echo nl2br(htmlspecialchars($row['advice_content'])); ?></p>
-                                    </section>
+                <!-- 進度條區域 -->
+                <section class="progress-section">
+                    <div class="dates">
+                        <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
+                        <span id="deadline-date">
+                            截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?>
+                        </span>
+                    </div>
+                    <div class="progress-bar-container"
+                        style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; height: 20px; margin: 10px 0;">
+                        <div class="progress-bar" style="width: 100%; height: 100%; position: relative;">
+                            <div class="progress"
+                                style="width: <?php echo $percent . '%'; ?>; background-color: <?php echo $color; ?>; height: 100%; transition: width 1s ease;">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="progress-info" style="font-size: 14px; margin-top: 5px;">
+                        目前 <?php echo $agree; ?> 人 / 還差 <?php echo $remain; ?> 人
+                        <span class="percent" style="float: right; font-weight: bold;"><?php echo $percent; ?>%</span>
+                    </div>
+                </section>
+
+                <div class="progress-tracker">
+                    <div class="step completed">
+                        <div class="circle"></div>
+                        <div class="label">提案</div>
+                        <div class="date"><?php echo htmlspecialchars($row['announce_date']); ?></div>
+                    </div>
+                    <div class="bar completed"></div>
+                    <div class="step active">
+                        <div class="circle"></div>
+                        <div class="label">附議中</div>
+                        <div class="date">2025-04-22</div>
+                    </div>
+                    <div class="bar"></div>
+                    <div class="step">
+                        <div class="circle"></div>
+                        <div class="label">附議達標<br>等待校方回應</div>
+                    </div>
+                    <div class="bar"></div>
+                    <div class="step">
+                        <div class="circle"></div>
+                        <div class="label">校方已回應</div>
+                    </div>
+                </div>
+
+
+                <div class="advice">
+                    <!-- 發布人與分類 -->
+                    <section class="meta">
+                        <p id="advice-author">發布人：<?php echo htmlspecialchars($row['user_id']); ?></p>
+                        <!-- 假設 user_id 是發布人 -->
+                        <p id="advice-category">分類：<?php echo htmlspecialchars($categoryName); ?></p>
+                    </section>
+
+                    <!-- 圖片或 PDF -->
+                    <div class="media-sidebar-wrapper">
+                        <section class="media">
+                            <?php if (!empty($row['file_path'])) { ?>
+                                <img id="advice-image" src="<?php echo htmlspecialchars($row['file_path']); ?>" alt="建言圖片" />
+                            <?php } else { ?>
+                                <img id="advice-image" src="./uploads/homepage.png" alt="預設建言圖片" />
+                            <?php } ?>
+                        </section>
+
+                        <div class="sidebar">
+                            <div class="progress-info-box">
+                                <div class="circular-progress" style="--progress-percent: <?php echo $percent; ?>%;
+                                 --progress-color: <?php echo $color; ?>;">
+                                    <div class="progress-text"><?php echo $percent; ?>%</div>
                                 </div>
-                            </main>
 
 
-                        <?php
+                                <div class="people">
+                                    <h5><strong>目前 <?php echo $agree; ?> 人 </strong></h5>
+                                    <p><strong> 還差 <?php echo $remain; ?> 人</strong></p>
+                                </div>
+                            </div>
+
+
+
+                            <div class="deadline">
+                                <!--<p><i class="fa-solid fa-user icon-circle"></i>已有 <strong>30</strong> 人參與募資</p>-->
+                                <p><i class="fa-solid fa-hourglass-half  icon-circle"></i></i> <strong>
+                                        截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?></strong>
+                                    天</p>
+
+                            </div>
+
+                            <div class="button-group">
+                                <button class="agree-btn" onclick="handleAgree()"><i
+                                        class="fa-solid fa-stamp"></i>附議</button>
+                                <div class="collect_share">
+                                    <button class="collect-btn">收藏<i class="fa-solid fa-heart"></i></button>
+                                    <button class="share-btn" onclick="copyLink()">分享 <i
+                                            class="fa-solid fa-share"></i></button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function copyLink() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url)
+                                .then(() => alert('連結已複製到剪貼簿！'))
+                                .catch(() => alert('複製失敗，請手動複製網址'));
+                        }
+                    </script>
+
+
+
+                    <!-- 內文 -->
+                    <section class="content">
+                        <p id="advice-content"><?php echo nl2br(htmlspecialchars($row['advice_content'])); ?></p>
+                    </section>
+                </div>
+            </main>
+
+
+            <?php
     } else {
         echo "沒有找到相關建言。";
     }
@@ -332,10 +408,12 @@
             </div>
 
             <form id="commentForm">
-                <input type="hidden" id="advice_id" name="advice_id" value="<?php echo htmlspecialchars($advice_id); ?>">
+                <input type="hidden" id="advice_id" name="advice_id"
+                    value="<?php echo htmlspecialchars($advice_id); ?>">
                 <div class="comment-input">
                     <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                    <textarea id="comment_text" name="comment_text" placeholder="我要留言...(最多150字)" maxlength="150" required></textarea>
+                    <textarea id="comment_text" name="comment_text" placeholder="我要留言...(最多150字)" maxlength="150"
+                        required></textarea>
                     <button id="submit-comment" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </form>
@@ -447,8 +525,8 @@
         </section>
 
         </main>
-        </div>
-        </div>
+    </div>
+    </div>
 </body>
 
 
@@ -518,7 +596,7 @@
 <footer class="footer"> footer</footer>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // 從 URL 的上頁連結中獲取 status
         const statusFromPreviousPage = new URLSearchParams(window.location.search).get('id');
         const status = <?php echo json_encode($status); ?>;
