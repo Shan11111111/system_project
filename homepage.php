@@ -278,6 +278,7 @@
                                     $agree = $row['agree'];
                                     $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
                                     $progress = $row['agree'] / 3 * 100; // 假設進度是根據同意數量計算的百分比
+                                    $progress = round($progress, 2); // 四捨五入到整數位
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
                                     }
@@ -387,6 +388,7 @@
                                     $category = $row['category'];
                                     $agree = $row['agree'];
                                     $progress = $row['agree'] / 3 * 100; // 假設進度是根據同意數量計算的百分比
+                                    $progress=round($progress,2); // 四捨五入到整數位
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
                                     }
@@ -556,6 +558,7 @@
                                                         if ($progressPercentage > 100) {
                                                             $progressPercentage = 100; // 確保進度不超過 100%
                                                         }
+                                                        $progressPercentage = round($progressPercentage,2); // 四捨五入到整數位
                                                     } else {
                                                         $progressPercentage = 0; // 如果目標金額為 0，進度設為 0%
                                                     }
@@ -602,6 +605,7 @@
                                                 if ($progressPercentage > 100) {
                                                     $progressPercentage = 100; // 確保進度不超過 100%
                                                 }
+                                                $progressPercentage = round($progressPercentage,2); // 四捨五入到整數位
                                             } else {
                                                 $progressPercentage = 0; // 如果目標金額為 0，進度設為 0%
                                             }
@@ -611,7 +615,7 @@
                                                         </div>
                                                         <div class="card-meta">
                                                             <div>
-                                                                <span>NT$ <?php echo htmlspecialchars($smallCard['total_funding']); ?> / 目標 NT$ <?php echo htmlspecialchars($smallCard['funding_goal']); ?></span>
+                                                                <span>NT$ <?php echo htmlspecialchars($smallCard['total_funding']); ?> / 目標 NT$ <?php echo htmlspecialchars($smallCard['funding_goal']); ?>/<?php echo"$progressPercentage%" ?></span>
                                                             </div>
                                                             <div>
                                                                 <span><?php echo htmlspecialchars($smallCard['donor_count']); ?> <i class="fa-regular fa-user"></i></span>

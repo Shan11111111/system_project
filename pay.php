@@ -215,7 +215,7 @@
             <input type="text" name="people_name" placeholder="輸入您的姓名">
 
             <label class="section-label">Email（選填，我們將通知您募資專案的後續進度）</label>
-            <input type="email" placeholder="your@email.com">
+            <input type="email" name="email"  placeholder="your@email.com">
 
             <!-- 隱藏欄位：指定募資專案 ID，可視情況修改 -->
             <input type="hidden" name="funding_id" value="1">
