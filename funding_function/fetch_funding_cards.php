@@ -21,12 +21,10 @@ $sql_projects = "SELECT
     p.start_date, 
     p.end_date, 
     p.status,
-    p.suggestion_assignments_id,
-    COUNT(fp.funding_people_id) AS supporter
+    p.suggestion_assignments_id
 FROM fundraising_projects p
-LEFT JOIN funding_people fp ON p.project_id = fp.funding_id
-GROUP BY p.project_id
 ORDER BY p.start_date DESC";
+
 
 $stmt_projects = $pdo->query($sql_projects);
 $projects = $stmt_projects->fetchAll(PDO::FETCH_ASSOC); // 取得所有募資專案資料
@@ -52,24 +50,34 @@ foreach ($projects as $project) {
             $image_url = $advice['file_path'];
         }
     }
+    // ✅ 查詢實際募得金額
+    $stmt = $pdo->prepare("SELECT SUM(donation_amount) FROM donation_record WHERE project_id = ?");
+    $stmt->execute([$project['project_id']]);
+    $raised_amount = $stmt->fetchColumn() ?: 0;
+
+    // ✅ 計算百分比（允許超過 100）
+    $goal = $project['funding_goal'];
+    $progress = $goal > 0 ? round($raised_amount / $goal * 100) : 0;
+    //支持人數
+    $stmt = $pdo->prepare("SELECT COUNT(DISTINCT donor) FROM donation_record WHERE project_id = ?");
+    $stmt->execute([$project['project_id']]);
+    $supporter = $stmt->fetchColumn() ?: 0;
 
     $cards[] = [
         'id' => $project['project_id'],
         'title' => $project['title'],
         'description' => $project['description'],
         'raised' => $project['funding_goal'],
-        'start_date' => $project['start_date'],
-        'end_date' => $project['end_date'],
+        'start_date' => date('Y-m-d', strtotime($project['start_date'])),
+        'end_date'   => date('Y-m-d', strtotime($project['end_date'])),
         'status' => $project['status'],
-        'supporter' => $project['supporter'],
+        'supporter' =>  $supporter,
         'file_path' => $image_url,
-        'category' => !empty($advice['category']) ? $advice['category'] : '未分類'
+        'category' => !empty($advice['category']) ? $advice['category'] : '未分類',
+        'progress' => $progress // ✅ 加入 progress
+
     ];
 }
-
-
-
-
 
 // 篩選
 if ($category !== 'all') {
@@ -82,8 +90,8 @@ if ($keyword !== '') {
 // 排序
 usort($cards, function ($a, $b) use ($sort) {
     if ($sort === 'hot') return $b['supporter'] - $a['supporter'];
-    if ($sort === 'deadline') return strtotime($a['deadline']) - strtotime($b['deadline']);
-    return strtotime($b['date']) - strtotime($a['date']);
+    if ($sort === 'deadline') return strtotime($a['end_date']) - strtotime($b['end_date']);
+    return strtotime($b['start_date']) - strtotime($a['start_date']); // 預設為最新
 });
 
 // 分頁
@@ -95,3 +103,36 @@ echo json_encode([
     'page' => $page,
     'totalPages' => ceil($totalFiltered / $perPage)
 ]);
+
+
+
+
+
+
+
+
+/* 篩選
+if ($category !== 'all') {
+    $cards = array_filter($cards, fn($c) => $c['category'] === $category);
+}
+if ($keyword !== '') {
+    $cards = array_filter($cards, fn($c) => stripos($c['title'], $keyword) !== false);
+}
+
+// 排序
+usort($cards, function ($a, $b) use ($sort) {
+    if ($sort === 'hot') return (int)$b['supporter'] - (int)$a['supporter'];
+    if ($sort === 'deadline') return strtotime($a['end_date']) - strtotime($b['end_date']);
+    return strtotime($b['start_date']) - strtotime($a['start_date']); // 最新排序
+});
+
+// 分頁
+$totalFiltered = count($cards);
+$pagedData = array_slice(array_values($cards), $start, $perPage);
+
+echo json_encode([
+    'data' => $pagedData,
+    'page' => $page,
+    'totalPages' => ceil($totalFiltered / $perPage)
+]);
+*/
