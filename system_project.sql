@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-22 15:51:24
+-- 產生時間： 2025-04-24 16:40:30
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -64,7 +64,18 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 1, 'welfare', '未處理', '2025-04-22'),
 (47, 412402141, '55', 'gOEJOJejoto', 0, 'welfare', '未處理', '2025-04-22'),
 (48, 412402141, 'jgozjojojoj', 'gjogjjgjgjojg', 0, 'academic', '未處理', '2025-04-22'),
-(49, 412402141, 'jwojajgjagjojg', 'gojaogjjagjjagjgjoojgj', 1, 'environment', '未處理', '2025-04-22');
+(49, 412402141, 'jwojajgjagjojg', 'gojaogjjagjjagjgjoojgj', 1, 'environment', '未處理', '2025-04-22'),
+(50, 412401011, '廁所施工聲音好吵', '請學校督促工人在課堂期間做好隔音', 3, 'equipment', '已分派', '2025-04-24'),
+(51, 412401011, '輔仁醫院附近有變態', '我們發現輔仁醫院這裡有一位怪怪的老伯伯，他常來醫院附近和學生搭訕，我們覺得學校應該加強校安，希望可以加強校安人手。', 3, 'other', '已分派', '2025-04-24'),
+(52, 412401011, '專題經費不足', '我們希望學校可以多給研究經費，尤其是我們要往更人工智慧發展，需要額外的金錢，我希望學校可以多給學生研究費用!尤其，教育部有給津貼，我覺得學校可以做更多的事情幫助學生更好!', 2, 'academic', '未處理', '2025-04-24'),
+(53, 412401011, '捐血救人', '我們希望學校的捐血救人活動可以提供捐血一袋送禮物的活動', 3, 'welfare', '已分派', '2025-04-24'),
+(54, 412401011, '請學校多宣傳捐血活動', '我們真的很需要有更多人捐血幫助血友症患者，我們希望學校能擴大宣傳或是幫助我們的活動實質的幫助!', 3, 'welfare', '未處理', '2025-04-24'),
+(55, 412401011, '輔大應該積極推廣研究發展', '我認為學校應該提供更多經費幫助在研究計畫，例如織品系的紡織車不夠多，需要預約登記，時間不夠，無法在時間內完成。', 2, 'academic', '未處理', '2025-04-24'),
+(56, 412401011, '輔大傳院跨國交流超炫!黃盟欽獲邀巴義兩國', '號外！號外！傳播學院獲獎喜訊不斷。創院以來第一人，影傳系藝術家黃盟欽老師遊走世界最前端，今年以新媒體科技結合影像創作，獲邀參加2024年10月15日在西班牙畢爾包舉辦的「BIDEODROMO國際實驗電影與錄影藝術節」，全台只有12位藝術家或團體參展。盟欽老師說：「能與來自世界各地的藝術家和觀眾交流，倍感榮幸與期待」。他不斷展現跨國藝術的交流能量，11月11日也獲邀到羅馬教廷參加我國駐教廷大使館主辦，由Sita Spada策展的「性靈相連」(Interconnected hearts) 數位藝術展，全台灣只有三人受邀。他以人工智慧對身體、科技和虛擬世界的影響，將數位人文與當代藝術融合，展現出科技與藝術的共融之美。簡直是超酷超炫的，輔大看似保守穩當，老師的靈魂一點都不保守。希望學校投入更多經費在傳播學院!', 3, 'academic', '已分派', '2025-04-24'),
+(57, 412401011, '互動展覽經費補助', '我們希望學校能夠提供我們經費補助舉辦互動展覽，我們已經研發出來了互動展覽的展品，但因為手上的錢不夠租美術館，希望學校可以幫助我們!', 3, 'academic', '未處理', '2025-04-24'),
+(58, 412401011, '舉辦下一次的社團展覽', '去年我們舉辦的社團展覽有很好的回響，今年需要一筆資金來籌辦社團展覽', 3, 'club', '已分派', '2025-04-24'),
+(59, 412401011, '動漫電玩研習社的同學帶來活力四射的舞蹈', '動漫電玩研習社的同學帶來活力四射的舞蹈，請幫他們應援! 我們還需要100份應援球', 1, 'club', '未處理', '2025-04-24'),
+(60, 412401011, '課外活動指導組的社團博覽會籌備團隊及燈光', '課外活動指導組的社團博覽會籌備團隊及燈光音響組工作人員，我們需要燈光設備兩台和麥可風五個', 1, 'club', '未處理', '2025-04-24');
 
 -- --------------------------------------------------------
 
@@ -98,7 +109,18 @@ INSERT INTO `advice_image` (`img_id`, `file_name`, `file_path`, `advice_id`) VAL
 (17, '02.png', 'uploads/68036ef7ea0d94.98225831.png', 44),
 (18, 'chicken_logo.png', 'uploads/68072a883e59b1.04497247.png', 45),
 (19, 'chicken_logo.png', 'uploads/6807313b56a347.31007348.png', 46),
-(20, 'chicken.png', 'uploads/68073acc8817c7.27225854.png', 49);
+(20, 'chicken.png', 'uploads/68073acc8817c7.27225854.png', 49),
+(21, '廁所.jpg', 'uploads/680a22a4120636.68855462.jpg', 50),
+(22, '醫院.jpg', 'uploads/680a23d1f33015.59732567.jpg', 51),
+(23, '學費.jpg', 'uploads/680a25293affa3.08263882.jpg', 52),
+(24, '捐血.jpg', 'uploads/680a25cea7efc0.15229133.jpg', 53),
+(25, '捐血救人.jpg', 'uploads/680a279d894cb5.40717671.jpg', 54),
+(26, '研究發展.jpg', 'uploads/680a288819fa74.13965203.jpg', 55),
+(27, '藝術展.jpg', 'uploads/680a297b717cc7.39125445.jpg', 56),
+(28, '互動作品.jpg', 'uploads/680a2a02578ef4.49020897.jpg', 57),
+(29, '社團活動.jpg', 'uploads/680a2a9f8a31d6.59051855.jpg', 58),
+(30, '動漫社同學.jpg', 'uploads/680a2af8e01c45.29464488.jpg', 59),
+(31, '1130923_021.jpg', 'uploads/680a2b4257d719.83630333.jpg', 60);
 
 -- --------------------------------------------------------
 
@@ -112,6 +134,18 @@ CREATE TABLE `advice_state` (
   `advice_id` int(11) NOT NULL,
   `state_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- 傾印資料表的資料 `advice_state`
+--
+
+INSERT INTO `advice_state` (`advice_state_id`, `content`, `advice_id`, `state_time`) VALUES
+(1, '附議達標', 53, '2025-04-24 20:52:16'),
+(2, '附議達標', 56, '2025-04-24 21:36:34'),
+(3, '附議達標', 51, '2025-04-24 21:36:42'),
+(4, '附議達標', 57, '2025-04-24 21:36:51'),
+(5, '附議達標', 54, '2025-04-24 22:19:42'),
+(6, '附議達標', 58, '2025-04-24 22:20:34');
 
 -- --------------------------------------------------------
 
@@ -153,20 +187,34 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (39, 345678, 41),
 (40, 345678, 42),
 (41, 345678, 43),
-(42, 345678, 44);
-
--- --------------------------------------------------------
-
---
--- 資料表結構 `assign`
---
-
-CREATE TABLE `assign` (
-  `assign_id` int(11) NOT NULL,
-  `advice_id` int(11) DEFAULT NULL,
-  `assign_office` varchar(255) DEFAULT NULL,
-  `assignment_time` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(42, 345678, 44),
+(43, 412401011, 50),
+(44, 412401011, 56),
+(45, 412401011, 55),
+(46, 412401011, 60),
+(47, 412401011, 53),
+(48, 412401011, 54),
+(49, 412401011, 58),
+(50, 412401011, 51),
+(51, 412401011, 57),
+(52, 412401011, 59),
+(53, 411100011, 53),
+(54, 411100011, 52),
+(55, 411100011, 58),
+(56, 411100011, 57),
+(57, 411100011, 51),
+(58, 411100011, 56),
+(59, 411100011, 50),
+(60, 410101001, 50),
+(61, 410101001, 53),
+(62, 409100001, 54),
+(63, 409100001, 55),
+(64, 409100001, 56),
+(65, 409100001, 51),
+(66, 409100001, 57),
+(67, 413010021, 52),
+(68, 413010021, 54),
+(69, 413010021, 58);
 
 -- --------------------------------------------------------
 
@@ -212,6 +260,20 @@ INSERT INTO `comments` (`comment_id`, `advice_id`, `user_id`, `comment_content`,
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `donation_record`
+--
+
+CREATE TABLE `donation_record` (
+  `donation_id` int(11) NOT NULL,
+  `donor` varchar(255) DEFAULT NULL,
+  `project_id` int(11) NOT NULL,
+  `donation_amount` decimal(10,2) DEFAULT NULL,
+  `donation_time` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `files`
 --
 
@@ -228,7 +290,9 @@ CREATE TABLE `files` (
 
 INSERT INTO `files` (`file_id`, `file_name`, `file_path`, `advice_id`) VALUES
 (1, '公設檢查表.pdf', 'file_upload/680350d573a4d1.89863904.pdf', 34),
-(2, '選課類別變動申請書.pdf', 'file_upload/68072a883f9a56.08837058.pdf', 45);
+(2, '選課類別變動申請書.pdf', 'file_upload/68072a883f9a56.08837058.pdf', 45),
+(3, '選課類別變動申請書.pdf', 'file_upload/680a28881bb8b9.22274312.pdf', 55),
+(4, '選課類別變動申請書.pdf', 'file_upload/680a297b72d683.04934517.pdf', 56);
 
 -- --------------------------------------------------------
 
@@ -270,21 +334,6 @@ CREATE TABLE `funding_comments` (
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `funding_people`
---
-
-CREATE TABLE `funding_people` (
-  `funding_people_id` int(11) NOT NULL,
-  `people_name` varchar(20) NOT NULL,
-  `donate_money` int(11) NOT NULL,
-  `gmail` text DEFAULT NULL,
-  `funding_id` int(11) NOT NULL,
-  `check_login` int(1) NOT NULL DEFAULT 0 COMMENT '確定是否為訪客:0為訪客、1為已登入'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- 資料表結構 `funding_state`
 --
 
@@ -317,7 +366,38 @@ CREATE TABLE `fundraising_projects` (
 --
 
 INSERT INTO `fundraising_projects` (`project_id`, `suggestion_assignments_id`, `title`, `description`, `funding_goal`, `start_date`, `end_date`, `status`) VALUES
-(1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', NULL, '進行中');
+(1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', NULL, '進行中'),
+(2, 6, '廁所施工聲音好吵', '我們會盡力監督', 0, '2025-04-24 21:29:40', NULL, '進行中'),
+(3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', NULL, '進行中'),
+(4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', NULL, '進行中'),
+(5, 8, '捐血救人', '用於招募志工與工讀金的費用', 35000, '2025-04-24 22:17:25', NULL, '進行中'),
+(6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', NULL, '進行中');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `replies`
+--
+
+CREATE TABLE `replies` (
+  `reply_id` int(11) NOT NULL,
+  `suggestion_assignments_id` int(11) NOT NULL,
+  `office_id` int(11) NOT NULL,
+  `reply_text` text NOT NULL,
+  `replied_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `replies`
+--
+
+INSERT INTO `replies` (`reply_id`, `suggestion_assignments_id`, `office_id`, `reply_text`, `replied_at`) VALUES
+(1, 3, 904, '了解同學，我們已經開始準備募資計畫了', '2025-04-24 21:03:09'),
+(2, 3, 904, '同學，我們已經發布募資了，如果有募資到目標量，我們會盡力執行，謝謝同學', '2025-04-24 21:08:37'),
+(3, 6, 904, '同學，我們可能控制不了聲音的問題', '2025-04-24 21:09:50'),
+(4, 5, 345678, '我們已提交提案了!', '2025-04-24 21:43:30'),
+(5, 7, 345678, '同學你好，我們會加強那邊的安全', '2025-04-24 22:13:59'),
+(6, 8, 345678, '同學您好，我們會幫助你們', '2025-04-24 22:18:01');
 
 -- --------------------------------------------------------
 
@@ -346,9 +426,14 @@ CREATE TABLE `suggestion_assignments` (
 --
 
 INSERT INTO `suggestion_assignments` (`suggestion_assignments_id`, `advice_id`, `office_id`, `proposal_text`, `funding_amount`, `proposal_file_path`, `submitted`, `approved_by_admin`, `admin_feedback`, `status`, `submitted_at`, `reviewed_at`, `notification`) VALUES
-(3, 41, 904, '購買校園消臭劑置放在校園內', 9000, '../uploads/chicken.png', 1, 1, '可以，希望有效', '已通過', '2025-04-22 21:37:32', '2025-04-22 21:40:49', 1),
-(4, 44, 123, '文化季經費:食材費', 12000, '../uploads/附件一113學年度(學士班)輔系開班一覽表 (1).pdf', 1, NULL, NULL, '審核中', '2025-04-22 21:46:56', NULL, 0),
-(5, 42, 345678, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0);
+(3, 41, 904, '購買校園消臭劑置放在校園內', 9000, '../uploads/chicken.png', 1, 1, '可以，希望有效', '已通過', '2025-04-22 21:37:32', '2025-04-22 21:40:49', 0),
+(4, 44, 123, '文化季經費:食材費', 12000, '../uploads/附件一113學年度(學士班)輔系開班一覽表 (1).pdf', 1, 0, '你們要買甚麼?請寫好', '被退回', '2025-04-22 21:46:56', '2025-04-24 21:18:08', 1),
+(5, 42, 345678, '幫助學生在社團活動發光發熱', 8000, '../uploads/動漫社同學.jpg', 1, 1, '不錯喔，祝順利', '已通過', '2025-04-24 21:43:02', '2025-04-24 21:43:54', 0),
+(6, 50, 904, '我們會盡力監督', 0, '../uploads/廁所.jpg', 1, 1, '加油!', '已通過', '2025-04-24 21:10:31', '2025-04-24 21:29:40', 1),
+(7, 51, 345678, '防狼噴霧普發1000瓶', 20000, '../uploads/醫院.jpg', 1, 1, '好的，祝順利', '已通過', '2025-04-24 22:15:17', '2025-04-24 22:15:43', 0),
+(8, 53, 345678, '用於招募志工與工讀金的費用', 35000, '../uploads/捐血.jpg', 1, 1, '不錯喔', '已通過', '2025-04-24 22:17:05', '2025-04-24 22:17:25', 0),
+(9, 56, 905, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
+(10, 58, 345678, '幫助社團募資', 25000, '../uploads/社團活動.jpg', 1, 1, '加油', '已通過', '2025-04-24 22:21:57', '2025-04-24 22:22:11', 1);
 
 -- --------------------------------------------------------
 
@@ -382,10 +467,15 @@ INSERT INTO `users` (`user_id`, `password`, `name`, `level`, `email`, `departmen
 (332478, '332478', '安教授', 'teacher', '332478@m365.fju.edu.tw', '資訊管理學系'),
 (333333, '333333', '王傑明', 'teacher', 'abcd@gmail.com', '外國語文學院'),
 (345678, '345678', '歐陽修', 'office', '123@gmail.com', '學務處'),
+(409100001, '409100001', '王靜', 'student', '409100001@gmail.com', '外國語文學院'),
+(410101001, '410101001', '王安', 'student', 'abc@gmail.com', '傳播學院'),
+(411100011, '411100011', '王傑明', 'student', 'abc@gmail.com', '文學院'),
 (412380012, '444aa', '吉伊卡娃', 'student', 'a@gmail.com', '藝術學院'),
+(412401011, '412401011', '王同學', 'student', 'abc@gmail.com', '藝術學院'),
 (412402001, '412402001', '王小明', 'student', 'example@gmail.com', '資訊管理學系'),
 (412402002, 'sss', '吉伊卡娃二號', 'student', 'abc@gmail.com', '文學院'),
-(412402141, 'sss', ':0', 'student', 'abcd@gmail.com', '管理學院');
+(412402141, 'sss', ':0', 'student', 'abcd@gmail.com', '管理學院'),
+(413010021, '413010021', '王靜', 'student', '1@gmail.com', '醫學院');
 
 --
 -- 已傾印資料表的索引
@@ -420,19 +510,19 @@ ALTER TABLE `agree_record`
   ADD KEY `advice_id` (`advice_id`);
 
 --
--- 資料表索引 `assign`
---
-ALTER TABLE `assign`
-  ADD PRIMARY KEY (`assign_id`),
-  ADD KEY `advice_id` (`advice_id`);
-
---
 -- 資料表索引 `comments`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`comment_id`),
   ADD KEY `advice_id` (`advice_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- 資料表索引 `donation_record`
+--
+ALTER TABLE `donation_record`
+  ADD PRIMARY KEY (`donation_id`),
+  ADD KEY `project_id` (`project_id`);
 
 --
 -- 資料表索引 `files`
@@ -457,13 +547,6 @@ ALTER TABLE `funding_comments`
   ADD KEY `user_id` (`user_id`);
 
 --
--- 資料表索引 `funding_people`
---
-ALTER TABLE `funding_people`
-  ADD PRIMARY KEY (`funding_people_id`),
-  ADD KEY `funding_id` (`funding_id`);
-
---
 -- 資料表索引 `funding_state`
 --
 ALTER TABLE `funding_state`
@@ -475,6 +558,14 @@ ALTER TABLE `funding_state`
 ALTER TABLE `fundraising_projects`
   ADD PRIMARY KEY (`project_id`),
   ADD KEY `suggestion_assignments_id` (`suggestion_assignments_id`);
+
+--
+-- 資料表索引 `replies`
+--
+ALTER TABLE `replies`
+  ADD PRIMARY KEY (`reply_id`),
+  ADD KEY `suggestion_assignments_id` (`suggestion_assignments_id`),
+  ADD KEY `office_id` (`office_id`);
 
 --
 -- 資料表索引 `suggestion_assignments`
@@ -498,31 +589,25 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice`
 --
 ALTER TABLE `advice`
-  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
 --
 ALTER TABLE `advice_image`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_state`
 --
 ALTER TABLE `advice_state`
-  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
-
---
--- 使用資料表自動遞增(AUTO_INCREMENT) `assign`
---
-ALTER TABLE `assign`
-  MODIFY `assign_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
@@ -531,10 +616,16 @@ ALTER TABLE `comments`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `donation_record`
+--
+ALTER TABLE `donation_record`
+  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
 --
 ALTER TABLE `files`
-  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding`
@@ -549,12 +640,6 @@ ALTER TABLE `funding_comments`
   MODIFY `funding_comments_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- 使用資料表自動遞增(AUTO_INCREMENT) `funding_people`
---
-ALTER TABLE `funding_people`
-  MODIFY `funding_people_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_state`
 --
 ALTER TABLE `funding_state`
@@ -564,19 +649,25 @@ ALTER TABLE `funding_state`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_projects`
 --
 ALTER TABLE `fundraising_projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `replies`
+--
+ALTER TABLE `replies`
+  MODIFY `reply_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `suggestion_assignments`
 --
 ALTER TABLE `suggestion_assignments`
-  MODIFY `suggestion_assignments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `suggestion_assignments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=412402142;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=413010022;
 
 --
 -- 已傾印資料表的限制式
@@ -603,17 +694,17 @@ ALTER TABLE `agree_record`
   ADD CONSTRAINT `agree_record_ibfk_2` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE;
 
 --
--- 資料表的限制式 `assign`
---
-ALTER TABLE `assign`
-  ADD CONSTRAINT `assign_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`);
-
---
 -- 資料表的限制式 `comments`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- 資料表的限制式 `donation_record`
+--
+ALTER TABLE `donation_record`
+  ADD CONSTRAINT `donation_record_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `fundraising_projects` (`project_id`) ON DELETE CASCADE;
 
 --
 -- 資料表的限制式 `files`
@@ -635,16 +726,17 @@ ALTER TABLE `funding_comments`
   ADD CONSTRAINT `funding_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
--- 資料表的限制式 `funding_people`
---
-ALTER TABLE `funding_people`
-  ADD CONSTRAINT `funding_people_ibfk_1` FOREIGN KEY (`funding_id`) REFERENCES `funding` (`funding_id`) ON DELETE CASCADE;
-
---
 -- 資料表的限制式 `fundraising_projects`
 --
 ALTER TABLE `fundraising_projects`
   ADD CONSTRAINT `fundraising_projects_ibfk_1` FOREIGN KEY (`suggestion_assignments_id`) REFERENCES `suggestion_assignments` (`suggestion_assignments_id`);
+
+--
+-- 資料表的限制式 `replies`
+--
+ALTER TABLE `replies`
+  ADD CONSTRAINT `replies_ibfk_1` FOREIGN KEY (`suggestion_assignments_id`) REFERENCES `suggestion_assignments` (`suggestion_assignments_id`),
+  ADD CONSTRAINT `replies_ibfk_2` FOREIGN KEY (`office_id`) REFERENCES `users` (`user_id`);
 
 --
 -- 資料表的限制式 `suggestion_assignments`
