@@ -64,7 +64,7 @@
                                         confirmButtonColor: '#3085d6',
                                         focusConfirm: false, // 禁用自動聚焦
                                         didOpen: () => {
-                                            // 禁用滾動
+                                            // 禁用滾动
                                             document.body.style.overflow = 'hidden';
 
                                         },
@@ -96,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -132,7 +132,7 @@
                                     confirmButtonColor: '#3085d6',
                                     focusConfirm: false, // 禁用自動聚焦
                                     didOpen: () => {
-                                        // 禁用滾動
+                                        // 禁用滾动
                                         document.body.style.overflow = 'hidden';
                                     },
                                     didClose: () => {
@@ -163,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -283,6 +283,33 @@
     }
     ?>
 
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment_text'])) {
+        $comment_text = trim($_POST['comment_text']);
+        $user_id = $_SESSION['user_id'] ?? 0; // 如果未登入，設為 0 或其他預設值
+        $project_id = intval($_GET['project_id'] ?? 0);
+
+        if (!empty($comment_text) && $project_id > 0 && $user_id > 0) {
+            $stmt = $link->prepare("INSERT INTO funding_comments (project_id, user_id, comment_text, created_at) VALUES (?, ?, ?, NOW())");
+            
+            // 檢查 prepare 是否成功
+            if ($stmt === false) {
+                die("SQL 語句準備失敗: " . $link->error);
+            }
+
+            $stmt->bind_param("iis", $project_id, $user_id, $comment_text);
+
+            if ($stmt->execute()) {
+                echo "<script>alert('留言成功！');</script>";
+            } else {
+                echo "<script>alert('留言失敗，請稍後再試！');</script>";
+            }
+            $stmt->close();
+        } else {
+            echo "<script>alert('留言內容不可為空，或未登入！');</script>";
+        }
+    }
+    ?>
 
     <div class="main-container">
         <div class="left">
@@ -384,34 +411,42 @@
                     <div class="comment-header">
                         <h4>留言區</h4>
                     </div>
+                    <form method="POST" action="">
+                        <div class="comment-input">
 
-                    <div class="comment-input">
-                        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                        <textarea id="comment-text" maxlength="150" placeholder="我要留言..."></textarea>
-                        <button id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
+                            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                            <textarea id="comment-text" name="comment_text" maxlength="150"
+                                placeholder="我要留言..."></textarea>
+                            <button type="submit" id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
 
+                        </div>
+                    </form>
                     <ul class="comment-list">
-                        <li class="comment-item">
-                            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                            <div class="comment-body">
-                                <div class="comment-meta">
-                                    <span class="user-name">學生</span>
-                                    <span class="comment-time">2025/04/18 14:32</span>
-                                </div>
-                                <div class="comment-content">金主爸爸快來</div>
-                            </div>
-                        </li>
-                        <li class="comment-item">
-                            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                            <div class="comment-body">
-                                <div class="comment-meta">
-                                    <span class="user-name">老師</span>
-                                    <span class="comment-time">2025/04/18 13:05</span>
-                                </div>
-                                <div class="comment-content">讚欸</div>
-                            </div>
-                        </li>
+                        <?php
+                        $comment_query = "SELECT u.user_id, fc.comment_text, fc.created_at 
+                      FROM funding_comments fc
+                      JOIN users u ON fc.user_id = u.user_id
+                      WHERE fc.project_id = $project_id 
+                      ORDER BY fc.created_at DESC";
+                        $comment_result = mysqli_query($link, $comment_query);
+
+                        if ($comment_result && mysqli_num_rows($comment_result) > 0) {
+                            while ($comment = mysqli_fetch_assoc($comment_result)) {
+                                echo '<li class="comment-item">';
+                                echo '<div class="user-avatar"><i class="fa-solid fa-user"></i></div>';
+                                echo '<div class="comment-body">';
+                                echo '<div class="comment-meta">';
+                                echo '<span class="user-name">' . htmlspecialchars($comment['user_id']) . '</span>';
+                                echo '<span class="comment-time">' . htmlspecialchars($comment['created_at']) . '</span>';
+                                echo '</div>';
+                                echo '<div class="comment-content">' . htmlspecialchars($comment['comment_text']) . '</div>';
+                                echo '</div>';
+                                echo '</li>';
+                            }
+                        } else {
+                            echo '<li class="comment-item">目前尚無留言。</li>';
+                        }
+                        ?>
                     </ul>
                 </section>
 
@@ -420,7 +455,8 @@
 
         <div class="sidebar">
             <div class="progress-info-box">
-                <div class="circular-progress" style="--progress-percent: <?php echo $progress_percent; ?>%; --progress-color: #f9a825;">
+                <div class="circular-progress"
+                    style="--progress-percent: <?php echo $progress_percent; ?>%; --progress-color: #f9a825;">
                     <div class="progress-text"><?php echo round($progress_percent); ?>%</div>
                 </div>
 
@@ -431,8 +467,10 @@
             </div>
 
             <div class="text-info">
-                <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong> 人參與募資</p>
-                <p><i class="fa-solid fa-hourglass-half icon-circle"></i>剩餘 <strong><?php echo $days_remaining; ?></strong> 天</p>
+                <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong>
+                    人參與募資</p>
+                <p><i class="fa-solid fa-hourglass-half icon-circle"></i>剩餘
+                    <strong><?php echo $days_remaining; ?></strong> 天</p>
             </div>
 
             <div class="button-group">
