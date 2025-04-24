@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-24 16:40:30
+-- 產生時間： 2025-04-24 18:55:18
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -145,7 +145,9 @@ INSERT INTO `advice_state` (`advice_state_id`, `content`, `advice_id`, `state_ti
 (3, '附議達標', 51, '2025-04-24 21:36:42'),
 (4, '附議達標', 57, '2025-04-24 21:36:51'),
 (5, '附議達標', 54, '2025-04-24 22:19:42'),
-(6, '附議達標', 58, '2025-04-24 22:20:34');
+(6, '附議達標', 58, '2025-04-24 22:20:34'),
+(7, '校方已回應', 51, '2025-04-25 00:39:43'),
+(8, '校方已回應', 42, '2025-04-25 00:42:28');
 
 -- --------------------------------------------------------
 
@@ -268,8 +270,16 @@ CREATE TABLE `donation_record` (
   `donor` varchar(255) DEFAULT NULL,
   `project_id` int(11) NOT NULL,
   `donation_amount` decimal(10,2) DEFAULT NULL,
-  `donation_time` datetime DEFAULT current_timestamp()
+  `donation_time` datetime DEFAULT current_timestamp(),
+  `email` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `donation_record`
+--
+
+INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_amount`, `donation_time`, `email`) VALUES
+(1, '王大明', 1, 1000.00, '2025-04-24 23:06:17', '409100001@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -325,11 +335,28 @@ INSERT INTO `funding` (`funding_id`, `advice_id`, `money`, `target`, `funding_ti
 
 CREATE TABLE `funding_comments` (
   `funding_comments_id` int(11) NOT NULL,
-  `funding_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `content` text NOT NULL,
-  `comment_time` datetime NOT NULL DEFAULT current_timestamp()
+  `comment_text` text NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `funding_comments`
+--
+
+INSERT INTO `funding_comments` (`funding_comments_id`, `project_id`, `user_id`, `comment_text`, `created_at`) VALUES
+(1, 2, 345678, '讚喔', '2025-04-24 23:36:40'),
+(2, 2, 345678, '讚喔', '2025-04-24 23:37:24'),
+(3, 2, 345678, '喔', '2025-04-24 23:41:47'),
+(4, 2, 345678, '我認同!', '2025-04-24 23:43:17'),
+(5, 2, 345678, '學校必須改善!', '2025-04-24 23:45:21'),
+(6, 2, 345678, '真的很吵', '2025-04-24 23:47:24'),
+(7, 2, 345678, '真的很吵', '2025-04-24 23:48:25'),
+(8, 2, 345678, '真的', '2025-04-24 23:50:16'),
+(9, 2, 345678, '讚', '2025-04-24 23:51:20'),
+(10, 2, 345678, '?', '2025-04-24 23:51:46'),
+(11, 4, 345678, '我遇到好多次，怪怪的人', '2025-04-24 23:53:47');
 
 -- --------------------------------------------------------
 
@@ -397,7 +424,11 @@ INSERT INTO `replies` (`reply_id`, `suggestion_assignments_id`, `office_id`, `re
 (3, 6, 904, '同學，我們可能控制不了聲音的問題', '2025-04-24 21:09:50'),
 (4, 5, 345678, '我們已提交提案了!', '2025-04-24 21:43:30'),
 (5, 7, 345678, '同學你好，我們會加強那邊的安全', '2025-04-24 22:13:59'),
-(6, 8, 345678, '同學您好，我們會幫助你們', '2025-04-24 22:18:01');
+(6, 8, 345678, '同學您好，我們會幫助你們', '2025-04-24 22:18:01'),
+(8, 7, 345678, '同學請注意安全', '2025-04-25 00:32:42'),
+(9, 7, 345678, '同學請注意安全', '2025-04-25 00:39:43'),
+(10, 5, 345678, '歡迎同學在下方多留言', '2025-04-25 00:42:28'),
+(11, 5, 345678, '歡迎同學', '2025-04-25 00:42:38');
 
 -- --------------------------------------------------------
 
@@ -433,7 +464,7 @@ INSERT INTO `suggestion_assignments` (`suggestion_assignments_id`, `advice_id`, 
 (7, 51, 345678, '防狼噴霧普發1000瓶', 20000, '../uploads/醫院.jpg', 1, 1, '好的，祝順利', '已通過', '2025-04-24 22:15:17', '2025-04-24 22:15:43', 0),
 (8, 53, 345678, '用於招募志工與工讀金的費用', 35000, '../uploads/捐血.jpg', 1, 1, '不錯喔', '已通過', '2025-04-24 22:17:05', '2025-04-24 22:17:25', 0),
 (9, 56, 905, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
-(10, 58, 345678, '幫助社團募資', 25000, '../uploads/社團活動.jpg', 1, 1, '加油', '已通過', '2025-04-24 22:21:57', '2025-04-24 22:22:11', 1);
+(10, 58, 345678, '幫助社團募資', 25000, '../uploads/社團活動.jpg', 1, 1, '加油', '已通過', '2025-04-24 22:21:57', '2025-04-24 22:22:11', 0);
 
 -- --------------------------------------------------------
 
@@ -543,7 +574,7 @@ ALTER TABLE `funding`
 --
 ALTER TABLE `funding_comments`
   ADD PRIMARY KEY (`funding_comments_id`),
-  ADD KEY `funding_id` (`funding_id`),
+  ADD KEY `project_id` (`project_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -601,7 +632,7 @@ ALTER TABLE `advice_image`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_state`
 --
 ALTER TABLE `advice_state`
-  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
@@ -619,7 +650,7 @@ ALTER TABLE `comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `donation_record`
 --
 ALTER TABLE `donation_record`
-  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
@@ -637,7 +668,7 @@ ALTER TABLE `funding`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_comments`
 --
 ALTER TABLE `funding_comments`
-  MODIFY `funding_comments_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `funding_comments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_state`
@@ -655,7 +686,7 @@ ALTER TABLE `fundraising_projects`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `replies`
 --
 ALTER TABLE `replies`
-  MODIFY `reply_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `reply_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `suggestion_assignments`
@@ -722,7 +753,7 @@ ALTER TABLE `funding`
 -- 資料表的限制式 `funding_comments`
 --
 ALTER TABLE `funding_comments`
-  ADD CONSTRAINT `funding_comments_ibfk_1` FOREIGN KEY (`funding_id`) REFERENCES `funding` (`funding_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `funding_comments_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `fundraising_projects` (`project_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `funding_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
