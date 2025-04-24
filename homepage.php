@@ -93,17 +93,17 @@
 
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
-                    <a class="nav-item" href="<?php if ($_SESSION['level']=='student' || $_SESSION['level']=='teacher'){
+                    <a class="nav-item" href="<?php if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
                         echo '#';
-                    } else if ($_SESSION['level']=='office') {
+                    } else if ($_SESSION['level'] == 'office') {
                         echo 'funding/office_assignments.php';
-                    } else if ($_SESSION['level']=='manager') {
+                    } else if ($_SESSION['level'] == 'manager') {
                         echo 'manager/advice_manager.php';
                     } ?>"><?php echo $_SESSION['user_id'] ?>會員專區</a>
 
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -170,7 +170,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -192,7 +192,7 @@
     <div class="banner">
         <div class="banner1">
             <div class="hot_propose">
-                <div class="chicken"  data-hover="🥚">
+                <div class="chicken" data-hover="🥚">
                     <img src="img\image2333.jpg">
                     <div class="chicken_tag"> 建言瀏覽</div>
                 </div>
@@ -261,8 +261,8 @@
                             }
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, a.advice_state, 
-               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.agree DESC"; // 查詢最熱門的建言
-
+               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<=2 ORDER BY a.agree DESC"; // 查詢最熱門的建言
+                            
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -277,7 +277,7 @@
                                     $category = $row['category'];
                                     $agree = $row['agree'];
                                     $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
-                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
+                                    $progress = $row['agree'] / 3 * 100; // 假設進度是根據同意數量計算的百分比
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
                                     }
@@ -286,8 +286,8 @@
                                     // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
-                            ?>
-                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                                    ?>
+                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
                                     <div class="swiper-slide">
                                         <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
                                             style="text-decoration: none; color: inherit;">
@@ -315,7 +315,7 @@
                                     </div>
 
 
-                            <?php }
+                                <?php }
                             }
                             ?>
                             <?php mysqli_close($link); ?>
@@ -371,8 +371,8 @@
                             }
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
-               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id ORDER BY a.announce_date DESC"; // 查詢最新的建言
-
+               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<4 ORDER BY a.announce_date DESC"; // 查詢最新的建言
+                            
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -386,18 +386,18 @@
                                     $advice_content = $row['advice_content'];
                                     $category = $row['category'];
                                     $agree = $row['agree'];
-                                    $progress = $row['agree'] / 5 * 100; // 假設進度是根據同意數量計算的百分比
+                                    $progress = $row['agree'] / 3 * 100; // 假設進度是根據同意數量計算的百分比
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
                                     }
                                     $progress_width = $progress . "%"; // 計算進度條的寬度
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
-
+                            
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
 
-                            ?>
-                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                                    ?>
+                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                                     <div class="swiper-slide">
                                         <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
@@ -424,7 +424,7 @@
                                         </a>
                                     </div>
 
-                            <?php }
+                                <?php }
                             } ?>
 
                             <?php mysqli_close($link) ?>
@@ -478,12 +478,18 @@
                     die("資料庫連線失敗: " . mysqli_connect_error());
                 }
 
+
                 // 查詢資料庫中的募資資料
                 $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
-                        ai.file_path FROM funding f 
-                        INNER JOIN advice a ON f.advice_id = a.advice_id 
-                        LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id 
-                        ORDER BY a.announce_date DESC";
+               ai.file_path, f.funding_goal, s.proposal_text, 
+               COALESCE(COUNT(d.donor),0) AS donor_count, COALESCE(SUM(d.donation_amount), 0) AS total_funding
+        FROM fundraising_projects f
+        INNER JOIN suggestion_assignments s ON f.suggestion_assignments_id = s.suggestion_assignments_id
+        LEFT JOIN donation_record d ON f.project_id = d.project_id
+        INNER JOIN advice a ON s.advice_id = a.advice_id
+        LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id
+        GROUP BY f.project_id
+        ORDER BY a.announce_date DESC";
 
                 $result = mysqli_query($link, $sql);
                 if (!$result) {
@@ -497,14 +503,34 @@
                         $data[] = $row;
                     }
 
-                    // 獲取第一筆資料作為大圖
-                    $bigCard = array_shift($data);
-                    $bigCardImage = !empty($bigCard['file_path']) ? $bigCard['file_path'] : 'default_big_image.jpg';
-                    $bigCardTitle = htmlspecialchars($bigCard['advice_title']);
-                    $bigCardAgree = htmlspecialchars($bigCard['agree']);
+                    // 確保有資料後再提取第一筆
+                    if (!empty($data)) {
+                        // 獲取第一筆資料作為大圖
+                        $bigCard = array_shift($data);
+                        $bigCardImage = !empty($bigCard['file_path']) ? $bigCard['file_path'] : 'default_big_image.jpg';
+                        $bigCardTitle = htmlspecialchars($bigCard['advice_title']);
+                        $bigCardMoney = htmlspecialchars($bigCard['funding_goal']);
+                        $bigCardDonorCount = htmlspecialchars($bigCard['donor_count'] ?? 0); // 預設為 0
+                        $bigCardTotalFunding = htmlspecialchars($bigCard['total_funding'] ?? 0); // 預設為 0
+                    } else {
+                        // 如果沒有資料，設置預設值
+                        $bigCardImage = 'default_big_image.jpg';
+                        $bigCardTitle = '暫無資料';
+                        $bigCardMoney = 0;
+                        $bigCardDonorCount = 0;
+                        $bigCardTotalFunding = 0;
+                    }
 
                     // 剩下的資料作為小圖
                     $smallCards = $data;
+                } else {
+                    // 如果沒有任何資料，設置預設值
+                    $bigCardImage = 'default_big_image.jpg';
+                    $bigCardTitle = '暫無資料';
+                    $bigCardMoney = 0;
+                    $bigCardDonorCount = 0;
+                    $bigCardTotalFunding = 0;
+                    $smallCards = [];
                 }
                 mysqli_close($link);
                 ?>
@@ -522,17 +548,26 @@
                                             </div>
                                             <div class="card-info">
                                                 <div class="card-title"><?php echo $bigCardTitle; ?></div>
+                                                <?php
+                                                $progressPercentage = ($bigCardTotalFunding / $bigCardMoney) * 100;
+                                                if ($progressPercentage > 100) {
+                                                    $progressPercentage = 100; // 確保進度不超過 100%
+                                                }
+                                                ?>
                                                 <div class="progress-bar">
-                                                    <div class="progress" style="width: 100%;"></div>
+                                                    <div class="progress" style="width:<?php echo $progressPercentage; ?>%;"></div>
                                                 </div>
                                                 <div class="card-meta">
                                                     <div>
-                                                        <span>NT$ <?php echo $bigCardAgree; ?></span>
+                                                        <span>已募得 NT$ <?php echo $bigCardTotalFunding; ?> / 目標 NT$
+                                                            <?php echo $bigCardMoney; ?></span>
                                                         <span class="divider">/</span>
-                                                        <span>100%</span>
+
+                                                        <span><?php echo "$progressPercentage%" ?></span>
                                                     </div>
                                                     <div>
-                                                        <span>335 <i class="fa-regular fa-user"></i></span>
+                                                        <span><?php echo $bigCardDonorCount; ?> <i
+                                                                class="fa-regular fa-user"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -546,18 +581,25 @@
                                                     <img src="<?php echo !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'default_small_image.jpg'; ?>" alt="小圖">
                                                 </div>
                                                 <div class="card-info">
-                                                    <div class="card-title"><?php echo htmlspecialchars($smallCard['advice_title']); ?></div>
+                                                    <div class="card-title">
+                                                        <?php echo htmlspecialchars($smallCard['advice_title']); ?>
+                                                    </div>
+                                                    <?php
+                                                    // 計算進度百分比
+                                                    $progressPercentage = ($smallCard['total_funding'] / $smallCard['funding_goal']) * 100;
+                                                    if ($progressPercentage > 100) {
+                                                        $progressPercentage = 100; // 確保進度不超過 100%
+                                                    }
+                                                    ?>
                                                     <div class="progress-bar">
-                                                        <div class="progress" style="width: 80%;"></div>
+                                                        <div class="progress" style="width: <?php echo $progressPercentage; ?>%;"></div>
                                                     </div>
                                                     <div class="card-meta">
                                                         <div>
-                                                            <span>NT$ <?php echo htmlspecialchars($smallCard['agree']); ?></span>
-                                                            <span class="divider">/</span>
-                                                            <span>100%</span>
+                                                            <span>已募得 NT$ <?php echo htmlspecialchars($smallCard['total_funding']); ?> / 目標 NT$ <?php echo htmlspecialchars($smallCard['funding_goal']); ?></span>
                                                         </div>
                                                         <div>
-                                                            <span>25 <i class="fa-regular fa-user"></i></span>
+                                                            <span><?php echo htmlspecialchars($smallCard['donor_count']); ?> <i class="fa-regular fa-user"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -611,19 +653,19 @@
     <!-- 初始化 Swiper -->
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
@@ -634,15 +676,15 @@
 
         /*CARD SLIDER*/
         const swiperConfigs = [{
-                container: ".mySwiper1",
-                next: ".swiper-button-next-1",
-                prev: ".swiper-button-prev-1"
-            },
-            {
-                container: ".mySwiper2",
-                next: ".swiper-button-next-2",
-                prev: ".swiper-button-prev-2"
-            }
+            container: ".mySwiper1",
+            next: ".swiper-button-next-1",
+            prev: ".swiper-button-prev-1"
+        },
+        {
+            container: ".mySwiper2",
+            next: ".swiper-button-next-2",
+            prev: ".swiper-button-prev-2"
+        }
         ];
 
         swiperConfigs.forEach(config => {
