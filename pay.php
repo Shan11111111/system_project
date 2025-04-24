@@ -181,15 +181,16 @@
         </div>
     </nav>
     <button class="back-btn" onclick="history.back()">← Back</button>
+    
 
 
     <div class="donate-wrapper">
         <div class="donate-header">
-        <h3 class="title">募資標題</hˇ>
-            <h5 class="donate-title">支持這個提案</h5>
+            <h3 class="title">募資標題</hˇ>
+                <h5 class="donate-title">支持這個提案</h5>
         </div>
-<hr>
-        <form class="donate-form">
+        <hr>
+        <form class="donate-form" method="post" action="funding_function/donate_money.php" onsubmit="return beforeSubmit()">
             <label class="section-label">選擇金額</label>
             <div class="amount-options">
                 <button type="button" onclick="setAmount(100)">100</button>
@@ -200,72 +201,75 @@
 
             <div class="custom-amount">
                 <span>NT$</span>
-                <input type="number" id="customAmount" placeholder="自訂金額">
+                <input type="number" id="customAmount" name="donate_money" placeholder="自訂金額" required>
             </div>
 
             <label class="section-label">信用卡付款</label>
             <input type="text" id="cardNumber" maxlength="19" placeholder="卡號 1234 5678 9012 3456">
             <div class="card-row">
-            <input type="text" id="expirationDate" placeholder="MM/YY" maxlength="5">
-
+                <input type="text" id="expirationDate" placeholder="MM/YY" maxlength="5">
                 <input type="text" maxlength="3" placeholder="CVC">
             </div>
             <hr>
             <label class="section-label">姓名（選填，我們將通知您募資專案的後續進度）</label>
-            <input type="name" placeholder="輸入您的姓名">
-            
+            <input type="text" name="people_name" placeholder="輸入您的姓名">
+
             <label class="section-label">Email（選填，我們將通知您募資專案的後續進度）</label>
             <input type="email" placeholder="your@email.com">
 
+            <!-- 隱藏欄位：指定募資專案 ID，可視情況修改 -->
+            <input type="hidden" name="funding_id" value="1">
+
             <button class="donate-btn" type="submit">送出付款</button>
         </form>
+
     </div>
 
 
     <script>
-  function setAmount(value) {
-    // 設定自訂金額輸入框（如果你有的話）
-    const input = document.querySelector('#customAmount');
-    if (input) input.value = value;
+        function setAmount(value) {
+            // 設定自訂金額輸入框（如果你有的話）
+            const input = document.querySelector('#customAmount');
+            if (input) input.value = value;
 
-    // 清除所有按鈕的 .selected
-    document.querySelectorAll('.amount-options button').forEach(btn => {
-      btn.classList.remove('selected');
-    });
+            // 清除所有按鈕的 .selected
+            document.querySelectorAll('.amount-options button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
 
-    // 將被點擊的按鈕加上 .selected
-    const buttons = document.querySelectorAll('.amount-options button');
-    buttons.forEach(btn => {
-      if (btn.textContent.trim() == value) {
-        btn.classList.add('selected');
-      }
-    });
-  }
-</script>
+            // 將被點擊的按鈕加上 .selected
+            const buttons = document.querySelectorAll('.amount-options button');
+            buttons.forEach(btn => {
+                if (btn.textContent.trim() == value) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+    </script>
 
-<script>
-  const cardInput = document.getElementById('cardNumber');
+    <script>
+        const cardInput = document.getElementById('cardNumber');
 
-  cardInput.addEventListener('input', function (e) {
-    let value = e.target.value;
-    // 移除所有非數字
-    value = value.replace(/\D/g, '');
-    // 分成4碼一組
-    value = value.replace(/(.{4})/g, '$1 ').trim();
-    e.target.value = value;
-  });
+        cardInput.addEventListener('input', function (e) {
+            let value = e.target.value;
+            // 移除所有非數字
+            value = value.replace(/\D/g, '');
+            // 分成4碼一組
+            value = value.replace(/(.{4})/g, '$1 ').trim();
+            e.target.value = value;
+        });
 
-  const expirationInput = document.getElementById('expirationDate');
+        const expirationInput = document.getElementById('expirationDate');
 
-expirationInput.addEventListener('input', function (e) {
-  let value = e.target.value.replace(/\D/g, ''); // 移除非數字
-  if (value.length >= 3) {
-    value = value.slice(0, 2) + '/' + value.slice(2, 4);
-  }
-  e.target.value = value;
+        expirationInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // 移除非數字
+            if (value.length >= 3) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
 
-});
-</script>
+        });
+    </script>
 
 
 
