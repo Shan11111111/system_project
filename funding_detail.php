@@ -182,7 +182,7 @@
     </nav>
 
     <?php
-    $project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+    $project_id = isset($_GET['project_id']) ? intval($_GET['project_id']) : 0;
     $link = mysqli_connect('localhost', 'root', '', 'system_project');
 
     if (!$link) {

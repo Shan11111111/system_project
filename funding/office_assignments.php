@@ -161,6 +161,53 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        .reply-records {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .reply-records h4 {
+            margin: 0 0 10px;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .reply-records ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reply-records ul li {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        /* 搜尋表單樣式 */
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-bar button {
+            padding: 8px 12px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -174,6 +221,12 @@
 
     <div class="content">
         <h1>處所分派建言</h1>
+        <div class="search-bar">
+    <form action="office_assignments.php" method="GET">
+        <input type="text" name="search" placeholder="輸入建言 ID 或標題進行搜尋" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+        <button type="submit">搜尋</button>
+    </form>
+</div>
         <table>
             <thead>
                 <tr>
@@ -181,19 +234,41 @@
                     <th>建言標題</th>
                     <th>狀態</th>
                     <th>操作</th>
+                    <th>回覆</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 
-
+$search=isset($_GET['search']) ? $_GET['search'] : '';
                 // 查詢分派給該處所的建言
                 $sql = "SELECT sa.suggestion_assignments_id, sa.advice_id, a.advice_title, sa.status, sa.notification, sa.admin_feedback 
                         FROM suggestion_assignments sa
                         JOIN advice a ON sa.advice_id = a.advice_id
                         WHERE sa.office_id = ?";
+
+                if (!empty($search)) {
+                    // 如果搜尋條件是數字，則搜尋建言 ID，否則搜尋建言標題
+                    if (is_numeric($search)) {
+                        $sql .= " AND sa.advice_id = ?";
+                    } else {
+                        $sql .= " AND a.advice_title LIKE ?";
+                    }
+                }
+
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $office_id);
+
+                if (!empty($search)) {
+                    if (is_numeric($search)) {
+                        $stmt->bind_param("ii", $office_id, $search);
+                    } else {
+                        $search_param = '%' . $search . '%';
+                        $stmt->bind_param("is", $office_id, $search_param);
+                    }
+                } else {
+                    $stmt->bind_param("i", $office_id);
+                }
+
                 $stmt->execute();
                 $result = $stmt->get_result();
 
@@ -209,26 +284,53 @@
                             echo " <a class='btn' href='reset_notification.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>查看通知</a>";
                         }
                         if ($row['status'] === '草擬中') {
-                            // 第一次提交提案
                             echo " <a class='btn' href='submit_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>提交提案</a>";
                         } elseif ($row['status'] === '被退回') {
-                            // 提案被退回，允許重新提交
                             echo " <a class='btn' href='submit_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>重新提交</a>";
                         } elseif ($row['status'] === '審核中') {
-                            // 提案正在審核中
                             echo " <span>等待審核</span>";
                         } elseif ($row['status'] === '已通過') {
-                            // 提案已通過
                             echo " <span>已通過</span>";
                         }
                         if (!empty($row['admin_feedback'])) {
                             echo "<p><strong>管理者回饋:</strong> " . htmlspecialchars($row['admin_feedback']) . "</p>";
                         }
                         echo "</td>";
+
+                        // 新增回覆表單
+                        echo "<td>";
+                        echo "<form action='submit_reply.php' method='POST'>";
+                        echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
+                        echo "<textarea name='reply_text' rows='3' placeholder='輸入回覆內容...' required></textarea>";
+                        echo "<button type='submit'>提交回覆</button>";
+                        echo "</form>";
+
+                        // 顯示回覆紀錄
+                        echo "<div class='reply-records'>";
+                        echo "<h4>回覆紀錄：</h4>";
+                        $reply_sql = "SELECT reply_text, replied_at FROM replies WHERE suggestion_assignments_id = ?";
+                        $reply_stmt = $conn->prepare($reply_sql);
+                        $reply_stmt->bind_param("i", $row['suggestion_assignments_id']);
+                        $reply_stmt->execute();
+                        $reply_result = $reply_stmt->get_result();
+
+                        if ($reply_result->num_rows > 0) {
+                            echo "<ul>";
+                            while ($reply_row = $reply_result->fetch_assoc()) {
+                                echo "<li>" . htmlspecialchars($reply_row['reply_text']) . " - " . htmlspecialchars($reply_row['replied_at']) . "</li>";
+                            }
+                            echo "</ul>";
+                        } else {
+                            echo "<p>尚無回覆</p>";
+                        }
+                        $reply_stmt->close();
+                        echo "</div>";
+
+                        echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='4'>目前沒有分派的建言</td></tr>";
+                    echo "<tr><td colspan='5'>目前沒有分派的建言</td></tr>";
                 }
 
                 $stmt->close();

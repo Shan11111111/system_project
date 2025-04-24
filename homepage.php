@@ -64,7 +64,7 @@
                                         confirmButtonColor: '#3085d6',
                                         focusConfirm: false, // 禁用自動聚焦
                                         didOpen: () => {
-                                            // 禁用滾動
+                                            // 禁用滾动
                                             document.body.style.overflow = 'hidden';
 
                                         },
@@ -143,7 +143,7 @@
                                         document.body.style.overflow = 'hidden';
                                     },
                                     didClose: () => {
-                                        // 恢復滾動
+                                        // 恢復滾动
                                         document.body.style.overflow = '';
                                         // 恢復滾動位置
                                         window.scrollTo(0, scrollTop);
@@ -371,7 +371,7 @@
                             }
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
-               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<4 ORDER BY a.announce_date DESC"; // 查詢最新的建言
+               ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<3 ORDER BY a.announce_date DESC"; // 查詢最新的建言
                             
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
@@ -480,7 +480,7 @@
 
 
                 // 查詢資料庫中的募資資料
-                $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
+                $sql = "SELECT f.project_id,a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
                ai.file_path, f.funding_goal, s.proposal_text, 
                COALESCE(COUNT(d.donor),0) AS donor_count, COALESCE(SUM(d.donation_amount), 0) AS total_funding
         FROM fundraising_projects f
@@ -541,73 +541,90 @@
                         <div class="swiper-slide">
                             <div class="fund-section">
                                 <div class="fund-content">
-                                    <div class="left-big-card">
-                                        <div class="fundraiser-card">
-                                            <div class="card-image">
-                                                <img src="<?php echo $bigCardImage; ?>" alt="大圖">
-                                            </div>
-                                            <div class="card-info">
-                                                <div class="card-title"><?php echo $bigCardTitle; ?></div>
-                                                <?php
-                                                $progressPercentage = ($bigCardTotalFunding / $bigCardMoney) * 100;
-                                                if ($progressPercentage > 100) {
-                                                    $progressPercentage = 100; // 確保進度不超過 100%
-                                                }
-                                                ?>
-                                                <div class="progress-bar">
-                                                    <div class="progress" style="width:<?php echo $progressPercentage; ?>%;"></div>
+                                    <a href="funding_detail.php?project_id=<?php echo urlencode($bigCard['project_id']); ?>"
+                                        style="text-decoration: none; color: inherit;">
+                                        <div class="left-big-card">
+                                            <div class="fundraiser-card">
+                                                <div class="card-image">
+                                                    <img src="<?php echo $bigCardImage; ?>" alt="大圖">
                                                 </div>
-                                                <div class="card-meta">
-                                                    <div>
-                                                        <span>已募得 NT$ <?php echo $bigCardTotalFunding; ?> / 目標 NT$
-                                                            <?php echo $bigCardMoney; ?></span>
-                                                        <span class="divider">/</span>
-
-                                                        <span><?php echo "$progressPercentage%" ?></span>
+                                                <div class="card-info">
+                                                    <div class="card-title"><?php echo $bigCardTitle; ?></div>
+                                                    <?php
+                                                    if ($bigCardMoney > 0) {
+                                                        $progressPercentage = ($bigCardTotalFunding / $bigCardMoney) * 100;
+                                                        if ($progressPercentage > 100) {
+                                                            $progressPercentage = 100; // 確保進度不超過 100%
+                                                        }
+                                                    } else {
+                                                        $progressPercentage = 0; // 如果目標金額為 0，進度設為 0%
+                                                    }
+                                                    ?>
+                                                    <div class="progress-bar">
+                                                        <div class="progress"
+                                                            style="width:<?php echo $progressPercentage; ?>%;"></div>
                                                     </div>
-                                                    <div>
-                                                        <span><?php echo $bigCardDonorCount; ?> <i
-                                                                class="fa-regular fa-user"></i></span>
+                                                    <div class="card-meta">
+                                                        <div>
+                                                            <span>已募得 NT$ <?php echo $bigCardTotalFunding; ?> / 目標 NT$
+                                                                <?php echo $bigCardMoney; ?></span>
+                                                            <span class="divider">/</span>
+
+                                                            <span><?php echo "$progressPercentage%" ?></span>
+                                                        </div>
+                                                        <div>
+                                                            <span><?php echo $bigCardDonorCount; ?> <i
+                                                                    class="fa-regular fa-user"></i></span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                    </a>
+
+
                                     <!-- 小圖 -->
                                     <div class="right-small-cards">
                                         <?php foreach ($smallCards as $smallCard): ?>
-                                            <div class="fundraiser-card small-card">
-                                                <div class="card-image">
-                                                    <img src="<?php echo !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'default_small_image.jpg'; ?>" alt="小圖">
-                                                </div>
-                                                <div class="card-info">
-                                                    <div class="card-title">
-                                                        <?php echo htmlspecialchars($smallCard['advice_title']); ?>
+                                            
+                                            <a href="funding_detail.php?project_id=<?php echo urlencode($smallCard['project_id']); ?>" style="text-decoration: none; color: inherit;">
+                                                <div class="fundraiser-card small-card">
+                                                    <div class="card-image">
+                                                        <img src="<?php echo !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'default_small_image.jpg'; ?>" alt="小圖">
                                                     </div>
-                                                    <?php
-                                                    // 計算進度百分比
-                                                    $progressPercentage = ($smallCard['total_funding'] / $smallCard['funding_goal']) * 100;
-                                                    if ($progressPercentage > 100) {
-                                                        $progressPercentage = 100; // 確保進度不超過 100%
-                                                    }
-                                                    ?>
-                                                    <div class="progress-bar">
-                                                        <div class="progress" style="width: <?php echo $progressPercentage; ?>%;"></div>
-                                                    </div>
-                                                    <div class="card-meta">
-                                                        <div>
-                                                            <span>已募得 NT$ <?php echo htmlspecialchars($smallCard['total_funding']); ?> / 目標 NT$ <?php echo htmlspecialchars($smallCard['funding_goal']); ?></span>
+                                                    <div class="card-info">
+                                                        <div class="card-title">
+                                                            <?php echo htmlspecialchars($smallCard['advice_title']); ?>
+                                                     <?php
+                                            if ($smallCard['funding_goal'] > 0) {
+                                                $progressPercentage = ($smallCard['total_funding'] / $smallCard['funding_goal']) * 100;
+                                                if ($progressPercentage > 100) {
+                                                    $progressPercentage = 100; // 確保進度不超過 100%
+                                                }
+                                            } else {
+                                                $progressPercentage = 0; // 如果目標金額為 0，進度設為 0%
+                                            }
+                                            ?>   </div>
+                                                        <div class="progress-bar">
+                                                            <div class="progress" style="width: <?php echo $progressPercentage; ?>%;"></div>
                                                         </div>
-                                                        <div>
-                                                            <span><?php echo htmlspecialchars($smallCard['donor_count']); ?> <i class="fa-regular fa-user"></i></span>
+                                                        <div class="card-meta">
+                                                            <div>
+                                                                <span>NT$ <?php echo htmlspecialchars($smallCard['total_funding']); ?> / 目標 NT$ <?php echo htmlspecialchars($smallCard['funding_goal']); ?></span>
+                                                            </div>
+                                                            <div>
+                                                                <span><?php echo htmlspecialchars($smallCard['donor_count']); ?> <i class="fa-regular fa-user"></i></span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         <?php endforeach; ?>
                                     </div>
                                 </div>
                             </div>
+                            </a>
                         </div>
                     </div>
                 </div>

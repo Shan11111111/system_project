@@ -86,7 +86,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $update_stmt->execute();
         $update_stmt->close();
 
-        // echo "附議成功";
+        // 檢查更新後的 agree 值是否等於 3
+        $check_agree_stmt = $conn->prepare("SELECT agree FROM advice WHERE advice_id = ?");
+        $check_agree_stmt->bind_param("i", $advice_id);
+        $check_agree_stmt->execute();
+        $check_agree_stmt->bind_result($current_agree);
+        $check_agree_stmt->fetch();
+        $check_agree_stmt->close();
+
+        if ($current_agree == 3) {
+            // 插入狀態到狀態表
+            $insert_status_stmt = $conn->prepare("INSERT INTO advice_state(advice_id, content) VALUES (?, ?)");
+            $status = "附議達標";
+            $insert_status_stmt->bind_param("is", $advice_id, $status);
+            $insert_status_stmt->execute();
+            $insert_status_stmt->close();
+        }
+
+        // 顯示成功訊息
         ?>
         <!DOCTYPE html>
         <html lang="zh-Hant">
@@ -94,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>動態網頁專案</title>
+            <title>處理中...</title>
             <link rel="stylesheet" href="css/styles.css">
         </head>
 
@@ -125,7 +142,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </body>
 
         </html>
-
         <?php
     } else {
         echo "錯誤：" . $stmt->error;
