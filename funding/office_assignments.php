@@ -307,7 +307,10 @@ $search=isset($_GET['search']) ? $_GET['search'] : '';
 
                         // 顯示回覆紀錄
                         echo "<div class='reply-records'>";
-                        echo "<h4>回覆紀錄：</h4>";
+                        echo "<h4 onclick='toggleReplyRecords(this)' style='cursor: pointer; color: #007BFF;'>回覆紀錄"."<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-caret-down-fill' viewBox='0 0 16 16'>
+                        <path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/>
+                      </svg>"."</h4>";
+                        echo "<div class='reply-content' style='display: none;'>"; // 默認隱藏
                         $reply_sql = "SELECT reply_text, replied_at FROM replies WHERE suggestion_assignments_id = ?";
                         $reply_stmt = $conn->prepare($reply_sql);
                         $reply_stmt->bind_param("i", $row['suggestion_assignments_id']);
@@ -324,7 +327,8 @@ $search=isset($_GET['search']) ? $_GET['search'] : '';
                             echo "<p>尚無回覆</p>";
                         }
                         $reply_stmt->close();
-                        echo "</div>";
+                        echo "</div>"; // 關閉 reply-content
+                        echo "</div>"; // 關閉 reply-records
 
                         echo "</td>";
                         echo "</tr>";
@@ -339,6 +343,16 @@ $search=isset($_GET['search']) ? $_GET['search'] : '';
             </tbody>
         </table>
     </div>
+    <script>
+        function toggleReplyRecords(element) {
+            const replyContent = element.nextElementSibling;
+            if (replyContent.style.display === "none" || replyContent.style.display === "") {
+                replyContent.style.display = "block"; // 展開
+            } else {
+                replyContent.style.display = "none"; // 收起
+            }
+        }
+    </script>
 </body>
 
 </html>
