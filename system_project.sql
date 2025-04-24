@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-24 18:55:18
+-- 產生時間： 2025-04-24 18:58:36
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -307,29 +307,6 @@ INSERT INTO `files` (`file_id`, `file_name`, `file_path`, `advice_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `funding`
---
-
-CREATE TABLE `funding` (
-  `funding_id` int(11) NOT NULL,
-  `advice_id` int(11) NOT NULL,
-  `money` int(11) NOT NULL DEFAULT 0,
-  `target` int(11) NOT NULL,
-  `funding_time` date NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- 傾印資料表的資料 `funding`
---
-
-INSERT INTO `funding` (`funding_id`, `advice_id`, `money`, `target`, `funding_time`) VALUES
-(7, 24, 0, 2000, '2025-04-22'),
-(8, 42, 0, 1000, '2025-04-22'),
-(9, 45, 0, 1000, '2025-04-22');
-
--- --------------------------------------------------------
-
---
 -- 資料表結構 `funding_comments`
 --
 
@@ -563,13 +540,6 @@ ALTER TABLE `files`
   ADD KEY `advice_id` (`advice_id`);
 
 --
--- 資料表索引 `funding`
---
-ALTER TABLE `funding`
-  ADD PRIMARY KEY (`funding_id`),
-  ADD KEY `advice_id` (`advice_id`);
-
---
 -- 資料表索引 `funding_comments`
 --
 ALTER TABLE `funding_comments`
@@ -659,12 +629,6 @@ ALTER TABLE `files`
   MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- 使用資料表自動遞增(AUTO_INCREMENT) `funding`
---
-ALTER TABLE `funding`
-  MODIFY `funding_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_comments`
 --
 ALTER TABLE `funding_comments`
@@ -742,12 +706,6 @@ ALTER TABLE `donation_record`
 --
 ALTER TABLE `files`
   ADD CONSTRAINT `files_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`);
-
---
--- 資料表的限制式 `funding`
---
-ALTER TABLE `funding`
-  ADD CONSTRAINT `funding_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE;
 
 --
 -- 資料表的限制式 `funding_comments`
