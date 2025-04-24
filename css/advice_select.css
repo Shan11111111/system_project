@@ -1,0 +1,124 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fffdf7;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fffefc;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.tabs-container {
+    position: relative;
+    margin-bottom: 20px;
+    background-color: #fff8ed;
+}
+
+.tabs {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+}
+
+.tab {
+    padding: 12px 24px;
+    cursor: pointer;
+    color: #666;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    color: #333;
+}
+
+.tab.active {
+    color: #333;
+}
+
+.tab-underline {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    width: 0;
+    background-color: #ffa500;
+    transition: left 0.3s ease, width 0.3s ease;
+}
+
+.tab-content {
+    padding: 20px 10px;
+    background: #fff;
+}
+
+.advice-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.advice-item {
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fffdf7;
+    transition: box-shadow 0.2s;
+}
+
+.advice-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.advice-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+}
+
+.advice-meta {
+    font-size: 0.95em;
+    color: #666;
+}
+
+.report-link {
+    margin-left: 10px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.report-link:hover {
+    text-decoration: underline;
+}
+
+.tag {
+    font-size: 0.85em;
+    background-color: #fcecc4;
+    padding: 3px 10px;
+    border-radius: 99px;
+    color: #8a5800;
+}
