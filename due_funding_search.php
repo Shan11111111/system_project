@@ -78,7 +78,7 @@
                     <button class="dropbtn">募資</button>
                     <div class="dropdown-content">
                         <a href="ongoing_funding_search.php">進行中募資</a>
-                        <a href="#">已結束募資</a>
+                        <a href="due_funding_search.php">已結束募資</a>
                     </div>
                 </div>
             </div>
@@ -156,7 +156,6 @@
                     <option value="environment">環保永續</option>
                     <option value="other">其他</option>
                 </select>
-
             </div>
             <div class="search_text">
                 <input type="text" id="search" placeholder="請輸入關鍵字" />
@@ -165,9 +164,9 @@
                     <span id="sortLabel">排序</span> <i class="fa-solid fa-filter"></i>
                 </button>
                 <div id="sortMenu" class="sort-menu">
-                    <div onclick="setSort('suscessful')">募資成功</div>
-                    <div onclick="setSort('fail')">募資失敗</div>
+                    <div onclick="setSort('hot')">最熱門</div>
                     <div onclick="setSort('new')">最新</div>
+                    <div onclick="setSort('deadline')">結束日期</div>
                 </div>
             </div>
         </div>
@@ -212,6 +211,8 @@
             } = getFilters();
             const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}`;
 
+            
+
             fetch(url)
                 .then(res => res.json())
                 .then(res => {
@@ -227,11 +228,12 @@
                     }
 
                     res.data.forEach(card => {
-                        container.innerHTML += `
-                        <div class="project-card">
+
+                        container.innerHTML += `                       
+                       <div class="project-card" data-id="${card.id}">
                             <div class="card-image">
                                 <div class="category"><span>${categoryMap[card.category] || card.category}</span></div>
-                                <img src="${card.image}" />
+                                <img src="${card.file_path}" />
                             </div>
                             <div class="card-info">
                                 <div class="card-title">${card.title}</div>
@@ -245,7 +247,7 @@
                                         <span>${card.progress}%</span>
                                     </div>
                                     <div>
-                                        <span>${card.supporter} <i class="fa-regular fa-user"></i></span>
+                                         <span>${card.supporter} <i class="fa-regular fa-user"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -254,6 +256,15 @@
                     });
 
                     renderPagination(res.totalPages);
+                    // 綁定每一張卡片的點擊事件
+                    document.querySelectorAll(".project-card").forEach(cardEl => {
+                        const id = cardEl.getAttribute("data-id");
+                        cardEl.onclick = () => {
+                            window.location.href = `funding_detail.php?id=${id}`;
+                        };
+                    });
+
+
                 });
         }
 
@@ -317,9 +328,9 @@
         function setSort(type) {
             currentSort = type;
             document.getElementById("sortLabel").textContent = {
-                suscessful: "募資成功",
-                fail: "募資失敗",
-                new: "最新"
+                hot: "最熱門",
+                new: "最新",
+                deadline: "結束日期"
             } [type];
             document.getElementById("sortMenu").style.display = "none";
             loadCards(1);
