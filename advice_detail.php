@@ -83,8 +83,7 @@
                             </script>
                         <?php } ?>
 
-                        <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_hot.php">熱門建言</a>
+                        <a href="advice_search.php">建言瀏覽</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -433,9 +432,13 @@
                                 <span id="announce-date" style="display:none;"><?php echo $row['announce_date']; ?></span>
 
                                 <!-- 附議按鈕 -->
-                                <button class="agree-btn" id="agree-btn" onclick="handleAgree()">
-                                    <i class="fa-solid fa-stamp"></i> 附議
-                                </button>
+                                <form id="insertForm" action="agree_insert.php" method="POST">
+                                    <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
+
+                                    <button class="agree-btn" id="agree-btn" onclick="handleAgree()">
+                                        <i class="fa-solid fa-stamp"></i> 附議
+                                    </button>
+                                </form>
 
                                 <div class="collect_share">
                                     <button class="collect-btn">收藏<i class="fa-solid fa-heart"></i></button>
@@ -500,7 +503,7 @@
                     <?php endif; ?>
                 </div>
                 <span class="reply-status <?= $state === '已回覆' ? 'replied' : 'pending' ?>">
-                    <?= $state === '已回覆' ? '🟢 已回覆' : '🟡 尚未回覆' ?>
+                    <?= $state === '已回覆' ? '已回覆' : ' 尚未回覆' ?>
                 </span>
                 <div class="reply-content">
                     <p>
@@ -698,15 +701,15 @@
         <span>返回</span>
     </button>
 
-    <form id="insertForm" action="agree_insert.php" method="POST">
+    <!--<form id="insertForm" action="agree_insert.php" method="POST">
         <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
 
-        <!-- 單一按鈕 -->
-        <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
+        <!--單一按鈕 -->
+        <!--<button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
             <i class="fa-solid fa-stamp"></i>
             <span>附議</span>
         </button>
-    </form>
+    </form>-->
 
     <script>
         function handleAgree() {
