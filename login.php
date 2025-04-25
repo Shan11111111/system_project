@@ -57,7 +57,7 @@
     <div class="signup-section">
       <h2>沒有帳號?</h2>
       <p>註冊帳號發表建言</p>
-      <button class="signup-btn"><a href="register.php">註冊</a></button>
+      <a href="register.php"><button class="signup-btn" style="color: #7c4d2b;">註冊</button></a>
     </div>
   </div>
 </body>

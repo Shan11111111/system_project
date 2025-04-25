@@ -85,7 +85,7 @@ session_start();
         <div class="signup-section">
             <h2>歡迎回來!</h2>
             <p>已經有帳號了嗎</p>
-            <button class="signup-btn" ><a href="login.php">登入</a></button>
+            <a href="login.php"><button class="signup-btn" style="color: #7c4d2b;">登入</button></a>
         </div>
     </div>
 
