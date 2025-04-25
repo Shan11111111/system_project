@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-24 18:58:36
+-- 產生時間： 2025-04-25 14:02:49
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -351,6 +351,23 @@ CREATE TABLE `funding_state` (
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `fundraising_extension_requests`
+--
+
+CREATE TABLE `fundraising_extension_requests` (
+  `id` int(11) NOT NULL,
+  `fundraising_project_id` int(11) NOT NULL,
+  `requested_by_office_id` int(11) NOT NULL,
+  `requested_extension_date` datetime NOT NULL,
+  `status` enum('待審核','已接受','已拒絕') DEFAULT '待審核',
+  `admin_response` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `reviewed_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `fundraising_projects`
 --
 
@@ -362,7 +379,7 @@ CREATE TABLE `fundraising_projects` (
   `funding_goal` int(11) NOT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime DEFAULT NULL,
-  `status` enum('進行中','已完成','已取消') DEFAULT '進行中'
+  `status` enum('進行中','已完成','已取消','已過期') DEFAULT '進行中'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -370,10 +387,10 @@ CREATE TABLE `fundraising_projects` (
 --
 
 INSERT INTO `fundraising_projects` (`project_id`, `suggestion_assignments_id`, `title`, `description`, `funding_goal`, `start_date`, `end_date`, `status`) VALUES
-(1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', NULL, '進行中'),
+(1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', '2025-04-23 19:45:19', '已過期'),
 (2, 6, '廁所施工聲音好吵', '我們會盡力監督', 0, '2025-04-24 21:29:40', NULL, '進行中'),
 (3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', NULL, '進行中'),
-(4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', NULL, '進行中'),
+(4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', '2025-04-25 17:42:29', '已過期'),
 (5, 8, '捐血救人', '用於招募志工與工讀金的費用', 35000, '2025-04-24 22:17:25', NULL, '進行中'),
 (6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', NULL, '進行中');
 
@@ -554,6 +571,14 @@ ALTER TABLE `funding_state`
   ADD PRIMARY KEY (`funding_state_id`);
 
 --
+-- 資料表索引 `fundraising_extension_requests`
+--
+ALTER TABLE `fundraising_extension_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fundraising_project_id` (`fundraising_project_id`),
+  ADD KEY `requested_by_office_id` (`requested_by_office_id`);
+
+--
 -- 資料表索引 `fundraising_projects`
 --
 ALTER TABLE `fundraising_projects`
@@ -641,6 +666,12 @@ ALTER TABLE `funding_state`
   MODIFY `funding_state_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_extension_requests`
+--
+ALTER TABLE `fundraising_extension_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_projects`
 --
 ALTER TABLE `fundraising_projects`
@@ -713,6 +744,13 @@ ALTER TABLE `files`
 ALTER TABLE `funding_comments`
   ADD CONSTRAINT `funding_comments_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `fundraising_projects` (`project_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `funding_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- 資料表的限制式 `fundraising_extension_requests`
+--
+ALTER TABLE `fundraising_extension_requests`
+  ADD CONSTRAINT `fundraising_extension_requests_ibfk_1` FOREIGN KEY (`fundraising_project_id`) REFERENCES `fundraising_projects` (`project_id`),
+  ADD CONSTRAINT `fundraising_extension_requests_ibfk_2` FOREIGN KEY (`requested_by_office_id`) REFERENCES `users` (`user_id`);
 
 --
 -- 資料表的限制式 `fundraising_projects`
