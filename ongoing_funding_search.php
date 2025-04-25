@@ -209,7 +209,7 @@
                 keyword,
                 sort
             } = getFilters();
-            const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}`;
+            const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}&page_type=ongoing`;
 
             
 
