@@ -166,6 +166,7 @@
                 <div id="sortMenu" class="sort-menu">
                     <div onclick="setSort('successful')">募資成功</div>
                     <div onclick="setSort('fail')">募資失敗</div>
+                    <div onclick="setSort('all')">所有募資</div>
                 </div>
             </div>
         </div>
@@ -227,13 +228,22 @@
                     }
 
                     res.data.forEach(card => {
+                        let stamp = '';
+                        if (card.is_expired) {
+                            if (card.progress >= 100) {
+                                stamp = `<img class="card-stamp" src="img/passed_funding.png" alt="成功">`;
+                            } else {
+                                stamp = `<img class="card-stamp" src="img/failed_funding.png" alt="失敗">`;
+                            }
+                        }
 
                         container.innerHTML += `                       
-                       <div class="project-card" data-id="${card.id}">
-                            <div class="card-image">
+                       <div class="project-card" data-id="${card.id}">   
+                            <div class="card-image"> 
                                 <div class="category"><span>${categoryMap[card.category] || card.category}</span></div>
                                 <img src="${card.file_path}" />
                             </div>
+
                             <div class="card-info">
                                 <div class="card-title">${card.title}</div>
                                 <div class="progress-bar">
@@ -250,6 +260,7 @@
                                     </div>
                                 </div>
                             </div>
+                          ${stamp}  <!-- ✅ 浮水印放在圖片和資訊區之間 -->
                         </div>
                     `;
                     });
