@@ -278,7 +278,7 @@
                                     $agree = $row['agree'];
                                     $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
                                     $progress = $row['agree'] / 3 * 100; // 假設進度是根據同意數量計算的百分比
-                                    $progress = round($progress, 2); // 四捨五入到整數位
+                                    $progress = round($progress); // 四捨五入到整數
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
                                     }
@@ -388,7 +388,7 @@
                                     $category = $row['category'];
                                     $agree = $row['agree'];
                                     $progress = $row['agree'] / 3 * 100; // 假設進度是根據同意數量計算的百分比
-                                    $progress = round($progress, 2); // 四捨五入到整數位
+                                    $progress = round($progress); // 四捨五入到整數
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
                                     }
