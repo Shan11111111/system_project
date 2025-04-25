@@ -83,8 +83,7 @@
                             </script>
                         <?php } ?>
 
-                        <a href="advice_search.php">最新建言</a><!--之後要設(不知道是前端還後端)-->
-                        <a href="advice_hot.php">熱門建言</a>
+                        <a href="advice_search.php">建言瀏覽</a>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -234,7 +233,8 @@
         $categoryName = isset($categoryMap[$categoryKey]) ? $categoryMap[$categoryKey] : '未知分類';
         $target = 3; // 附議目標人數
         $agree = $row['agree'];
-        $percent = min(100, ($agree / $target) * 100);
+        $percent = min(100, floor(($agree / $target) * 100));
+
         $remain = max(0, $target - $agree);
         $color = $percent >= 100 ? '#4caf50' : '#2196f3'; // 綠或藍
         ?>
@@ -242,13 +242,37 @@
             <main class="suggestion-detail">
                 <!-- 標題 -->
                 <h1 class="title" id="advice-title"><?php echo htmlspecialchars($row['advice_title']); ?></h1>
+                <?php
+                $agree = (int) $row['agree'];
+                $agreeThreshold = 3; //
+            
 
-                <span id="suggestion-status" class="suggestion-status status-pending">
-                    <?php echo htmlspecialchars($row['advice_state']); ?> <!-- 顯示建言狀態 -->
+                $announceDate = new DateTime($row['announce_date']);
+                $dueDate = clone $announceDate;
+                $dueDate->modify('+15 days');
+                $now = new DateTime();
+                $expired = $now > $dueDate;
+
+                // 狀態
+                if ($agree >= $agreeThreshold) {
+                    $statusClass = 'status-passed';
+                    $statusLabel = '已達標';
+                } elseif ($expired) {
+                    $statusClass = 'status-failed';
+                    $statusLabel = '未達標';
+                } else {
+                    $statusClass = 'status-pending';
+                    $statusLabel = '進行中';
+                }
+                ?>
+
+                <span class="suggestion-status <?php echo $statusClass; ?>">
+                    <?php echo $statusLabel; ?>
                 </span>
 
 
-                <!-- 進度條區域 -->
+
+                <!-- 進度條區域 
                 <section class="progress-section">
                     <div class="dates">
                         <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
@@ -270,31 +294,95 @@
                         目前 <?php echo $agree; ?> 人 / 還差 <?php echo $remain; ?> 人
                         <span class="percent" style="float: right; font-weight: bold;"><?php echo $percent; ?>%</span>
                     </div>
-                </section>
+                </section>-->
 
-                <div class="progress-tracker">
-                    <div class="step completed">
-                        <div class="circle"></div>
-                        <div class="label">提案</div>
-                        <div class="date"><?php echo htmlspecialchars($row['announce_date']); ?></div>
+                <?php
+                include 'db_connection.php';
+
+                $advice_id = $_GET['advice_id'] ?? 0;
+
+                $sql = "SELECT * FROM advice WHERE advice_id = ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$advice_id]);
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$row) {
+                    die("查無此建言。");
+                }
+
+                // 設定門檻與狀態
+                $agreeThreshold = 3;
+                $agreeCount = (int) $row['agree'];
+                $replyState = trim($row['advice_state'] ?? '未回覆');
+                $announceDate = new DateTime($row['announce_date']);
+                $now = new DateTime();
+
+                // 附議期限 = 提案日 + 15 天
+                $dueDate = clone $announceDate;
+                $dueDate->modify('+15 days');
+
+                $expired = $now > $dueDate;
+                $rejected = $expired && ($agreeCount < $agreeThreshold);
+
+                // 狀態指標
+                $status = 0;
+
+                if (!$rejected) {
+                    if ($agreeCount > 0)
+                        $status = 1;
+                    if ($agreeCount >= $agreeThreshold)
+                        $status = 2;
+                    if ($replyState === '已回覆')
+                        $status = 3;
+                }
+                ?>
+
+
+
+                <?php if ($rejected): ?>
+                    <div class="rejected-message"
+                        style="color: #b00020; background: #fbe9e7; padding: 15px; border-radius: 8px;margin-bottom: 20px;">
+                        附議人數未達標，建言提案未通過。<br>
+                        （附議期限已於 <?php echo $dueDate->format('Y-m-d'); ?> 結束）
                     </div>
-                    <div class="bar completed"></div>
-                    <div class="step active">
-                        <div class="circle"></div>
-                        <div class="label">附議中</div>
-                        <div class="date">2025-04-22</div>
+                <?php else: ?>
+                    <div class="progress-tracker">
+                        <!-- 提案 -->
+                        <div class="step <?php echo $status >= 0 ? 'completed' : ''; ?>">
+                            <div class="circle"></div>
+                            <div class="label">提案</div>
+                            <div class="date"><?php echo htmlspecialchars($row['announce_date']); ?></div>
+                        </div>
+
+                        <div class="bar <?php echo $status >= 1 ? 'completed' : ''; ?>"></div>
+
+                        <!-- 附議中 -->
+                        <div class="step <?php echo $status == 1 ? 'active' : ($status > 1 ? 'completed' : ''); ?>">
+                            <div class="circle"></div>
+                            <div class="label">附議中</div>
+                        </div>
+
+                        <div class="bar <?php echo $status >= 2 ? 'completed' : ''; ?>"></div>
+
+                        <!-- 附議達標 -->
+                        <div class="step <?php echo $status == 2 ? 'active' : ($status > 2 ? 'completed' : ''); ?>">
+                            <div class="circle"></div>
+                            <div class="label">附議達標<br>等待校方回應</div>
+                        </div>
+
+                        <div class="bar <?php echo $status >= 3 ? 'completed' : ''; ?>"></div>
+
+                        <!-- 校方已回應 -->
+                        <div class="step <?php echo $status == 3 ? 'active' : ''; ?>">
+                            <div class="circle"></div>
+                            <div class="label">校方已回應</div>
+                        </div>
                     </div>
-                    <div class="bar"></div>
-                    <div class="step">
-                        <div class="circle"></div>
-                        <div class="label">附議達標<br>等待校方回應</div>
-                    </div>
-                    <div class="bar"></div>
-                    <div class="step">
-                        <div class="circle"></div>
-                        <div class="label">校方已回應</div>
-                    </div>
-                </div>
+
+
+                <?php endif; ?>
+
+
 
 
                 <div class="advice">
@@ -334,14 +422,24 @@
                             <div class="deadline">
                                 <!--<p><i class="fa-solid fa-user icon-circle"></i>已有 <strong>30</strong> 人參與募資</p>-->
                                 <p><i class="fa-solid fa-hourglass-half  icon-circle"></i></i> <strong>
-                                        截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?></strong>
-                                    天</p>
+                                        截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +15 days')); ?></strong>
+                                </p>
 
                             </div>
 
                             <div class="button-group">
-                                <button class="agree-btn" onclick="handleAgree()"><i
-                                        class="fa-solid fa-stamp"></i>附議</button>
+                                <!-- 隱藏 announce_date 作為 JS 用 -->
+                                <span id="announce-date" style="display:none;"><?php echo $row['announce_date']; ?></span>
+
+                                <!-- 附議按鈕 -->
+                                <form id="insertForm" action="agree_insert.php" method="POST">
+                                    <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
+
+                                    <button class="agree-btn" id="agree-btn" onclick="handleAgree()">
+                                        <i class="fa-solid fa-stamp"></i> 附議
+                                    </button>
+                                </form>
+
                                 <div class="collect_share">
                                     <button class="collect-btn">收藏<i class="fa-solid fa-heart"></i></button>
                                     <button class="share-btn" onclick="copyLink()">分享 <i
@@ -372,8 +470,8 @@
             </main>
 
             <?php
-            
-        
+
+
             // 查主建言的狀態
             $stmt1 = $link->prepare("SELECT advice_state FROM advice WHERE advice_id = ?");
             $stmt1->bind_param("i", $advice_id);
@@ -396,15 +494,17 @@
 
 
             <div class="school-reply-card">
+
                 <div class="reply-header">
-                    <span class="reply-status <?= $state === '已回覆' ? 'replied' : 'pending' ?>">
-                        <?= $state === '已回覆' ? '🟢 已回覆' : '🟡 尚未回覆' ?>
-                    </span>
+
+                    <h5><strong>校方回覆</strong></h5>
                     <?php if ($update_time): ?>
                         <span class="reply-time">最後更新：<?= $update_time ?></span>
                     <?php endif; ?>
                 </div>
-
+                <span class="reply-status <?= $state === '已回覆' ? 'replied' : 'pending' ?>">
+                    <?= $state === '已回覆' ? '已回覆' : ' 尚未回覆' ?>
+                </span>
                 <div class="reply-content">
                     <p>
                         <?= $content ? htmlspecialchars($content) : '本建言尚待校方回覆，請耐心等候。' ?>
@@ -460,6 +560,29 @@
                 </div>
             </form>
             <div id="responseMessage" style="margin-top: 20px;"></div>
+            <script>
+                function checkDeadline() {
+                    const dateText = document.getElementById('announce-date').textContent.trim();
+                    const announceDate = new Date(dateText);
+                    const now = new Date();
+
+                    // 設定截止日為提案日 + 15 天
+                    const deadline = new Date(announceDate);
+                    deadline.setDate(deadline.getDate() + 15);
+
+                    if (now > deadline) {
+                        // 超過時間，禁用按鈕
+                        const btn = document.getElementById('agree-btn');
+                        btn.disabled = true;
+                        btn.innerHTML = '附議已截止';
+                        btn.style.backgroundColor = '#ccc'; // 可選：讓按鈕變灰色
+                        btn.style.cursor = 'not-allowed';
+                    }
+                }
+
+                // 執行檢查
+                checkDeadline();
+            </script>
 
 
             <script>
@@ -578,15 +701,15 @@
         <span>返回</span>
     </button>
 
-    <form id="insertForm" action="agree_insert.php" method="POST">
+    <!--<form id="insertForm" action="agree_insert.php" method="POST">
         <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
 
-        <!-- 單一按鈕 -->
-        <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
+        <!--單一按鈕 -->
+        <!--<button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
             <i class="fa-solid fa-stamp"></i>
             <span>附議</span>
         </button>
-    </form>
+    </form>-->
 
     <script>
         function handleAgree() {
