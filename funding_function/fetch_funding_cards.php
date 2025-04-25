@@ -111,8 +111,6 @@ if ($status_filter === 'active') { //ongoing
 if ($category !== 'all') {
     $cards = array_filter($cards, fn($c) => $c['category'] === $category);
 }
-
-
 // 關鍵字搜尋（標題模糊搜尋）
 if ($keyword !== '') {
     $cards = array_filter($cards, fn($c) => stripos($c['title'], $keyword) !== false);
@@ -125,6 +123,7 @@ usort($cards, function ($a, $b) use ($sort) {
     return strtotime($b['start_date']) - strtotime($a['start_date']); // 預設為最新
 });
 
+//due排序
 if ($status_filter === 'expired') {
     // 先根據 sort 篩選成功或失敗
     if ($sort === 'successful') {
@@ -159,29 +158,3 @@ echo json_encode([
 ]);
 
 
-
-/* 篩選
-if ($category !== 'all') {
-    $cards = array_filter($cards, fn($c) => $c['category'] === $category);
-}
-if ($keyword !== '') {
-    $cards = array_filter($cards, fn($c) => stripos($c['title'], $keyword) !== false);
-}
-
-// 排序
-usort($cards, function ($a, $b) use ($sort) {
-    if ($sort === 'hot') return (int)$b['supporter'] - (int)$a['supporter'];
-    if ($sort === 'deadline') return strtotime($a['end_date']) - strtotime($b['end_date']);
-    return strtotime($b['start_date']) - strtotime($a['start_date']); // 最新排序
-});
-
-// 分頁
-$totalFiltered = count($cards);
-$pagedData = array_slice(array_values($cards), $start, $perPage);
-
-echo json_encode([
-    'data' => $pagedData,
-    'page' => $page,
-    'totalPages' => ceil($totalFiltered / $perPage)
-]);
-*/
