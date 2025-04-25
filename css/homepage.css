@@ -1055,106 +1055,100 @@ a {
 
 .footer {
   display: flex;
-  height: 240px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
   background-color: var(--color-yellow);
-  padding-left: 200px;
-  padding-right: 200px;
-
+  padding: 40px 5%;
+  gap: 20px;
 }
 
 .logo_space {
-  flex: 3;
+  flex: 1 1 100%;
   display: flex;
   align-items: center;
-  margin-right: 1rem;
-  /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-
-
-.help {
-  display: flex;
-  flex: 2;
-  flex-direction: column;
-  padding-top: 30px;
-  margin-right: 1rem;
-  /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
-}
-
-.help_content {
-  padding-top: 5px;
-}
-
-
+.help,
 .footer_info {
-  flex: 4;
+  flex: 1 1 45%;
   display: flex;
   flex-direction: column;
-  padding-top: 30px;
-  margin-right: 0rem;
-  /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
 }
 
 .help_title,
 .info_title {
-  display: flex;
   font-size: 18px;
   font-weight: bold;
   color: var(--color-dark-brown);
+  margin-bottom: 5px;
+}
+
+.help_content,
+.info_content {
+  padding-top: 5px;
 }
 
 .info_content {
   display: flex;
-  flex-direction: row;
-  padding: 5px 0 0 0px;
-  gap: 10px;
-}
-
-.school_info {
-  display: flex;
-  flex: 2;
   flex-direction: column;
+  gap: 25px;
 }
 
+.school_info,
 .connection {
   display: flex;
-  flex: 3;
   flex-direction: column;
-
+  gap: 5px;
 }
 
-@media screen and (max-width: 768px) {
+
+
+@media screen and (min-width: 768px) {
+  .logo_space {
+    flex: 3;
+    justify-content: flex-start;
+    align-items: flex-start; /* 由 center 改為 top 對齊 */
+    padding-top: 30px;        /* 與 .help 區塊一致 */
+    margin-bottom: 0;
+  }
+
+  .connection{
+    margin-left: 35px;
+  }
+}
+
+
+@media  (min-width: 768px) {
   .footer {
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem 1rem;
-    gap: 2rem;
-    height: auto;
-    background-color: var(--color-yellow);
+    flex-wrap: nowrap;
+    padding-left: 200px;
+    padding-right: 200px;
+    height: 240px;
   }
 
   .logo_space {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex: 3;
     justify-content: flex-start;
-    width: 100%;
+    margin-bottom: 0;
   }
 
-  .logo_space img {
-    width: 100px;
-    height: auto;
-  }
-
-  .help_info{
-    display: block;
-    flex-direction: row;
-  }
-  .help{
-    flex: 1;
-  }
-  .footer_info{
+  .help {
     flex: 2;
+    margin-right: 1rem;
+    padding-top: 30px;
   }
 
+  .footer_info {
+    flex: 4;
+    margin-right: 0;
+    padding-top: 30px;
+  }
+
+  .info_content {
+    flex-direction: row;
+    
+  }
 }

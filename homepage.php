@@ -467,7 +467,7 @@
                         </div>
                         <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right" style="color: #a5a0a0"></i>
                         </div>
-                        <div class="more"><a href="ongoing_funding_search.php">更多</a></div>
+                        <div class="more"><a href="#">更多</a></div>
                     </div>
                 </div>
 
@@ -492,7 +492,7 @@
         LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id
         GROUP BY f.project_id
         ORDER BY a.announce_date DESC";
-                
+
                 $result = mysqli_query($link, $sql);
                 if (!$result) {
                     die("查詢失敗: " . mysqli_error($link));
@@ -543,7 +543,7 @@
                         <div class="swiper-slide">
                             <div class="fund-section">
                                 <div class="fund-content">
-                                    <a href="funding_detail.php?id=<?php echo urlencode($bigCard['project_id']); ?>"
+                                    <a href="funding_detail.php?project_id=<?php echo urlencode($bigCard['project_id']); ?>"
                                         style="text-decoration: none; color: inherit;">
                                         <div class="left-big-card">
                                             <div class="fundraiser-card">
@@ -591,7 +591,7 @@
                                     <div class="right-small-cards">
                                         <?php foreach ($smallCards as $smallCard): ?>
 
-                                            <a href="funding_detail.php?id=<?php echo urlencode($smallCard['project_id']); ?>"
+                                            <a href="funding_detail.php?project_id=<?php echo urlencode($smallCard['project_id']); ?>"
                                                 style="text-decoration: none; color: inherit;">
                                                 <div class="fundraiser-card small-card">
                                                     <div class="card-image">
