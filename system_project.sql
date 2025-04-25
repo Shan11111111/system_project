@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-25 14:02:49
+-- 產生時間： 2025-04-25 15:00:01
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -365,6 +365,13 @@ CREATE TABLE `fundraising_extension_requests` (
   `reviewed_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- 傾印資料表的資料 `fundraising_extension_requests`
+--
+
+INSERT INTO `fundraising_extension_requests` (`id`, `fundraising_project_id`, `requested_by_office_id`, `requested_extension_date`, `status`, `admin_response`, `created_at`, `reviewed_at`) VALUES
+(10, 1, 904, '2025-04-27 00:00:00', '已接受', '好', '2025-04-25 20:53:46', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -387,12 +394,12 @@ CREATE TABLE `fundraising_projects` (
 --
 
 INSERT INTO `fundraising_projects` (`project_id`, `suggestion_assignments_id`, `title`, `description`, `funding_goal`, `start_date`, `end_date`, `status`) VALUES
-(1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', '2025-04-23 19:45:19', '已過期'),
-(2, 6, '廁所施工聲音好吵', '我們會盡力監督', 0, '2025-04-24 21:29:40', NULL, '進行中'),
-(3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', NULL, '進行中'),
+(1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', '2025-04-27 00:00:00', '進行中'),
+(2, 6, '廁所施工聲音好吵', '我們會盡力監督', 0, '2025-04-24 21:29:40', '2025-06-24 20:58:32', '進行中'),
+(3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', '2025-06-24 20:58:32', '進行中'),
 (4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', '2025-04-25 17:42:29', '已過期'),
-(5, 8, '捐血救人', '用於招募志工與工讀金的費用', 35000, '2025-04-24 22:17:25', NULL, '進行中'),
-(6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', NULL, '進行中');
+(5, 8, '捐血救人', '用於招募志工與工讀金的費用', 35000, '2025-04-24 22:17:25', '2025-06-24 20:58:32', '進行中'),
+(6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', '2025-04-24 20:59:32', '進行中');
 
 -- --------------------------------------------------------
 
@@ -669,7 +676,7 @@ ALTER TABLE `funding_state`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_extension_requests`
 --
 ALTER TABLE `fundraising_extension_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_projects`
