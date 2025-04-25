@@ -80,6 +80,7 @@ foreach ($projects as $project) {
         $is_expired = false; // 若有錯，視為尚未過期
     }
 
+
     // 組合卡片資料
     $cards[] = [
         'id' => $project['project_id'],
@@ -119,6 +120,7 @@ if ($keyword !== '') {
 // ongoing排序
 usort($cards, function ($a, $b) use ($sort) {
     if ($sort === 'hot') return $b['supporter'] - $a['supporter'];
+    if ($sort === 'target') return $b['progress'] - $a['progress'];
     if ($sort === 'deadline') return strtotime($a['end_date']) - strtotime($b['end_date']);
     return strtotime($b['start_date']) - strtotime($a['start_date']); // 預設為最新
 });

@@ -165,6 +165,7 @@
                 </button>
                 <div id="sortMenu" class="sort-menu">
                     <div onclick="setSort('hot')">最熱門</div>
+                    <div onclick="setSort('target')">快達標</div>
                     <div onclick="setSort('new')">最新</div>
                     <div onclick="setSort('deadline')">結束日期</div>
                 </div>
@@ -330,7 +331,8 @@
             document.getElementById("sortLabel").textContent = {
                 hot: "最熱門",
                 new: "最新",
-                deadline: "結束日期"
+                deadline: "結束日期",
+                target:"快達標"
             } [type];
             document.getElementById("sortMenu").style.display = "none";
             loadCards(1);
