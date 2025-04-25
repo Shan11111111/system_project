@@ -586,6 +586,8 @@
 
 
             <script>
+
+                
                 document.getElementById('commentForm').addEventListener('submit', async function (event) {
                     event.preventDefault();
 

@@ -235,19 +235,20 @@ body {
 
 .banner {
   display: grid;
-  grid-template-columns:  1fr 0.8fr 1fr;
+  grid-template-columns: 1fr 0.8fr 1fr;
   grid-template-rows: repeat(3, auto);
   gap: 40px;
   justify-items: center;
   align-items: center;
   background-image:
-  linear-gradient(to bottom, rgba(0, 0, 0, 0), #b0a99894),
-  url('../img/homepage.png');
+    linear-gradient(to bottom, rgba(0, 0, 0, 0), #b0a99894),
+    url('../img/homepage.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   height: 100%;
-  padding-top: 90px; /* 根據你的 navbar 高度調整 */
+  padding-top: 90px;
+  /* 根據你的 navbar 高度調整 */
 
 }
 
@@ -257,6 +258,7 @@ body {
     transform: scale(0.5);
     opacity: 0;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -266,6 +268,7 @@ body {
 .chicken {
   animation: popIn 0.6s ease;
 }
+
 .chicken:hover::after {
   content: "🐣 咕咕～";
   position: absolute;
@@ -277,7 +280,7 @@ body {
   border-radius: 12px;
   font-size: 14px;
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   z-index: 10;
   pointer-events: none;
   opacity: 0;
@@ -291,13 +294,15 @@ body {
   }
 }
 
-.banner1, .banner3 {
+.banner1,
+.banner3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 40px;
   flex: none;
 }
+
 .hot_propose {
   flex: 1;
   display: flex;
@@ -315,6 +320,7 @@ body {
 .new_propose .chicken {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .new_propose .chicken:hover {
   transform: translateX(70px) scale(1.1) translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -323,6 +329,7 @@ body {
 .new_fund .chicken {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .new_fund .chicken:hover {
   transform: translateX(-70px) scale(1.1) translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -896,12 +903,14 @@ a {
   margin-top: auto;
   /* ✅ 貼底對齊（若需要） */
 }
+
 .CARD-meta span {
   display: inline-block;
   margin-right: 6px;
   color: #555;
 
 }
+
 .divider {
   margin: 0 4px;
   color: #555;
@@ -1047,17 +1056,18 @@ a {
 .footer {
   display: flex;
   height: 240px;
-  background-color:var(--color-yellow);
+  background-color: var(--color-yellow);
   padding-left: 200px;
   padding-right: 200px;
-  
+
 }
 
 .logo_space {
   flex: 3;
   display: flex;
   align-items: center;
-  margin-right: 1rem; /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
+  margin-right: 1rem;
+  /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
 }
 
 
@@ -1067,35 +1077,39 @@ a {
   flex: 2;
   flex-direction: column;
   padding-top: 30px;
-  margin-right: 1rem; /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
+  margin-right: 1rem;
+  /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
 }
 
-.help_content{
+.help_content {
   padding-top: 5px;
 }
 
 
-.footer_info{
+.footer_info {
   flex: 4;
   display: flex;
   flex-direction: column;
   padding-top: 30px;
-  margin-right: 0rem; /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
+  margin-right: 0rem;
+  /* 原本可能是 2rem 或更多，這樣會讓距離變小 */
 }
 
-.help_title ,.info_title{
+.help_title,
+.info_title {
   display: flex;
   font-size: 18px;
   font-weight: bold;
   color: var(--color-dark-brown);
 }
 
-.info_content{
+.info_content {
   display: flex;
   flex-direction: row;
-  padding: 5px 0 0 0px ;
-  gap:10px;
+  padding: 5px 0 0 0px;
+  gap: 10px;
 }
+
 .school_info {
   display: flex;
   flex: 2;
@@ -1109,5 +1123,38 @@ a {
 
 }
 
+@media screen and (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    gap: 2rem;
+    height: auto;
+    background-color: var(--color-yellow);
+  }
 
+  .logo_space {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+  }
 
+  .logo_space img {
+    width: 100px;
+    height: auto;
+  }
+
+  .help_info{
+    display: block;
+    flex-direction: row;
+  }
+  .help{
+    flex: 1;
+  }
+  .footer_info{
+    flex: 2;
+  }
+
+}

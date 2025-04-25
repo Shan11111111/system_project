@@ -388,7 +388,7 @@
                                     $category = $row['category'];
                                     $agree = $row['agree'];
                                     $progress = $row['agree'] / 3 * 100; // 假設進度是根據同意數量計算的百分比
-                                    $progress=round($progress,2); // 四捨五入到整數位
+                                    $progress = round($progress, 2); // 四捨五入到整數位
                                     if ($progress > 100) {
                                         $progress = 100; // 確保進度不超過 100%
                                     }
@@ -558,7 +558,7 @@
                                                         if ($progressPercentage > 100) {
                                                             $progressPercentage = 100; // 確保進度不超過 100%
                                                         }
-                                                        $progressPercentage = round($progressPercentage,2); // 四捨五入到整數位
+                                                        $progressPercentage = round($progressPercentage, 2); // 四捨五入到整數位
                                                     } else {
                                                         $progressPercentage = 0; // 如果目標金額為 0，進度設為 0%
                                                     }
@@ -590,35 +590,43 @@
                                     <!-- 小圖 -->
                                     <div class="right-small-cards">
                                         <?php foreach ($smallCards as $smallCard): ?>
-                                            
-                                            <a href="funding_detail.php?project_id=<?php echo urlencode($smallCard['project_id']); ?>" style="text-decoration: none; color: inherit;">
+
+                                            <a href="funding_detail.php?project_id=<?php echo urlencode($smallCard['project_id']); ?>"
+                                                style="text-decoration: none; color: inherit;">
                                                 <div class="fundraiser-card small-card">
                                                     <div class="card-image">
-                                                        <img src="<?php echo !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'default_small_image.jpg'; ?>" alt="小圖">
+                                                        <img src="<?php echo !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'default_small_image.jpg'; ?>"
+                                                            alt="小圖">
                                                     </div>
                                                     <div class="card-info">
                                                         <div class="card-title">
                                                             <?php echo htmlspecialchars($smallCard['advice_title']); ?>
-                                                     <?php
-                                            if ($smallCard['funding_goal'] > 0) {
-                                                $progressPercentage = ($smallCard['total_funding'] / $smallCard['funding_goal']) * 100;
-                                                if ($progressPercentage > 100) {
-                                                    $progressPercentage = 100; // 確保進度不超過 100%
-                                                }
-                                                $progressPercentage = round($progressPercentage,2); // 四捨五入到整數位
-                                            } else {
-                                                $progressPercentage = 0; // 如果目標金額為 0，進度設為 0%
-                                            }
-                                            ?>   </div>
+                                                            <?php
+                                                            if ($smallCard['funding_goal'] > 0) {
+                                                                $progressPercentage = ($smallCard['total_funding'] / $smallCard['funding_goal']) * 100;
+                                                                if ($progressPercentage > 100) {
+                                                                    $progressPercentage = 100; // 確保進度不超過 100%
+                                                                }
+                                                                $progressPercentage = round($progressPercentage, 2); // 四捨五入到整數位
+                                                            } else {
+                                                                $progressPercentage = 0; // 如果目標金額為 0，進度設為 0%
+                                                            }
+                                                            ?>
+                                                        </div>
                                                         <div class="progress-bar">
-                                                            <div class="progress" style="width: <?php echo $progressPercentage; ?>%;"></div>
+                                                            <div class="progress"
+                                                                style="width: <?php echo $progressPercentage; ?>%;"></div>
                                                         </div>
                                                         <div class="card-meta">
                                                             <div>
-                                                                <span>NT$ <?php echo htmlspecialchars($smallCard['total_funding']); ?> / 目標 NT$ <?php echo htmlspecialchars($smallCard['funding_goal']); ?>/<?php echo"$progressPercentage%" ?></span>
+                                                                <span>NT$
+                                                                    <?php echo htmlspecialchars($smallCard['total_funding']); ?>
+                                                                    / 目標 NT$
+                                                                    <?php echo htmlspecialchars($smallCard['funding_goal']); ?>/<?php echo "$progressPercentage%" ?></span>
                                                             </div>
                                                             <div>
-                                                                <span><?php echo htmlspecialchars($smallCard['donor_count']); ?> <i class="fa-regular fa-user"></i></span>
+                                                                <span><?php echo htmlspecialchars($smallCard['donor_count']); ?>
+                                                                    <i class="fa-regular fa-user"></i></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -638,7 +646,10 @@
 
     <footer class="footer">
         <div class="logo_space">
-            <img src="img\logo.png" style="width: 150px;">
+            <img src="img/logo.png" style="width: 150px;">
+        </div>
+        <div class="help_info">
+            
         </div>
         <div class="help">
             <div class="help_title">幫助</div>
@@ -652,6 +663,7 @@
         <div class="footer_info">
             <div class="info_title">相關資訊</div>
             <hr>
+
             <div class="info_content">
                 <div class="school_info">
                     <div>關於我們</div>
@@ -663,6 +675,7 @@
                     <div>電話:(02)2905-2000</div>
                 </div>
             </div>
+
         </div>
 
     </footer>
@@ -673,6 +686,8 @@
 
     <!-- 初始化 Swiper -->
     <script>
+
+        
         // 點擊漢堡切換 menu
         document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
