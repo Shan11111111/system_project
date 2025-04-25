@@ -1,57 +1,11 @@
 <?php
+
+session_start();
+
 // 資料庫連線
 $conn = new mysqli("localhost", "root", "", "system_project");
 if ($conn->connect_error) {
     die("資料庫連線失敗: " . $conn->connect_error);
-}
-
-// 處理表單提交
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $request_id = intval($_POST['request_id']);
-    $admin_response = htmlspecialchars($_POST['admin_response']);
-    $action = $_POST['action'];
-
-    if ($action === 'accept') {
-        $status = '已接受';
-    } elseif ($action === 'reject') {
-        $status = '已拒絕';
-    } else {
-        die("無效的操作。");
-    }
-
-    // 更新資料庫中的申請狀態
-$stmt = $conn->prepare("UPDATE fundraising_extension_requests SET status = ?, admin_response = ? WHERE id = ?");
-if (!$stmt) {
-    die("SQL prepare failed: " . $conn->error);
-}
-$stmt->bind_param("ssi", $status, $admin_response, $request_id);
-
-if ($stmt->execute()) {
-    if ($action === 'accept') {
-        // 更新募款專案的截止日
-        $update_stmt = $conn->prepare(
-"UPDATE fundraising_projects f SET f.status='進行中', f.end_date = (SELECT requested_extension_date FROM fundraising_extension_requests WHERE fundraising_project_id = ?) 
-        WHERE project_id = (SELECT fundraising_project_id FROM fundraising_extension_requests WHERE id = ?)"
-        );
-        if (!$update_stmt) {
-            die("SQL prepare failed: " . $conn->error);
-        }
-        $update_stmt->bind_param("ii", $request_id, $request_id);
-        if ($update_stmt->execute()) {
-            echo "<script>alert('申請已成功更新。');</script>";
-        } else {
-            echo "<script>alert('更新募款專案的截止日失敗: " . addslashes($conn->error) . "');</script>";
-        }
-        $update_stmt->close();
-    } else {
-        echo "<script>alert('申請已成功更新。');</script>";
-    }
-} else {
-    echo "<script>alert('更新失敗: " . addslashes($conn->error) . "');</script>";
-}
-
-$stmt->close();
-
 }
 
 // 查詢待審核的延後申請
@@ -161,7 +115,7 @@ $result = $conn->query($sql);
         }
 
         .dropdown a:hover {
-            background-color:rgb(159, 193, 255);
+            background-color: rgb(159, 193, 255);
         }
 
         /* 表格樣式 */
@@ -194,7 +148,7 @@ $result = $conn->query($sql);
         }
 
         tr:hover {
-            background-color:rgb(167, 185, 255);
+            background-color: rgb(167, 185, 255);
         }
 
         input[type="number"] {
@@ -247,24 +201,25 @@ $result = $conn->query($sql);
             </div>
         </div>
 
-<?php
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<div>";
-        echo "<h3>專案名稱：" . htmlspecialchars($row['title']) . "</h3>";
-        echo "<p>申請延後至：" . htmlspecialchars($row['requested_extension_date']) . "</p>";
-        echo "<p>申請時間：" . htmlspecialchars($row['created_at']) . "</p>";
-        echo "<form action='review_extension_requests.php' method='POST'>";
-        echo "<input type='hidden' name='request_id' value='" . htmlspecialchars($row['id']) . "'>";
-        echo "<textarea name='admin_response' placeholder='輸入回應...' required></textarea>";
-        echo "<button type='submit' name='action' value='accept'>接受</button>";
-        echo "<button type='submit' name='action' value='reject'>拒絕</button>";
-        echo "</form>";
-        echo "</div>";
-    }
-} else {
-    echo "<p>目前沒有待審核的申請。</p>";
-}
+        <?php
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<div>";
+                echo "<h3>專案名稱：" . htmlspecialchars($row['title']) . "</h3>";
+                echo "<p>申請延後至：" . htmlspecialchars($row['requested_extension_date']) . "</p>";
+                echo "<p>申請時間：" . htmlspecialchars($row['created_at']) . "</p>";
+                echo "<form action='apply_date.php' method='POST'>";
+                echo "<input type='hidden' name='request_id' value='" . htmlspecialchars($row['id']) . "'>";
+                echo "<input type='hidden' name='end_date' value='" . htmlspecialchars($row['requested_extension_date']) . "'>";
+                echo "<textarea name='admin_response' placeholder='輸入回應...' required></textarea>";
+                echo "<button type='submit' name='action' value='accept'>接受</button>";
+                echo "<button type='submit' name='action' value='reject'>拒絕</button>";
+                echo "</form>";
+                echo "</div>";
+            }
+        } else {
+            echo "<p>目前沒有待審核的申請。</p>";
+        }
 
-$conn->close();
-?>
+        $conn->close();
+        ?>
