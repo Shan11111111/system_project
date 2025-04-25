@@ -236,36 +236,116 @@ body {
   margin-top: 100px;
 }
 /* 建言區 */
+.highlight-advice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff6da;
+  border-left: 6px solid #d9a679;
+  border-right: 6px solid #d9a679;
+  padding: 10px 20px;
+  border-radius: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: #4b3f2f;
+  width: 90%;
+  margin: 20px auto;
+
+}
 
 .highlight {
   display: flex;
-  margin: auto;
-  justify-content: center;
-  background: #fff6c5;
-  width: 80%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #e6dba8;
-  margin-bottom: 20px;
-  font-weight: bold;
-  margin-top: 2%;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .highlight_content {
-  flex: 4;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+#highlight-count {
+  font-size: 16px;
+  margin: 0 ;
+
 }
 
 .highlight_btn {
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 100px;
-  flex: 1;
+  background-color: #c8925c;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s ease-in-out;
+  margin-top: 0.4rem;
+}
 
+.highlight_btn:hover {
+  transform: scale(1.05);
+  background-color: #e72c0f;
+}
+
+.pulse {
+  animation: pulse-btn 1.5s infinite;
+}
+
+@keyframes pulse-btn {
+  0% {
+      transform: scale(1);
+  }
+
+  50% {
+      transform: scale(1.05);
+  }
+
+  100% {
+      transform: scale(1);
+  }
+}
+
+#highlight-title::before {
+  content: '🔥';
+  display: inline-block;
+  font-size: 1.2rem;
+  animation: fire-dance 0.8s infinite ease-in-out;
+  filter: drop-shadow(0 0 6px orange);
+  margin-right: 8px;
 
 }
 
+@keyframes fire-dance {
+  0%   { transform: scale(1) rotate(0deg);   opacity: 1; }
+  25%  { transform: scale(1.15) rotate(-5deg); opacity: 0.9; }
+  50%  { transform: scale(1.25) rotate(5deg);  opacity: 1; }
+  75%  { transform: scale(1.1) rotate(-3deg);  opacity: 0.95; }
+  100% { transform: scale(1) rotate(0deg);    opacity: 1; }
+}
+
+/* RWD 支援：手機畫面時按鈕換行 */
+@media (max-width: 600px) {
+  .highlight-advice {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .highlight_btn {
+    width: 70%;
+    text-align: center;
+    align-items: center;
+    margin: auto;
+  }
+  .highlight{
+    margin: auto;
+  }
+  #highlight-count{
+    margin: auto;
+  }
+}
+
 .advice_space {
-  width: 85%;
+  width: 90%;
   margin: auto;
   padding-top: 2%;
 }
@@ -310,7 +390,6 @@ body {
   gap: 5px;
 
 }
-
 
 
 

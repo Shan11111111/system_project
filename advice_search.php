@@ -145,22 +145,19 @@
     </nav>
 
     <div class="container">
-        <div class="highlight">
-            <div class="highlight_content" id="highlight-title">快要達標的建言</div>
-            <div class="highlight_btn" id="highlight-action">去附議</div>
+        <div class="highlight-advice">
+            <div class="highlight">
+                <div class="highlight_content" id="highlight-title">快要達標的建言：</div>
+                <div id="highlight-count"></div>
+            </div>
+            <div class="highlight_btn pulse" id="highlight-action">🐣 點我 +1 力挺！</div>
         </div>
-        <div class="highlight_title">
-            <center>
-                <p id="highlight-count">快要達標的建言，還剩 ? 人</p>
-            </center>
-        </div>
-
         <div class="advice_space">
             <div class="tabs">
                 <div class="tab active" onclick="switchTab('active')">進行中</div>
                 <div class="tab" onclick="switchTab('ended')">已結束</div>
             </div>
-            <hr style="width=70%; border-color:black;" />
+            <hr style=" border-color:black;" />
             <div class="filter-bar">
                 <div class="search_text">
                     <!-- 修正後的下拉選單 -->
