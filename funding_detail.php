@@ -96,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -163,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -182,7 +182,7 @@
     </nav>
 
     <?php
-    $project_id = isset($_GET['project_id']) ? intval($_GET['project_id']) : 0;
+    $project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     $link = mysqli_connect('localhost', 'root', '', 'system_project');
 
     if (!$link) {
@@ -255,7 +255,7 @@
         $row['image_path'] = $image_path;
 
         // 募資金額總和
-        $fund_sql = "SELECT SUM(donate_money) AS current_amount FROM funding_people WHERE funding_id = $project_id";
+        $fund_sql = "SELECT SUM(donation_amount) AS current_amount FROM donation_record WHERE donation_id = $project_id";
         $fund_result = mysqli_query($link, $fund_sql);
         if ($fund_result && mysqli_num_rows($fund_result) > 0) {
             $fund_row = mysqli_fetch_assoc($fund_result);
@@ -266,7 +266,7 @@
 
         // 參與者統計
         $participant_count = 0;
-        $count_sql = "SELECT COUNT(*) AS total FROM funding_people WHERE funding_id = $project_id";
+        $count_sql = "SELECT COUNT(DISTINCT donor) AS total FROM donation_record WHERE project_id = $project_id";
         $count_result = mysqli_query($link, $count_sql);
         if ($count_result && mysqli_num_rows($count_result) > 0) {
             $count_row = mysqli_fetch_assoc($count_result);
@@ -291,7 +291,7 @@
 
         if (!empty($comment_text) && $project_id > 0 && $user_id > 0) {
             $stmt = $link->prepare("INSERT INTO funding_comments (project_id, user_id, comment_text, created_at) VALUES (?, ?, ?, NOW())");
-            
+
             // 檢查 prepare 是否成功
             if ($stmt === false) {
                 die("SQL 語句準備失敗: " . $link->error);
@@ -470,7 +470,8 @@
                 <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong>
                     人參與募資</p>
                 <p><i class="fa-solid fa-hourglass-half icon-circle"></i>剩餘
-                    <strong><?php echo $days_remaining; ?></strong> 天</p>
+                    <strong><?php echo $days_remaining; ?></strong> 天
+                </p>
             </div>
 
             <div class="button-group">
