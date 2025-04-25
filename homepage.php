@@ -86,7 +86,7 @@
                     <button class="dropbtn">募資</button>
                     <div class="dropdown-content">
                         <a href="ongoing_funding_search.php">進行中募資</a>
-                        <a href="#">已結束募資</a>
+                        <a href="due_funding_search.php">已結束募資</a>
                     </div>
                 </div>
             </div>
