@@ -120,8 +120,8 @@
             <div class="dropdown">
                 <button class="dropbtn">募資</button>
                 <div class="dropdown-content">
-                    <a href="#">進行中計畫</a>
-                    <a href="#">成功案例</a>
+                    <a href="ongoing_funding_search.php">進行中募資</a>
+                    <a href="due_funding_search.php">已結束募資</a>
                 </div>
             </div>
 
@@ -164,9 +164,8 @@
                     <span id="sortLabel">排序</span> <i class="fa-solid fa-filter"></i>
                 </button>
                 <div id="sortMenu" class="sort-menu">
-                    <div onclick="setSort('hot')">最熱門</div>
-                    <div onclick="setSort('new')">最新</div>
-                    <div onclick="setSort('deadline')">結束日期</div>
+                    <div onclick="setSort('successful')">募資成功</div>
+                    <div onclick="setSort('fail')">募資失敗</div>
                 </div>
             </div>
         </div>
@@ -190,7 +189,7 @@
         };
 
         let currentPage = 1;
-        let currentSort = 'hot';
+        let currentSort = 'all';
         const itemsPerPage = 12;
 
         function getFilters() {
@@ -209,9 +208,9 @@
                 keyword,
                 sort
             } = getFilters();
-            const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}`;
+            const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}&page_type=due`;
 
-            
+
 
             fetch(url)
                 .then(res => res.json())
@@ -328,9 +327,8 @@
         function setSort(type) {
             currentSort = type;
             document.getElementById("sortLabel").textContent = {
-                hot: "最熱門",
-                new: "最新",
-                deadline: "結束日期"
+                successful: "募資成功",
+                fail: "募資失敗",
             } [type];
             document.getElementById("sortMenu").style.display = "none";
             loadCards(1);

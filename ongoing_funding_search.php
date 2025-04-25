@@ -120,8 +120,8 @@
             <div class="dropdown">
                 <button class="dropbtn">募資</button>
                 <div class="dropdown-content">
-                    <a href="#">進行中計畫</a>
-                    <a href="#">成功案例</a>
+                    <a href="ongoing_funding_search.php">進行中募資</a>
+                    <a href="due_funding_search.php">已結束募資</a>
                 </div>
             </div>
 
@@ -165,6 +165,7 @@
                 </button>
                 <div id="sortMenu" class="sort-menu">
                     <div onclick="setSort('hot')">最熱門</div>
+                    <div onclick="setSort('target')">快達標</div>
                     <div onclick="setSort('new')">最新</div>
                     <div onclick="setSort('deadline')">結束日期</div>
                 </div>
@@ -209,9 +210,9 @@
                 keyword,
                 sort
             } = getFilters();
-            const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}`;
+            const url = `funding_function/fetch_funding_cards.php?page=${page}&category=${category}&keyword=${encodeURIComponent(keyword)}&sort=${sort}&page_type=ongoing`;
 
-            
+
 
             fetch(url)
                 .then(res => res.json())
@@ -330,7 +331,8 @@
             document.getElementById("sortLabel").textContent = {
                 hot: "最熱門",
                 new: "最新",
-                deadline: "結束日期"
+                deadline: "結束日期",
+                target:"快達標"
             } [type];
             document.getElementById("sortMenu").style.display = "none";
             loadCards(1);
