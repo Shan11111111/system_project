@@ -179,6 +179,28 @@
 
     <!-- ✅ JavaScript 功能 -->
     <script>
+// 點擊漢堡切換 menu
+document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        });
+
+        // 手機 dropdown 點擊展開
+        document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); // 防止跳頁
+                const parent = btn.parentElement;
+                parent.classList.toggle('active');
+            });
+        });
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 400) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
         const categoryMap = {
             all: "全部分類",
             equipment: "設施改善",

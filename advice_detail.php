@@ -503,7 +503,7 @@
                     <?php endif; ?>
                 </div>
                 <span class="reply-status <?= $state === '已回覆' ? 'replied' : 'pending' ?>">
-                    <?= $state === '已回覆' ? '已回覆' : ' 尚未回覆' ?>
+                    <?= $state === '<i class="fa-solid fa-circle"></i>&nbsp已回覆' ? '已回覆' : ' <i class="fa-solid fa-circle"></i>&nbsp尚未回覆' ?>
                 </span>
                 <div class="reply-content">
                     <p>
@@ -587,7 +587,7 @@
 
             <script>
 
-                
+
                 document.getElementById('commentForm').addEventListener('submit', async function (event) {
                     event.preventDefault();
 
@@ -707,7 +707,7 @@
         <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
 
         <!--單一按鈕 -->
-        <!--<button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
+    <!--<button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
             <i class="fa-solid fa-stamp"></i>
             <span>附議</span>
         </button>
@@ -763,6 +763,28 @@
 <footer class="footer"> footer</footer>
 
 <script>
+    // 點擊漢堡切換 menu
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        document.getElementById('mobile-menu').classList.toggle('active');
+    });
+
+    // 手機 dropdown 點擊展開
+    document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault(); // 防止跳頁
+            const parent = btn.parentElement;
+            parent.classList.toggle('active');
+        });
+    });
+    window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 400) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         // 從 URL 的上頁連結中獲取 status
         const statusFromPreviousPage = new URLSearchParams(window.location.search).get('id');
