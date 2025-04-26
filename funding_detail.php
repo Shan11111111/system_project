@@ -202,7 +202,8 @@
             p.suggestion_assignments_id, 
             a.advice_id
         FROM fundraising_projects p
-        LEFT JOIN advice a ON a.advice_id = p.suggestion_assignments_id
+        left join suggestion_assignments sa on sa.suggestion_assignments_id= p.suggestion_assignments_id
+        LEFT JOIN advice a ON a.advice_id = sa.advice_id
         WHERE p.project_id = $project_id";
 
     $result = mysqli_query($link, $sql);
@@ -290,7 +291,7 @@
         $row['image_path'] = $image_path;
 
         // 募資金額總和
-        $fund_sql = "SELECT SUM(donation_amount) AS current_amount FROM donation_record WHERE donation_id = $project_id";
+        $fund_sql = "SELECT SUM(donation_amount) AS current_amount FROM donation_record WHERE project_id = $project_id";
         $fund_result = mysqli_query($link, $fund_sql);
         if ($fund_result && mysqli_num_rows($fund_result) > 0) {
             $fund_row = mysqli_fetch_assoc($fund_result);
@@ -312,6 +313,7 @@
         $funding_goal = $row['funding_goal'];
         $current_amount = $row['current_amount'];
         if ($current_amount >= $funding_goal) {
+
             $funding_status_text = "專案募資成功！";
         } else {
             $funding_status_text = "募資專案尚未達標";
