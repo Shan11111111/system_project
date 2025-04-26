@@ -89,8 +89,8 @@
                 <div class="dropdown">
                     <button class="dropbtn">募資</button>
                     <div class="dropdown-content">
-                        <a href="#">進行中計畫</a>
-                        <a href="#">成功案例</a>
+                        <a href="ongoing_funding_search.php">進行中計畫</a>
+                        <a href="due_funding_search.php">成功案例</a>
                     </div>
                 </div>
             </div>
@@ -156,8 +156,8 @@
             <div class="dropdown">
                 <button class="dropbtn">募資</button>
                 <div class="dropdown-content">
-                    <a href="#">進行中計畫</a>
-                    <a href="#">成功案例</a>
+                    <a href="ongoing_funding_search.php">進行中計畫</a>
+                    <a href="due_funding_search.php">成功案例</a>
                 </div>
             </div>
 
@@ -272,30 +272,6 @@
 
 
 
-                <!-- 進度條區域 
-                <section class="progress-section">
-                    <div class="dates">
-                        <span id="announce-date">發布日：<?php echo htmlspecialchars($row['announce_date']); ?></span>
-                        <span id="deadline-date">
-                            截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30 days')); ?>
-                        </span>
-                    </div>
-                    <div class="progress-bar-container"
-                        style="width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; height: 20px; margin: 10px 0;">
-                        <div class="progress-bar" style="width: 100%; height: 100%; position: relative;">
-                            <div class="progress"
-                                style="width: <?php echo $percent . '%'; ?>; background-color: <?php echo $color; ?>; height: 100%; transition: width 1s ease;">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="progress-info" style="font-size: 14px; margin-top: 5px;">
-                        目前 <?php echo $agree; ?> 人 / 還差 <?php echo $remain; ?> 人
-                        <span class="percent" style="float: right; font-weight: bold;"><?php echo $percent; ?>%</span>
-                    </div>
-                </section>-->
-
                 <?php
                 include 'db_connection.php';
 
@@ -337,7 +313,27 @@
                 }
                 ?>
 
+                <?php
 
+
+                // 查主建言的狀態
+                $stmt1 = $link->prepare("SELECT advice_state FROM advice WHERE advice_id = ?");
+                $stmt1->bind_param("i", $advice_id);
+                $stmt1->execute();
+                $result1 = $stmt1->get_result();
+                $advice = $result1->fetch_assoc();
+                $state = $advice['advice_state'] ?? '未處理';
+
+                // 查校方最新處理內容
+                $stmt2 = $link->prepare("SELECT content, state_time FROM advice_state WHERE advice_id = ? ORDER BY state_time DESC LIMIT 1");
+                $stmt2->bind_param("i", $advice_id);
+                $stmt2->execute();
+                $result2 = $stmt2->get_result();
+                $response = $result2->fetch_assoc();
+
+                $content = $response['content'] ?? null;
+                $update_time = $response['state_time'] ?? null;
+                ?>
 
                 <?php if ($rejected): ?>
                     <div class="rejected-message"
@@ -368,6 +364,7 @@
                         <div class="step <?php echo $status == 2 ? 'active' : ($status > 2 ? 'completed' : ''); ?>">
                             <div class="circle"></div>
                             <div class="label">附議達標<br>等待校方回應</div>
+                            <div class="date"><?= $update_time ?></div>
                         </div>
 
                         <div class="bar <?php echo $status >= 3 ? 'completed' : ''; ?>"></div>
@@ -498,7 +495,10 @@
             </main>
 
             <?php
-
+            // 連接資料庫
+// $link = new mysqli('localhost', 'root', '', '你的資料庫');
+        
+            $advice_id = $_GET['advice_id'] ?? 0;
 
             // 查主建言的狀態
             $stmt1 = $link->prepare("SELECT advice_state FROM advice WHERE advice_id = ?");
@@ -508,34 +508,46 @@
             $advice = $result1->fetch_assoc();
             $state = $advice['advice_state'] ?? '未處理';
 
-            // 查校方最新處理內容
-            $stmt2 = $link->prepare("SELECT content, state_time FROM advice_state WHERE advice_id = ? ORDER BY state_time DESC LIMIT 1");
+            // 查 suggestion_assignments_id
+            $stmt2 = $link->prepare("SELECT suggestion_assignments_id FROM suggestion_assignments WHERE advice_id = ?");
             $stmt2->bind_param("i", $advice_id);
             $stmt2->execute();
             $result2 = $stmt2->get_result();
-            $response = $result2->fetch_assoc();
+            $assignment = $result2->fetch_assoc();
+            $suggestion_assignments_id = $assignment['suggestion_assignments_id'] ?? null;
 
-            $content = $response['content'] ?? null;
-            $update_time = $response['state_time'] ?? null;
+            // 預設回覆內容
+            $content = null;
+            $update_time = null;
+
+            // 如果有找到 suggestion_assignments_id，再去抓 replies 表
+            if ($suggestion_assignments_id) {
+                $stmt3 = $link->prepare("SELECT reply_text, replied_at FROM replies WHERE suggestion_assignments_id = ? ORDER BY replied_at DESC LIMIT 1");
+                $stmt3->bind_param("i", $suggestion_assignments_id);
+                $stmt3->execute();
+                $result3 = $stmt3->get_result();
+                $reply = $result3->fetch_assoc();
+
+                if ($reply) {
+                    $content = $reply['reply_text'];
+                    $reply_update_time = $reply['replied_at'];
+                }
+            }
             ?>
 
-
-
             <div class="school-reply-card">
-
                 <div class="reply-header">
-
                     <h5><strong>校方回覆</strong></h5>
-                    <?php if ($update_time): ?>
-                        <span class="reply-time">最後更新：<?= $update_time ?></span>
+                    <?php if ($reply_update_time): ?>
+                        <span class="reply-time">最後更新：<?= htmlspecialchars($reply_update_time) ?></span>
                     <?php endif; ?>
                 </div>
                 <span class="reply-status <?= $state === '已回覆' ? 'replied' : 'pending' ?>">
-                    <?= $state === '<i class="fa-solid fa-circle"></i>&nbsp已回覆' ? '已回覆' : ' <i class="fa-solid fa-circle"></i>&nbsp尚未回覆' ?>
+                    <?= $state === '已回覆' ? '<i class="fa-solid fa-circle"></i>&nbsp已回覆' : '<i class="fa-solid fa-circle"></i>&nbsp尚未回覆' ?>
                 </span>
                 <div class="reply-content">
                     <p>
-                        <?= $content ? htmlspecialchars($content) : '本建言尚待校方回覆，請耐心等候。' ?>
+                        <?= $content ? nl2br(htmlspecialchars($content)) : '本建言尚待校方回覆，請耐心等候。' ?>
                     </p>
                 </div>
             </div>

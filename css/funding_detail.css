@@ -738,6 +738,8 @@
   }
   
   .share-btn {
+    display: flex;
+    align-items: center;
     background-color: #fff;
     color: #f6a623;
     border: 2px solid #f6a623;
