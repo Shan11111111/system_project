@@ -218,38 +218,15 @@ WHERE p.project_id = $project_id";
         $start_date = $row['start_date'];
         $end_date = $row['end_date'];
 
-        // 日期處理
-// 設定時區為 GMT+8（台灣）
-        $timezone = new DateTimeZone('Asia/Taipei');
+        // 處理日期與剩餘天數
+        $start_date_obj = new DateTime($start_date);
+        $start_date_obj->modify('+6 months');
+        $end_date = $start_date_obj->format('Y/m/d H:i');
 
-        // 建立現在時間，指定時區
-        $today = new DateTime('now', $timezone);
-
-        // 取得資料庫的 end_date
-        $end_date_obj = new DateTime($end_date, $timezone);
-
-        // 比較兩個時間
-        if ($today > $end_date_obj) {
-            $remaining_text = "已結束";
-        } else {
-            $interval = $today->diff($end_date_obj);
-            $days_remaining = $interval->days;
-            $hours_remaining = $interval->h;
-            $minutes_remaining = $interval->i;
-
-            if ($days_remaining > 0) {
-                $remaining_text = "剩餘 {$days_remaining} 天 {$hours_remaining} 小時";
-            } elseif ($hours_remaining > 0) {
-                $remaining_text = "剩餘 {$hours_remaining} 小時";
-            } elseif ($minutes_remaining > 0) {
-                $remaining_text = "剩餘不到 1 小時";
-            } else {
-                $remaining_text = "募資已結束";
-            }
-        }
-
-
-
+        $today = new DateTime();
+        $end_date_obj = new DateTime($end_date);
+        $interval = $today->diff($end_date_obj);
+        $days_remaining = $interval->invert ? 0 : $interval->days;
 
         // 查圖片：先拿到 advice_id
         if (!empty($suggestion_assignments_id)) {
@@ -505,16 +482,7 @@ WHERE p.project_id = $project_id";
             </div>
 
             <div class="button-group">
-                <?php if ($today > $end_date_obj): ?>
-                    <!-- 已結束，按鈕停用 -->
-                    <button class="donate-btn" disabled style="background-color: gray; cursor: not-allowed;">募資已結束</button>
-                <?php else: ?>
-                    <!-- 募資進行中，正常可以點 -->
-                    <a href="pay.php"><button class="donate-btn">立即募資</button></a>
-                <?php endif; ?>
-
-
-                <button class="share-btn" onclick="copyLink()">分享 &nbsp;<i class="fa-solid fa-share"></i></button>
+                <a href="pay.php"><button class="donate-btn">立即募資</button></a>
 
             </div>
         </div>
@@ -530,39 +498,39 @@ WHERE p.project_id = $project_id";
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sidebar = document.querySelector('.sidebar');
-            const footer = document.querySelector('.footer');
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.querySelector('.sidebar');
+    const footer = document.querySelector('.footer');
 
             function updateSidebarPosition() {
                 const sidebarHeight = sidebar.offsetHeight;
                 const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
                 const footerTop = footer.offsetTop;
 
-                const scrollY = window.scrollY;
-                const offsetTop = 100; // navbar高度
-                const buffer = 40;     // sidebar底部留空間
+        const scrollY = window.scrollY;
+        const offsetTop = 100; // navbar高度
+        const buffer = 40;     // sidebar底部留空間
 
                 const sidebarBottom = scrollY + offsetTop + sidebarHeight;
                 const footerStart = footerTop;
 
                 const windowWidth = window.innerWidth;
 
-                if (windowWidth > 768) {
-                    // 桌機版
-                    if (sidebarBottom + buffer >= footerStart) {
-                        sidebar.style.position = 'absolute';
-                        sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
-                    } else {
-                        sidebar.style.position = 'fixed';
-                        sidebar.style.top = offsetTop + 'px';
-                    }
-                } else {
-                    // 手機版
-                    sidebar.style.position = 'static'; // 還原
-                    sidebar.style.top = 'auto';         // 還原
-                }
+        if (windowWidth > 768) { 
+            // 桌機版
+            if (sidebarBottom + buffer >= footerStart) {
+                sidebar.style.position = 'absolute';
+                sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
+            } else {
+                sidebar.style.position = 'fixed';
+                sidebar.style.top = offsetTop + 'px';
             }
+        } else {
+            // 手機版
+            sidebar.style.position = 'static'; // 還原
+            sidebar.style.top = 'auto';         // 還原
+        }
+    }
 
             window.addEventListener('scroll', updateSidebarPosition);
             window.addEventListener('resize', updateSidebarPosition);
@@ -608,20 +576,20 @@ WHERE p.project_id = $project_id";
 
     </footer>
     <script>
-        // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+// 點擊漢堡切換 menu
+document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');

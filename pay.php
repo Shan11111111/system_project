@@ -1,4 +1,30 @@
-<?php session_start(); ?>
+<?php
+session_start();
+require_once 'db_connection.php'; // 確保包含資料庫連線檔案
+
+// 接收募資專案 ID
+$project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+// 預設標題
+$funding_title = '募資專案';
+
+// 從資料庫查詢對應的標題
+if ($project_id > 0) {
+    $sql = "SELECT title FROM fundraising_projects WHERE project_id = ?";
+    $stmt = $pdo->prepare($sql);
+    if ($stmt->execute([$project_id])) {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $funding_title = htmlspecialchars($row['title']); // 避免 XSS
+        } else {
+            $funding_title = "查無此專案";
+        }
+    } else {
+        die("SQL 執行失敗");
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -96,7 +122,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -163,7 +189,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -181,13 +207,13 @@
         </div>
     </nav>
     <button class="back-btn" onclick="history.back()">← Back</button>
-    
+
 
 
     <div class="donate-wrapper">
         <div class="donate-header">
-            <h3 class="title">募資標題</hˇ>
-                <h5 class="donate-title">支持這個提案</h5>
+            <h3 class="title"><?php echo $funding_title; ?></h3>
+            <h5 class="donate-title">支持這個提案</h5>
         </div>
         <hr>
         <form class="donate-form" method="post" action="funding_function/donate_money.php" onsubmit="return beforeSubmit()">
@@ -215,7 +241,7 @@
             <input type="text" name="people_name" placeholder="輸入您的姓名">
 
             <label class="section-label">Email（選填，我們將通知您募資專案的後續進度）</label>
-            <input type="email" name="email"  placeholder="your@email.com">
+            <input type="email" name="email" placeholder="your@email.com">
 
             <!-- 隱藏欄位：指定募資專案 ID，可視情況修改 -->
             <input type="hidden" name="funding_id" value="1">
@@ -250,7 +276,7 @@
     <script>
         const cardInput = document.getElementById('cardNumber');
 
-        cardInput.addEventListener('input', function (e) {
+        cardInput.addEventListener('input', function(e) {
             let value = e.target.value;
             // 移除所有非數字
             value = value.replace(/\D/g, '');
@@ -261,7 +287,7 @@
 
         const expirationInput = document.getElementById('expirationDate');
 
-        expirationInput.addEventListener('input', function (e) {
+        expirationInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, ''); // 移除非數字
             if (value.length >= 3) {
                 value = value.slice(0, 2) + '/' + value.slice(2, 4);

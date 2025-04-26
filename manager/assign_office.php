@@ -193,8 +193,10 @@ $result = $conn->query($sql);
         <a href="../homepage.php">孵仁首頁</a>
         <a href="../manager/advice_manager.php">建言管理</a>
         <a href="assign_office.php">達標建言分配處所</a>
-        <a href="review_proposals.php">審核</a>
-        <a href="../manager/people_manager.php">人員處理</a>
+        <a href="review_proposals.php">募資專案審核</a>
+        <!-- <a href="project_manager.php">募資管理</a> -->
+        <a href="review_extension_requests.php">延後募資申請審核</a>
+        <a href="people_manager.php">人員處理</a>
         <a href="#">數據分析</a>
     </div>
 
