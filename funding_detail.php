@@ -96,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -163,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -525,7 +525,7 @@
                             style="background-color: gray; cursor: not-allowed;">募資已結束</button>
                     <?php else: ?>
                         <!-- 可以募資 -->
-                        <a href="pay.php"><button class="donate-btn">立即募資</button></a>
+                        <a href="pay.php?id=<?php echo $project_id; ?>" class="donate-btn">立即募資</a>
                     <?php endif; ?>
                 </div>
                 <button class="share-btn" onclick="copyLink()">分享 <i class="fa-solid fa-share"></i></button>
@@ -538,7 +538,7 @@
             <button class="donate-btn" disabled style="background-color: gray; cursor: not-allowed;">募資已結束</button>
         <?php else: ?>
             <!-- 募資進行中，正常可以點 -->
-            <a href="pay.php"><button class="donate-btn">立即募資</button></a>
+            <a href="pay.php?id=<?php echo $project_id; ?>" class="donate-btn">立即募資</a>
         <?php endif; ?>
 
         <script>
@@ -553,7 +553,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.querySelector('.sidebar');
             const footer = document.querySelector('.footer');
 
@@ -564,7 +564,7 @@
 
                 const scrollY = window.scrollY;
                 const offsetTop = 100; // navbar高度
-                const buffer = 40;     // sidebar底部留空間
+                const buffer = 40; // sidebar底部留空間
 
                 const sidebarBottom = scrollY + offsetTop + sidebarHeight;
                 const footerStart = footerTop;
@@ -583,7 +583,7 @@
                 } else {
                     // 手機版
                     sidebar.style.position = 'static'; // 還原
-                    sidebar.style.top = 'auto';         // 還原
+                    sidebar.style.top = 'auto'; // 還原
                 }
             }
 
@@ -632,19 +632,19 @@
     </footer>
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');

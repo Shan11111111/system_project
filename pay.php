@@ -22,8 +22,24 @@ if ($project_id > 0) {
     } else {
         die("SQL 執行失敗");
     }
+} else {
+    die("未提供有效的專案 ID");
 }
 ?>
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $funding_title; ?></title>
+</head>
+
+<body>
+    <h3><?php echo $funding_title; ?></h3>
+</body>
+
+</html>
 
 <!DOCTYPE html>
 <html lang="zh">
@@ -244,7 +260,7 @@ if ($project_id > 0) {
             <input type="email" name="email" placeholder="your@email.com">
 
             <!-- 隱藏欄位：指定募資專案 ID，可視情況修改 -->
-            <input type="hidden" name="funding_id" value="1">
+            <input type="hidden" name="funding_id" value="<?php echo $project_id; ?>">
 
             <button class="donate-btn" type="submit">送出付款</button>
         </form>
