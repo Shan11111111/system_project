@@ -724,8 +724,12 @@ body {
   color: #888;
 }
 
+.reply-content{
+  margin-top: 12px;
+}
+
 .reply-content p {
-  margin-top: 10px;
+  margin-top: 12px;
   margin: 0;
   font-size: 1rem;
   color: #333;
