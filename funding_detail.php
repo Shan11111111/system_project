@@ -213,7 +213,7 @@
 
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-
+//日期處理不要動
         $suggestion_assignments_id = $row['suggestion_assignments_id'] ?? 0;
         $start_date = $row['start_date'];
         $end_date = $row['end_date'];
@@ -360,8 +360,7 @@
             <img src="<?php echo htmlspecialchars($row['image_path']); ?>" alt="專案圖片" class="project-image">
 
 
-
-
+<!--don't move-->
             <div class="progress-text-box">
                 <p><strong><?php echo htmlspecialchars($funding_status_text); ?></strong></p>
                 <p>在 <strong><?php echo htmlspecialchars($end_date); ?></strong> 募資結束前，您都可以持續贊助此計畫。</p>
@@ -512,11 +511,12 @@
             <div class="text-info">
                 <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong>
                     人參與募資</p>
+                    <!--don't move-->
                 <p><i class="fa-solid fa-hourglass-half icon-circle"></i>
                     <strong><?php echo $remaining_text; ?></strong>
                 </p>
             </div>
-
+<!--don't move-->
             <div class="button-group">
                 <div class="donate-button">
                     <?php if ($is_project_expired): ?>
