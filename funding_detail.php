@@ -453,7 +453,7 @@
             </div>
         </div>
 
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="progress-info-box">
                 <div class="circular-progress"
                     style="--progress-percent: <?php echo $progress_percent; ?>%; --progress-color: #f9a825;">
@@ -483,6 +483,49 @@
 
 
     </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.querySelector('.sidebar');
+    const footer = document.querySelector('.footer');
+
+    function updateSidebarPosition() {
+        const sidebarHeight = sidebar.offsetHeight;
+        const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
+        const footerTop = footer.offsetTop;
+
+        const scrollY = window.scrollY;
+        const offsetTop = 100; // navbar高度
+        const buffer = 40;     // sidebar底部留空間
+
+        const sidebarBottom = scrollY + offsetTop + sidebarHeight;
+        const footerStart = footerTop;
+
+        const windowWidth = window.innerWidth;
+
+        if (windowWidth > 768) { 
+            // 桌機版
+            if (sidebarBottom + buffer >= footerStart) {
+                sidebar.style.position = 'absolute';
+                sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
+            } else {
+                sidebar.style.position = 'fixed';
+                sidebar.style.top = offsetTop + 'px';
+            }
+        } else {
+            // 手機版
+            sidebar.style.position = 'static'; // 還原
+            sidebar.style.top = 'auto';         // 還原
+        }
+    }
+
+    window.addEventListener('scroll', updateSidebarPosition);
+    window.addEventListener('resize', updateSidebarPosition);
+    updateSidebarPosition(); // 初始呼叫一次
+});
+</script>
+
+
     
     <footer class="footer">
         <div class="logo_space">

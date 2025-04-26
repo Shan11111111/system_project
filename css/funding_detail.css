@@ -269,8 +269,8 @@
     position: fixed;
     top: 100px; /* 距離上方，避免被 navbar 蓋住，可視需要微調 */
     right: 5%;
-    width: 30%; /* 保留原本寬度比例 */
-    max-width: 360px; /* 可設上限避免太寬 */
+    width: 28%; /* 保留原本寬度比例 */
+    max-width: 340px; /* 可設上限避免太寬 */
     background: white;
     border-radius: 12px;
     padding: 1.5rem;
@@ -282,6 +282,7 @@
     overflow-y: auto;
     z-index: 999;
   }
+  
   
   
   .title {
