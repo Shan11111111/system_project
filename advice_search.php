@@ -497,7 +497,13 @@
         function renderHighlight() {
             const target = data
                 .filter(item => item.status === 'active' && item.support_count < 3)
-                .sort((a, b) => b.support_count - a.support_count)[0];
+                .sort((a, b) => {
+                    if (b.support_count !== a.support_count) {
+                        return b.support_count - a.support_count;
+                    }
+                    return new Date(a.announce_date) - new Date(b.announce_date);
+                })[0]; // ✅ 加上 [0]，選出第一個符合的建言
+
 
             if (target) {
                 const remain = Math.max(0, 3 - target.support_count); // 附議人數基準: 3
