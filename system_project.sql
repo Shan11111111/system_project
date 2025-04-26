@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-26 14:43:23
+-- 產生時間： 2025-04-26 17:10:02
 -- 伺服器版本： 10.4.32-MariaDB
--- PHP 版本： 8.0.30
+-- PHP 版本： 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -346,6 +346,31 @@ INSERT INTO `funding_comments` (`funding_comments_id`, `project_id`, `user_id`, 
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `funding_faq`
+--
+
+CREATE TABLE `funding_faq` (
+  `funding_FAQ_id` int(15) NOT NULL,
+  `project_id` int(15) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `question` varchar(100) NOT NULL,
+  `reply` text NOT NULL,
+  `updated_on` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `funding_faq`
+--
+
+INSERT INTO `funding_faq` (`funding_FAQ_id`, `project_id`, `user_id`, `question`, `reply`, `updated_on`) VALUES
+(3, 5, 332478, '111', '111', '2025-04-26 22:17:18'),
+(4, 5, 332478, '133', '333', '2025-04-26 22:17:18'),
+(6, 5, 345678, '沒捐過血可以嗎?', '可以哦!一般來說，只要符合捐血條件（像年齡、體重、健康狀況OK），沒捐過血的人也可以第一次去捐血喔！', '2025-04-26 22:39:25'),
+(7, 5, 345678, '該拔牙可以捐血嗎?', '如果你剛拔牙，暫時不能捐血喔！\r\n\r\n一般來說，拔牙後要暫緩捐血 7 天以上（有些地方規定是 7～14 天）', '2025-04-26 22:35:26');
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `funding_state`
 --
 
@@ -589,6 +614,14 @@ ALTER TABLE `funding_comments`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- 資料表索引 `funding_faq`
+--
+ALTER TABLE `funding_faq`
+  ADD PRIMARY KEY (`funding_FAQ_id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- 資料表索引 `funding_state`
 --
 ALTER TABLE `funding_state`
@@ -682,6 +715,12 @@ ALTER TABLE `files`
 --
 ALTER TABLE `funding_comments`
   MODIFY `funding_comments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `funding_faq`
+--
+ALTER TABLE `funding_faq`
+  MODIFY `funding_FAQ_id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_state`
