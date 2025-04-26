@@ -249,7 +249,7 @@
 
                 $announceDate = new DateTime($row['announce_date']);
                 $dueDate = clone $announceDate;
-                $dueDate->modify('+15 days');
+                $dueDate->modify('+30 days');
                 $now = new DateTime();
                 $expired = $now > $dueDate;
 
@@ -795,7 +795,7 @@
     <a href="#top" class="top-btn">Top</a>
 </div>
 
-<footer class="footer"> footer</footer>
+
 
 <script>
     // 點擊漢堡切換 menu
