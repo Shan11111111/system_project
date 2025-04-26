@@ -533,14 +533,7 @@
 
             </div>
         </div>
-        <?php if ($today > $end_date_obj): ?>
-            <!-- 已結束，按鈕停用 -->
-            <button class="donate-btn" disabled style="background-color: gray; cursor: not-allowed;">募資已結束</button>
-        <?php else: ?>
-            <!-- 募資進行中，正常可以點 -->
-            <a href="pay.php"><button class="donate-btn">立即募資</button></a>
-        <?php endif; ?>
-
+        
         <script>
             function copyLink() {
                 const url = window.location.href;
