@@ -150,12 +150,14 @@
                 <div class="highlight_content" id="highlight-title">快要達標的建言：</div>
                 <div id="highlight-count"></div>
             </div>
-            <div class="highlight_btn pulse" id="highlight-action">🐣 點我 +1 力挺！</div>
+
+            <div class="highlight_btn pulse " id="highlight-action">🐣 點我 +1 力挺！</div>
         </div>
         <div class="advice_space">
             <div class="tabs">
-                <div class="tab active" onclick="switchTab('active')">進行中</div>
-                <div class="tab" onclick="switchTab('ended')">已結束</div>
+                <div class="tab active" data-tab="active" onclick="switchTab('active')">進行中</div>
+                <div class="tab" data-tab="ended" onclick="switchTab('ended')">已截止</div>
+                <div class="tab" data-tab="responed" onclick="switchTab('responed')">已回覆</div>
             </div>
             <hr style=" border-color:black;" />
             <div class="filter-bar">
@@ -173,9 +175,15 @@
                     <input type="text" id="search" placeholder="請輸入關鍵字" />
                     <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
-                <div class="search_sort">
-                    <button id="hotBtn" onclick="toggleArrow(this)">HOT<i class="fa-solid fa-caret-up"></i></button>
-                    <button id="newBtn" onclick="toggleArrow(this)">NEW<i class="fa-solid fa-caret-up"></i></button>
+                <div class="sort-wrapper">
+                    <button class="sort" id="sortBtn" onclick="toggleSortMenu()">
+                        <span id="sortLabel">排序</span> <i class="fa-solid fa-filter"></i>
+                    </button>
+                    <div id="sortMenu" class="sort-menu">
+                        <div onclick="setSort('hot')" data-sort="hot">最熱門</div>
+                        <div onclick="setSort('new')" data-sort="new">最新</div>
+                        <div onclick="setSort('deadline')" data-sort="deadline">最舊</div>
+                    </div>
                 </div>
             </div>
 
@@ -250,100 +258,11 @@
             </div>
         </div>
     </template>
-    
+
 
     <script>
-        // 全域變數：搜尋、排序狀態
-
-        let currentCategory = 'all'; // 下拉預設：全部
-        let currentKeyword = ''; // 關鍵字
-        let currentSort = 'new'; // 'hot' / 'new'
-        let currentOrder = 'desc'; // 'asc' / 'desc'
-        let currentTab = 'active'; // 'active' / 'ended'
-
-        // 分頁使用
-        let data = [];
-        let currentPage = 1;
-        const itemsPerPage = 10;
-
-        // 頁面載入
-        document.addEventListener('DOMContentLoaded', () => {
-            // 預設：NEW desc
-            fetchData();
-        });
-
-        // 監聽分類下拉選單 (不用再按按鈕就自動刷新)
-        document.getElementById('category').addEventListener('change', function() {
-            currentCategory = this.value;
-            currentPage = 1;
-            fetchData();
-        });
-
-        // 關鍵字搜尋
-        function search() {
-            currentKeyword = document.getElementById('search').value.trim();
-            currentPage = 1;
-            fetchData();
-        }
-
-        // HOT / NEW 按鈕
-        function toggleArrow(btn) {
-            const btnText = btn.textContent.replace(/(\s|<i.*<\/i>)/g, '').toLowerCase();
-            // 可能是 'hot' / 'new'
-            const icon = btn.querySelector("i");
-
-            // 若按下的跟 currentSort 相同，就切換 asc / desc
-            // 若不同，就更換排序欄位並預設 desc
-            if ((btnText === 'hot' && currentSort === 'hot') ||
-                (btnText === 'new' && currentSort === 'new')) {
-                currentOrder = (currentOrder === 'desc') ? 'asc' : 'desc';
-            } else {
-                currentSort = btnText;
-                currentOrder = 'desc';
-            }
-
-            // 視覺：箭頭方向
-            icon.classList.toggle("fa-caret-up");
-            icon.classList.toggle("fa-caret-down");
-
-            currentPage = 1;
-            fetchData();
-        }
-
-        // 拉取資料 (後端 dealwith_advice_date.php)
-        function fetchData() {
-            // 組裝 URL (GET 參數)
-            const url = `advice_function/dealwith_advice_date.php?category=${currentCategory}&keyword=${encodeURIComponent(currentKeyword)}&sort=${currentSort}&order=${currentOrder}`;
-            console.log("[fetchData] URL:", url);
-
-            fetch(url)
-                .then(response => response.json())
-                .then(json => {
-                    console.log("取得建言資料：", json);
-                    data = json;
-                    renderSuggestions();
-                    renderHighlight(); // 更新快達標區塊
-                })
-                .catch(error => {
-                    console.error("載入建言資料失敗：", error);
-                });
-        }
-
-        // 切換「進行中 / 已結束」標籤
-        function switchTab(tab) {
-            currentTab = tab;
-            currentPage = 1;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            if (tab === 'active') {
-                document.querySelectorAll('.tab')[0].classList.add('active');
-            } else {
-                document.querySelectorAll('.tab')[1].classList.add('active');
-            }
-            renderSuggestions();
-        }
-        // 前端的「英文→中文」對照表
         const categoryMap = {
-            "all": "全部分類", // 跟後端的 'all' 相對應，如果有需要映射可以寫，不需要就可省略
+            "all": "全部分類",
             "equipment": "設施改善",
             "academic": "學術發展",
             "club": "社團活動",
@@ -352,21 +271,112 @@
             "other": "其他"
         };
 
-        // 顯示建言列表
+        // 全域變數
+        let currentCategory = 'all';
+        let currentKeyword = '';
+        let currentSort = 'new';
+        let currentTab = 'active'; // active 或 ended
+        let data = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        // 監聽
+        document.getElementById('category').addEventListener('change', function() {
+            currentCategory = this.value;
+            currentPage = 1;
+            fetchData();
+        });
+
+        function search() {
+            currentKeyword = document.getElementById('search').value.trim();
+            currentPage = 1;
+            fetchData();
+        }
+
+        function toggleSortMenu() {
+            document.getElementById('sortMenu').classList.toggle('show');
+        }
+
+        function setSort(sortType) {
+            currentSort = sortType;
+            currentPage = 1;
+            document.getElementById('sortLabel').textContent = (sortType === 'hot') ? '最熱門' : (sortType === 'deadline') ? '截止時間' : '最新';
+            document.getElementById('sortMenu').classList.remove('show');
+            fetchData();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            currentPage = 1;
+
+            // 先移除所有 tab 的 active 樣式
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+            // 再找到 data-tab 為 tab 的項目加上 active
+            const selected = document.querySelector(`.tab[data-tab="${tab}"]`);
+            if (selected) selected.classList.add('active');
+            fetchData(); // ✅ 每次切 tab 也重新撈最新資料
+
+        }
+
+        document.getElementById('search').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // 防止表單送出（雖然你沒有 form，但保險）
+                search(); // 呼叫你的搜尋函式
+            }
+        });
+
+        function fetchData() {
+            const url = `advice_function/dealwith_advice_search.php?category=${currentCategory}&keyword=${encodeURIComponent(currentKeyword)}&sort=${currentSort}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(json => {
+                    if (json.no_result) {
+                        data = []; // 清空資料
+                        renderSuggestions(); // 讓前端畫面觸發「查無結果」
+                        renderPagination(0); // 清空分頁
+                        document.getElementById('highlight-title').textContent = '目前沒有快要達標的建言';
+                        document.getElementById('highlight-count').textContent = '';
+                        document.getElementById('highlight-action').style.display = 'none';
+                        return;
+                    }
+                    data = json;
+                    renderSuggestions();
+                    renderHighlight();
+                })
+                .catch(error => {
+                    console.error("載入失敗：", error);
+                });
+        }
+
+
         function renderSuggestions() {
             const list = document.getElementById('suggestion-list');
             list.innerHTML = '';
 
-            // 根據「進行中/已結束」分流
             const filtered = data.filter(item => {
                 if (currentTab === 'active') {
-                    return item.status === 'active';
-                } else {
-                    return (item.status === 'ended-passed' || item.status === 'ended-notpassed');
+                    return item.has_response === false && item.status === 'active';
+                } else if (currentTab === 'ended') {
+                    return item.has_response === false && (item.status === 'ended-passed' || item.status === 'ended-notpassed');
+                } else if (currentTab === 'responed') {
+                    return item.has_response === true;
                 }
+                return false;
             });
 
-            // 做分頁
+            // 查無結果
+            if (filtered.length === 0) {
+                const noResult = document.createElement('div');
+                noResult.className = 'no-result';
+                noResult.innerHTML = '<p>查無結果</p>';
+                list.appendChild(noResult);
+                renderPagination(0); // 分頁清空
+                return; // 不再往下畫建言卡片
+            }
+
+
             const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
             paginated.forEach(item => {
@@ -374,13 +384,12 @@
                 div.className = 'suggestion';
                 div.onclick = () => {
                     window.location.href = `advice_detail.php?advice_id=${item.advice_id}`;
-
                 };
 
                 const imagePath = item.file_path || 'uploads/homepage.png';
-                const remainingDays = Math.max(0, 30 - item.days_elapsed);
                 const publishDate = item.announce_date || '未知';
                 const categoryText = categoryMap[item.category] || item.category || '無';
+                const remainingDays = Math.max(0, 30 - item.days_elapsed);
 
                 let template = '';
                 if (currentTab === 'ended') {
@@ -388,7 +397,7 @@
                         .replace('{{imgSrc}}', imagePath)
                         .replace('{{title}}', item.advice_title)
                         .replace('{{statusClass}}', item.status === 'ended-passed' ? 'status-passed' : 'status-failed')
-                        .replace('{{statusText}}', item.status === 'ended-passed' ? '通過' : '未通過')
+                        .replace('{{statusText}}', item.status === 'ended-passed' ? '已達標' : '未達標')
                         .replace('{{publishDate}}', publishDate);
                 } else {
                     template = document.getElementById('suggestion-active-template').innerHTML
@@ -408,53 +417,67 @@
             renderPagination(filtered.length);
         }
 
-        // 分頁按鈕
         function renderPagination(totalItems) {
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
 
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            if (totalPages <= 1) return;
+
             if (currentPage > 1) {
-                const prev = document.createElement('button');
-                prev.textContent = '上一頁';
+                const prev = document.createElement("button");
+                prev.textContent = "←";
                 prev.onclick = () => {
                     currentPage--;
                     renderSuggestions();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 };
                 pagination.appendChild(prev);
             }
 
             for (let i = 1; i <= totalPages; i++) {
-                const btn = document.createElement('button');
-                btn.textContent = i;
-                if (i === currentPage) btn.disabled = true;
-                btn.onclick = () => {
+                const pageBtn = document.createElement("button");
+                pageBtn.textContent = i;
+                if (i === currentPage) {
+                    pageBtn.disabled = true;
+                    pageBtn.classList.add("active");
+                }
+                pageBtn.onclick = () => {
                     currentPage = i;
                     renderSuggestions();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 };
-                pagination.appendChild(btn);
+                pagination.appendChild(pageBtn);
             }
 
             if (currentPage < totalPages) {
-                const next = document.createElement('button');
-                next.textContent = '下一頁';
+                const next = document.createElement("button");
+                next.textContent = "→";
                 next.onclick = () => {
                     currentPage++;
                     renderSuggestions();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 };
                 pagination.appendChild(next);
             }
         }
 
-        // 「快要達標的建言」顯示
         function renderHighlight() {
-            // 找出「active」且 support_count < 100 的最高附議
             const target = data
-                .filter(item => item.status === 'active' && item.support_count < 100)
+                .filter(item => item.status === 'active' && item.support_count < 3)
                 .sort((a, b) => b.support_count - a.support_count)[0];
 
             if (target) {
-                const remain = 10 - target.support_count;
+                const remain = Math.max(0, 3 - target.support_count); // 👈 改這邊，基準改成 3
                 document.getElementById('highlight-title').textContent = `快要達標的建言：${target.advice_title}`;
                 document.getElementById('highlight-count').textContent = `還差 ${remain} 人即可達成`;
                 document.getElementById('highlight-action').style.display = 'inline-block';
@@ -468,17 +491,21 @@
             }
         }
 
-        // 手機選單
+        // 手機版漢堡選單
         document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
+        // 手機版下拉展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 btn.parentElement.classList.toggle('active');
             });
         });
+
+        // 頁面初始化
+        fetchData();
     </script>
 
 </body>

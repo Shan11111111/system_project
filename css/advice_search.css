@@ -234,6 +234,7 @@ body {
 
 .container{
   margin-top: 100px;
+  margin-bottom: 50px;
 }
 /* 建言區 */
 .highlight-advice {
@@ -265,10 +266,22 @@ body {
 }
 
 #highlight-count {
-  font-size: 16px;
-  margin: 0 ;
+  font-size: 1.1rem;
+  margin: 0  ;
+  font-weight: bold;
 
 }
+
+#highlight-count::before {
+  content: '💖';
+  display: inline-block;
+  font-size: 1.2rem;
+  animation: fire-dance 0.8s infinite ease-in-out;
+  filter: drop-shadow(0 0 6px rgb(235, 81, 142));
+  margin-right: 8px;
+
+}
+
 
 .highlight_btn {
   background-color: #c8925c;
@@ -280,11 +293,15 @@ body {
   font-size: 1rem;
   transition: transform 0.2s ease-in-out;
   margin-top: 0.4rem;
+  position: relative; /* 為了shine用 */
+  overflow: hidden;    /* 把超出光澤隱藏 */
+
 }
 
 .highlight_btn:hover {
   transform: scale(1.05);
-  background-color: #e72c0f;
+  background-color: #4dab30;
+  
 }
 
 .pulse {
@@ -371,6 +388,20 @@ body {
 
 }
 
+/* 被點擊後的狀態（現在有） */
+.tab.active {
+  background: var(--color-yellow);
+  font-weight: bold;
+  border-bottom: 3px solid #e6b800;
+  color: var(--color-dark-brown);
+}
+
+/* ✅ 重點：點擊後再 hover 的狀態 */
+.tab.active:hover {
+  background-color: #ffe48a;
+  color: var(--color-dark-brown);
+}
+
 .filter-bar {
   display: flex;
   flex-direction: row;
@@ -407,7 +438,51 @@ button {
   cursor: pointer;
 }
 
+/* 排序選單 */
+/* 調整排序選單的 z-index 層級與 hover 效果 */
+/* 保證排序按鈕是定位參考點 */
+.sort-wrapper {
+  position: relative;
+}
 
+/* 排序選單相對於按鈕定位 */
+.sort-menu {
+  position: absolute;
+  top: 110%; /* 稍微下移一點 */
+  right: 0;
+  z-index: 9999;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  min-width: 130px;
+  overflow: hidden;
+  display: none;
+  animation: fadeInSort 0.2s ease-out;
+}
+
+/* 顯示時 */
+.sort-menu.show {
+  display: block;
+}
+
+.sort-menu div {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sort-menu div:hover {
+  background-color: #fdf2b1;
+  color: var(--color-dark-brown);
+}
+
+.sort-menu div.active {
+  background-color: var(--color-yellow);
+  font-weight: bold;
+  color: var(--color-dark-brown);
+}
+  
 
 
 
@@ -518,6 +593,14 @@ button {
   color: #333;
   cursor: default;
 }
+
+.no-result {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+}
+
 
 .footer {
   display: flex;
