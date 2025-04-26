@@ -302,7 +302,7 @@
 
         // 參與者統計
         $participant_count = 0;
-        $count_sql = "SELECT COUNT(DISTINCT donor) AS total FROM donation_record WHERE project_id = $project_id";
+        $count_sql = "SELECT COUNT(*) AS total FROM donation_record WHERE project_id = $project_id";
         $count_result = mysqli_query($link, $count_sql);
         if ($count_result && mysqli_num_rows($count_result) > 0) {
             $count_row = mysqli_fetch_assoc($count_result);
