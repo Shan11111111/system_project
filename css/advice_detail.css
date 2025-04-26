@@ -1060,5 +1060,101 @@ body {
 }
 
 .footer {
-  background-color: #ceb600;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: var(--color-yellow);
+  padding: 40px 5%;
+  gap: 20px;
+}
+
+.logo_space {
+  flex: 1 1 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.help,
+.footer_info {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.help_title,
+.info_title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-dark-brown);
+  margin-bottom: 5px;
+}
+
+.help_content,
+.info_content {
+  padding-top: 5px;
+}
+
+.info_content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.school_info,
+.connection {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+
+@media screen and (min-width: 768px) {
+  .logo_space {
+    flex: 3;
+    justify-content: flex-start;
+    align-items: flex-start; /* 由 center 改為 top 對齊 */
+    padding-top: 30px;        /* 與 .help 區塊一致 */
+    margin-bottom: 0;
+  }
+
+  .connection{
+    margin-left: 35px;
+  }
+}
+
+
+@media  (min-width: 768px) {
+  .footer {
+    flex-wrap: nowrap;
+    padding-left: 200px;
+    padding-right: 200px;
+    height: 240px;
+  }
+
+  .logo_space {
+    flex: 3;
+    justify-content: flex-start;
+    margin-bottom: 0;
+  }
+
+  .help {
+    flex: 2;
+    margin-right: 1rem;
+    padding-top: 30px;
+  }
+
+  .footer_info {
+    flex: 4;
+    margin-right: 0;
+    padding-top: 30px;
+  }
+
+  .info_content {
+    flex-direction: row;
+    
+  }
 }
