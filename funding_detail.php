@@ -475,7 +475,7 @@
             </div>
 
             <div class="button-group">
-                <a href="pay.php"><button class="donate-btn">立即募資</button></a>
+                <a href="pay.php?id=<?php echo $project_id; ?>"><button class="donate-btn">立即募資</button></a>
 
                 <button class="share-btn">分享</button>
             </div>
@@ -485,48 +485,48 @@
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const sidebar = document.querySelector('.sidebar');
-    const footer = document.querySelector('.footer');
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const footer = document.querySelector('.footer');
 
-    function updateSidebarPosition() {
-        const sidebarHeight = sidebar.offsetHeight;
-        const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
-        const footerTop = footer.offsetTop;
+            function updateSidebarPosition() {
+                const sidebarHeight = sidebar.offsetHeight;
+                const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
+                const footerTop = footer.offsetTop;
 
-        const scrollY = window.scrollY;
-        const offsetTop = 100; // navbar高度
-        const buffer = 40;     // sidebar底部留空間
+                const scrollY = window.scrollY;
+                const offsetTop = 100; // navbar高度
+                const buffer = 40; // sidebar底部留空間
 
-        const sidebarBottom = scrollY + offsetTop + sidebarHeight;
-        const footerStart = footerTop;
+                const sidebarBottom = scrollY + offsetTop + sidebarHeight;
+                const footerStart = footerTop;
 
-        const windowWidth = window.innerWidth;
+                const windowWidth = window.innerWidth;
 
-        if (windowWidth > 768) { 
-            // 桌機版
-            if (sidebarBottom + buffer >= footerStart) {
-                sidebar.style.position = 'absolute';
-                sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
-            } else {
-                sidebar.style.position = 'fixed';
-                sidebar.style.top = offsetTop + 'px';
+                if (windowWidth > 768) {
+                    // 桌機版
+                    if (sidebarBottom + buffer >= footerStart) {
+                        sidebar.style.position = 'absolute';
+                        sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
+                    } else {
+                        sidebar.style.position = 'fixed';
+                        sidebar.style.top = offsetTop + 'px';
+                    }
+                } else {
+                    // 手機版
+                    sidebar.style.position = 'static'; // 還原
+                    sidebar.style.top = 'auto'; // 還原
+                }
             }
-        } else {
-            // 手機版
-            sidebar.style.position = 'static'; // 還原
-            sidebar.style.top = 'auto';         // 還原
-        }
-    }
 
-    window.addEventListener('scroll', updateSidebarPosition);
-    window.addEventListener('resize', updateSidebarPosition);
-    updateSidebarPosition(); // 初始呼叫一次
-});
-</script>
+            window.addEventListener('scroll', updateSidebarPosition);
+            window.addEventListener('resize', updateSidebarPosition);
+            updateSidebarPosition(); // 初始呼叫一次
+        });
+    </script>
 
 
-    
+
     <footer class="footer">
         <div class="logo_space">
             <img src="img/logo.png" style="width: 150px;">
@@ -563,20 +563,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     </footer>
     <script>
-// 點擊漢堡切換 menu
-document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        // 點擊漢堡切換 menu
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
