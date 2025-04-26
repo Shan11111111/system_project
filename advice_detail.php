@@ -89,8 +89,8 @@
                 <div class="dropdown">
                     <button class="dropbtn">募資</button>
                     <div class="dropdown-content">
-                        <a href="#">進行中計畫</a>
-                        <a href="#">成功案例</a>
+                        <a href="ongoing_funding_search.php">進行中計畫</a>
+                        <a href="due_funding_search.php">成功案例</a>
                     </div>
                 </div>
             </div>
@@ -156,8 +156,8 @@
             <div class="dropdown">
                 <button class="dropbtn">募資</button>
                 <div class="dropdown-content">
-                    <a href="#">進行中計畫</a>
-                    <a href="#">成功案例</a>
+                    <a href="ongoing_funding_search.php">進行中計畫</a>
+                    <a href="due_funding_search.php">成功案例</a>
                 </div>
             </div>
 
