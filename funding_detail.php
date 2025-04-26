@@ -218,7 +218,7 @@
 
         // 處理日期與剩餘天數
         $start_date_obj = new DateTime($start_date);
-        $start_date_obj->modify('+1 months');
+        $start_date_obj->modify('+2 months');
         $end_date = $start_date_obj->format('Y/m/d H:i');
 
         $today = new DateTime();
