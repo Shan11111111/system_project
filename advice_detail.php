@@ -319,7 +319,7 @@
 
                 // 附議期限 = 提案日 + 15 天
                 $dueDate = clone $announceDate;
-                $dueDate->modify('+15 days');
+                $dueDate->modify('+30 days');
 
                 $expired = $now > $dueDate;
                 $rejected = $expired && ($agreeCount < $agreeThreshold);
@@ -403,7 +403,7 @@
                             <?php } ?>
                         </section>
 
-                        <div class="sidebar">
+                        <div class="sidebar" id="sidebar">
                             <div class="progress-info-box">
                                 <div class="circular-progress" style="--progress-percent: <?php echo $percent; ?>%;
                                  --progress-color: <?php echo $color; ?>;">
@@ -566,9 +566,9 @@
                     const announceDate = new Date(dateText);
                     const now = new Date();
 
-                    // 設定截止日為提案日 + 15 天
+                    // 設定截止日為提案日 + 30 天
                     const deadline = new Date(announceDate);
-                    deadline.setDate(deadline.getDate() + 15);
+                    deadline.setDate(deadline.getDate() + 30);
 
                     if (now > deadline) {
                         // 超過時間，禁用按鈕
