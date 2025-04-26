@@ -67,7 +67,7 @@ foreach ($projects as $project) {
     $raised = $stmt->fetchColumn() ?: 0;
 
     // 支持人數
-    $stmt = $pdo->prepare("SELECT COUNT(DISTINCT donor) FROM donation_record WHERE project_id = ?");
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM donation_record WHERE project_id = ?");
     $stmt->execute([$project['project_id']]);
     $supporter = $stmt->fetchColumn() ?: 0;
 
