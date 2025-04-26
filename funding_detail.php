@@ -525,7 +525,7 @@
                             style="background-color: gray; cursor: not-allowed;">募資已結束</button>
                     <?php else: ?>
                         <!-- 可以募資 -->
-                        <a href="pay.php?id=<?php echo $project_id; ?>" class="donate-btn">立即募資</a>
+                        <a href="pay.php?id=<?php echo "$project_id"; ?>" class="donate-btn">立即募資</a>
                     <?php endif; ?>
                 </div>
                 <button class="share-btn" onclick="copyLink()">分享 <i class="fa-solid fa-share"></i></button>
