@@ -3,7 +3,7 @@
 session_start();
 if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $funding_id = $_POST['funding_id'];
-    $people_name = $_POST['people_name'];
+    $people_name = !empty($_POST['people_name']) ? $_POST['people_name'] : '匿名';
     $donate_money = $_POST['donate_money'];
     $email = $_POST['email'];
 } else {
