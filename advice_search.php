@@ -184,7 +184,41 @@
         </div>
     </div>
 
-    <div class="footer">footer</div>
+    <footer class="footer">
+        <div class="logo_space">
+            <img src="img/logo.png" style="width: 150px;">
+        </div>
+        <div class="help_info">
+
+        </div>
+        <div class="help">
+            <div class="help_title">幫助</div>
+            <hr style="width: 150px;">
+            <div class="help_content">
+                <div>常見問題</div>
+                <div>使用條款</div>
+                <div>隱私條款</div>
+            </div>
+        </div>
+        <div class="footer_info">
+            <div class="info_title">相關資訊</div>
+            <hr>
+
+            <div class="info_content">
+                <div class="school_info">
+                    <div>關於我們</div>
+                    <div>學校處室</div>
+                    <div>意見箱</div>
+                </div>
+                <div class="connection">
+                    <div>242新北市新莊區中正路510號.</div>
+                    <div>電話:(02)2905-2000</div>
+                </div>
+            </div>
+
+        </div>
+
+    </footer>
 
     <!-- Templates -->
     <template id="suggestion-active-template">
@@ -216,6 +250,7 @@
             </div>
         </div>
     </template>
+    
 
     <script>
         // 全域變數：搜尋、排序狀態
