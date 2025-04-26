@@ -20,13 +20,13 @@ if ($link->connect_error) {
 // 檢查捐款金額是否為數字
 if (!is_numeric($donate_money) || $donate_money < 0) {
     echo "<script>alert('金額必須是正整數的數字');</script>";
-    header("Location: homepage.php");
+    echo "<script>window.location.href='../funding_detail.php?id=$funding_id';</script>";
     exit();
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo "<script>alert('請輸入有效的電子郵件地址');</script>";
-    header("Location: homepage.php");
+    echo "<script>window.location.href='../funding_detail.php?id=$funding_id';</script>";
     exit();
 }
 
