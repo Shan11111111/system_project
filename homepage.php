@@ -191,12 +191,14 @@
     <!-- Banner -->
     <div class="banner">
         <div class="banner1">
-            <div class="hot_propose">
-                <div class="chicken" data-hover="🥚">
-                    <img src="img\image2333.jpg">
-                    <div class="chicken_tag"> 建言瀏覽</div>
+            <a href="advice_search.php">
+                <div class="hot_propose">
+                    <div class="chicken" data-hover="🥚">
+                        <img src="img\image2333.jpg">
+                        <div class="chicken_tag"> 建言瀏覽</div>
+                    </div>
                 </div>
-            </div>
+            </a>
             <div class="new_propose">
                 <div class="chicken">
                     <img src="img\6A7933B2-AA2E-498F-964B-259E5C7ACB2B.png">
@@ -212,16 +214,18 @@
             </div>
         </div>
         <div class="banner3">
-            <div class="hot_fund">
-                <div class="chicken">
-                    <img src="img\10C332BB-804B-48D6-B909-50720AD3B2B5.png">
-                    <div class="chicken_tag">募資專案</div>
+            <a href="ongoing_funding_search.php">
+                <div class="hot_fund">
+                    <div class="chicken">
+                        <img src="img\10C332BB-804B-48D6-B909-50720AD3B2B5.png">
+                        <div class="chicken_tag">募資專案</div>
+                    </div>
                 </div>
-            </div>
+            </a>
             <div class="new_fund">
                 <div class="chicken">
                     <img src="img\D8904374-10AE-4B6B-B6FB-355FEA8C7B44.png">
-                    <div class="chicken_tag">成功專案</div>
+                    <div class="chicken_tag">意見箱</div>
                 </div>
 
             </div>
