@@ -254,10 +254,24 @@
             <div class="suggestion-title">{{title}}</div>
             <div class="suggestion-meta">
                 <span class="suggestion-status {{statusClass}}">{{statusText}}</span>
+                <span>附議數：{{comments}}</span>
                 <span>發布日：{{publishDate}}</span>
             </div>
         </div>
     </template>
+
+    <template id="suggestion-responed-template">
+        <img src="{{imgSrc}}" alt="建言圖">
+        <div class="suggestion-content">
+            <div class="suggestion-title">{{title}}</div>
+            <div class="suggestion-meta">
+                <span class="badge beef">已回覆</span>
+                <span>附議數：{{comments}}</span>
+                <span>發布日：{{publishDate}}</span>
+            </div>
+        </div>
+    </template>
+
 
 
     <script>
@@ -300,7 +314,7 @@
         function setSort(sortType) {
             currentSort = sortType;
             currentPage = 1;
-            document.getElementById('sortLabel').textContent = (sortType === 'hot') ? '最熱門' : (sortType === 'deadline') ? '截止時間' : '最新';
+            document.getElementById('sortLabel').textContent = (sortType === 'hot') ? '最熱門' : (sortType === 'deadline') ? '最舊' : '最新';
             document.getElementById('sortMenu').classList.remove('show');
             fetchData();
         }
@@ -396,8 +410,17 @@
                     template = document.getElementById('suggestion-ended-template').innerHTML
                         .replace('{{imgSrc}}', imagePath)
                         .replace('{{title}}', item.advice_title)
+                        .replace('{{comments}}', item.support_count)
                         .replace('{{statusClass}}', item.status === 'ended-passed' ? 'status-passed' : 'status-failed')
                         .replace('{{statusText}}', item.status === 'ended-passed' ? '已達標' : '未達標')
+                        .replace('{{publishDate}}', publishDate);
+                } else if (currentTab === 'responed') {
+                    template = document.getElementById('suggestion-responed-template').innerHTML
+                        .replace('{{imgSrc}}', imagePath)
+                        .replace('{{title}}', item.advice_title)
+                        .replace('{{comments}}', item.support_count)
+                        .replace('{{commentCount}}', item.comment_count)
+                        .replace('{{category}}', categoryText)
                         .replace('{{publishDate}}', publishDate);
                 } else {
                     template = document.getElementById('suggestion-active-template').innerHTML
@@ -477,7 +500,7 @@
                 .sort((a, b) => b.support_count - a.support_count)[0];
 
             if (target) {
-                const remain = Math.max(0, 3 - target.support_count); // 👈 改這邊，基準改成 3
+                const remain = Math.max(0, 3 - target.support_count); // 附議人數基準: 3
                 document.getElementById('highlight-title').textContent = `快要達標的建言：${target.advice_title}`;
                 document.getElementById('highlight-count').textContent = `還差 ${remain} 人即可達成`;
                 document.getElementById('highlight-action').style.display = 'inline-block';
