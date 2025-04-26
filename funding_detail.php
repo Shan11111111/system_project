@@ -189,6 +189,7 @@
         die("資料庫連線失敗: " . mysqli_connect_error());
     }
 
+    // 取得專案基本資料 + 建議 ID + 關聯欄位
     // 取得專案基本資料 + 建議 ID + 關聯欄位 
     $sql = "SELECT 
             p.project_id,
@@ -199,8 +200,7 @@
             p.end_date,
             p.status,
             p.suggestion_assignments_id, 
-            a.advice_id,
-            sa.proposal_file_path
+            a.advice_id
         FROM fundraising_projects p
         left join suggestion_assignments sa on sa.suggestion_assignments_id= p.suggestion_assignments_id
         LEFT JOIN advice a ON a.advice_id = sa.advice_id
@@ -377,294 +377,284 @@
 
             <div class="tab-content active">
                 <p><?php echo nl2br(htmlspecialchars($row['project_description'])); ?></p>
-                <p>附件：
+                <p>附件：<a href="file/專案說明.pdf" download>專案說明.pdf</a></p>
+            </div>
+
+
+            <div class="tab-content">
+
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <h3 class="progress-title">進度標題</h3>
+                        <span class="progress-date">2025/04/18</span>
+                    </div>
+                    <div class="progress-content">
+                        <!--內文放這，不要用<P>直接放不然css會失效-->
+
+                    </div>
+                    <div class="progress-footer">
+                        <a href="#" class="read-more">查看更多</a>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <h3 class="progress-title">進度標題</h3>
+                        <span class="progress-date">2025/04/18</span>
+                    </div>
+                    <div class="progress-content">
+                        <!--內文放這，不要用<P>直接放不然css會失效-->
+
+                    </div>
+                    <div class="progress-footer">
+                        <a href="#" class="read-more">查看更多</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <?php
+            $faq_query = "SELECT question, reply, updated_on FROM funding_FAQ WHERE project_id = $project_id ORDER BY updated_on DESC";
+            $faq_result = mysqli_query($link, $faq_query);
+            ?>
+            
+            <div class="tab-content">
+                <div class="faq-list">
                     <?php
-                    if (!empty($row['proposal_file_path'])):
-                        // 確保路徑指向 file_upload 資料夾
-                        $file_path = str_replace('../', '', $row['proposal_file_path']);
-                        $file_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/file_upload/' . basename($file_path);
-                    ?>
-                        <a href="<?php echo htmlspecialchars($file_url); ?>" download>專案說明.pdf</a>
-                    <?php else: ?>
-                        無附件
-                    <?php endif; ?>
-                </p>
-
-
-                <div class="tab-content">
-
-                    <div class="progress-card">
-                        <div class="progress-header">
-                            <h3 class="progress-title">進度標題</h3>
-                            <span class="progress-date">2025/04/18</span>
-                        </div>
-                        <div class="progress-content">
-                            <!--內文放這，不要用<P>直接放不然css會失效-->
-
-                        </div>
-                        <div class="progress-footer">
-                            <a href="#" class="read-more">查看更多</a>
-                        </div>
-                    </div>
-
-                    <div class="progress-card">
-                        <div class="progress-header">
-                            <h3 class="progress-title">進度標題</h3>
-                            <span class="progress-date">2025/04/18</span>
-                        </div>
-                        <div class="progress-content">
-                            <!--內文放這，不要用<P>直接放不然css會失效-->
-
-                        </div>
-                        <div class="progress-footer">
-                            <a href="#" class="read-more">查看更多</a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <?php
-                $faq_query = "SELECT question, reply, updated_on FROM funding_FAQ WHERE project_id = $project_id ORDER BY updated_on DESC";
-                $faq_result = mysqli_query($link, $faq_query);
-                ?>
-
-                <div class="tab-content">
-                    <div class="faq-list">
-                        <?php
-                        if ($faq_result && mysqli_num_rows($faq_result) > 0) {
-                            while ($faq = mysqli_fetch_assoc($faq_result)) {
-                                echo '<div class="faq-item">';
-                                echo '<div class="faq-question" onclick="toggleFaq(this)">';
-                                echo '<div class="faq-meta">';
-                                echo '<div class="faq-date">更新於 ' . htmlspecialchars($faq['updated_on']) . '</div>';
-                                echo '<div class="faq-title">' . htmlspecialchars($faq['question']) . '</div>';
-                                echo '</div>';
-                                echo '<div class="faq-arrow"><i class="fa-solid fa-caret-down"></i></div>';
-                                echo '</div>';
-                                echo '<div class="faq-answer">' . nl2br(htmlspecialchars($faq['reply'])) . '</div>';
-                                echo '</div>';
-                            }
-                        } else {
-                            echo '<p>目前沒有常見問題。</p>';
+                    if ($faq_result && mysqli_num_rows($faq_result) > 0) {
+                        while ($faq = mysqli_fetch_assoc($faq_result)) {
+                            echo '<div class="faq-item">';
+                            echo '<div class="faq-question" onclick="toggleFaq(this)">';
+                            echo '<div class="faq-meta">';
+                            echo '<div class="faq-date">更新於 ' . htmlspecialchars($faq['updated_on']) . '</div>';
+                            echo '<div class="faq-title">' . htmlspecialchars($faq['question']) . '</div>';
+                            echo '</div>';
+                            echo '<div class="faq-arrow"><i class="fa-solid fa-caret-down"></i></div>';
+                            echo '</div>';
+                            echo '<div class="faq-answer">' . nl2br(htmlspecialchars($faq['reply'])) . '</div>';
+                            echo '</div>';
                         }
-                        ?>
-                    </div>
+                    } else {
+                        echo '<p>目前沒有常見問題。</p>';
+                    }
+                    ?>
                 </div>
-                <div class="tab-content">
+            </div>
+            <div class="tab-content">
 
-                    <section class="comments">
-                        <div class="comment-header">
-                            <h4>留言區</h4>
+                <section class="comments">
+                    <div class="comment-header">
+                        <h4>留言區</h4>
+                    </div>
+                    <form method="POST" action="">
+                        <div class="comment-input">
+
+                            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                            <textarea id="comment-text" name="comment_text" maxlength="150"
+                                placeholder="我要留言..."></textarea>
+                            <button type="submit" id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
+
                         </div>
-                        <form method="POST" action="">
-                            <div class="comment-input">
-
-                                <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                                <textarea id="comment-text" name="comment_text" maxlength="150"
-                                    placeholder="我要留言..."></textarea>
-                                <button type="submit" id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>
-
-                            </div>
-                        </form>
-                        <ul class="comment-list">
-                            <?php
-                            $comment_query = "SELECT u.user_id, fc.comment_text, fc.created_at 
+                    </form>
+                    <ul class="comment-list">
+                        <?php
+                        $comment_query = "SELECT u.user_id, fc.comment_text, fc.created_at 
                       FROM funding_comments fc
                       JOIN users u ON fc.user_id = u.user_id
                       WHERE fc.project_id = $project_id 
                       ORDER BY fc.created_at DESC";
-                            $comment_result = mysqli_query($link, $comment_query);
+                        $comment_result = mysqli_query($link, $comment_query);
 
-                            if ($comment_result && mysqli_num_rows($comment_result) > 0) {
-                                while ($comment = mysqli_fetch_assoc($comment_result)) {
-                                    echo '<li class="comment-item">';
-                                    echo '<div class="user-avatar"><i class="fa-solid fa-user"></i></div>';
-                                    echo '<div class="comment-body">';
-                                    echo '<div class="comment-meta">';
-                                    echo '<span class="user-name">' . htmlspecialchars($comment['user_id']) . '</span>';
-                                    echo '<span class="comment-time">' . htmlspecialchars($comment['created_at']) . '</span>';
-                                    echo '</div>';
-                                    echo '<div class="comment-content">' . htmlspecialchars($comment['comment_text']) . '</div>';
-                                    echo '</div>';
-                                    echo '</li>';
-                                }
-                            } else {
-                                echo '<li class="comment-item">目前尚無留言。</li>';
+                        if ($comment_result && mysqli_num_rows($comment_result) > 0) {
+                            while ($comment = mysqli_fetch_assoc($comment_result)) {
+                                echo '<li class="comment-item">';
+                                echo '<div class="user-avatar"><i class="fa-solid fa-user"></i></div>';
+                                echo '<div class="comment-body">';
+                                echo '<div class="comment-meta">';
+                                echo '<span class="user-name">' . htmlspecialchars($comment['user_id']) . '</span>';
+                                echo '<span class="comment-time">' . htmlspecialchars($comment['created_at']) . '</span>';
+                                echo '</div>';
+                                echo '<div class="comment-content">' . htmlspecialchars($comment['comment_text']) . '</div>';
+                                echo '</div>';
+                                echo '</li>';
                             }
-                            ?>
-                        </ul>
-                    </section>
+                        } else {
+                            echo '<li class="comment-item">目前尚無留言。</li>';
+                        }
+                        ?>
+                    </ul>
+                </section>
 
+            </div>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="progress-info-box">
+                <div class="circular-progress"
+                    style="--progress-percent: <?php echo $progress_percent; ?>%; --progress-color: #f9a825;">
+                    <div class="progress-text"><?php echo round($progress_percent); ?>%</div>
+                </div>
+
+                <div class="money">
+                    <h3><strong>NT$<?php echo number_format($row['current_amount']); ?></strong></h3>
+                    <p>目標 <strong>NT$<?php echo number_format($row['funding_goal']); ?></strong></p>
                 </div>
             </div>
 
-            <div class="sidebar" id="sidebar">
-                <div class="progress-info-box">
-                    <div class="circular-progress"
-                        style="--progress-percent: <?php echo $progress_percent; ?>%; --progress-color: #f9a825;">
-                        <div class="progress-text"><?php echo round($progress_percent); ?>%</div>
-                    </div>
-
-                    <div class="money">
-                        <h3><strong>NT$<?php echo number_format($row['current_amount']); ?></strong></h3>
-                        <p>目標 <strong>NT$<?php echo number_format($row['funding_goal']); ?></strong></p>
-                    </div>
-                </div>
-
-                <div class="text-info">
-                    <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong>
-                        人參與募資</p>
-                    <!--don't move-->
-                    <p><i class="fa-solid fa-hourglass-half icon-circle"></i>
-                        <strong><?php echo $remaining_text; ?></strong>
-                    </p>
-                </div>
+            <div class="text-info">
+                <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong>
+                    人參與募資</p>
                 <!--don't move-->
-                <div class="button-group">
-                    <div class="donate-button">
-                        <?php if ($is_project_expired): ?>
-                            <!-- 時間結束，按鈕禁用 -->
-                            <button class="donate-btn" disabled
-                                style="background-color: gray; cursor: not-allowed;">募資已結束</button>
-                        <?php else: ?>
-                            <!-- 可以募資 -->
-                            <a href="pay.php?id=<?php echo "$project_id"; ?>" class="donate-btn">立即募資</a>
-                        <?php endif; ?>
-                    </div>
-                    <button class="share-btn" onclick="copyLink()">分享 <i class="fa-solid fa-share"></i></button>
-
-
-                </div>
+                <p><i class="fa-solid fa-hourglass-half icon-circle"></i>
+                    <strong><?php echo $remaining_text; ?></strong>
+                </p>
             </div>
+            <!--don't move-->
+            <div class="button-group">
+                <div class="donate-button">
+                    <?php if ($is_project_expired): ?>
+                        <!-- 時間結束，按鈕禁用 -->
+                        <button class="donate-btn" disabled
+                            style="background-color: gray; cursor: not-allowed;">募資已結束</button>
+                    <?php else: ?>
+                        <!-- 可以募資 -->
+                        <a href="pay.php?id=<?php echo "$project_id"; ?>" class="donate-btn">立即募資</a>
+                    <?php endif; ?>
+                </div>
+                <button class="share-btn" onclick="copyLink()">分享 <i class="fa-solid fa-share"></i></button>
 
-            <script>
-                function copyLink() {
-                    const url = window.location.href;
-                    navigator.clipboard.writeText(url)
-                        .then(() => alert('連結已複製到剪貼簿！'))
-                        .catch(() => alert('複製失敗，請手動複製網址'));
-                }
-            </script>
 
+            </div>
         </div>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const sidebar = document.querySelector('.sidebar');
-                const footer = document.querySelector('.footer');
+            function copyLink() {
+                const url = window.location.href;
+                navigator.clipboard.writeText(url)
+                    .then(() => alert('連結已複製到剪貼簿！'))
+                    .catch(() => alert('複製失敗，請手動複製網址'));
+            }
+        </script>
 
-                function updateSidebarPosition() {
-                    const sidebarHeight = sidebar.offsetHeight;
-                    const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
-                    const footerTop = footer.offsetTop;
+    </div>
 
-                    const scrollY = window.scrollY;
-                    const offsetTop = 100; // navbar高度
-                    const buffer = 40; // sidebar底部留空間
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const footer = document.querySelector('.footer');
 
-                    const sidebarBottom = scrollY + offsetTop + sidebarHeight;
-                    const footerStart = footerTop;
+            function updateSidebarPosition() {
+                const sidebarHeight = sidebar.offsetHeight;
+                const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
+                const footerTop = footer.offsetTop;
 
-                    const windowWidth = window.innerWidth;
+                const scrollY = window.scrollY;
+                const offsetTop = 100; // navbar高度
+                const buffer = 40; // sidebar底部留空間
 
-                    if (windowWidth > 768) {
-                        // 桌機版
-                        if (sidebarBottom + buffer >= footerStart) {
-                            sidebar.style.position = 'absolute';
-                            sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
-                        } else {
-                            sidebar.style.position = 'fixed';
-                            sidebar.style.top = offsetTop + 'px';
-                        }
+                const sidebarBottom = scrollY + offsetTop + sidebarHeight;
+                const footerStart = footerTop;
+
+                const windowWidth = window.innerWidth;
+
+                if (windowWidth > 768) {
+                    // 桌機版
+                    if (sidebarBottom + buffer >= footerStart) {
+                        sidebar.style.position = 'absolute';
+                        sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
                     } else {
-                        // 手機版
-                        sidebar.style.position = 'static'; // 還原
-                        sidebar.style.top = 'auto'; // 還原
+                        sidebar.style.position = 'fixed';
+                        sidebar.style.top = offsetTop + 'px';
                     }
-                }
-
-                window.addEventListener('scroll', updateSidebarPosition);
-                window.addEventListener('resize', updateSidebarPosition);
-                updateSidebarPosition(); // 初始呼叫一次
-            });
-        </script>
-
-
-
-        <footer class="footer">
-            <div class="logo_space">
-                <img src="img/logo.png" style="width: 150px;">
-            </div>
-            <div class="help_info">
-
-            </div>
-            <div class="help">
-                <div class="help_title">幫助</div>
-                <hr style="width: 150px;">
-                <div class="help_content">
-                    <div>常見問題</div>
-                    <div>使用條款</div>
-                    <div>隱私條款</div>
-                </div>
-            </div>
-            <div class="footer_info">
-                <div class="info_title">相關資訊</div>
-                <hr>
-
-                <div class="info_content">
-                    <div class="school_info">
-                        <div>關於我們</div>
-                        <div>學校處室</div>
-                        <div>意見箱</div>
-                    </div>
-                    <div class="connection">
-                        <div>242新北市新莊區中正路510號.</div>
-                        <div>電話:(02)2905-2000</div>
-                    </div>
-                </div>
-
-            </div>
-
-        </footer>
-        <script>
-            // 點擊漢堡切換 menu
-            document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
-                document.getElementById('mobile-menu').classList.toggle('active');
-            });
-
-            // 手機 dropdown 點擊展開
-            document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault(); // 防止跳頁
-                    const parent = btn.parentElement;
-                    parent.classList.toggle('active');
-                });
-            });
-            window.addEventListener('scroll', function() {
-                const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 400) {
-                    navbar.classList.add('scrolled');
                 } else {
-                    navbar.classList.remove('scrolled');
+                    // 手機版
+                    sidebar.style.position = 'static'; // 還原
+                    sidebar.style.top = 'auto'; // 還原
                 }
+            }
+
+            window.addEventListener('scroll', updateSidebarPosition);
+            window.addEventListener('resize', updateSidebarPosition);
+            updateSidebarPosition(); // 初始呼叫一次
+        });
+    </script>
+
+
+
+    <footer class="footer">
+        <div class="logo_space">
+            <img src="img/logo.png" style="width: 150px;">
+        </div>
+        <div class="help_info">
+
+        </div>
+        <div class="help">
+            <div class="help_title">幫助</div>
+            <hr style="width: 150px;">
+            <div class="help_content">
+                <div>常見問題</div>
+                <div>使用條款</div>
+                <div>隱私條款</div>
+            </div>
+        </div>
+        <div class="footer_info">
+            <div class="info_title">相關資訊</div>
+            <hr>
+
+            <div class="info_content">
+                <div class="school_info">
+                    <div>關於我們</div>
+                    <div>學校處室</div>
+                    <div>意見箱</div>
+                </div>
+                <div class="connection">
+                    <div>242新北市新莊區中正路510號.</div>
+                    <div>電話:(02)2905-2000</div>
+                </div>
+            </div>
+
+        </div>
+
+    </footer>
+    <script>
+        // 點擊漢堡切換 menu
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        });
+
+        // 手機 dropdown 點擊展開
+        document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault(); // 防止跳頁
+                const parent = btn.parentElement;
+                parent.classList.toggle('active');
             });
-
-            function showTab(index) {
-                const tabs = document.querySelectorAll(".tab");
-                const contents = document.querySelectorAll(".tab-content");
-                tabs.forEach((tab, i) => {
-                    tab.classList.toggle("active", i === index);
-                    contents[i].classList.toggle("active", i === index);
-                });
+        });
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 400) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
-        </script>
+        });
 
-        <script>
-            function toggleFaq(el) {
-                const item = el.closest('.faq-item');
-                item.classList.toggle('open');
-            }
-        </script>
+        function showTab(index) {
+            const tabs = document.querySelectorAll(".tab");
+            const contents = document.querySelectorAll(".tab-content");
+            tabs.forEach((tab, i) => {
+                tab.classList.toggle("active", i === index);
+                contents[i].classList.toggle("active", i === index);
+            });
+        }
+    </script>
+
+    <script>
+        function toggleFaq(el) {
+            const item = el.closest('.faq-item');
+            item.classList.toggle('open');
+        }
+    </script>
 
 </body>
 
