@@ -96,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -163,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -190,19 +190,20 @@
     }
 
     // 取得專案基本資料 + 建議 ID + 關聯欄位
+    // 取得專案基本資料 + 建議 ID + 關聯欄位 
     $sql = "SELECT 
-            p.project_id,
-            p.title AS project_title,
-            p.description AS project_description,
-            p.funding_goal,
-            p.start_date,
-            p.end_date,
-            p.status,
-            p.suggestion_assignments_id, 
-            a.advice_id
-        FROM fundraising_projects p
-        LEFT JOIN advice a ON a.advice_id = p.suggestion_assignments_id
-        WHERE p.project_id = $project_id";
+p.project_id,
+p.title AS project_title,
+p.description AS project_description,
+p.funding_goal,
+p.start_date,
+p.end_date,
+p.status,
+p.suggestion_assignments_id, 
+a.advice_id
+FROM fundraising_projects p
+LEFT JOIN advice a ON a.advice_id = p.suggestion_assignments_id
+WHERE p.project_id = $project_id";
 
     $result = mysqli_query($link, $sql);
 
@@ -215,16 +216,40 @@
 
         $suggestion_assignments_id = $row['suggestion_assignments_id'] ?? 0;
         $start_date = $row['start_date'];
+        $end_date = $row['end_date'];
 
-        // 處理日期與剩餘天數
-        $start_date_obj = new DateTime($start_date);
-        $start_date_obj->modify('+6 months');
-        $end_date = $start_date_obj->format('Y/m/d H:i');
+        // 日期處理
+// 設定時區為 GMT+8（台灣）
+        $timezone = new DateTimeZone('Asia/Taipei');
 
-        $today = new DateTime();
-        $end_date_obj = new DateTime($end_date);
-        $interval = $today->diff($end_date_obj);
-        $days_remaining = $interval->invert ? 0 : $interval->days;
+        // 建立現在時間，指定時區
+        $today = new DateTime('now', $timezone);
+
+        // 取得資料庫的 end_date
+        $end_date_obj = new DateTime($end_date, $timezone);
+
+        // 比較兩個時間
+        if ($today > $end_date_obj) {
+            $remaining_text = "已結束";
+        } else {
+            $interval = $today->diff($end_date_obj);
+            $days_remaining = $interval->days;
+            $hours_remaining = $interval->h;
+            $minutes_remaining = $interval->i;
+
+            if ($days_remaining > 0) {
+                $remaining_text = "剩餘 {$days_remaining} 天 {$hours_remaining} 小時";
+            } elseif ($hours_remaining > 0) {
+                $remaining_text = "剩餘 {$hours_remaining} 小時";
+            } elseif ($minutes_remaining > 0) {
+                $remaining_text = "剩餘不到 1 小時";
+            } else {
+                $remaining_text = "募資已結束";
+            }
+        }
+
+
+
 
         // 查圖片：先拿到 advice_id
         if (!empty($suggestion_assignments_id)) {
@@ -276,6 +301,11 @@
         // 計算募資百分比
         $funding_goal = $row['funding_goal'];
         $current_amount = $row['current_amount'];
+        if ($current_amount >= $funding_goal) {
+            $funding_status_text = "專案募資成功！";
+        } else {
+            $funding_status_text = "募資專案尚未達標";
+        }
         $progress_percent = ($funding_goal > 0) ? ($current_amount / $funding_goal) * 100 : 0;
     } else {
         echo "查無專案資料";
@@ -320,7 +350,7 @@
 
 
             <div class="progress-text-box">
-                <p><strong>專案募資成功！</strong></p>
+                <p><strong><?php echo htmlspecialchars($funding_status_text); ?></strong></p>
                 <p>在 <strong><?php echo htmlspecialchars($end_date); ?></strong> 募資結束前，您都可以持續贊助此計畫。</p>
             </div>
             <div class="tabs">
@@ -374,7 +404,7 @@
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)">
                             <div class="faq-meta">
-                                <div class="faq-date">更新於 2025/03/24zz</div>
+                                <div class="faq-date">更新於</div>
                                 <div class="faq-title">如何確認是否贊助成功？</div>
                             </div>
                             <div class="faq-arrow"><i class="fa-solid fa-caret-down"></i></div>
@@ -469,64 +499,79 @@
             <div class="text-info">
                 <p><i class="fa-solid fa-user icon-circle"></i>已有 <strong><?php echo $participant_count; ?></strong>
                     人參與募資</p>
-                <p><i class="fa-solid fa-hourglass-half icon-circle"></i>剩餘
-                    <strong><?php echo $days_remaining; ?></strong> 天
+                <p><i class="fa-solid fa-hourglass-half icon-circle"></i>
+                    <strong><?php echo $remaining_text; ?></strong>
                 </p>
             </div>
 
             <div class="button-group">
-                <a href="pay.php"><button class="donate-btn">立即募資</button></a>
+                <?php if ($today > $end_date_obj): ?>
+                    <!-- 已結束，按鈕停用 -->
+                    <button class="donate-btn" disabled style="background-color: gray; cursor: not-allowed;">募資已結束</button>
+                <?php else: ?>
+                    <!-- 募資進行中，正常可以點 -->
+                    <a href="pay.php"><button class="donate-btn">立即募資</button></a>
+                <?php endif; ?>
 
-                <button class="share-btn">分享</button>
+
+                <button class="share-btn" onclick="copyLink()">分享 &nbsp;<i class="fa-solid fa-share"></i></button>
+
             </div>
         </div>
-
+        <script>
+                        function copyLink() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url)
+                                .then(() => alert('連結已複製到剪貼簿！'))
+                                .catch(() => alert('複製失敗，請手動複製網址'));
+                        }
+                    </script>
 
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const sidebar = document.querySelector('.sidebar');
-    const footer = document.querySelector('.footer');
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('.sidebar');
+            const footer = document.querySelector('.footer');
 
-    function updateSidebarPosition() {
-        const sidebarHeight = sidebar.offsetHeight;
-        const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
-        const footerTop = footer.offsetTop;
+            function updateSidebarPosition() {
+                const sidebarHeight = sidebar.offsetHeight;
+                const sidebarTop = sidebar.getBoundingClientRect().top + window.scrollY;
+                const footerTop = footer.offsetTop;
 
-        const scrollY = window.scrollY;
-        const offsetTop = 100; // navbar高度
-        const buffer = 40;     // sidebar底部留空間
+                const scrollY = window.scrollY;
+                const offsetTop = 100; // navbar高度
+                const buffer = 40;     // sidebar底部留空間
 
-        const sidebarBottom = scrollY + offsetTop + sidebarHeight;
-        const footerStart = footerTop;
+                const sidebarBottom = scrollY + offsetTop + sidebarHeight;
+                const footerStart = footerTop;
 
-        const windowWidth = window.innerWidth;
+                const windowWidth = window.innerWidth;
 
-        if (windowWidth > 768) { 
-            // 桌機版
-            if (sidebarBottom + buffer >= footerStart) {
-                sidebar.style.position = 'absolute';
-                sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
-            } else {
-                sidebar.style.position = 'fixed';
-                sidebar.style.top = offsetTop + 'px';
+                if (windowWidth > 768) {
+                    // 桌機版
+                    if (sidebarBottom + buffer >= footerStart) {
+                        sidebar.style.position = 'absolute';
+                        sidebar.style.top = (footerStart - sidebarHeight - buffer) + 'px';
+                    } else {
+                        sidebar.style.position = 'fixed';
+                        sidebar.style.top = offsetTop + 'px';
+                    }
+                } else {
+                    // 手機版
+                    sidebar.style.position = 'static'; // 還原
+                    sidebar.style.top = 'auto';         // 還原
+                }
             }
-        } else {
-            // 手機版
-            sidebar.style.position = 'static'; // 還原
-            sidebar.style.top = 'auto';         // 還原
-        }
-    }
 
-    window.addEventListener('scroll', updateSidebarPosition);
-    window.addEventListener('resize', updateSidebarPosition);
-    updateSidebarPosition(); // 初始呼叫一次
-});
-</script>
+            window.addEventListener('scroll', updateSidebarPosition);
+            window.addEventListener('resize', updateSidebarPosition);
+            updateSidebarPosition(); // 初始呼叫一次
+        });
+    </script>
 
 
-    
+
     <footer class="footer">
         <div class="logo_space">
             <img src="img/logo.png" style="width: 150px;">
@@ -563,8 +608,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     </footer>
     <script>
-// 點擊漢堡切換 menu
-document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        // 點擊漢堡切換 menu
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
