@@ -435,10 +435,38 @@
                                 <form id="insertForm" action="agree_insert.php" method="POST">
                                     <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
 
-                                    <button class="agree-btn" id="agree-btn" onclick="handleAgree()">
+                                    <button class="agree-btn" id="agree-btn" onclick="handleAgree(event)">
                                         <i class="fa-solid fa-stamp"></i> 附議
                                     </button>
                                 </form>
+
+                                <script>
+                                    function handleAgree(event) {
+                                        event.preventDefault(); // 阻止按鈕預設送出表單
+
+                                        const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+                                        if (!isLoggedIn) {
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: '請先登入',
+                                                text: '附議為學生與教職人員專屬功能！',
+                                                confirmButtonText: '確定',
+                                                confirmButtonColor: '#3085d6',
+                                                focusConfirm: false,
+                                                didOpen: () => {
+                                                    document.body.style.overflow = 'hidden';
+                                                },
+                                                didClose: () => {
+                                                    document.body.style.overflow = '';
+                                                    window.scrollTo(0, 0);
+                                                }
+                                            });
+                                        } else {
+                                            document.getElementById('insertForm').submit();
+                                        }
+                                    }
+                                </script>
 
                                 <div class="collect_share">
                                     <button class="collect-btn">收藏<i class="fa-solid fa-heart"></i></button>
@@ -737,16 +765,16 @@
     <button class="back-btn" onclick="window.location.href='advice_search.php'"><i class="fa-solid fa-arrow-left"></i>
         <span>返回</span>
     </button>
-
-    <!--<form id="insertForm" action="agree_insert.php" method="POST">
+    <!--
+    <form id="insertForm" action="agree_insert.php" method="POST">
         <input type="hidden" name="advice_id" value="<?php echo $advice_id; ?>">
 
-        <!--單一按鈕 -->
-    <!--<button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
+        單一按鈕 
+    <button type="button" id="agree-btn" class="agree-fixed-btn" onclick="handleAgree()">
             <i class="fa-solid fa-stamp"></i>
             <span>附議</span>
         </button>
-    </form>-->
+    </form>
 
     <script>
         function handleAgree() {
@@ -775,7 +803,7 @@
                 document.getElementById('insertForm').submit();
             }
         }
-    </script>
+    </script>-->
 
 
     <!-- <script>
