@@ -206,7 +206,7 @@ if ($project_id > 0) {
 
         </div>
     </nav>
-    <button class="back-btn" onclick="history.back()">← Back</button>
+    <button class="back-btn" onclick="history.back()">← 返回</button>
 
 
 
