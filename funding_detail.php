@@ -364,10 +364,15 @@
 
 
             <!--don't move-->
-            <div class="progress-text-box">
-                <p><strong><?php echo htmlspecialchars($funding_status_text); ?></strong></p>
-                <p>在 <strong><?php echo htmlspecialchars($end_date); ?></strong> 募資結束前，您都可以持續贊助此計畫。</p>
-            </div>
+            <div class="progress-text-box <?php echo $is_project_expired ? 'expired' : ''; ?>">
+    <?php if ($is_project_expired): ?>
+        <p class="expired-text"><strong>募資專案已結束</strong></p>
+    <?php else: ?>
+        <p><strong><?php echo htmlspecialchars($funding_status_text); ?></strong></p>
+        <p>在 <strong><?php echo htmlspecialchars($end_date); ?></strong> 募資結束前，您都可以持續贊助此計畫。</p>
+    <?php endif; ?>
+</div>
+
             <div class="tabs">
                 <div class="tab active" onclick="showTab(0)">專案內容</div>
                 <div class="tab" onclick="showTab(1)">進度回報</div>
@@ -390,7 +395,7 @@
                     </div>
                     <div class="progress-content">
                         <!--內文放這，不要用<P>直接放不然css會失效-->
-
+                        進度內文
                     </div>
                     <div class="progress-footer">
                         <a href="#" class="read-more">查看更多</a>
@@ -404,7 +409,7 @@
                     </div>
                     <div class="progress-content">
                         <!--內文放這，不要用<P>直接放不然css會失效-->
-
+進度內文
                     </div>
                     <div class="progress-footer">
                         <a href="#" class="read-more">查看更多</a>

@@ -309,6 +309,20 @@
     font-size: 16px;
     line-height: 1.6;
   }
+
+  .progress-text-box.expired {
+    background-color: #f8d7da; 
+    border: 1px solid #f5c2c7;
+    border-radius: 10px;
+}
+
+.progress-text-box.expired .expired-text {
+    color: #842029; 
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin:auto ;
+
+}
   
   
   .tabs {
