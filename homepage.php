@@ -290,7 +290,7 @@
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
                                     // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
-                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
                             ?>
                                     <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
                                     <div class="swiper-slide">
@@ -400,7 +400,7 @@
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
 
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
-                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'https://img.kpopdata.com/upload/content/216/231/22416704092d26793206.jpg';
+                                    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
 
                             ?>
                                     <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
@@ -520,7 +520,7 @@
                         <?php foreach ($chunkedData as $group): ?>
                             <?php
                             $bigCard = array_shift($group); // 第一筆作為大卡
-                            $bigCardImage = !empty($bigCard['file_path']) ? $bigCard['file_path'] : 'default_big_image.jpg';
+                            $bigCardImage = !empty($bigCard['file_path']) ? $bigCard['file_path'] : 'img\homepage.png';
                             $bigCardTitle = htmlspecialchars($bigCard['advice_title']);
                             $bigCardMoney = (float)($bigCard['funding_goal'] ?? 0);
                             $bigCardDonorCount = (int)($bigCard['donor_count'] ?? 0);
@@ -562,7 +562,7 @@
                                         <div class="right-small-cards">
                                             <?php foreach ($group as $smallCard): ?>
                                                 <?php
-                                                $img = !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'default_small_image.jpg';
+                                                $img = !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'img\homepage.png';
                                                 $title = htmlspecialchars($smallCard['advice_title']);
                                                 $goal = (float)($smallCard['funding_goal'] ?? 0);
                                                 $total = (float)($smallCard['total_funding'] ?? 0);
