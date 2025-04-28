@@ -291,6 +291,9 @@
         let currentSort = 'new';
         let currentTab = 'active'; // active 或 ended
         let data = [];
+        let rawData = [];
+        let fetchedOnce = false; // ⭐新增一個旗子
+
         let currentPage = 1;
         const itemsPerPage = 10;
 
@@ -347,15 +350,20 @@
                 .then(response => response.json())
                 .then(json => {
                     if (json.no_result) {
-                        data = []; // 清空資料
-                        renderSuggestions(); // 讓前端畫面觸發「查無結果」
-                        renderPagination(0); // 清空分頁
-                        document.getElementById('highlight-title').textContent = '目前沒有快要達標的建言';
-                        document.getElementById('highlight-count').textContent = '';
-                        document.getElementById('highlight-action').style.display = 'none';
+                        data = [];
+                        if (!fetchedOnce) {
+                            rawData = []; // ⭐只在第一次沒有資料時清空 rawData
+                        }
+                        renderSuggestions();
+                        renderHighlight();
+                        renderPagination(0);
                         return;
                     }
-                    data = json;
+                    if (!fetchedOnce) {
+                        rawData = json; // ⭐只在第一次 fetch 成功時存 rawData
+                        fetchedOnce = true; // ⭐之後不再覆蓋 rawData
+                    }
+                    data = json; // 一直更新 data
                     renderSuggestions();
                     renderHighlight();
                 })
@@ -495,18 +503,17 @@
         }
 
         function renderHighlight() {
-            const target = data
+            const target = rawData
                 .filter(item => item.status === 'active' && item.support_count < 3)
                 .sort((a, b) => {
                     if (b.support_count !== a.support_count) {
                         return b.support_count - a.support_count;
                     }
                     return new Date(a.announce_date) - new Date(b.announce_date);
-                })[0]; // ✅ 加上 [0]，選出第一個符合的建言
-
+                })[0]; // 取最接近達標的一個
 
             if (target) {
-                const remain = Math.max(0, 3 - target.support_count); // 附議人數基準: 3
+                const remain = Math.max(0, 3 - target.support_count);
                 document.getElementById('highlight-title').textContent = `快要達標的建言：${target.advice_title}`;
                 document.getElementById('highlight-count').textContent = `還差 ${remain} 人即可達成`;
                 document.getElementById('highlight-action').style.display = 'inline-block';
