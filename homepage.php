@@ -471,7 +471,7 @@
                         </div>
                         <div class="swiper-button-next-3"><i class="fa-solid fa-arrow-right" style="color: #a5a0a0"></i>
                         </div>
-                        <div class="more"><a href="#">更多</a></div>
+                        <div class="more"><a href="ongoing_funding_search.php">更多</a></div>
                     </div>
                 </div>
 
