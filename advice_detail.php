@@ -495,8 +495,7 @@
             </main>
 
             <?php
-            // 連接資料庫
-// $link = new mysqli('localhost', 'root', '', '你的資料庫');
+           
         
             $advice_id = $_GET['advice_id'] ?? 0;
 
@@ -518,7 +517,7 @@
 
             // 預設回覆內容
             $content = null;
-            $update_time = null;
+            $reply_update_time = null;  
 
             // 如果有找到 suggestion_assignments_id，再去抓 replies 表
             if ($suggestion_assignments_id) {
