@@ -162,10 +162,6 @@
                     <a href="#">已結束募資</a>
                 </div>
             </div>
-
-
-
-
             <?php if (isset($_SESSION['user_id'])) { ?>
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
@@ -208,10 +204,35 @@
             </div>
         </div>
         <div class="banner2">
-            <div class="chicken">
-                <img src="img\F66F58A6-65E9-4AF5-9188-3D246E67AE26.png">
-                <div class="chicken_tag">我要建言</div>
-            </div>
+            <a href="submitadvice.php" id="submitAdviceLink">
+                <div class="chicken">
+                    <img src="img\F66F58A6-65E9-4AF5-9188-3D246E67AE26.png">
+                    <div class="chicken_tag">我要建言</div>
+                </div>
+            </a>
+            <script>
+                document.getElementById('submitAdviceLink').addEventListener('click', function(event) {
+                    const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+                    if (!isLoggedIn) {
+                        event.preventDefault(); // 阻止跳轉
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '請先登入',
+                            text: '發布建言為學生與教職人員專屬功能！',
+                            confirmButtonText: '確定',
+                            confirmButtonColor: '#3085d6',
+                            focusConfirm: false,
+                            didOpen: () => {
+                                document.body.style.overflow = 'hidden';
+                            },
+                            didClose: () => {
+                                document.body.style.overflow = '';
+                                document.body.style.paddingRight = ''; // ⭐恢復
+                            }
+                        });
+                    }
+                });
+            </script>
         </div>
         <div class="banner3">
             <a href="ongoing_funding_search.php">
@@ -223,13 +244,13 @@
                 </div>
             </a>
             <a href="suggestion_box.php">
-            <div class="new_fund">
-                <div class="chicken">
-                    <img src="img\D8904374-10AE-4B6B-B6FB-355FEA8C7B44.png">
-                    <div class="chicken_tag">意見箱</div>
-                </div>
+                <div class="new_fund">
+                    <div class="chicken">
+                        <img src="img\D8904374-10AE-4B6B-B6FB-355FEA8C7B44.png">
+                        <div class="chicken_tag">意見箱</div>
+                    </div>
 
-            </div>
+                </div>
             </a>
         </div>
     </div>
