@@ -332,10 +332,11 @@
     <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment_text'])) {
         $comment_text = trim($_POST['comment_text']);
-        $user_id = $_SESSION['user_id'] ?? 0; // 如果未登入，設為 0 或其他預設值
-        $project_id = intval($_GET['project_id'] ?? 0);
+        $user_id = $_POST['user_id']; // 如果未登入，設為 0 或其他預設值
+        $project_id = $_POST['project_id'] ?? 0; // 確保 project_id 也有值
+        $method=$_POST['method'] ?? '';
 
-        if (!empty($comment_text) && $project_id > 0 && $user_id > 0) {
+        if (!empty($comment_text) && $project_id > 0 && $user_id > 0 && $method === 'comment_send') {
             $stmt = $link->prepare("INSERT INTO funding_comments (project_id, user_id, comment_text, created_at) VALUES (?, ?, ?, NOW())");
 
             // 檢查 prepare 是否成功
@@ -347,12 +348,16 @@
 
             if ($stmt->execute()) {
                 echo "<script>alert('留言成功！');</script>";
+                echo "<script>window.location.href = 'funding_detail.php?id=$project_id';</script>";
             } else {
                 echo "<script>alert('留言失敗，請稍後再試！');</script>";
+                echo "<script>window.location.href = 'funding_detail.php?id=$project_id';</script>";
             }
             $stmt->close();
         } else {
             echo "<script>alert('留言內容不可為空，或未登入！');</script>";
+            echo "<script>window.location.href = 'funding_detail.php?id=$project_id';</script>";
+            
         }
     }
     ?>
@@ -487,6 +492,9 @@
                         <div class="comment-input">
 
                             <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                            <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
+                            <input type="hidden" name="method" value="comment_send">
+                            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id'] ?? 0; ?>">
                             <textarea id="comment-text" name="comment_text" maxlength="150"
                                 placeholder="我要留言..."></textarea>
                             <button type="submit" id="submit-comment"><i class="fa-solid fa-paper-plane"></i></button>

@@ -1,5 +1,5 @@
 <?php
-// filepath: c:\xampp\htdocs\analysis_project\manager\approve_proposal.php
+session_start();
 
 // 資料庫連線
 $conn = new mysqli("localhost", "root", "", "system_project");
@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin_feedback = $_POST['admin_feedback']; // 接收管理者的回饋內容
 
     // 更新提案狀態為 "已通過" 並存入回饋
-    $sql = "UPDATE suggestion_assignments 
-            SET status = '已通過', reviewed_at = NOW(), approved_by_admin = TRUE, notification = TRUE, admin_feedback = ? 
+    $sql = "UPDATE suggestion_assignments s
+            SET s.status = '已通過', s.reviewed_at = NOW(), s.approved_by_admin = TRUE, s.notification = TRUE, admin_feedback = ? 
             WHERE suggestion_assignments_id = ?";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {

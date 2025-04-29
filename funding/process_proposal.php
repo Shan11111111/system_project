@@ -16,15 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 檔案上傳處理
     $upload_dir = "../uploads/";
     $path="uploads/";
-    $file_path = $upload_dir . basename($proposal_file['name']);
+    $file_path = $path . basename($proposal_file['name']);
     if (!move_uploaded_file($proposal_file['tmp_name'], $file_path)) {
         die("檔案上傳失敗");
     }
 
     // 更新提案內容
-    $sql = "UPDATE suggestion_assignments 
-            SET proposal_text = ?, funding_amount = ?, proposal_file_path = ?, submitted = TRUE, submitted_at = NOW(), status = '審核中' 
-            WHERE suggestion_assignments_id = ?";
+    $sql = "UPDATE suggestion_assignments s
+            SET s.proposal_text = ?, s.funding_amount = ?, s.proposal_file_path = ?, s.submitted = TRUE, s.submitted_at = NOW(), s.status = '審核中' 
+            WHERE s.suggestion_assignments_id = ?";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         die("SQL 錯誤: " . $conn->error);
