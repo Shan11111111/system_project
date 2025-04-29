@@ -156,7 +156,7 @@
         <div class="advice_space">
             <div class="tabs">
                 <div class="tab active" data-tab="active" onclick="switchTab('active')">進行中</div>
-                <div class="tab" data-tab="ended" onclick="switchTab('ended')">已截止</div>
+                <div class="tab" data-tab="ended" onclick="switchTab('ended')">未受理</div>
                 <div class="tab" data-tab="responed" onclick="switchTab('responed')">已回覆</div>
             </div>
             <hr style=" border-color:black;" />
