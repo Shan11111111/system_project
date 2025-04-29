@@ -222,6 +222,7 @@
                     </div>
                 </div>
             </a>
+            <a href="suggestion_box.php">
             <div class="new_fund">
                 <div class="chicken">
                     <img src="img\D8904374-10AE-4B6B-B6FB-355FEA8C7B44.png">
@@ -229,6 +230,7 @@
                 </div>
 
             </div>
+            </a>
         </div>
     </div>
 

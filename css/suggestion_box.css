@@ -1,0 +1,326 @@
+:root {
+  /* 主色調 */
+  --color-yellow: #fff6da;
+  /* 鵝黃色 - 小雞感 */
+  /*navbar*/
+  --color-orange-brown: #d9a679;
+  /* 溫柔橘棕 - 強調/按鈕  */
+  --color-dark-brown: #7c4d2b;
+  /* 深咖啡 - 導航、標題 * 文字的hover*/
+
+  /* 輔助色 */
+  --color-soft-green: #dddfab7f;
+  /* 嫩綠色 - 自然感 */
+  --color-cream: #fff8ed;
+  /* 奶油白 - 背景 */
+
+  /* 字體與邊線 */
+  --color-text: #4b3f2f;
+  /* 深褐灰 - 內文字體 */
+  --color-line: #d7cbb8;
+  --navbar-text: #fff6da;
+  /* 淡褐線條 */
+
+  /* 狀態/互動 */
+  --color-hover: #efc89c;
+  /* hover/active 狀態用的柔橘 */
+}
+
+html,
+body {
+  font-family: Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  background-color: var(--color-cream);
+}
+
+/* Navbar */
+/* Navbar 基本設定 */
+/* Navbar 基本樣式 */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--color-yellow);
+  padding: 10px 170px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 滾動後的 navbar 樣式 */
+.navbar.scrolled {
+  width: 100% !important;
+  left: 0 !important;
+  transform: none !important;
+  border-radius: 0;
+  top: 0;
+  padding: 10px 150px;
+  transition: all 0.3s ease;
+}
+
+/* nav-container 三欄佈局 */
+/* nav-container 為三欄架構 */
+.nav-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+}
+
+/* 左欄：LOGO靠左 */
+.nav-left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* 中欄：建言/募資置中 */
+.nav-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
+/* 右欄：登入/註冊靠右 */
+.nav-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Dropdown 保持原樣 */
+/* 修正 dropdown 父層，讓它定位正常 */
+.nav-center .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+  color: inherit;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+}
+
+.dropbtn:hover {
+  color: var(--color-dark-brown);
+}
+
+/* 修正 dropdown 選單位置 & 寬度 */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;
+  background-color: var(--color-yellow);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  min-width: 150px;
+  z-index: 9999;
+  /* 提高層級，蓋過其他東西 */
+}
+
+/* 顯示下拉選單 */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* 修正 dropdown 連結樣式 */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  white-space: nowrap;
+}
+
+.dropdown-content a:hover {
+  color: var(--color-dark-brown);
+}
+
+/* 登入、註冊樣式 */
+.nav-item {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 12px;
+}
+
+.nav-item:hover {
+  color: var(--color-dark-brown);
+}
+
+/* 漢堡按鈕 */
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* 手機選單預設關閉 */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 20px;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+/* 顯示手機選單 */
+.mobile-menu.active {
+  display: flex;
+}
+
+/* RWD: 小螢幕調整 */
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+    margin-left: auto;
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .logo {
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .dropdown-content {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    border: 1px solid #eee;
+    margin-top: 5px;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: none;
+    /* hover 無效 */
+  }
+
+  .dropdown.active .dropdown-content {
+    display: block;
+  }
+
+  .dropdown-content {
+    display: none;
+  }
+}
+
+.container{
+  display: flex;
+}
+
+
+.contact-container{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.contact-left{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+  padding: 17px 33px;
+  border-radius: 10px;
+}
+
+.contact-left-title h2{
+  font-weight: 600;
+  color:var(--color-dark-brown);
+  font-size: 35px;
+  margin-bottom: 5px;
+}
+.contact-left-title hr{
+  border: none;
+  width: 120px;
+  height: 5px;
+  background-color:var(--color-orange-brown) ;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.contact-inputs{
+  width: 400px;
+  height: 50px;
+  border: none;
+  outline: none;
+  padding-left: 25px;
+  font-weight: 500;
+  color:var(--color-dark-brown);
+  border-radius: 50px;
+}
+
+.contact-left textarea{
+  height: 140px;
+  padding-top: 15px;
+  border-radius: 20px;
+
+}
+
+.contact-inputs:focus{
+  border: 2px solid var(--color-dark-brown);
+}
+
+.contact-inputs::placeholder{
+  color: #a9a9a9;
+}
+
+.contact-left button{
+  display: flex;
+  right: 0%;
+  align-items: center;
+  padding: 12px 25px;
+  font-size: 13px;
+  color: #fff;
+  gap: 10px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(270deg,var(--color-dark-brown),var(--color-orange-brown));
+  cursor: pointer;
+}
+
+.contact-right{
+  width: 400px;
+}
+
+.contact-right img{
+  align-items: center;
+  margin-right: 400px;
+}
+
+@media (max-width:800px) {
+  .contact-inputs{
+      width: 80vw;
+  }
+  .contact-right{
+      display: none;
+  }
+}
