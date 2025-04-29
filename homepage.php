@@ -498,130 +498,127 @@
                     </div>
                 </div>
 
-                <?php
-                $link = mysqli_connect('localhost', 'root');
-                mysqli_select_db($link, "system_project");
 
-                // 檢查連線是否成功
-                if (!$link) {
-                    die("資料庫連線失敗: " . mysqli_connect_error());
-                }
-
-                // 查詢資料庫中的募資資料
-                $sql = "SELECT f.project_id, a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
-               ai.file_path, f.funding_goal, s.proposal_text, 
-               COALESCE(COUNT(d.donor),0) AS donor_count, 
-               COALESCE(SUM(d.donation_amount), 0) AS total_funding
-        FROM fundraising_projects f
-        INNER JOIN suggestion_assignments s ON f.suggestion_assignments_id = s.suggestion_assignments_id
-        LEFT JOIN donation_record d ON f.project_id = d.project_id
-        INNER JOIN advice a ON s.advice_id = a.advice_id
-        LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id
-        GROUP BY f.project_id
-        ORDER BY a.announce_date DESC";
-
-                $result = mysqli_query($link, $sql);
-                if (!$result) {
-                    die("查詢失敗: " . mysqli_error($link));
-                }
-
-                $data = [];
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $data[] = $row;
-                    }
-                }
-                mysqli_close($link);
-
-                // 切成每頁 5 筆資料（1 張大卡 + 最多 4 張小卡）
-                $chunkedData = array_chunk($data, 5);
-                ?>
 
                 <!-- swiper 輸出區塊 -->
+                <!-- swiper輸出區 -->
                 <div class="swiper mySwiper3">
-                    <div class="swiper-wrapper">
-                        <?php foreach ($chunkedData as $group): ?>
-                            <?php
-                            $bigCard = array_shift($group); // 第一筆作為大卡
-                            $bigCardImage = !empty($bigCard['file_path']) ? $bigCard['file_path'] : 'img\homepage.png';
-                            $bigCardTitle = htmlspecialchars($bigCard['advice_title']);
-                            $bigCardMoney = (float)($bigCard['funding_goal'] ?? 0);
-                            $bigCardDonorCount = (int)($bigCard['donor_count'] ?? 0);
-                            $bigCardTotalFunding = (float)($bigCard['total_funding'] ?? 0);
-                            $progressDisplay = ($bigCardMoney > 0) ? intval(($bigCardTotalFunding / $bigCardMoney) * 100) : 0;
-                            $progressBar = min(100, $progressDisplay);
-                            ?>
-                            <div class="swiper-slide">
-                                <div class="fund-section">
-                                    <div class="fund-content">
-                                        <!-- 大卡 -->
-                                        <a href="funding_detail.php?id=<?php echo urlencode($bigCard['project_id']); ?>" style="text-decoration: none; color: inherit;">
-                                            <div class="left-big-card">
-                                                <div class="fundraiser-card">
-                                                    <div class="card-image">
-                                                        <img src="<?php echo $bigCardImage; ?>" alt="大圖">
-                                                    </div>
-                                                    <div class="card-info">
-                                                        <div class="card-title"><?php echo $bigCardTitle; ?></div>
-                                                        <div class="progress-bar">
-                                                            <div class="progress" style="width:<?php echo $progressBar; ?>%;"></div>
-                                                        </div>
-                                                        <div class="card-meta">
-                                                            <div>
-                                                                <span>NT$ <?php echo number_format($bigCardTotalFunding, 0); ?></span>
-                                                                <span class="divider">/</span>
-                                                                <span><?php echo $progressDisplay; ?>%</span>
-                                                            </div>
-                                                            <div>
-                                                                <span><?php echo $bigCardDonorCount; ?> <i class="fa-regular fa-user"></i></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                    <div class="swiper-wrapper" id="funding-cards"></div>
+                </div>
+                <div id="no-project-message" style="display:none; text-align:center; margin-top:20px;">目前沒有進行中的募資專案。</div>
+
+                <script>
+                    async function fetchOngoingFunding(page = 1) {
+                        try {
+                            const response = await fetch(`funding_function/fetch_funding_cards.php?page_type=ongoing&page=${page}`);
+                            const result = await response.json();
+                            const data = result.data || [];   // 取出資料，若為空則給空陣列
+
+                            const cardsWrapper = document.getElementById('funding-cards');
+                            const noProjectMessage = document.getElementById('no-project-message');
+                            cardsWrapper.innerHTML = '';
+                            noProjectMessage.style.display = 'none';
+       
+                            if (data.length === 0) {   // 如果沒有任何資料，顯示「沒有進行中專案」訊息並結束函數
+                                noProjectMessage.style.display = 'block';
+                                return;
+                            }
+
+                            // 1. 按progress比例高到低排序
+                            const sortedData = [...data].sort((a, b) => b.progress - a.progress);
+
+                            // 2. 每5筆一組
+                            const chunkedData = [];
+                            for (let i = 0; i < sortedData.length; i += 5) {
+                                chunkedData.push(sortedData.slice(i, i + 5));
+                            }
+
+                            // 3. 渲染每一個 swiper-slide（每組5筆）
+                            chunkedData.forEach(group => {
+                                if (group.length === 0) return;
+
+                                const bigCard = group[0]; // 第一筆大卡
+                                const smallCards = group.slice(1); // 剩下小卡們
+
+                                const swiperSlide = document.createElement('div');
+                                swiperSlide.className = 'swiper-slide';
+
+                                swiperSlide.innerHTML = `
+                <div class="fund-section">
+                    <div class="fund-content">
+                        <!-- 大卡 -->
+                        <a href="funding_detail.php?id=${bigCard.id}" style="text-decoration: none; color: inherit;">
+                            <div class="left-big-card">
+                                <div class="fundraiser-card">
+                                    <div class="card-image">
+                                        <img src="${bigCard.file_path || 'img/homepage.png'}" alt="大圖">
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="card-title">${bigCard.title}</div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width:${Math.min(100, bigCard.progress)}%;"></div>
+                                        </div>
+                                        <div class="card-meta">
+                                            <div>
+                                                <span>NT$ ${Number(bigCard.raised).toLocaleString()}</span>
+                                                <span class="divider">/</span>
+                                                <span>${bigCard.progress}%</span>
+                                            </div>
+                                            <div>
+                                                <span>${bigCard.supporter} <i class="fa-regular fa-user"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- 小卡區 -->
+                        <div class="right-small-cards">
+                            ${smallCards.map(smallCard => `
+                                <a href="funding_detail.php?id=${smallCard.id}" style="text-decoration: none; color: inherit;">
+                                    <div class="fundraiser-card small-card">
+                                        <div class="card-image">
+                                            <img src="${smallCard.file_path || 'img/homepage.png'}" alt="小圖">
+                                        </div>
+                                        <div class="card-info">
+                                            <div class="card-title">${smallCard.title}</div>
+                                            <div class="progress-bar">
+                                                <div class="progress" style="width:${Math.min(100, smallCard.progress)}%;"></div>
+                                            </div>
+                                            <div class="card-meta">
+                                                <div>
+                                                    <span>NT$ ${Number(smallCard.raised).toLocaleString()} / ${smallCard.progress}%</span>
+                                                </div>
+                                                <div>
+                                                    <span>${smallCard.supporter} <i class="fa-regular fa-user"></i></span>
                                                 </div>
                                             </div>
-                                        </a>
-
-                                        <!-- 小卡 -->
-                                        <div class="right-small-cards">
-                                            <?php foreach ($group as $smallCard): ?>
-                                                <?php
-                                                $img = !empty($smallCard['file_path']) ? $smallCard['file_path'] : 'img\homepage.png';
-                                                $title = htmlspecialchars($smallCard['advice_title']);
-                                                $goal = (float)($smallCard['funding_goal'] ?? 0);
-                                                $total = (float)($smallCard['total_funding'] ?? 0);
-                                                $donor = (int)($smallCard['donor_count'] ?? 0);
-                                                $progressDisplay = ($goal > 0) ? intval(($total / $goal) * 100) : 0;
-                                                $progressBar = min(100, $progressDisplay);
-                                                ?>
-                                                <a href="funding_detail.php?id=<?php echo urlencode($smallCard['project_id']); ?>" style="text-decoration: none; color: inherit;">
-                                                    <div class="fundraiser-card small-card">
-                                                        <div class="card-image">
-                                                            <img src="<?php echo $img; ?>" alt="小圖">
-                                                        </div>
-                                                        <div class="card-info">
-                                                            <div class="card-title"><?php echo $title; ?></div>
-                                                            <div class="progress-bar">
-                                                                <div class="progress" style="width: <?php echo $progressBar; ?>%;"></div>
-                                                            </div>
-                                                            <div class="card-meta">
-                                                                <div>
-                                                                    <span>NT$ <?php echo number_format($total, 0); ?> / <?php echo $progressDisplay; ?>%</span>
-                                                                </div>
-                                                                <div>
-                                                                    <span><?php echo $donor; ?> <i class="fa-regular fa-user"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            <?php endforeach; ?>
                                         </div>
-                                    </div> <!-- .fund-content -->
-                                </div> <!-- .fund-section -->
-                            </div> <!-- .swiper-slide -->
-                        <?php endforeach; ?>
-                    </div>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div> 
                 </div>
+            `;
+
+                                cardsWrapper.appendChild(swiperSlide);
+                            });
+
+                            // 更新 swiper
+                            if (typeof mySwiper3 !== 'undefined') {
+                                mySwiper3.update();
+                            }
+
+                        } catch (error) {
+                            console.error('讀取募資資料失敗:', error);
+                        }
+                    }
+
+                    // 頁面載入時就 fetch
+                    fetchOngoingFunding();
+                </script>
             </div>
         </div>
     </div>

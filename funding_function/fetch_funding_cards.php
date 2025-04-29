@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 include '../db_connection.php'; // 資料庫連線
 
 // 分頁設定
-$perPage = 12;
+$perPage = 9;
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $start = ($page - 1) * $perPage;
 
@@ -59,7 +59,7 @@ foreach ($projects as $project) {
                 $image_url = $advice['file_path'];
             }
         }
-    }
+    } 
 
     // 募資金額總和
     $stmt = $pdo->prepare("SELECT SUM(donation_amount) FROM donation_record WHERE project_id = ?");
