@@ -192,7 +192,7 @@
 
         let currentPage = 1;
         let currentSort = 'hot';
-        const itemsPerPage = 12;
+        const itemsPerPage = 9;
 
         function getFilters() {
             return {
