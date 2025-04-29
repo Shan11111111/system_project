@@ -304,7 +304,7 @@
                 $status = 0;
 
                 if (!$rejected) {
-                    if ($agreeCount >=0)
+                    if ($agreeCount >= 0)
                         $status = 1;
                     if ($agreeCount >= $agreeThreshold)
                         $status = 2;
@@ -490,13 +490,43 @@
                     <!-- 內文 -->
                     <section class="content">
                         <p id="advice-content"><?php echo nl2br(htmlspecialchars($row['advice_content'])); ?></p>
+                        <?php
+                        // 連接資料庫
+                        $link = mysqli_connect('localhost', 'root', '', 'system_project');
+                        if (!$link) {
+                            die('資料庫連線失敗: ' . mysqli_connect_error());
+                        }
+
+                        // 取得建言 ID
+                        $advice_id = $_GET['advice_id'] ?? 0;
+
+                        // 查詢附加檔案
+                        $sql_file = "SELECT file_name, file_path FROM files WHERE advice_id = ?";
+                        $stmt_file = mysqli_prepare($link, $sql_file);
+                        mysqli_stmt_bind_param($stmt_file, 'i', $advice_id);
+                        mysqli_stmt_execute($stmt_file);
+                        $result_file = mysqli_stmt_get_result($stmt_file);
+
+                        // 有檔案才顯示
+                        if (mysqli_num_rows($result_file) > 0) {
+                            echo '<div class="file-list">';
+                            while ($file = mysqli_fetch_assoc($result_file)) {
+                                echo '<div class="file-item">';
+                                echo '<i class="fa-solid fa-file"></i> 附加文件:<a href="' . htmlspecialchars($file['file_path']) . '" download="' . htmlspecialchars($file['file_name']) . '">' . htmlspecialchars($file['file_name']) . '</a>';
+                                echo '</div>';
+                            }
+                            echo '</div>';
+                        }
+                        ?>
+
                     </section>
+
                 </div>
             </main>
 
             <?php
-           
-        
+
+
             $advice_id = $_GET['advice_id'] ?? 0;
 
             // 查主建言的狀態
@@ -517,7 +547,7 @@
 
             // 預設回覆內容
             $content = null;
-            $reply_update_time = null;  
+            $reply_update_time = null;
 
             // 如果有找到 suggestion_assignments_id，再去抓 replies 表
             if ($suggestion_assignments_id) {
