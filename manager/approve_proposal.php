@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("si", $admin_feedback, $suggestion_assignments_id);
     if ($stmt->execute()) {
         // 將提案資料插入到募資專案表
-        $fundraising_sql = "INSERT INTO fundraising_projects (suggestion_assignments_id, title, description, funding_goal, start_date,end_date status) 
+        $fundraising_sql = "INSERT INTO fundraising_projects (suggestion_assignments_id, title, description, funding_goal, start_date,end_date, status) 
                             SELECT sa.suggestion_assignments_id, a.advice_title, sa.proposal_text, sa.funding_amount, NOW(),DATE_ADD(NOW(), INTERVAL 30 DAY), '進行中'
                             FROM suggestion_assignments sa
                             JOIN advice a ON sa.advice_id = a.advice_id
