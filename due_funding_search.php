@@ -213,7 +213,7 @@ document.getElementById('mobile-menu-toggle').addEventListener('click', function
 
         let currentPage = 1;
         let currentSort = 'all';
-        const itemsPerPage = 12;
+        const itemsPerPage = 9;
 
         function getFilters() {
             return {

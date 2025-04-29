@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 檔案上傳處理
     $upload_dir = "../uploads/";
-    $file_path = $upload_dir . basename($proposal_file['name']);
+    $path="uploads/";
+    $file_path = $path . basename($proposal_file['name']);
     if (!move_uploaded_file($proposal_file['tmp_name'], $file_path)) {
         die("檔案上傳失敗");
     }
