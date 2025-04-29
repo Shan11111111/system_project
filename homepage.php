@@ -267,7 +267,7 @@
             <div class="hot-area">
                 <div class="advice_classifedtitle">
                     <div class="title-bar">
-                        <div class="hot_tag">HOT</div>
+                        <div class="hot_tag">最熱門</div>
                         <div class="right-controls">
                             <div class="swiper-button-prev-1"><i class="fa-solid fa-arrow-left"
                                     style="color: #a5a0a0;"></i></div>
@@ -376,7 +376,7 @@
             <div class="new-area">
                 <div class="advice_classifedtitle">
                     <div class="title-bar">
-                        <div class="new_tag">NEW</div>
+                        <div class="new_tag">最新鮮</div>
                         <div class="right-controls">
                             <div class="swiper-button-prev-2"><i class="fa-solid fa-arrow-left"
                                     style="color: #a5a0a0;"></i>
