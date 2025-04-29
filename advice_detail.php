@@ -304,7 +304,7 @@
                 $status = 0;
 
                 if (!$rejected) {
-                    if ($agreeCount > 0)
+                    if ($agreeCount >=0)
                         $status = 1;
                     if ($agreeCount >= $agreeThreshold)
                         $status = 2;
