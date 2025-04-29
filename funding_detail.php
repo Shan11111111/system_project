@@ -96,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -163,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -365,13 +365,13 @@
 
             <!--don't move-->
             <div class="progress-text-box <?php echo $is_project_expired ? 'expired' : ''; ?>">
-    <?php if ($is_project_expired): ?>
-        <p class="expired-text"><strong>募資專案已結束</strong></p>
-    <?php else: ?>
-        <p><strong><?php echo htmlspecialchars($funding_status_text); ?></strong></p>
-        <p>在 <strong><?php echo htmlspecialchars($end_date); ?></strong> 募資結束前，您都可以持續贊助此計畫。</p>
-    <?php endif; ?>
-</div>
+                <?php if ($is_project_expired): ?>
+                    <p class="expired-text"><strong>募資專案已結束</strong></p>
+                <?php else: ?>
+                    <p><strong><?php echo htmlspecialchars($funding_status_text); ?></strong></p>
+                    <p>在 <strong><?php echo htmlspecialchars($end_date); ?></strong> 募資結束前，您都可以持續贊助此計畫。</p>
+                <?php endif; ?>
+            </div>
 
             <div class="tabs">
                 <div class="tab active" onclick="showTab(0)">專案內容</div>
@@ -382,7 +382,39 @@
 
             <div class="tab-content active">
                 <p><?php echo nl2br(htmlspecialchars($row['project_description'])); ?></p>
-                <p>附件：<a href="file/專案說明.pdf" download>專案說明.pdf</a></p>
+                <?php
+                // 資料庫連線
+                $link = mysqli_connect('localhost', 'root', '', 'system_project');
+                if (!$link) {
+                    die('資料庫連線失敗: ' . mysqli_connect_error());
+                }
+
+                // 取得專案 ID
+                $project_id = $_GET['id'] ?? 0;
+
+                // 查附件檔案路徑
+                $sql_file = "
+    SELECT sa.proposal_file_path
+    FROM fundraising_projects fp
+    JOIN suggestion_assignments sa ON fp.suggestion_assignments_id = sa.suggestion_assignments_id
+    WHERE fp.project_id = ?
+";
+                $stmt_file = mysqli_prepare($link, $sql_file);
+                mysqli_stmt_bind_param($stmt_file, 'i', $project_id);
+                mysqli_stmt_execute($stmt_file);
+                $result_file = mysqli_stmt_get_result($stmt_file);
+                $row_file = mysqli_fetch_assoc($result_file);
+
+                // 顯示下載連結（若有檔案）
+                if (!empty($row_file['proposal_file_path'])) {
+                    $file_url = htmlspecialchars($row_file['proposal_file_path']);
+                    $file_name = htmlspecialchars(basename($row_file['proposal_file_path']));
+                    echo '<div class="project-file">';
+                    echo ' 附件：<a href="' . $file_url . '" download="' . $file_name . '">' . $file_name . '</a>';
+                    echo '</div>';
+                }
+                ?>
+
             </div>
 
 
@@ -409,7 +441,7 @@
                     </div>
                     <div class="progress-content">
                         <!--內文放這，不要用<P>直接放不然css會失效-->
-進度內文
+                        進度內文
                     </div>
                     <div class="progress-footer">
                         <a href="#" class="read-more">查看更多</a>
@@ -422,7 +454,7 @@
             $faq_query = "SELECT question, reply, updated_on FROM funding_FAQ WHERE project_id = $project_id ORDER BY updated_on DESC";
             $faq_result = mysqli_query($link, $faq_query);
             ?>
-            
+
             <div class="tab-content">
                 <div class="faq-list">
                     <?php
@@ -544,7 +576,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const sidebar = document.querySelector('.sidebar');
             const footer = document.querySelector('.footer');
 
@@ -623,19 +655,19 @@
     </footer>
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
