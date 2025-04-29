@@ -32,6 +32,7 @@ body {
   height: 100%;
   margin: 0;
   background-color: var(--color-cream);
+  overflow-x: hidden; /* 防止意外水平捲動 */
 }
 
 /* Navbar */
@@ -246,10 +247,9 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  height: 100%;
-  padding-top: 90px;
-  /* 根據你的 navbar 高度調整 */
-
+  min-height: 100vh; /* 重點改這裡！*/
+  padding-top: 90px; /* 根據你的 navbar 高度調整 */
+  box-sizing: border-box;
 }
 
 /*首頁五元素*/
