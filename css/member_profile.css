@@ -1,0 +1,99 @@
+:root {
+    /* 主色調 */
+    --color-yellow: #fff6da;
+    /* 鵝黃色 - 小雞感 */
+    /*navbar*/
+    --color-orange-brown: #d9a679;
+    /* 溫柔橘棕 - 強調/按鈕  */
+    --color-dark-brown: #7c4d2b;
+    /* 深咖啡 - 導航、標題 * 文字的hover*/
+  
+    /* 輔助色 */
+    --color-soft-green: #dddfab7f;
+    /* 嫩綠色 - 自然感 */
+    --color-cream: #fff8ed;
+    /* 奶油白 - 背景 */
+  
+    /* 字體與邊線 */
+    --color-text: #4b3f2f;
+    /* 深褐灰 - 內文字體 */
+    --color-line: #d7cbb8;
+    --navbar-text: #fff6da;
+    /* 淡褐線條 */
+  
+    /* 狀態/互動 */
+    --color-hover: #efc89c;
+    /* hover/active 狀態用的柔橘 */
+  }
+  
+  .profile-container {
+    padding: 30px;
+    color: #333;
+    max-width: 900px;
+    margin: auto;
+  }
+  
+  .profile-header {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+  }
+  
+  .user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #f6a623;
+    margin-right: 20px;
+  }
+  
+  .user-info h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--color-dark-brown);
+  }
+  
+  .user-info p {
+    margin: 4px 0;
+    font-size: 18px;
+  }
+  
+  .profile-stats {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+  }
+  
+  .stat-card {
+    background-color: var(--color-yellow);
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--color-line);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .stat-title {
+    font-size: 20px;
+    color: var(--color-dark-brown);
+    margin-bottom: 10px;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+    color: var(--color-dark-brown);
+    font-weight: bold;
+  }
+  
