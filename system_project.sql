@@ -80,6 +80,18 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 
 -- --------------------------------------------------------
 
+--收藏的建言
+CREATE TABLE collection (
+    collection_id INT AUTO_INCREMENT PRIMARY KEY,
+    advice_id INT NOT NULL,
+    user_id INT NOT NULL,
+    collection_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (advice_id) REFERENCES advice(advice_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_advice (user_id, advice_id)
+);
+
 --
 -- 資料表結構 `advice_image`
 --
