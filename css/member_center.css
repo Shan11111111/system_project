@@ -1,0 +1,304 @@
+:root {
+    /* 主色調 */
+    --color-yellow: #fff6da;
+    /* 鵝黃色 - 小雞感 */
+    /*navbar*/
+    --color-orange-brown: #D9A679;
+    /* 溫柔橘棕 - 強調/按鈕  */
+    --color-dark-brown: #7c4d2b;
+    /* 深咖啡 - 導航、標題 * 文字的hover/ 
+  
+    /* 輔助色 */
+    --color-soft-green: #dddfab7f;
+    /* 嫩綠色 - 自然感 */
+    --color-cream: #fff8ed;
+    /* 奶油白 - 背景 */
+  
+    /* 字體與邊線 */
+    --color-text: #4B3F2F;
+    /* 深褐灰 - 內文字體 */
+    --color-line: #D7CBB8;
+    --navbar-text: #fff6da
+      /* 淡褐線條 */
+  
+      /* 狀態/互動 */
+      --color-hover: #EFC89C;
+    /* hover/active 狀態用的柔橘 */
+  }
+  
+  html,
+  body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+    background-color: var(--color-cream);
+  }
+  
+  /* Navbar */
+  /* Navbar 基本設定 */
+  /* Navbar 基本樣式 */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--color-yellow);
+    padding: 10px 170px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  
+  }
+  
+  /* 滾動後的 navbar 樣式 */
+  .navbar.scrolled {
+    width: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+    border-radius: 0;
+    top: 0;
+    padding: 10px 150px;
+    transition: all 0.3s ease;
+  }
+  
+  /* nav-container 三欄佈局 */
+  /* nav-container 為三欄架構 */
+  .nav-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* 左欄：LOGO靠左 */
+  .nav-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  /* 中欄：建言/募資置中 */
+  .nav-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+  }
+  
+  /* 右欄：登入/註冊靠右 */
+  .nav-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  /* Dropdown 保持原樣 */
+  /* 修正 dropdown 父層，讓它定位正常 */
+  .nav-center .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropbtn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+    color: inherit;
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+  }
+  
+  .dropbtn:hover {
+    color: var(--color-dark-brown);
+  }
+  
+  /* 修正 dropdown 選單位置 & 寬度 */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    background-color: var(--color-yellow);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    min-width: 150px;
+    z-index: 9999;
+    /* 提高層級，蓋過其他東西 */
+  }
+  
+  /* 顯示下拉選單 */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  /* 修正 dropdown 連結樣式 */
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    white-space: nowrap;
+  }
+  
+  .dropdown-content a:hover {
+    color: var(--color-dark-brown);
+  }
+  
+  /* 登入、註冊樣式 */
+  .nav-item {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+  }
+  
+  .nav-item:hover {
+    color: var(--color-dark-brown);
+  }
+  
+  /* 漢堡按鈕 */
+  .menu-toggle {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+  }
+  
+  /* 手機選單預設關閉 */
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+    background: white;
+    border-top: 1px solid #eee;
+  }
+  
+  /* 顯示手機選單 */
+  .mobile-menu.active {
+    display: flex;
+  }
+  
+  /* RWD: 小螢幕調整 */
+  @media (max-width: 768px) {
+    .desktop-menu {
+      display: none;
+    }
+  
+    .menu-toggle {
+      display: block;
+      margin-left: auto;
+    }
+  
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+  
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  
+    .dropdown-content {
+      position: static;
+      transform: none;
+      box-shadow: none;
+      border: 1px solid #eee;
+      margin-top: 5px;
+    }
+  
+    .dropdown:hover .dropdown-content {
+      display: none;
+      /* hover 無效 */
+    }
+  
+    .dropdown.active .dropdown-content {
+      display: block;
+    }
+  
+    .dropdown-content {
+      display: none;
+    }
+  }
+  
+  .member-container {
+    display: flex;
+    width: 100%;
+    min-height: 90vh;
+    margin-top: 60px; /* 預留給navbar */
+  }
+  
+  .member-sidebar {
+    width: 260px;
+    background-color: var(--color-yellow);
+    padding: 30px 20px;
+    box-sizing: border-box;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  }
+  
+  .sidebar-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: var(--color-dark-brown);
+    text-align: center;
+  }
+  
+  .member-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .member-sidebar li {
+    margin-bottom: 20px;
+  }
+  
+  .member-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-dark-brown);
+    font-size: 18px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .member-sidebar a:hover,
+  .member-sidebar a.active {
+    background-color: var(--hover-color);
+    color: var(--primary-color);
+  }
+  
+  .member-main {
+    flex: 1;
+    padding: 30px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-left: 1px solid #eee;
+  }
+  
+  .member-main iframe {
+    width: 100%;
+    height: 85vh;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--bg-light);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  }
+
+  
