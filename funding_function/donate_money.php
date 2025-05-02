@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $people_name = !empty($_POST['people_name']) ? $_POST['people_name'] : '匿名';
     $donate_money = $_POST['donate_money'];
     $email = $_POST['email'];
+    $user_id = $_SESSION['user_id'] ?? null;
 } else {
     echo "錯誤傳送";
     header("Location: homepage.php");
@@ -34,12 +35,12 @@ if (!empty($email)) {
 
 
 
-$stmt = $link->prepare("INSERT INTO donation_record (donor, donation_amount, project_id, email) VALUES (?, ?, ?, ?)");
+$stmt = $link->prepare("INSERT INTO donation_record (donor, donation_amount, project_id, email,user_id) VALUES (?, ?, ?, ?, ?)");
 if (!$stmt) {
     die("Prepare failed: " . $link->error);
 }
 
-$stmt->bind_param("siis", $people_name, $donate_money, $funding_id, $email);
+$stmt->bind_param("siisi", $people_name, $donate_money, $funding_id, $email, $user_id);
 if ($stmt->execute()) {
     echo "<script>alert('捐款成功');</script>";
     echo "<script>window.location.href='../homepage.php';</script>";
