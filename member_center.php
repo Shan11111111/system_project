@@ -151,13 +151,13 @@
             <ul>
                 <li><a href="member_center/member_profile.php" target="memberContent"><i class="fa-solid fa-user"></i>
                         我的資料</a></li>
-                <li><a href="member_favorites.php" target="memberContent"><i class="fa-solid fa-heart"></i> 收藏紀錄</a>
+                <li><a href="member_center/member_favorites.php" target="memberContent"><i class="fa-solid fa-heart"></i> 收藏紀錄</a>
                 </li>
-                <li><a href="member_suggestions.php" target="memberContent"><i class="fa-solid fa-lightbulb"></i>
+                <li><a href="member_center/member_advice.php" target="memberContent"><i class="fa-solid fa-lightbulb"></i>
                         我的建言</a></li>
-                <li><a href="member_agreements.php" target="memberContent"><i class="fa-solid fa-stamp"></i> 我的附議</a>
+                <li><a href="member_center/member_agreements.php" target="memberContent"><i class="fa-solid fa-stamp"></i> 我的附議</a>
                 </li>
-                <li><a href="member_fundings.php" target="memberContent"><i class="fa-solid fa-hand-holding-heart"></i>
+                <li><a href="member_center/member_fundings.php" target="memberContent"><i class="fa-solid fa-hand-holding-heart"></i>
                         募資紀錄</a></li>
             </ul>
         </aside>
