@@ -297,6 +297,11 @@ CREATE TABLE `donation_record` (
   `donation_time` datetime DEFAULT current_timestamp(),
   `email` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--加入user_id
+ALTER TABLE `donation_record`
+ADD `user_id` INT(11) DEFAULT NULL,
+ADD CONSTRAINT `fk_donation_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`);
+
 
 --
 -- 傾印資料表的資料 `donation_record`
