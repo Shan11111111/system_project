@@ -32,6 +32,8 @@ body {
   height: 100%;
   margin: 0;
   background-color: var(--color-cream);
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 

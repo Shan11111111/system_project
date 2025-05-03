@@ -260,7 +260,19 @@
             }
         }
         fetchData(); // ✅ 網頁載入就先自動抓資料
+
+
+        window.addEventListener('load', function() {
+            const height = document.body.scrollHeight;
+            if (window.parent) {
+                const iframe = window.parent.document.querySelector('iframe[name="memberContent"]');
+                if (iframe) {
+                    iframe.style.height = height + 'px';
+                }
+            }
+        });
     </script>
+
 
 </body>
 
