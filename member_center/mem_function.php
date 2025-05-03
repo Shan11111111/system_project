@@ -39,6 +39,32 @@ try {
             ON a.advice_id = img.advice_id
         WHERE ar_user.user_id = :user_id
         ";
+    }elseif ($agreeType === 'collect') {
+        // ✅ 查詢我收藏過的建言
+        $sql = "
+        SELECT 
+            a.advice_id,
+            a.user_id,
+            a.advice_title,
+            a.category,
+            a.announce_date,
+            a.advice_state,
+            DATEDIFF(CURDATE(), a.announce_date) AS days_elapsed,
+            COUNT(DISTINCT ar.agree_record_id) AS support_count,
+            COUNT(DISTINCT c.comment_id)       AS comment_count,
+            img.file_path,
+            1 AS is_favorite
+        FROM collection col
+        INNER JOIN advice a 
+            ON col.advice_id = a.advice_id
+        LEFT JOIN agree_record ar 
+            ON a.advice_id = ar.advice_id
+        LEFT JOIN comments c 
+            ON a.advice_id = c.advice_id
+        LEFT JOIN advice_image img 
+            ON a.advice_id = img.advice_id
+        WHERE col.user_id = :user_id
+        ";
     } else {
         // ✅ 查詢我發起的建言
         $sql = "
