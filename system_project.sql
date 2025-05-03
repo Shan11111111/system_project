@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-03 15:52:38
+-- 產生時間： 2025-05-03 17:19:09
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -79,6 +79,8 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (61, 904, '提出建言', '提出建言', 0, 'academic', '未處理', '2025-04-29');
 
 -- --------------------------------------------------------
+
+--
 -- 資料表結構 `advice_image`
 --
 
@@ -311,6 +313,21 @@ INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_a
 (5, '匿名', 2, 500.00, '2025-04-26 20:32:06', ''),
 (6, '匿名', 2, 1000.00, '2025-04-29 13:44:22', ''),
 (7, '匿名', 3, 5000.00, '2025-04-29 16:30:20', '');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `execution_report`
+--
+
+CREATE TABLE `execution_report` (
+  `execution_report_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `updated_time` int(11) NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -642,6 +659,13 @@ ALTER TABLE `donation_record`
   ADD KEY `project_id` (`project_id`);
 
 --
+-- 資料表索引 `execution_report`
+--
+ALTER TABLE `execution_report`
+  ADD PRIMARY KEY (`execution_report_id`),
+  ADD KEY `fundraising_projects` (`project_id`);
+
+--
 -- 資料表索引 `files`
 --
 ALTER TABLE `files`
@@ -750,6 +774,12 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `donation_record`
   MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
+--
+ALTER TABLE `execution_report`
+  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
