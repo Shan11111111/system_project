@@ -1,0 +1,261 @@
+:root {
+  /* 主色調 */
+  --color-yellow: #fff6da;
+  /* 鵝黃色 - 小雞感 */
+  /*navbar*/
+  --color-orange-brown: #D9A679;
+  /* 溫柔橘棕 - 強調/按鈕  */
+  --color-dark-brown: #7c4d2b;
+  /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+  --color-soft-green: #dddfab7f;
+  /* 嫩綠色 - 自然感 */
+  --color-cream: #fff8ed;
+  /* 奶油白 - 背景 */
+
+  /* 字體與邊線 */
+  --color-text: #4B3F2F;
+  /* 深褐灰 - 內文字體 */
+  --color-line: #D7CBB8;
+  --navbar-text: #fff6da
+    /* 淡褐線條 */
+
+    /* 狀態/互動 */
+    --color-hover: #EFC89C;
+  /* hover/active 狀態用的柔橘 */
+}
+
+html,
+body {
+  font-family: Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  background-color: var(--color-cream);
+}
+
+
+.advice_space {
+  width: 90%;
+  margin: auto;
+  padding-top: 2%;
+}
+
+
+
+.filter-bar {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search_text {
+  flex: 7
+}
+
+.search_sort {
+  flex: 3;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+
+}
+
+
+
+select,
+input[type="text"],
+button {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: #f8e58c;
+  border: none;
+  cursor: pointer;
+}
+
+/* 排序選單 */
+/* 調整排序選單的 z-index 層級與 hover 效果 */
+/* 保證排序按鈕是定位參考點 */
+.sort-wrapper {
+  position: relative;
+}
+
+/* 排序選單相對於按鈕定位 */
+.sort-menu {
+  position: absolute;
+  top: 110%; /* 稍微下移一點 */
+  right: 0;
+  z-index: 9999;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  min-width: 130px;
+  overflow: hidden;
+  display: none;
+  animation: fadeInSort 0.2s ease-out;
+}
+
+/* 顯示時 */
+.sort-menu.show {
+  display: block;
+}
+
+.sort-menu div {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sort-menu div:hover {
+  background-color: #fdf2b1;
+  color: var(--color-dark-brown);
+}
+
+.sort-menu div.active {
+  background-color: var(--color-yellow);
+  font-weight: bold;
+  color: var(--color-dark-brown);
+}
+  
+
+
+
+.suggestion {
+  display: flex;
+  background: white;
+  border: 1px solid #e0e0e0;
+  align-items: center; /* 垂直置中對齊圖片與文字 */
+
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.suggestion:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: #d6ae57;
+}
+
+.suggestion img {
+  width: 160px;
+  height: 90px;
+  object-fit: cover;
+  flex-shrink: 0;
+  flex-shrink: 0; /* 不讓圖片被壓縮 */
+
+}
+
+.suggestion-content {
+  padding: 12px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+.suggestion-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+  padding-left: 5px ;
+}
+
+.suggestion-meta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;  /* ⭐ 這是關鍵，讓所有文字與徽章對齊中線 */
+  width: 100%;
+  font-size: 13px;
+  color: #555;
+  gap: 10px;
+  flex-wrap: wrap;
+
+}
+
+.data span {
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.data{
+  flex: 1;
+}
+
+.date{
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 15px;
+  gap: 10px;
+}
+
+.suggestion-status {
+  display: inline-block;
+  font-size: 13px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: white;
+}
+
+.status-passed {
+  background-color: #6db36d;
+}
+
+.status-failed {
+  background-color: #d26a6a;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  color: white;
+  background-color: var(--color-orange-brown);
+  align-items: center;  /* ⭐ 這是關鍵，讓所有文字與徽章對齊中線 */
+
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background: #fff8d1;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #ffd966;
+  font-weight: bold;
+  color: #333;
+  cursor: default;
+}
+
+.no-result {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+
