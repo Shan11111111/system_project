@@ -84,14 +84,11 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 CREATE TABLE collection (
     collection_id INT AUTO_INCREMENT PRIMARY KEY,
     advice_id INT NOT NULL,
-    user_id INT NOT NULL,
-    collection_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,  -- 不加外鍵，但可 JOIN 用
+    collection_created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    FOREIGN KEY (advice_id) REFERENCES advice(advice_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
     
-);
-
 --
 -- 資料表結構 `advice_image`
 --
