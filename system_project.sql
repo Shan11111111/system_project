@@ -89,7 +89,7 @@ CREATE TABLE collection (
 
     FOREIGN KEY (advice_id) REFERENCES advice(advice_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    UNIQUE KEY unique_user_advice (user_id, advice_id)
+    
 );
 
 --
