@@ -243,6 +243,11 @@ CREATE TABLE `collection` (
   `user_id` int(11) NOT NULL,
   `collection_created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- --------------------------------------------------------
+
+INSERT INTO `collection` (`collection_id`, `advice_id`, `user_id`, `collection_created_at`) VALUES
+(1, 61, 333333, '2025-05-03 23:17:45'),
+(2, 58, 333333, '2025-05-03 23:45:45');
 
 -- --------------------------------------------------------
 
