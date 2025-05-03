@@ -241,6 +241,7 @@ $result = $stmt->get_result();
         <a href="../funding/office_assignments.php">提交提案</a>
         <a href="office_apply_date.php">延後募款申請</a>
         <a href="funding_FAQ.php">募資常見問題</a>
+        <a href="funding_return.php">募資進度回報</a>
     </div>
 
     <div style="margin-left: 300px; padding: 20px;">

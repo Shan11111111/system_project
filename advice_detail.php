@@ -205,6 +205,8 @@
     LEFT JOIN advice_image ai ON ai.advice_id = a.advice_id
     WHERE a.advice_id = $advice_id";
 
+
+    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
     $advice_id = isset($_GET['advice_id']) ? intval($_GET['advice_id']) : 0;
     $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
 

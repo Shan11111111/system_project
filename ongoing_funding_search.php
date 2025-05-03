@@ -261,7 +261,7 @@
                     document.querySelectorAll(".project-card").forEach(cardEl => {
                         const id = cardEl.getAttribute("data-id");
                         cardEl.onclick = () => {
-                            window.location.href = `funding_detail.php?id=${id}`;
+                            window.location.href = `funding_detail.php?project_id=${id}`;
                         };
                     });
 

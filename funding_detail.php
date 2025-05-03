@@ -96,7 +96,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -163,7 +163,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -182,7 +182,7 @@
     </nav>
 
     <?php
-    $project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+    $project_id = isset($_GET['project_id']) ? intval($_GET['project_id']) : 0;
     $link = mysqli_connect('localhost', 'root', '', 'system_project');
 
     if (!$link) {
@@ -190,7 +190,7 @@
     }
 
     // 取得專案基本資料 + 建議 ID + 關聯欄位
-    // 取得專案基本資料 + 建議 ID + 關聯欄位 
+
     $sql = "SELECT 
             p.project_id,
             p.title AS project_title,
@@ -334,7 +334,7 @@
         $comment_text = trim($_POST['comment_text']);
         $user_id = $_POST['user_id']; // 如果未登入，設為 0 或其他預設值
         $project_id = $_POST['project_id'] ?? 0; // 確保 project_id 也有值
-        $method=$_POST['method'] ?? '';
+        $method = $_POST['method'] ?? '';
 
         if (!empty($comment_text) && $project_id > 0 && $user_id > 0 && $method === 'comment_send') {
             $stmt = $link->prepare("INSERT INTO funding_comments (project_id, user_id, comment_text, created_at) VALUES (?, ?, ?, NOW())");
@@ -357,7 +357,6 @@
         } else {
             echo "<script>alert('留言內容不可為空，或未登入！');</script>";
             echo "<script>window.location.href = 'funding_detail.php?id=$project_id';</script>";
-            
         }
     }
     ?>
@@ -425,32 +424,41 @@
 
             <div class="tab-content">
 
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <h3 class="progress-title">進度標題</h3>
-                        <span class="progress-date">2025/04/18</span>
-                    </div>
-                    <div class="progress-content">
-                        <!--內文放這，不要用<P>直接放不然css會失效-->
-                        進度內文
-                    </div>
-                    <div class="progress-footer">
-                        <a href="#" class="read-more">查看更多</a>
-                    </div>
-                </div>
+                <?php
+                // 查詢進度回報
+                $progress_sql = "SELECT title, content, file_path, FROM_UNIXTIME(updated_time) AS updated_time 
+                 FROM execution_report 
+                 WHERE project_id = ? 
+                 ORDER BY updated_time DESC";
+                $stmt_progress = $link->prepare($progress_sql);
+                $stmt_progress->bind_param("i", $project_id);
+                $stmt_progress->execute();
+                $progress_result = $stmt_progress->get_result();
+                ?>
 
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <h3 class="progress-title">進度標題</h3>
-                        <span class="progress-date">2025/04/18</span>
-                    </div>
-                    <div class="progress-content">
-                        <!--內文放這，不要用<P>直接放不然css會失效-->
-                        進度內文
-                    </div>
-                    <div class="progress-footer">
-                        <a href="#" class="read-more">查看更多</a>
-                    </div>
+                <div class="tab-content">
+                    <?php
+                    if ($progress_result && $progress_result->num_rows > 0) {
+                        while ($progress = $progress_result->fetch_assoc()) {
+                            echo '<div class="progress-card">';
+                            echo '    <div class="progress-header">';
+                            echo '        <h3 class="progress-title">' . htmlspecialchars($progress['title']) . '</h3>';
+                            echo '        <span class="progress-date">' . htmlspecialchars($progress['updated_time']) . '</span>';
+                            echo '    </div>';
+                            echo '    <div class="progress-content">';
+                            echo '        ' . nl2br(htmlspecialchars($progress['content']));
+                            echo '    </div>';
+                            if (!empty($progress['file_path'])) {
+                                echo '    <div class="progress-footer">';
+                                echo '        <a href="' . htmlspecialchars($progress['file_path']) . '" download>下載附件</a>';
+                                echo '    </div>';
+                            }
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<p>目前尚無進度回報。</p>';
+                    }
+                    ?>
                 </div>
 
             </div>
@@ -584,7 +592,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.querySelector('.sidebar');
             const footer = document.querySelector('.footer');
 
@@ -663,19 +671,19 @@
     </footer>
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
