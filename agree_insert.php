@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // 檢查是否已經存在相同 user_id 和 advice_id，避免重複插入
     $check_stmt = $conn->prepare("SELECT COUNT(*) FROM agree_record WHERE advice_id = ? AND user_id = ?");
-    $check_stmt->bind_param("ss", $advice_id, $user_id);
+    $check_stmt->bind_param("ii", $advice_id, $user_id);
     $check_stmt->execute();
     $check_stmt->bind_result($count);
     $check_stmt->fetch();
@@ -145,7 +145,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php
     } else {
         echo "錯誤：" . $stmt->error;
-        header("Location: advice_accept.php?error=附議失敗");
+        echo "<script>alert('錯誤：無法附議');</script>";
+        echo "<script>window.location.href = 'advice_detail.php?advice_id=" . urlencode($advice_id) . "';</script>";
 
     }
 
