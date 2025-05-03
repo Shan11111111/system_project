@@ -211,14 +211,25 @@ button {
   border-radius: 10px;
   color: white;
 }
-
-.status-passed {
-  background-color: #6db36d;
+.badge.badge-active {
+  background-color: #6db36d; /* 活動中 - 淺綠 */
 }
 
-.status-failed {
-  background-color: #d26a6a;
+.badge.badge-responed {
+  background-color: var(--color-orange-brown);; /* 已回覆*/
 }
+
+
+.badge.badge-passed {
+  background-color: #6db36d; /* 已達標 - 綠 */
+  color: white;
+}
+
+.badge.badge-expired {
+  background-color: #d26a6a; /* 已失效 - 灰 */
+  color: white;
+}
+
 
 .badge {
   display: inline-block;

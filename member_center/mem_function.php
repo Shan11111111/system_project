@@ -58,22 +58,24 @@ try {
     foreach ($results as &$row) {
         $daysElapsed = (int)$row['days_elapsed'];
         $support = (int)$row['support_count'];
-        $row['status'] = ($daysElapsed > 30)
-            ? (($support >= 3) ? 'ended-passed' : 'ended-notpassed')
-            : (($support >= 3) ? 'ended-passed' : 'active');
-
         $row['has_response'] = $row['advice_state'] === '已回覆';
         $row['remaining_days'] = max(0, 30 - $daysElapsed);
-
+    
         if ($row['has_response']) {
+            $row['status'] = 'responed';
             $row['type'] = 'responed';
-        } elseif ($row['status'] === 'active') {
+        } elseif ($support >= 3 && $daysElapsed <= 30) {
+            $row['status'] = 'passed'; // 已達標但尚未回覆
+            $row['type'] = 'active';
+        } elseif ($daysElapsed <= 30) {
+            $row['status'] = 'active'; // 進行中
             $row['type'] = 'active';
         } else {
+            $row['status'] = 'expired'; // 失效
             $row['type'] = 'ended';
         }
     }
-
+    
     // 排序
     if ($sort === 'hot') {
         usort($results, fn($a, $b) => $b['support_count'] <=> $a['support_count']);

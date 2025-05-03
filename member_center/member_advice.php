@@ -60,7 +60,6 @@
             <div class="suggestion-title">{{title}}</div>
             <div class="suggestion-meta">
                 <span class="badge type-label">{{typeText}}</span>
-                {{statusHTML}}
                 <span>附議數：{{comments}}</span>
                 {{commentHTML}}
                 {{categoryHTML}}
@@ -166,22 +165,14 @@
                 const categoryText = categoryMap[item.category] || item.category || '無';
                 const typeTextMap = {
                     'active': '進行中',
-                    'ended': '已結束',
+                    'passed': '已達標',
+                    'expired': '未達標',
                     'responed': '已回覆'
                 };
-                const typeText = typeTextMap[item.type] || '';
+                const typeText = typeTextMap[item.status] || '';
 
                 const remainingDays = Math.max(0, 30 - item.days_elapsed);
 
-                // 狀態顯示處理
-                let statusHTML = '';
-                if (item.status === 'ended-passed') {
-                    statusHTML = '<span class="suggestion-status status-passed">已達標</span>';
-                } else if (item.status === 'ended-notpassed') {
-                    statusHTML = '<span class="suggestion-status status-failed">未達標</span>';
-                } else if (item.has_response) {
-                    statusHTML = '<span class="badge beef">已回覆</span>';
-                }
 
                 const commentHTML = item.comment_count !== undefined ? `<span><i class="fa-solid fa-comment"></i>：${item.comment_count}</span>` : '';
                 const categoryHTML = item.category ? `<span>分類: ${categoryText}</span>` : '';
@@ -190,7 +181,6 @@
                 let template = document.getElementById('suggestion-template').innerHTML
                     .replace('{{imgSrc}}', imagePath)
                     .replace('{{title}}', item.advice_title)
-                    .replace('{{statusHTML}}', statusHTML)
                     .replace('{{comments}}', item.support_count)
                     .replace('{{commentHTML}}', commentHTML)
                     .replace('{{categoryHTML}}', categoryHTML)
@@ -199,8 +189,28 @@
                     .replace('{{typeText}}', typeText);
 
 
+
                 div.innerHTML = template;
                 list.appendChild(div);
+                // 塞進 HTML 後再處理 type-label badge 的顏色
+                const badge = div.querySelector('.type-label');
+                badge.classList.remove('badge-active', 'badge-ended', 'badge-responed', 'badge-passed', 'badge-expired');
+                switch (item.status) {
+                    case 'active':
+                        badge.classList.add('badge-active');
+                        break;
+                    case 'passed':
+                        badge.classList.add('badge-passed');
+                        break;
+                    case 'expired':
+                        badge.classList.add('badge-expired');
+                        break;
+                    case 'responed':
+                        badge.classList.add('badge-responed');
+                        break;
+                }
+
+
             });
 
             renderPagination(data.length);
