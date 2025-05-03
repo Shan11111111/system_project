@@ -79,14 +79,6 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (61, 904, '提出建言', '提出建言', 0, 'academic', '未處理', '2025-04-29');
 
 -- --------------------------------------------------------
--- 資料表結構 `collection`收藏
-
-CREATE TABLE collection (
-    collection_id INT AUTO_INCREMENT PRIMARY KEY,
-    advice_id INT NOT NULL,
-    user_id INT NOT NULL,  -- 不加外鍵，但可 JOIN 用
-    collection_created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 -- 資料表結構 `advice_image`
 --
 
