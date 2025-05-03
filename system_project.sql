@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-04-29 13:08:20
+-- 產生時間： 2025-05-03 15:52:38
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -61,7 +61,7 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (43, 333333, '設立休息區', '休息沒空間', 2, 'other', '未處理', '2025-04-19'),
 (44, 333333, '舉辦文化週', '交流太少', 3, 'other', '已分派', '2025-04-19'),
 (45, 333333, 'zjgojrzjjrg', 'zjgrogjigjjgojgji', 3, 'environment', '未處理', '2025-04-22'),
-(46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 1, 'welfare', '未處理', '2025-04-22'),
+(46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 2, 'welfare', '未處理', '2025-04-22'),
 (47, 412402141, '55', 'gOEJOJejoto', 0, 'welfare', '未處理', '2025-04-22'),
 (48, 412402141, 'jgozjojojoj', 'gjogjjgjgjojg', 0, 'academic', '未處理', '2025-04-22'),
 (49, 412402141, 'jwojajgjagjojg', 'gojaogjjagjjagjgjoojgj', 1, 'environment', '未處理', '2025-04-22'),
@@ -75,11 +75,12 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (57, 412401011, '互動展覽經費補助', '我們希望學校能夠提供我們經費補助舉辦互動展覽，我們已經研發出來了互動展覽的展品，但因為手上的錢不夠租美術館，希望學校可以幫助我們!', 3, 'academic', '已分派', '2025-04-24'),
 (58, 412401011, '舉辦下一次的社團展覽', '去年我們舉辦的社團展覽有很好的回響，今年需要一筆資金來籌辦社團展覽', 3, 'club', '已回覆', '2025-04-24'),
 (59, 412401011, '動漫電玩研習社的同學帶來活力四射的舞蹈', '動漫電玩研習社的同學帶來活力四射的舞蹈，請幫他們應援! 我們還需要100份應援球', 1, 'club', '未處理', '2025-04-24'),
-(60, 412401011, '課外活動指導組的社團博覽會籌備團隊及燈光', '課外活動指導組的社團博覽會籌備團隊及燈光音響組工作人員，我們需要燈光設備兩台和麥可風五個', 1, 'club', '未處理', '2025-04-24'),
+(60, 412401011, '課外活動指導組的社團博覽會籌備團隊及燈光', '課外活動指導組的社團博覽會籌備團隊及燈光音響組工作人員，我們需要燈光設備兩台和麥可風五個', 2, 'club', '未處理', '2025-04-24'),
 (61, 904, '提出建言', '提出建言', 0, 'academic', '未處理', '2025-04-29');
 
 -- --------------------------------------------------------
 
+<<<<<<< HEAD
 --收藏的建言
 CREATE TABLE collection (
     collection_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -89,6 +90,8 @@ CREATE TABLE collection (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
     
+=======
+>>>>>>> 6555841a7411e6ca316416bc941ec706c72bd667
 --
 -- 資料表結構 `advice_image`
 --
@@ -184,6 +187,7 @@ CREATE TABLE `agree_record` (
 --
 
 INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
+(1, 333333, 60),
 (14, 333333, 24),
 (15, 345678, 24),
 (18, 412402141, 24),
@@ -236,7 +240,21 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (68, 413010021, 54),
 (69, 413010021, 58),
 (70, 412402012, 52),
-(71, 333333, 55);
+(71, 333333, 55),
+(72, 333333, 46);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `collection`
+--
+
+CREATE TABLE `collection` (
+  `collection_id` int(11) NOT NULL,
+  `advice_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `collection_created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -294,11 +312,6 @@ CREATE TABLE `donation_record` (
   `donation_time` datetime DEFAULT current_timestamp(),
   `email` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
---加入user_id
-ALTER TABLE `donation_record`
-ADD `user_id` INT(11) DEFAULT NULL,
-ADD CONSTRAINT `fk_donation_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`);
-
 
 --
 -- 傾印資料表的資料 `donation_record`
@@ -620,6 +633,14 @@ ALTER TABLE `agree_record`
   ADD KEY `advice_id` (`advice_id`);
 
 --
+-- 資料表索引 `collection`
+--
+ALTER TABLE `collection`
+  ADD PRIMARY KEY (`collection_id`),
+  ADD KEY `advice_id` (`advice_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- 資料表索引 `comments`
 --
 ALTER TABLE `comments`
@@ -690,9 +711,7 @@ ALTER TABLE `replies`
 -- 資料表索引 `suggestion_assignments`
 --
 ALTER TABLE `suggestion_assignments`
-  ADD PRIMARY KEY (`suggestion_assignments_id`),
-  ADD KEY `advice_id` (`advice_id`),
-  ADD KEY `office_id` (`office_id`);
+  ADD PRIMARY KEY (`suggestion_assignments_id`);
 
 --
 -- 資料表索引 `users`
@@ -726,7 +745,13 @@ ALTER TABLE `advice_state`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
+--
+ALTER TABLE `collection`
+  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
@@ -789,87 +814,15 @@ ALTER TABLE `suggestion_assignments`
   MODIFY `suggestion_assignments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- 使用資料表自動遞增(AUTO_INCREMENT) `users`
---
-ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=413010022;
-
---
 -- 已傾印資料表的限制式
 --
 
 --
--- 資料表的限制式 `advice`
+-- 資料表的限制式 `collection`
 --
-ALTER TABLE `advice`
-  ADD CONSTRAINT `advice_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
-
---
--- 資料表的限制式 `advice_image`
---
-ALTER TABLE `advice_image`
-  ADD CONSTRAINT `advice_image_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE;
-
---
--- 資料表的限制式 `agree_record`
---
-ALTER TABLE `agree_record`
-  ADD CONSTRAINT `agree_record_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `agree_record_ibfk_2` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE;
-
---
--- 資料表的限制式 `comments`
---
-ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
-
---
--- 資料表的限制式 `donation_record`
---
-ALTER TABLE `donation_record`
-  ADD CONSTRAINT `donation_record_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `fundraising_projects` (`project_id`) ON DELETE CASCADE;
-
---
--- 資料表的限制式 `files`
---
-ALTER TABLE `files`
-  ADD CONSTRAINT `files_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`);
-
---
--- 資料表的限制式 `funding_comments`
---
-ALTER TABLE `funding_comments`
-  ADD CONSTRAINT `funding_comments_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `fundraising_projects` (`project_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `funding_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
-
---
--- 資料表的限制式 `fundraising_extension_requests`
---
-ALTER TABLE `fundraising_extension_requests`
-  ADD CONSTRAINT `fundraising_extension_requests_ibfk_1` FOREIGN KEY (`fundraising_project_id`) REFERENCES `fundraising_projects` (`project_id`),
-  ADD CONSTRAINT `fundraising_extension_requests_ibfk_2` FOREIGN KEY (`requested_by_office_id`) REFERENCES `users` (`user_id`);
-
---
--- 資料表的限制式 `fundraising_projects`
---
-ALTER TABLE `fundraising_projects`
-  ADD CONSTRAINT `fundraising_projects_ibfk_1` FOREIGN KEY (`suggestion_assignments_id`) REFERENCES `suggestion_assignments` (`suggestion_assignments_id`);
-
---
--- 資料表的限制式 `replies`
---
-ALTER TABLE `replies`
-  ADD CONSTRAINT `replies_ibfk_1` FOREIGN KEY (`suggestion_assignments_id`) REFERENCES `suggestion_assignments` (`suggestion_assignments_id`),
-  ADD CONSTRAINT `replies_ibfk_2` FOREIGN KEY (`office_id`) REFERENCES `users` (`user_id`);
-
---
--- 資料表的限制式 `suggestion_assignments`
---
-ALTER TABLE `suggestion_assignments`
-  ADD CONSTRAINT `suggestion_assignments_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`),
-  ADD CONSTRAINT `suggestion_assignments_ibfk_2` FOREIGN KEY (`office_id`) REFERENCES `users` (`user_id`);
+ALTER TABLE `collection`
+  ADD CONSTRAINT `collection_ibfk_1` FOREIGN KEY (`advice_id`) REFERENCES `advice` (`advice_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `collection_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
