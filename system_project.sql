@@ -88,7 +88,7 @@ CREATE TABLE collection (
     collection_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (advice_id) REFERENCES advice(advice_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
     
 );
 
