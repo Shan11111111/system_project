@@ -1,0 +1,176 @@
+:root {
+    /* 主色調 */
+    --color-yellow: #fff6da;
+    /* 鵝黃色 - 小雞感 */
+    /*navbar*/
+    --color-orange-brown: #d9a679;
+    /* 溫柔橘棕 - 強調/按鈕  */
+    --color-dark-brown: #7c4d2b;
+    /* 深咖啡 - 導航、標題 * 文字的hover*/
+  
+    /* 輔助色 */
+    --color-soft-green: #dddfab7f;
+    /* 嫩綠色 - 自然感 */
+    --color-cream: #fff8ed;
+    /* 奶油白 - 背景 */
+  
+    /* 字體與邊線 */
+    --color-text: #4b3f2f;
+    /* 深褐灰 - 內文字體 */
+    --color-line: #d7cbb8;
+    --navbar-text: #fff6da;
+    /* 淡褐線條 */
+  
+    /* 狀態/互動 */
+    --color-hover: #efc89c;
+    /* hover/active 狀態用的柔橘 */
+  }
+body {
+    background-color: var(--color-cream);
+    font-family: "Noto Sans TC", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.donation-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.donation-tabs {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f0e6d2;
+}
+
+.tab {
+    background: none;
+    border: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 4px solid transparent;
+    color: #555;
+    font-weight: 500;
+}
+
+.tab.active {
+    border-bottom: 4px solid #f4d35e;
+    color: #000;
+    font-weight: 700;
+}
+
+.refund-notice{
+    background-color: #fcbbbb79;
+    border: 1px ;
+    padding: 12px 18px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    color: #ff0000;
+    font-size: 15px;
+}
+
+
+.donation-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.donation-search input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.donation-search button {
+    padding: 8px 16px;
+    background-color: #f4d35e;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.donation-search button:hover {
+    background-color: #e4c847;
+}
+
+#donationList {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.donation-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #eee;
+    padding: 20px 24px;
+    border-radius: 12px;
+    background-color: var(--color-yellow);
+    box-shadow: 0 2px 6px var(--color-line);
+    transition: box-shadow 0.2s ease;
+}
+
+.donation-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-amount {
+    flex: 1;
+    
+    color: #666;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.card-date {
+    flex: 1;
+    
+    color: #666;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.card-link {
+    text-decoration: none;
+}
+
+.card-detail {
+    padding: 6px 14px;
+    background-color: var(--color-orange-brown);
+    color: #2e2e2e;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.card-detail:hover {
+    background-color: #e4c847;
+    transform: translateY(-1px);
+}
