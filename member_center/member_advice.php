@@ -145,7 +145,7 @@
             if (data.length === 0) {
                 const noResult = document.createElement('div');
                 noResult.className = 'no-result';
-                noResult.innerHTML = '<p>查無結果</p>';
+                noResult.innerHTML = '<p>你未提出過建言</p>';
                 list.appendChild(noResult);
                 renderPagination(0);
                 return;
