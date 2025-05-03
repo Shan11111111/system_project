@@ -157,7 +157,7 @@
                 const div = document.createElement('div');
                 div.className = 'suggestion';
                 div.onclick = () => {
-                    window.location.href = `advice_detail.php?advice_id=${item.advice_id}`;
+                    window.parent.location.href = `../advice_detail.php?advice_id=${item.advice_id}`;
                 };
 
                 const imagePath = item.file_path ? `../${item.file_path}` : '../uploads/homepage.png';
