@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-03 17:19:09
+-- 產生時間： 2025-05-04 06:32:13
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -243,7 +243,10 @@ CREATE TABLE `collection` (
   `user_id` int(11) NOT NULL,
   `collection_created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
--- --------------------------------------------------------
+
+--
+-- 傾印資料表的資料 `collection`
+--
 
 INSERT INTO `collection` (`collection_id`, `advice_id`, `user_id`, `collection_created_at`) VALUES
 (1, 61, 333333, '2025-05-03 23:17:45'),
@@ -311,14 +314,14 @@ CREATE TABLE `donation_record` (
 -- 傾印資料表的資料 `donation_record`
 --
 
-INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_amount`, `donation_time`, `email`) VALUES
-(1, '王大明', 1, 1000.00, '2025-04-24 23:06:17', '409100001@gmail.com'),
-(2, '王安石', 1, 500.00, '2025-04-26 19:31:52', 'abc@gmail.com'),
-(3, '王鍾', 3, 500.00, '2025-04-26 19:39:28', 'abc@gmail.com'),
-(4, '匿名', 2, 500.00, '2025-04-26 20:21:27', ''),
-(5, '匿名', 2, 500.00, '2025-04-26 20:32:06', ''),
-(6, '匿名', 2, 1000.00, '2025-04-29 13:44:22', ''),
-(7, '匿名', 3, 5000.00, '2025-04-29 16:30:20', '');
+INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_amount`, `donation_time`, `email`, `user_id`) VALUES
+(1, '王大明', 1, 1000.00, '2025-04-24 23:06:17', '409100001@gmail.com', 0),
+(2, '王安石', 1, 500.00, '2025-04-26 19:31:52', 'abc@gmail.com', 0),
+(3, '王鍾', 3, 500.00, '2025-04-26 19:39:28', 'abc@gmail.com', 0),
+(4, '匿名', 2, 500.00, '2025-04-26 20:21:27', '', 0),
+(5, '匿名', 2, 500.00, '2025-04-26 20:32:06', '', 0),
+(6, '匿名', 2, 1000.00, '2025-04-29 13:44:22', '', 0),
+(7, '匿名', 3, 5000.00, '2025-04-29 16:30:20', '', 0);
 
 -- --------------------------------------------------------
 
@@ -332,8 +335,18 @@ CREATE TABLE `execution_report` (
   `title` varchar(100) NOT NULL,
   `content` varchar(255) NOT NULL,
   `file_path` varchar(255) NOT NULL,
-  `updated_time` int(11) NOT NULL DEFAULT current_timestamp()
+  `updated_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `execution_report`
+--
+
+INSERT INTO `execution_report` (`execution_report_id`, `project_id`, `title`, `content`, `file_path`, `updated_time`) VALUES
+(3, 2, '0504', '測試', '', '2025-05-04 11:04:57'),
+(4, 2, '12212', '11111', '', '2025-05-04 11:04:57'),
+(5, 2, '1212', '1212', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12'),
+(6, 2, '11', '11111', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12');
 
 -- --------------------------------------------------------
 
@@ -768,7 +781,7 @@ ALTER TABLE `agree_record`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
 --
 ALTER TABLE `collection`
-  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
@@ -786,7 +799,7 @@ ALTER TABLE `donation_record`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
 --
 ALTER TABLE `execution_report`
-  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
@@ -822,7 +835,7 @@ ALTER TABLE `fundraising_extension_requests`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_projects`
 --
 ALTER TABLE `fundraising_projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `replies`
