@@ -100,7 +100,7 @@
                     <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -168,7 +168,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -189,7 +189,7 @@
 
     <?php
     // 從網址中取得建言的 ID
-    $advice_id = isset($_GET['advice_id']) ? $_GET['advice_id'] : 0;
+    $advice_id = isset($_GET['advice_id']) ? intval($_GET['advice_id']) : 0;
 
     // Step 1: 連接資料庫
     $link = mysqli_connect('localhost', 'root', '', 'system_project');
@@ -206,9 +206,6 @@
     WHERE a.advice_id = $advice_id";
 
 
-    $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
-    $advice_id = isset($_GET['advice_id']) ? intval($_GET['advice_id']) : 0;
-    $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
 
 
     // 執行查詢
@@ -221,6 +218,8 @@
 
     // Step 4: 顯示公告
     if ($row = mysqli_fetch_assoc($result)) {
+        $image_url = !empty($row['file_path']) ? $row['file_path'] : './uploads/homepage.png';
+        $status = isset($row['advice_state']) ? $row['advice_state'] : 'pending';
 
         $categoryMap = [
             "all" => "全部分類",
@@ -239,7 +238,7 @@
 
         $remain = max(0, $target - $agree);
         $color = $percent >= 100 ? '#4caf50' : '#2196f3'; // 綠或藍
-        ?>
+    ?>
         <div class="container">
             <main class="suggestion-detail">
                 <!-- 標題 -->
@@ -247,7 +246,7 @@
                 <?php
                 $agree = (int) $row['agree'];
                 $agreeThreshold = 3; //
-            
+
 
                 $announceDate = new DateTime($row['announce_date']);
                 $dueDate = clone $announceDate;
@@ -395,11 +394,7 @@
                     <!-- 圖片或 PDF -->
                     <div class="media-sidebar-wrapper">
                         <section class="media">
-                            <?php if (!empty($row['file_path'])) { ?>
-                                <img id="advice-image" src="<?php echo htmlspecialchars($row['file_path']); ?>" alt="建言圖片" />
-                            <?php } else { ?>
-                                <img id="advice-image" src="./uploads/homepage.png" alt="預設建言圖片" />
-                            <?php } ?>
+                            <img id="advice-image" src="<?php echo $image_url; ?>" alt="建言圖片" />
                         </section>
 
                         <div class="sidebar" id="sidebar">
@@ -585,7 +580,7 @@
 
 
 
-            <?php
+        <?php
     } else {
         echo "沒有找到相關建言。";
     }
@@ -607,7 +602,7 @@
 
     // 將留言資料轉換為 JSON 格式
     echo "<script>const allComments = " . json_encode($comments) . ";</script>";
-    ?>
+        ?>
 
 
 
@@ -657,9 +652,7 @@
 
 
             <script>
-
-
-                document.getElementById('commentForm').addEventListener('submit', async function (event) {
+                document.getElementById('commentForm').addEventListener('submit', async function(event) {
                     event.preventDefault();
 
                     // 從 PHP 將登入狀態帶入 JavaScript
@@ -763,43 +756,43 @@
         </section>
 
         </main>
-    </div>
-    </div>
-    <footer class="footer">
-        <div class="logo_space">
-            <img src="img/logo.png" style="width: 150px;">
         </div>
-        <div class="help_info">
-
         </div>
-        <div class="help">
-            <div class="help_title">幫助</div>
-            <hr style="width: 150px;">
-            <div class="help_content">
-                <div>常見問題</div>
-                <div>使用條款</div>
-                <div>隱私條款</div>
+        <footer class="footer">
+            <div class="logo_space">
+                <img src="img/logo.png" style="width: 150px;">
             </div>
-        </div>
-        <div class="footer_info">
-            <div class="info_title">相關資訊</div>
-            <hr>
+            <div class="help_info">
 
-            <div class="info_content">
-                <div class="school_info">
-                    <div>關於我們</div>
-                    <div>學校處室</div>
-                    <div>意見箱</div>
-                </div>
-                <div class="connection">
-                    <div>242新北市新莊區中正路510號.</div>
-                    <div>電話:(02)2905-2000</div>
+            </div>
+            <div class="help">
+                <div class="help_title">幫助</div>
+                <hr style="width: 150px;">
+                <div class="help_content">
+                    <div>常見問題</div>
+                    <div>使用條款</div>
+                    <div>隱私條款</div>
                 </div>
             </div>
+            <div class="footer_info">
+                <div class="info_title">相關資訊</div>
+                <hr>
 
-        </div>
+                <div class="info_content">
+                    <div class="school_info">
+                        <div>關於我們</div>
+                        <div>學校處室</div>
+                        <div>意見箱</div>
+                    </div>
+                    <div class="connection">
+                        <div>242新北市新莊區中正路510號.</div>
+                        <div>電話:(02)2905-2000</div>
+                    </div>
+                </div>
 
-    </footer>
+            </div>
+
+        </footer>
 </body>
 
 
@@ -870,19 +863,19 @@
 
 <script>
     // 點擊漢堡切換 menu
-    document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
         document.getElementById('mobile-menu').classList.toggle('active');
     });
 
     // 手機 dropdown 點擊展開
     document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
+        btn.addEventListener('click', function(e) {
             e.preventDefault(); // 防止跳頁
             const parent = btn.parentElement;
             parent.classList.toggle('active');
         });
     });
-    window.addEventListener('scroll', function () {
+    window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
         if (window.scrollY > 400) {
             navbar.classList.add('scrolled');
@@ -891,7 +884,7 @@
         }
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // 從 URL 的上頁連結中獲取 status
         const statusFromPreviousPage = new URLSearchParams(window.location.search).get('id');
         const status = <?php echo json_encode($status); ?>;
