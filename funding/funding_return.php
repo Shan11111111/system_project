@@ -31,7 +31,7 @@ $project = $result->fetch_assoc();
 
 $status_message = "";
 if (!$project) {
-    $status_message = "目前沒有以完成專案。";
+    $status_message = "目前沒有已完成專案。";
 } elseif ($project['status'] !== '已完成') {
     $status_message = "注意：此專案尚未完成，您仍可提交回報。";
 }
