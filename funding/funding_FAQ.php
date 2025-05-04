@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($faq_id) {
         // 更新常見問題
-        $stmt = $conn->prepare("UPDATE funding_FAQ SET project_id = ?, question = ?, reply = ?, updated_on = NOW() WHERE funding_FAQ_id = ?");
+        $stmt = $conn->prepare("UPDATE funding_faq SET project_id = ?, question = ?, reply = ?, updated_on = NOW() WHERE funding_FAQ_id = ?");
         $stmt->bind_param("issi", $project_id, $question, $reply, $faq_id);
     } else {
         // 新增常見問題
@@ -180,7 +180,7 @@ if (isset($_GET['delete'])) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['funding_FAQ_id']) . "</td>";
-                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'><a href='../funding_detail.php?id=" . htmlspecialchars($row['project_id']) . "' style='color: #007BFF; text-decoration: none;'>" . htmlspecialchars($row['project_id']) . "</a></td>";
+                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'><a href='../funding_detail.php?project_id=" . htmlspecialchars($row['project_id']) . "' style='color: #007BFF; text-decoration: none;'>" . htmlspecialchars($row['project_id']) . "</a></td>";
                         echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['question']) . "</td>";
                         echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['reply']) . "</td>";
                         echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['updated_on']) . "</td>";

@@ -394,7 +394,7 @@
                 }
 
                 // 取得專案 ID
-                $project_id = $_GET['id'] ?? 0;
+                $project_id = $_GET['project_id'] ?? 0;
 
                 // 查附件檔案路徑
                 $sql_file = "
@@ -423,55 +423,60 @@
 
 
             <div class="tab-content">
-
                 <?php
                 // 查詢進度回報
-                $progress_sql = "SELECT title, content, file_path, FROM_UNIXTIME(updated_time) AS updated_time 
-                 FROM execution_report 
-                 WHERE project_id = ? 
-                 ORDER BY updated_time DESC";
+                $progress_sql = "SELECT title, content, file_path, updated_time 
+                     FROM execution_report 
+                     WHERE project_id = ? 
+                     ORDER BY updated_time DESC";
                 $stmt_progress = $link->prepare($progress_sql);
+
+                if (!$stmt_progress) {
+                    die("SQL 語句準備失敗：" . $link->error);
+                }
+
                 $stmt_progress->bind_param("i", $project_id);
                 $stmt_progress->execute();
                 $progress_result = $stmt_progress->get_result();
+
+                if ($progress_result && $progress_result->num_rows > 0) {
+                    while ($progress = $progress_result->fetch_assoc()) {
+                        echo '<div class="progress-card">';
+                        echo '    <div class="progress-header">';
+                        echo '        <h3 class="progress-title">' . htmlspecialchars($progress['title']) . '</h3>';
+                        echo '        <span class="progress-date">' . htmlspecialchars($progress['updated_time']) . '</span>';
+                        echo '    </div>';
+                        echo '    <div class="progress-content">';
+                        echo '        ' . nl2br(htmlspecialchars($progress['content']));
+                        echo '    </div>';
+                        if (!empty($progress['file_path'])) {
+                            echo '    <div class="progress-footer">';
+                            echo '        <a href="' . htmlspecialchars($progress['file_path']) . '" download>下載附件</a>';
+                            echo '    </div>';
+                        }
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<p>目前尚無進度回報。</p>';
+                }
                 ?>
 
-                <div class="tab-content">
-                    <?php
-                    if ($progress_result && $progress_result->num_rows > 0) {
-                        while ($progress = $progress_result->fetch_assoc()) {
-                            echo '<div class="progress-card">';
-                            echo '    <div class="progress-header">';
-                            echo '        <h3 class="progress-title">' . htmlspecialchars($progress['title']) . '</h3>';
-                            echo '        <span class="progress-date">' . htmlspecialchars($progress['updated_time']) . '</span>';
-                            echo '    </div>';
-                            echo '    <div class="progress-content">';
-                            echo '        ' . nl2br(htmlspecialchars($progress['content']));
-                            echo '    </div>';
-                            if (!empty($progress['file_path'])) {
-                                echo '    <div class="progress-footer">';
-                                echo '        <a href="' . htmlspecialchars($progress['file_path']) . '" download>下載附件</a>';
-                                echo '    </div>';
-                            }
-                            echo '</div>';
-                        }
-                    } else {
-                        echo '<p>目前尚無進度回報。</p>';
-                    }
-                    ?>
-                </div>
+
 
             </div>
-
-            <?php
-            $faq_query = "SELECT question, reply, updated_on FROM funding_FAQ WHERE project_id = $project_id ORDER BY updated_on DESC";
-            $faq_result = mysqli_query($link, $faq_query);
-            ?>
 
             <div class="tab-content">
                 <div class="faq-list">
                     <?php
-                    if ($faq_result && mysqli_num_rows($faq_result) > 0) {
+                    // 查詢常見問題
+                    $faq_query = "SELECT question, reply, updated_on FROM funding_faq WHERE project_id = $project_id ORDER BY updated_on DESC";
+                    $faq_result = mysqli_query($link, $faq_query);
+
+                    if (!$faq_result) {
+                        die("SQL 查詢失敗：" . mysqli_error($link));
+                    }
+
+                    if (mysqli_num_rows($faq_result) > 0) {
                         while ($faq = mysqli_fetch_assoc($faq_result)) {
                             echo '<div class="faq-item">';
                             echo '<div class="faq-question" onclick="toggleFaq(this)">';
@@ -490,6 +495,7 @@
                     ?>
                 </div>
             </div>
+
             <div class="tab-content">
 
                 <section class="comments">

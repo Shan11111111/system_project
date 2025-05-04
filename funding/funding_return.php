@@ -44,13 +44,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 處理上傳檔案
     if (!empty($_FILES['file']['name'])) {
-        $upload_dir = "../uploads/reports/";
+        $upload_dir = "../file_upload/";
+
+        // 確保目錄存在
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
-        $file_name = basename($_FILES['file']['name']);
+
+        // 檢查檔案類型
+        $allowed_types = ['application/pdf'];
+        $file_type = mime_content_type($_FILES['file']['tmp_name']);
+        if (!in_array($file_type, $allowed_types)) {
+            die("只允許上傳 PDF 檔案。");
+        }
+
+        // 生成唯一檔案名稱
+        $file_name = uniqid() . '_' . basename($_FILES['file']['name']);
         $file_path = $upload_dir . $file_name;
 
+        // 移動檔案
         if (!move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
             die("檔案上傳失敗。");
         }
