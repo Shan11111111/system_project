@@ -243,6 +243,11 @@ CREATE TABLE `collection` (
   `user_id` int(11) NOT NULL,
   `collection_created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- --------------------------------------------------------
+
+INSERT INTO `collection` (`collection_id`, `advice_id`, `user_id`, `collection_created_at`) VALUES
+(1, 61, 333333, '2025-05-03 23:17:45'),
+(2, 58, 333333, '2025-05-03 23:45:45');
 
 -- --------------------------------------------------------
 
@@ -298,7 +303,8 @@ CREATE TABLE `donation_record` (
   `project_id` int(11) NOT NULL,
   `donation_amount` decimal(10,2) DEFAULT NULL,
   `donation_time` datetime DEFAULT current_timestamp(),
-  `email` text DEFAULT NULL
+  `email` text DEFAULT NULL,
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -656,7 +662,8 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `donation_record`
   ADD PRIMARY KEY (`donation_id`),
-  ADD KEY `project_id` (`project_id`);
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- 資料表索引 `execution_report`
