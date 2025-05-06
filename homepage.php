@@ -547,7 +547,7 @@
                 <div class="fund-section">
                     <div class="fund-content">
                         <!-- 大卡 -->
-                        <a href="funding_detail.php?id=${bigCard.id}" style="text-decoration: none; color: inherit;">
+                        <a href="funding_detail.php?project_id=${bigCard.id}" style="text-decoration: none; color: inherit;">
                             <div class="left-big-card">
                                 <div class="fundraiser-card">
                                     <div class="card-image">
@@ -576,7 +576,7 @@
                         <!-- 小卡區 -->
                         <div class="right-small-cards">
                             ${smallCards.map(smallCard => `
-                                <a href="funding_detail.php?id=${smallCard.id}" style="text-decoration: none; color: inherit;">
+                                <a href="funding_detail.php?project_id=${smallCard.id}" style="text-decoration: none; color: inherit;">
                                     <div class="fundraiser-card small-card">
                                         <div class="card-image">
                                             <img src="${smallCard.file_path || 'img/homepage.png'}" alt="小圖">
