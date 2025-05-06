@@ -94,7 +94,7 @@
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
                     <a class="nav-item" href="<?php if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
-                                                    echo '#';
+                                                    echo 'member_center.php';
                                                 } else if ($_SESSION['level'] == 'office') {
                                                     echo 'funding/office_assignments.php';
                                                 } else if ($_SESSION['level'] == 'manager') {
