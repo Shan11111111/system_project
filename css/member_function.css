@@ -126,10 +126,20 @@ button {
   color: var(--color-dark-brown);
 }
   
+  
+.uncollect-btn {
+  position: absolute;
+  max-width: 30px;
+  max-height: 30px;
+  cursor: pointer;
+  right: 40px;
+  object-fit: contain;     /* ✅ 確保圖片內容不會超出 */
 
+}
 
 
 .suggestion {
+  position: relative;
   display: flex;
   background: white;
   border: 1px solid #e0e0e0;
