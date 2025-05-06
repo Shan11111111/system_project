@@ -66,6 +66,7 @@
                 {{deadlineHTML}}
                 <span>發布日：{{publishDate}}</span>
             </div>
+            <img src="cross_img/delete.png" class="uncollect-btn" title="取消收藏" data-advice-id="{{adviceId}}">
         </div>
     </template>
 
@@ -156,10 +157,6 @@
             paginated.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'suggestion';
-                div.onclick = () => {
-                    window.parent.location.href = `../advice_detail.php?advice_id=${item.advice_id}`;
-                };
-
                 const imagePath = item.file_path ? `../${item.file_path}` : '../uploads/homepage.png';
                 const publishDate = item.announce_date || '未知';
                 const categoryText = categoryMap[item.category] || item.category || '無';
@@ -186,12 +183,29 @@
                     .replace('{{categoryHTML}}', categoryHTML)
                     .replace('{{deadlineHTML}}', deadlineHTML)
                     .replace('{{publishDate}}', publishDate)
-                    .replace('{{typeText}}', typeText);
-
-
+                    .replace('{{typeText}}', typeText)
+                    .replace('{{adviceId}}', item.advice_id);
 
                 div.innerHTML = template;
+                div.onclick = () => {
+                    window.parent.location.href = `../advice_detail.php?advice_id=${item.advice_id}`;
+                };
+
+                // div.querySelector('.suggestion-content').onclick = () => {
+                //    window.parent.location.href = `../advice_detail.php?advice_id=${item.advice_id}`;
+                // };
+
                 list.appendChild(div);
+
+                const cancelBtn = div.querySelector('.uncollect-btn');
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // 不要觸發跳轉
+                        const aid = e.currentTarget.dataset.adviceId;
+                        cancelCollect(aid);
+                    });
+                }
+
                 // 塞進 HTML 後再處理 type-label badge 的顏色
                 const badge = div.querySelector('.type-label');
                 badge.classList.remove('badge-active', 'badge-ended', 'badge-responed', 'badge-passed', 'badge-expired');
@@ -281,6 +295,40 @@
                 }
             }
         });
+
+        //取消彈跳視窗
+        function cancelCollect(adviceId) {
+            fetch(`cancel_favo.php?advice_id=${adviceId}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Network response was not ok');
+                    return res.json();
+                })
+                .then(result => {
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '已取消收藏',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        fetchData(); // 重新載入收藏列表
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '取消失敗',
+                            text: result.message || '發生未知錯誤'
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: '發生錯誤',
+                        text: '請稍後再試'
+                    });
+                });
+        }
     </script>
 
 
