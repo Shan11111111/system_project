@@ -95,7 +95,7 @@
                     <div class="card-title">{{title}}</div>
                     <div class="card-amount">捐款 {{amount}} 元</div>
                     <div class="card-date">日期:{{date}}</div>
-                    <a class="card-link" href="../funding_detail.php?id={{project_id}}" target="_blank"><div class="card-detail">募資詳細頁面</div></a>
+                    <a class="card-link" href="../funding_detail.php?project_id={{project_id}}" target="_blank"><div class="card-detail">募資詳細頁面</div></a>
 
                 </div>
             </template>
