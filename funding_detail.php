@@ -348,15 +348,15 @@
 
             if ($stmt->execute()) {
                 echo "<script>alert('留言成功！');</script>";
-                echo "<script>window.location.href = 'funding_detail.php?id=$project_id';</script>";
+                echo "<script>window.location.href = 'funding_detail.php?project_id=$project_id';</script>";
             } else {
                 echo "<script>alert('留言失敗，請稍後再試！');</script>";
-                echo "<script>window.location.href = 'funding_detail.php?id=$project_id';</script>";
+                echo "<script>window.location.href = 'funding_detail.php?project_id=$project_id';</script>";
             }
             $stmt->close();
         } else {
             echo "<script>alert('留言內容不可為空，或未登入！');</script>";
-            echo "<script>window.location.href = 'funding_detail.php?id=$project_id';</script>";
+            echo "<script>window.location.href = 'funding_detail.php?project_id=$project_id';</script>";
         }
     }
     ?>
