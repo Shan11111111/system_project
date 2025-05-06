@@ -42,11 +42,48 @@ if (!$stmt) {
 
 $stmt->bind_param("siisi", $people_name, $donate_money, $funding_id, $email, $user_id);
 if ($stmt->execute()) {
+
+    // 假設目標金額儲存在 fundraising_projects 表的 funding_goal 欄位
+    $target_stmt = $link->prepare("SELECT funding_goal FROM fundraising_projects WHERE project_id = ?");
+    if (!$target_stmt) {
+        echo "<script>alert('準備失敗');</script>";
+        die("Prepare failed: " . $link->error);
+    }
+    
+    $target_stmt->bind_param("i", $funding_id);
+    $target_stmt->execute();
+    $target_stmt->bind_result($target_amount);
+    $target_stmt->fetch();
+    $target_stmt->close();
+
+    // 獲取目前的總捐款金額
+    $total_stmt = $link->prepare("SELECT SUM(donation_amount) FROM donation_record WHERE project_id = ?");
+    if (!$total_stmt) {
+        echo "<script>alert('準備失敗');</script>";
+        die("Prepare failed: " . $link->error);
+    }
+    $total_stmt->bind_param("i", $funding_id);
+    $total_stmt->execute();
+    $total_stmt->bind_result($total_donations);
+    $total_stmt->fetch();
+    $total_stmt->close();
+
+    // 檢查是否達標
+    if ($total_donations >= $target_amount) {
+        $update_stmt = $link->prepare("UPDATE fundraising_projects SET status = '已完成' WHERE project_id = ?");
+        if (!$update_stmt) {
+            echo "<script>alert('更新失敗');</script>";
+            die("Prepare failed: " . $link->error);
+        }
+        $update_stmt->bind_param("i", $funding_id);
+        $update_stmt->execute();
+        $update_stmt->close();
+    }
     echo "<script>alert('捐款成功');</script>";
     echo "<script>window.location.href='../homepage.php';</script>";
 } else {
     echo "<script>alert('捐款失敗');</script>";
-    echo "<script>window.location.href='../homepage.php';</script>";
+    // echo "<script>window.location.href='../homepage.php';</script>";
 }
 $stmt->close();
 $link->close();

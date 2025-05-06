@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-04 06:32:13
+-- 產生時間： 2025-05-06 08:27:47
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -307,7 +307,7 @@ CREATE TABLE `donation_record` (
   `donation_amount` decimal(10,2) DEFAULT NULL,
   `donation_time` datetime DEFAULT current_timestamp(),
   `email` text DEFAULT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -321,7 +321,15 @@ INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_a
 (4, '匿名', 2, 500.00, '2025-04-26 20:21:27', '', 0),
 (5, '匿名', 2, 500.00, '2025-04-26 20:32:06', '', 0),
 (6, '匿名', 2, 1000.00, '2025-04-29 13:44:22', '', 0),
-(7, '匿名', 3, 5000.00, '2025-04-29 16:30:20', '', 0);
+(7, '匿名', 3, 5000.00, '2025-04-29 16:30:20', '', 0),
+(8, '匿名', 3, 1000.00, '2025-05-06 14:04:25', '', NULL),
+(9, '匿名', 3, 500.00, '2025-05-06 14:05:57', '', NULL),
+(10, '匿名', 6, 500.00, '2025-05-06 14:11:21', '', NULL),
+(11, '匿名', 6, 1000.00, '2025-05-06 14:12:38', '', NULL),
+(12, '匿名', 6, 1000.00, '2025-05-06 14:14:08', '', NULL),
+(13, '匿名', 6, 2000.00, '2025-05-06 14:18:12', '', NULL),
+(14, '匿名', 6, 500.00, '2025-05-06 14:18:30', '', NULL),
+(15, '匿名', 3, 1000.00, '2025-05-06 14:18:57', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -483,7 +491,7 @@ CREATE TABLE `fundraising_projects` (
   `funding_goal` int(11) NOT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime DEFAULT NULL,
-  `status` enum('進行中','已完成','已取消','已過期') DEFAULT '進行中'
+  `status` enum('進行中','已完成','已取消') DEFAULT '進行中'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -492,9 +500,9 @@ CREATE TABLE `fundraising_projects` (
 
 INSERT INTO `fundraising_projects` (`project_id`, `suggestion_assignments_id`, `title`, `description`, `funding_goal`, `start_date`, `end_date`, `status`) VALUES
 (1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', '2025-04-27 00:00:00', '進行中'),
-(2, 6, '廁所施工聲音好吵', '我們會盡力監督', 10, '2025-04-24 21:29:40', '2025-04-28 20:58:32', ''),
-(3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', '2025-05-24 20:58:32', '進行中'),
-(4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', '2025-04-25 17:42:29', '已過期'),
+(2, 6, '廁所施工聲音好吵', '我們會盡力監督', 10, '2025-04-24 21:29:40', '2025-04-28 20:58:32', '進行中'),
+(3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', '2025-05-24 20:58:32', '已完成'),
+(4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', '2025-04-25 17:42:29', '進行中'),
 (5, 8, '捐血救人', '用於招募志工與工讀金的費用', 35000, '2025-04-24 22:17:25', '2025-05-24 20:58:32', '進行中'),
 (6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', '2025-05-10 00:00:00', '進行中');
 
@@ -793,7 +801,7 @@ ALTER TABLE `comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `donation_record`
 --
 ALTER TABLE `donation_record`
-  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
