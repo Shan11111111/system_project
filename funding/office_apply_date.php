@@ -17,7 +17,7 @@ $sql = "SELECT project_id, title, end_date, suggestion_assignments.office_id
         FROM fundraising_projects f 
         INNER JOIN suggestion_assignments 
         ON f.suggestion_assignments_id = suggestion_assignments.suggestion_assignments_id
-        WHERE f.end_date < CURDATE() AND suggestion_assignments.office_id = ?";
+        WHERE f.end_date < CURDATE() AND f.status='進行中' AND suggestion_assignments.office_id = ?";
 
 
 $stmt = $conn->prepare($sql);
