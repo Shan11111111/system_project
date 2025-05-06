@@ -298,36 +298,49 @@
 
         //取消彈跳視窗
         function cancelCollect(adviceId) {
-            fetch(`cancel_favo.php?advice_id=${adviceId}`)
-                .then(res => {
-                    if (!res.ok) throw new Error('Network response was not ok');
-                    return res.json();
-                })
-                .then(result => {
-                    if (result.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '已取消收藏',
-                            showConfirmButton: false,
-                            timer: 1500
+            Swal.fire({
+                title: '確定要取消收藏嗎？',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: '確定',
+                cancelButtonText: '取消'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // 真的執行取消收藏
+                    fetch(`../member_center/cancel_favo.php?advice_id=${adviceId}`)
+                        .then(res => {
+                            if (!res.ok) throw new Error('Network response was not ok');
+                            return res.json();
+                        })
+                        .then(result => {
+                            if (result.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '已取消收藏',
+                                    showConfirmButton: false,
+                                    timer: 1200
+                                });
+                                fetchData(); // 重新刷新收藏清單
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '取消失敗',
+                                    text: result.message || '發生未知錯誤'
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire({
+                                icon: 'error',
+                                title: '發生錯誤',
+                                text: '請稍後再試'
+                            });
                         });
-                        fetchData(); // 重新載入收藏列表
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: '取消失敗',
-                            text: result.message || '發生未知錯誤'
-                        });
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    Swal.fire({
-                        icon: 'error',
-                        title: '發生錯誤',
-                        text: '請稍後再試'
-                    });
-                });
+                }
+            });
         }
     </script>
 
