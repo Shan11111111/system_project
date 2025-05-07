@@ -228,7 +228,7 @@ $total_pages = ceil($total_rows / $limit);
         <!-- <a href="project_manager.php">募資管理</a> -->
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
-        <a href="#">數據分析</a>
+        <!-- <a href="#">數據分析</a> -->
     </div>
 
     <!-- 頁面內容 -->

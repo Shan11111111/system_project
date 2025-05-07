@@ -292,7 +292,7 @@
         <h2>管理系統</h2>
         <a href="../homepage.php">孵仁首頁</a>
         <a href="">發布公告</a>
-        <a href="funding/adapt.php">自由認領達標建言區</a>
+        <a href="adapt.php">自由認領達標建言區</a>
         <a href="../funding/office_assignments.php">提交提案與專案管理</a>
         <a href="office_apply_date.php">延後募款申請</a>
         <a href="funding_FAQ.php">募資常見問題</a>
@@ -301,7 +301,7 @@
     </div>
 
     <div class="content">
-        <h1>處所分派建言</h1>
+        <h1>處所被分派之建言</h1>
         <div class="search-bar">
     <form action="office_assignments.php" method="GET">
         <input type="text" name="search" placeholder="輸入建言 ID 或標題進行搜尋" value="<?php echo htmlspecialchars($search); ?>">

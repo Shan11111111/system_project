@@ -27,9 +27,25 @@ if ($conn->connect_error) {
     die("連線失敗: " . $conn->connect_error);
 }
 
-// 從 advice 表中抓取覆議次數超過 3 的建言
-$sql = "SELECT user_id,advice_state,announce_date,advice_id, advice_title, agree FROM advice WHERE agree >= 3 and advice_state='未處理'";
+// 從 advice 表中抓取覆議次數超過 3 的建言且狀態是未處理，並且超過十天無處所認領的建言，需要分配處所
+$sql = "SELECT user_id, advice_state, announce_date, advice.advice_id, advice_title, agree,state_time 
+        FROM advice
+        inner join advice_state
+        ON advice.advice_id = advice_state.advice_id
+        LEFT JOIN suggestion_assignments 
+        ON advice.advice_id = suggestion_assignments.advice_id 
+        WHERE advice.advice_state = '未處理' 
+        AND suggestion_assignments.advice_id IS NULL 
+        AND agree >= 3
+        and state_time <= DATE_SUB(NOW(), INTERVAL 10 DAY)";
+
 $result = $conn->query($sql);
+
+// 檢查 SQL 查詢是否成功
+if (!$result) {
+    die("SQL 查詢失敗: " . $conn->error);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -95,23 +111,18 @@ $result = $conn->query($sql);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .profile {
-            position: relative;
-            display: inline-block;
-        }
-
         .profile img {
+            cursor: pointer;
+            border-radius: 50%;
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
         }
 
         .dropdown {
             display: none;
             position: absolute;
             top: 50px;
-            right: 0;
+            right: 10px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
@@ -128,7 +139,7 @@ $result = $conn->query($sql);
         }
 
         .dropdown a:hover {
-            background-color:rgb(159, 193, 255);
+            background-color: rgb(159, 193, 255);
         }
 
         /* 表格樣式 */
@@ -161,7 +172,7 @@ $result = $conn->query($sql);
         }
 
         tr:hover {
-            background-color:rgb(167, 185, 255);
+            background-color: rgb(167, 185, 255);
         }
 
         input[type="number"] {
@@ -199,7 +210,7 @@ $result = $conn->query($sql);
         <a href="people_manager.php">人員處理</a>
         <a href="#">數據分析</a>
     </div>
-
+    <!-- 左側導覽列 -->
     <!-- 頁面內容 -->
     <div class="content">
         <!-- 頭部 -->
@@ -213,7 +224,6 @@ $result = $conn->query($sql);
                 </div>
             </div>
         </div>
-
         <!-- 表格內容 -->
         <h1>分配建言處理處所</h1>
         <table>
@@ -225,27 +235,30 @@ $result = $conn->query($sql);
                     <th>覆議次數</th>
                     <th>建言狀態</th>
                     <th>建言時間</th>
+                    <th>覆議達成時間</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
+                // 確保查詢有結果
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>" . $row['advice_id'] . "</td>";
-                        echo "<td>" . $row['user_id'] . "</td>";
+                        echo "<td>" . htmlspecialchars($row['advice_id']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['user_id']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['advice_title']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['agree']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['advice_state']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['announce_date']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['state_time']) . "</td>";
                         echo "<td>";
-                        echo "<a href='assign_detail.php?advice_id=" . $row['advice_id'] . "' class='btn btn-primary'>分派</a>";
+                        echo "<a href='assign_detail.php?advice_id=" . htmlspecialchars($row['advice_id']) . "' class='btn btn-primary'>分派</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='6'>沒有符合條件的建言</td></tr>";
+                    echo "<tr><td colspan='7'>沒有符合條件的建言</td></tr>";
                 }
                 ?>
             </tbody>
@@ -267,8 +280,8 @@ $result = $conn->query($sql);
         }
     </script>
 </body>
-
 </html>
+
 <?php
 $conn->close();
 ?>
