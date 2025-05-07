@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-06 08:27:47
+-- 產生時間： 2025-05-07 12:14:48
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -70,13 +70,16 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (52, 412401011, '專題經費不足', '我們希望學校可以多給研究經費，尤其是我們要往更人工智慧發展，需要額外的金錢，我希望學校可以多給學生研究費用!尤其，教育部有給津貼，我覺得學校可以做更多的事情幫助學生更好!', 3, 'academic', '已回覆', '2025-04-24'),
 (53, 412401011, '捐血救人', '我們希望學校的捐血救人活動可以提供捐血一袋送禮物的活動', 3, 'welfare', '已回覆', '2025-04-24'),
 (54, 412401011, '請學校多宣傳捐血活動', '我們真的很需要有更多人捐血幫助血友症患者，我們希望學校能擴大宣傳或是幫助我們的活動實質的幫助!', 3, 'welfare', '已分派', '2025-04-24'),
-(55, 412401011, '輔大應該積極推廣研究發展', '我認為學校應該提供更多經費幫助在研究計畫，例如織品系的紡織車不夠多，需要預約登記，時間不夠，無法在時間內完成。', 3, 'academic', '未處理', '2025-04-24'),
+(55, 412401011, '輔大應該積極推廣研究發展', '我認為學校應該提供更多經費幫助在研究計畫，例如織品系的紡織車不夠多，需要預約登記，時間不夠，無法在時間內完成。', 3, 'academic', '已分派', '2025-04-24'),
 (56, 412401011, '輔大傳院跨國交流超炫!黃盟欽獲邀巴義兩國', '號外！號外！傳播學院獲獎喜訊不斷。創院以來第一人，影傳系藝術家黃盟欽老師遊走世界最前端，今年以新媒體科技結合影像創作，獲邀參加2024年10月15日在西班牙畢爾包舉辦的「BIDEODROMO國際實驗電影與錄影藝術節」，全台只有12位藝術家或團體參展。盟欽老師說：「能與來自世界各地的藝術家和觀眾交流，倍感榮幸與期待」。他不斷展現跨國藝術的交流能量，11月11日也獲邀到羅馬教廷參加我國駐教廷大使館主辦，由Sita Spada策展的「性靈相連」(Interconnected hearts) 數位藝術展，全台灣只有三人受邀。他以人工智慧對身體、科技和虛擬世界的影響，將數位人文與當代藝術融合，展現出科技與藝術的共融之美。簡直是超酷超炫的，輔大看似保守穩當，老師的靈魂一點都不保守。希望學校投入更多經費在傳播學院!', 3, 'academic', '已分派', '2025-04-24'),
 (57, 412401011, '互動展覽經費補助', '我們希望學校能夠提供我們經費補助舉辦互動展覽，我們已經研發出來了互動展覽的展品，但因為手上的錢不夠租美術館，希望學校可以幫助我們!', 3, 'academic', '已分派', '2025-04-24'),
 (58, 412401011, '舉辦下一次的社團展覽', '去年我們舉辦的社團展覽有很好的回響，今年需要一筆資金來籌辦社團展覽', 3, 'club', '已回覆', '2025-04-24'),
 (59, 412401011, '動漫電玩研習社的同學帶來活力四射的舞蹈', '動漫電玩研習社的同學帶來活力四射的舞蹈，請幫他們應援! 我們還需要100份應援球', 1, 'club', '未處理', '2025-04-24'),
-(60, 412401011, '課外活動指導組的社團博覽會籌備團隊及燈光', '課外活動指導組的社團博覽會籌備團隊及燈光音響組工作人員，我們需要燈光設備兩台和麥可風五個', 2, 'club', '未處理', '2025-04-24'),
-(61, 904, '提出建言', '提出建言', 0, 'academic', '未處理', '2025-04-29');
+(60, 412401011, '課外活動指導組的社團博覽會籌備團隊及燈光', '課外活動指導組的社團博覽會籌備團隊及燈光音響組工作人員，我們需要燈光設備兩台和麥可風五個', 3, 'club', '未處理', '2025-04-24'),
+(61, 904, '提出建言', '提出建言', 0, 'academic', '未處理', '2025-04-29'),
+(62, 412402141, '一起救地球', '我們希望學校能夠發起學生救地球團體，前往各地參與各式各樣的環保行動', 0, 'environment', '未處理', '2025-05-07'),
+(63, 412402141, '一起玩音樂', '我們希望學校可以撥補一些場地與設備給我們熱門音樂社，我們的團員渴望有一個舞台，讓更多人發現他們的閃亮點!', 0, 'club', '未處理', '2025-05-07'),
+(64, 412402141, '我們希望可以得到贊助', '親愛的校方、師長好，我們是輔仁大學享食冰箱的負責人，近期發現越來越少人捐贈食物，很多人都向我們反映，學生的手頭經濟不充裕，我們希望可以藉由這個贊助幫助我們學校惡肚子的學生，謝謝大家的幫助TwT', 0, 'other', '未處理', '2025-05-07');
 
 -- --------------------------------------------------------
 
@@ -122,7 +125,10 @@ INSERT INTO `advice_image` (`img_id`, `file_name`, `file_path`, `advice_id`) VAL
 (29, '社團活動.jpg', 'uploads/680a2a9f8a31d6.59051855.jpg', 58),
 (30, '動漫社同學.jpg', 'uploads/680a2af8e01c45.29464488.jpg', 59),
 (31, '1130923_021.jpg', 'uploads/680a2b4257d719.83630333.jpg', 60),
-(32, 'S.png', 'uploads/68108aa9433c01.51546450.png', 61);
+(32, 'S.png', 'uploads/68108aa9433c01.51546450.png', 61),
+(33, 'S__23527436.jpg', 'uploads/681b2fc96c4037.95908169.jpg', 62),
+(34, '唱歌.jpg', 'uploads/681b30ec11ba20.91962390.jpg', 63),
+(35, '御飯糰.jpeg', 'uploads/681b323a6a1d22.86093358.jpeg', 64);
 
 -- --------------------------------------------------------
 
@@ -156,7 +162,8 @@ INSERT INTO `advice_state` (`advice_state_id`, `content`, `advice_id`, `state_ti
 (12, '校方已回應', 58, '2025-04-26 20:40:29'),
 (13, '附議達標', 52, '2025-04-29 16:16:56'),
 (14, '校方已回應', 52, '2025-04-29 16:19:28'),
-(15, '附議達標', 55, '2025-04-29 18:56:48');
+(15, '附議達標', 55, '2025-04-29 18:56:48'),
+(16, '附議達標', 60, '2025-05-07 17:59:54');
 
 -- --------------------------------------------------------
 
@@ -229,7 +236,8 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (69, 413010021, 58),
 (70, 412402012, 52),
 (71, 333333, 55),
-(72, 333333, 46);
+(72, 333333, 46),
+(73, 412402141, 60);
 
 -- --------------------------------------------------------
 
@@ -292,7 +300,8 @@ INSERT INTO `comments` (`comment_id`, `advice_id`, `user_id`, `comment_content`,
 (71, 44, 333333, '好好笑', '2025-04-19'),
 (72, 45, 412402141, 'jtojo', '2025-04-22'),
 (73, 48, 412402141, 'fknefnwof', '2025-04-22'),
-(74, 52, 904, '1111', '2025-04-29');
+(74, 52, 904, '1111', '2025-04-29'),
+(75, 61, 345678, '耶', '2025-05-06');
 
 -- --------------------------------------------------------
 
@@ -329,7 +338,8 @@ INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_a
 (12, '匿名', 6, 1000.00, '2025-05-06 14:14:08', '', NULL),
 (13, '匿名', 6, 2000.00, '2025-05-06 14:18:12', '', NULL),
 (14, '匿名', 6, 500.00, '2025-05-06 14:18:30', '', NULL),
-(15, '匿名', 3, 1000.00, '2025-05-06 14:18:57', '', NULL);
+(15, '匿名', 3, 1000.00, '2025-05-06 14:18:57', '', NULL),
+(16, '匿名', 3, 100.00, '2025-05-06 14:46:19', '', 904);
 
 -- --------------------------------------------------------
 
@@ -412,7 +422,9 @@ INSERT INTO `funding_comments` (`funding_comments_id`, `project_id`, `user_id`, 
 (11, 4, 345678, '我遇到好多次，怪怪的人', '2025-04-24 23:53:47'),
 (15, 2, 333333, 'sojgg', '2025-04-29 18:52:24'),
 (16, 1, 333333, 'sgroggj', '2025-04-29 18:52:38'),
-(17, 6, 333333, 'gsrogjsgoojg', '2025-04-29 18:53:00');
+(17, 6, 333333, 'gsrogjsgoojg', '2025-04-29 18:53:00'),
+(18, 6, 333333, '我捐了', '2025-05-06 14:29:28'),
+(19, 3, 333333, '我捐了', '2025-05-06 14:29:42');
 
 -- --------------------------------------------------------
 
@@ -585,7 +597,8 @@ INSERT INTO `suggestion_assignments` (`suggestion_assignments_id`, `advice_id`, 
 (11, 24, 345678, 'fjafoif', 2000, 'uploads/soap球.png', 1, 1, '', '已通過', '2025-04-29 16:42:12', '2025-04-29 16:46:20', 0),
 (12, 52, 345678, 'fijoapofjiog', 3000, 'uploads/輔系公告 (1).pdf', 1, 1, 'ok', '已通過', '2025-04-29 16:24:48', '2025-04-29 16:25:04', 0),
 (13, 57, 123, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
-(14, 54, 345678, 'cl3jfofjfjoof', 2000, 'uploads/1745924654_c01.png', 1, NULL, NULL, '審核中', '2025-04-29 19:04:14', NULL, 0);
+(14, 54, 345678, 'cl3jfofjfjoof', 2000, 'uploads/1745924654_c01.png', 1, NULL, NULL, '審核中', '2025-04-29 19:04:14', NULL, 0),
+(15, 55, 904, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -765,25 +778,25 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice`
 --
 ALTER TABLE `advice`
-  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
 --
 ALTER TABLE `advice_image`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_state`
 --
 ALTER TABLE `advice_state`
-  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
@@ -795,13 +808,13 @@ ALTER TABLE `collection`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `donation_record`
 --
 ALTER TABLE `donation_record`
-  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
@@ -819,7 +832,7 @@ ALTER TABLE `files`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_comments`
 --
 ALTER TABLE `funding_comments`
-  MODIFY `funding_comments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `funding_comments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_faq`
@@ -855,7 +868,7 @@ ALTER TABLE `replies`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `suggestion_assignments`
 --
 ALTER TABLE `suggestion_assignments`
-  MODIFY `suggestion_assignments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `suggestion_assignments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- 已傾印資料表的限制式
