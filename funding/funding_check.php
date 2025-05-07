@@ -1,5 +1,5 @@
 <?php
-// session_start();
+session_start();
 // // 檢查是否已登入
 // if (!isset($_SESSION['user_id'])) {
 //     header("Location: login.php");

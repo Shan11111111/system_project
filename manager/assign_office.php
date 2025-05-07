@@ -1,23 +1,20 @@
 <?php
-// session_start();
-// // 檢查是否已登入
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: login.php");
-//     exit();
-// }
-// // 檢查使用者權限
-// if ($_SESSION['user_role'] !== 'manager') {
-//     echo "您沒有權限訪問此頁面。";
-//     header("Location: ../homepage.php");
-//     exit();
-// }
+session_start();
 
+// 確保使用者已登入
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// 獲取使用者 ID
+$user_id = $_SESSION['user_id'];
 
 // 資料庫連線設定
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "system_project"; // 替換為您的資料庫名稱
+$dbname = "system_project";
 
 // 建立連線
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -27,25 +24,40 @@ if ($conn->connect_error) {
     die("連線失敗: " . $conn->connect_error);
 }
 
-// 從 advice 表中抓取覆議次數超過 3 的建言且狀態是未處理，並且超過十天無處所認領的建言，需要分配處所
-$sql = "SELECT user_id, advice_state, announce_date, advice.advice_id, advice_title, agree,state_time 
+// 查詢使用者名稱和部門
+$stmt = $conn->prepare("SELECT name, department FROM users WHERE user_id = ?");
+if (!$stmt) {
+    die("SQL 準備失敗：" . $conn->error);
+}
+
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($name, $department);
+
+if (!$stmt->fetch()) {
+    $name = "未知使用者";
+    $department = "未知部門";
+}
+
+$stmt->close();
+
+// 查詢建言資料
+$sql = "SELECT user_id, advice_state, announce_date, advice.advice_id, advice_title, agree, state_time 
         FROM advice
-        inner join advice_state
+        INNER JOIN advice_state
         ON advice.advice_id = advice_state.advice_id
         LEFT JOIN suggestion_assignments 
         ON advice.advice_id = suggestion_assignments.advice_id 
         WHERE advice.advice_state = '未處理' 
         AND suggestion_assignments.advice_id IS NULL 
         AND agree >= 3
-        and state_time <= DATE_SUB(NOW(), INTERVAL 10 DAY)";
+        AND state_time <= DATE_SUB(NOW(), INTERVAL 10 DAY)";
 
 $result = $conn->query($sql);
 
-// 檢查 SQL 查詢是否成功
 if (!$result) {
     die("SQL 查詢失敗: " . $conn->error);
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -56,11 +68,13 @@ if (!$result) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>達標建言處理</title>
     <style>
+        /* 全局樣式 */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
+            background-color: #f4f6f9;
         }
 
         /* 左側導覽列 */
@@ -79,6 +93,7 @@ if (!$result) {
         .sidebar h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5em;
         }
 
         .sidebar a {
@@ -88,6 +103,7 @@ if (!$result) {
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar a:hover {
@@ -98,31 +114,55 @@ if (!$result) {
         .content {
             margin-left: 280px;
             padding: 20px;
-            width: calc(100% - 250px);
+            width: calc(100% - 280px);
         }
 
-        /* 頭部個人資料 */
+        .content h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* 頭部個人資訊區 */
         .header {
             display: flex;
             justify-content: flex-end;
             align-items: center;
             padding: 10px 20px;
-            background-color: #f4f4f9;
+            background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
-        .profile img {
+        .profile {
+            position: relative;
             cursor: pointer;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-info img {
             border-radius: 50%;
             width: 40px;
             height: 40px;
         }
 
+        .profile-info p {
+            margin: 0;
+            font-size: 1em;
+            color: #333;
+            font-weight: bold;
+        }
+
         .dropdown {
             display: none;
             position: absolute;
-            top: 50px;
-            right: 10px;
+            top: 60px;
+            right: 0;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
@@ -136,6 +176,7 @@ if (!$result) {
             padding: 10px 15px;
             text-decoration: none;
             color: #333;
+            font-size: 0.9em;
         }
 
         .dropdown a:hover {
@@ -149,6 +190,8 @@ if (!$result) {
             margin: 20px 0;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         thead {
@@ -175,23 +218,19 @@ if (!$result) {
             background-color: rgb(167, 185, 255);
         }
 
-        input[type="number"] {
-            padding: 8px;
-            width: 80%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
+        /* 按鈕樣式 */
+        .btn {
             padding: 8px 12px;
             background-color: #007BFF;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9em;
         }
 
-        button:hover {
+        .btn:hover {
             background-color: #0056b3;
         }
     </style>
@@ -205,18 +244,20 @@ if (!$result) {
         <a href="../manager/advice_manager.php">建言管理</a>
         <a href="assign_office.php">達標建言分配處所</a>
         <a href="review_proposals.php">募資專案審核</a>
-        <!-- <a href="project_manager.php">募資管理</a> -->
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
         <a href="#">數據分析</a>
     </div>
-    <!-- 左側導覽列 -->
+
     <!-- 頁面內容 -->
     <div class="content">
         <!-- 頭部 -->
         <div class="header">
             <div class="profile">
-                <img src="../img/logo.png" alt="頭像" onclick="toggleDropdown()">
+                <div class="profile-info" onclick="toggleDropdown()">
+                    <img src="../img/logo.png" alt="頭像">
+                    <p><?php echo htmlspecialchars($name); ?> - <?php echo htmlspecialchars($department); ?></p>
+                </div>
                 <div class="dropdown" id="dropdownMenu">
                     <a href="#">個人資料</a>
                     <a href="#">設定</a>
@@ -224,6 +265,7 @@ if (!$result) {
                 </div>
             </div>
         </div>
+
         <!-- 表格內容 -->
         <h1>分配建言處理處所</h1>
         <table>
@@ -241,7 +283,6 @@ if (!$result) {
             </thead>
             <tbody>
                 <?php
-                // 確保查詢有結果
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
@@ -252,13 +293,11 @@ if (!$result) {
                         echo "<td>" . htmlspecialchars($row['advice_state']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['announce_date']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['state_time']) . "</td>";
-                        echo "<td>";
-                        echo "<a href='assign_detail.php?advice_id=" . htmlspecialchars($row['advice_id']) . "' class='btn btn-primary'>分派</a>";
-                        echo "</td>";
+                        echo "<td><a href='assign_detail.php?advice_id=" . htmlspecialchars($row['advice_id']) . "' class='btn'>分派</a></td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='7'>沒有符合條件的建言</td></tr>";
+                    echo "<tr><td colspan='8'>沒有符合條件的建言</td></tr>";
                 }
                 ?>
             </tbody>
@@ -274,12 +313,13 @@ if (!$result) {
         // 點擊其他地方關閉下拉選單
         window.onclick = function (event) {
             const dropdown = document.getElementById('dropdownMenu');
-            if (!event.target.matches('.profile img')) {
+            if (!event.target.closest('.profile-info')) {
                 dropdown.style.display = 'none';
             }
         }
     </script>
 </body>
+
 </html>
 
 <?php

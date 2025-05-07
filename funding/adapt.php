@@ -1,4 +1,5 @@
 <?php
+// 確保已經啟動 session 並連接資料庫
 session_start();
 
 if (!isset($_SESSION["user_id"])) {
@@ -12,6 +13,9 @@ $conn = new mysqli("localhost", "root", "", "system_project");
 if ($conn->connect_error) {
     die("連接失敗：" . $conn->connect_error);
 }
+
+// 引入個人資料模組
+include 'profile_module.php';
 
 // 計算資料總數
 $total_sql = "SELECT COUNT(*) AS total FROM advice
@@ -34,6 +38,8 @@ $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 
 // 更新查詢語句，加入 LIMIT 和 OFFSET
+$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+
 $sql = "SELECT user_id, advice_state, announce_date, advice.advice_id, advice_title, agree, state_time 
         FROM advice
         INNER JOIN advice_state
@@ -43,8 +49,13 @@ $sql = "SELECT user_id, advice_state, announce_date, advice.advice_id, advice_ti
         WHERE advice.advice_state = '未處理' 
         AND suggestion_assignments.advice_id IS NULL 
         AND agree >= 3
-        AND state_time >= DATE_SUB(NOW(), INTERVAL 10 DAY)
-        LIMIT $limit OFFSET $offset";
+        AND state_time >= DATE_SUB(NOW(), INTERVAL 10 DAY)";
+
+if (!empty($search)) {
+    $sql .= " AND (advice_title LIKE '%$search%' OR user_id LIKE '%$search%' or advice.advice_id like '%$search%')";
+}
+
+$sql .= " LIMIT $limit OFFSET $offset";
 
 $result = $conn->query($sql);
 
@@ -283,6 +294,79 @@ if (!$result) {
         .dropdown a:hover {
             background-color: rgb(159, 193, 255);
         }
+
+        /* 卡片樣式 */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 1.2em;
+            color: #007BFF;
+        }
+
+        .card p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .card button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .card button:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .pagination a.active {
+            background-color: #0056b3;
+            font-weight: bold;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
     </style>
     <script>
         function toggleDropdown() {
@@ -317,77 +401,50 @@ if (!$result) {
     <!-- 個人資訊區 -->
      <?php
     // 獲取使用者名稱
-    $stmt = $conn->prepare("SELECT name FROM users WHERE user_id = ?");
+    $stmt = $conn->prepare("SELECT name,department FROM users WHERE user_id = ?");
     if (!$stmt) {
         die("SQL 準備失敗：" . $conn->error);
     }
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
-    $stmt->bind_result($name);
+    $stmt->bind_result($name,$department);
     $stmt->fetch();
     $stmt->close();
     ?>
-    <div class="header">
-        <div class="profile">
-            <div class="profile-info" onclick="toggleDropdown()">
-                <p><?php echo htmlspecialchars($user_id); ?><?php echo htmlspecialchars($name); ?></p>
-                <img src="../img/logo.png" alt="個人頭像">
-            </div>
-            <div id="dropdownMenu" class="dropdown">
-                <a href="edit_profile.php">編輯個人資料</a>
-                <a href="logout.php">登出</a>
-            </div>
-        </div>
-    </div>
+    
 
     <div class="content">
         <h1>可認領的建言</h1>
 
         <!-- 搜尋欄 -->
         <div class="search-bar">
-            <input type="text" placeholder="搜尋建言...">
-            <button>搜尋</button>
+            <form action="adapt.php" method="GET">
+                <input type="text" name="search" placeholder="搜尋建言..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <button type="submit">搜尋</button>
+            </form>
         </div>
 
-        <!-- 表格 -->
-        <table>
-            <thead>
-                <tr>
-                    <th>建言 ID</th>
-                    <th>建言人</th>
-                    <th>建言內容</th>
-                    <th>覆議次數</th>
-                    <th>建言狀態</th>
-                    <th>達成時間</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($result->num_rows > 0): ?>
-                    <?php while ($advice = $result->fetch_assoc()): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($advice['advice_id']); ?></td>
-                            <td><?php echo htmlspecialchars($advice['user_id']); ?></td>
-                            <td><?php echo htmlspecialchars($advice['advice_title']); ?></td>
-                            <td><?php echo htmlspecialchars($advice['agree']); ?></td>
-                            <td><?php echo htmlspecialchars($advice['advice_state']); ?></td>
-                            <td><?php echo htmlspecialchars($advice['state_time']); ?></td>
-                            <td>
-                                <form action="office_adapt.php" method="POST">
-                                    <input type="hidden" name="advice_id"
-                                        value="<?php echo htmlspecialchars($advice['advice_id']); ?>">
-                                    <button type="submit">認領</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="7">目前沒有可認領的建言。</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+        <!-- 卡片容器 -->
+        <div class="card-container">
+            <?php if ($result->num_rows > 0): ?>
+                <?php while ($advice = $result->fetch_assoc()): ?>
+                    <div class="card">
+                        <h3>建言 ID: <?php echo htmlspecialchars($advice['advice_id']); ?></h3>
+                        <p><strong>建言人:</strong> <?php echo htmlspecialchars($advice['user_id']); ?></p>
+                        <p><strong>建言內容:</strong> <?php echo htmlspecialchars($advice['advice_title']); ?></p>
+                        <p><strong>覆議次數:</strong> <?php echo htmlspecialchars($advice['agree']); ?></p>
+                        <p><strong>建言狀態:</strong> <?php echo htmlspecialchars($advice['advice_state']); ?></p>
+                        <p><strong>達成時間:</strong> <?php echo htmlspecialchars($advice['state_time']); ?></p>
+                        <form action="office_adapt.php" method="POST">
+                            <input type="hidden" name="advice_id" value="<?php echo htmlspecialchars($advice['advice_id']); ?>">
+                            <button type="submit">認領</button>
+                        </form>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>目前沒有可認領的建言。</p>
+            <?php endif; ?>
+        </div>
 
         <!-- 分頁 -->
         <?php if ($total_pages > 1): ?>

@@ -1,5 +1,7 @@
+
+
 <?php
-// session_start();
+session_start();
 // // 檢查是否已登入
 // if (!isset($_SESSION['user_id'])) {
 //     header("Location: login.php");
@@ -31,6 +33,11 @@ if ($conn->connect_error) {
 $filter_level = isset($_GET['level']) ? $_GET['level'] : '';
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 
+// 分頁邏輯
+$limit = 10; // 每頁顯示 10 筆資料
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
+
 // 動態生成 SQL 查詢
 $sql = "SELECT user_id, name, level, email, department FROM users WHERE level != 'manager'";
 if (!empty($filter_level)) {
@@ -42,7 +49,23 @@ if (!empty($search_query)) {
                 OR department LIKE '%" . $conn->real_escape_string($search_query) . "%'
                 OR user_id LIKE '%" . $conn->real_escape_string($search_query) . "%')";
 }
+$sql .= " LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
+
+// 計算總頁數
+$total_sql = "SELECT COUNT(*) AS total FROM users WHERE level != 'manager'";
+if (!empty($filter_level)) {
+    $total_sql .= " AND level = '" . $conn->real_escape_string($filter_level) . "'";
+}
+if (!empty($search_query)) {
+    $total_sql .= " AND (name LIKE '%" . $conn->real_escape_string($search_query) . "%' 
+                    OR email LIKE '%" . $conn->real_escape_string($search_query) . "%' 
+                    OR department LIKE '%" . $conn->real_escape_string($search_query) . "%'
+                    OR user_id LIKE '%" . $conn->real_escape_string($search_query) . "%')";
+}
+$total_result = $conn->query($total_sql);
+$total_row = $total_result->fetch_assoc();
+$total_pages = ceil($total_row['total'] / $limit);
 ?>
 
 <!DOCTYPE html>
@@ -98,15 +121,7 @@ $result = $conn->query($sql);
             width: calc(100% - 250px);
         }
 
-        /* 頭部個人資料 */
-        .header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f4f4f9;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+        
 
         .profile {
             position: relative;
@@ -196,6 +211,32 @@ $result = $conn->query($sql);
         button:hover {
             background-color: #0056b3;
         }
+
+        /* 分頁樣式 */
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #007BFF;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .pagination a.active {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -213,10 +254,11 @@ $result = $conn->query($sql);
         <a href="#">數據分析</a>
     </div>
 
+    <?php include "header.php";?>
     <!-- 頁面內容 -->
-    <div class="content">
+    <div>
         <!-- 頭部 -->
-        <div class="header">
+        <!-- <div class="header">
             <div class="profile">
                 <img src="../img/logo.png" alt="頭像" onclick="toggleDropdown()">
                 <div class="dropdown" id="dropdownMenu">
@@ -225,7 +267,7 @@ $result = $conn->query($sql);
                     <a href="#">登出</a>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- 篩選表單 -->
         <h1>人員管理頁面</h1>
@@ -236,6 +278,7 @@ $result = $conn->query($sql);
                     <option value="">全部</option>
                     <option value="student" <?php if ($filter_level == 'student') echo 'selected'; ?>>學生</option>
                     <option value="teacher" <?php if ($filter_level == 'teacher') echo 'selected'; ?>>教職員</option>
+                    <option value="office" <?php if ($filter_level == 'office') echo 'selected'; ?>>處所負責人</option>
                 </select>
             </div>
             <div style="display: flex; flex-direction: column;">
@@ -283,6 +326,15 @@ $result = $conn->query($sql);
                 ?>
             </tbody>
         </table>
+
+        <!-- 分頁 -->
+        <div class="pagination">
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <a href="people_manager.php?page=<?php echo $i; ?>&level=<?php echo htmlspecialchars($filter_level); ?>&search=<?php echo htmlspecialchars($search_query); ?>" class="<?php echo $i == $page ? 'active' : ''; ?>">
+                    <?php echo $i; ?>
+                </a>
+            <?php endfor; ?>
+        </div>
     </div>
 
     <script>

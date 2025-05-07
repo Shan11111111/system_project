@@ -28,6 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("檔案上傳失敗");
     }
 
+    // 檢查當前的 status
+    $check_sql = "SELECT status FROM suggestion_assignments WHERE suggestion_assignments_id = ?";
+    $check_stmt = $conn->prepare($check_sql);
+    if (!$check_stmt) {
+        die("SQL 錯誤: " . $conn->error);
+    }
+
+    $check_stmt->bind_param("i", $suggestion_assignments_id);
+    $check_stmt->execute();
+    $check_stmt->bind_result($current_state);
+    $check_stmt->fetch();
+    $check_stmt->close();
+
     // 更新資料庫
     $sql = "UPDATE suggestion_assignments s
             SET s.proposal_text = ?, s.funding_amount = ?, s.proposal_file_path = ?, s.submitted = TRUE, s.submitted_at = NOW(), s.status = '審核中' 
@@ -39,10 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt->bind_param("sisi", $proposal_text, $funding_amount, $relative_file_path, $suggestion_assignments_id);
     if ($stmt->execute()) {
-        echo "<script>alert('提案已成功重新提交');</script>";
+        if ($current_state === '被退回') {
+            echo "<script>alert('提案已成功重新提交');</script>";
+        } elseif ($current_state === '草擬中') {
+            echo "<script>alert('提案已成功提交');</script>";
+        } else {
+            echo "<script>alert('提案已成功更新');</script>";
+        }
         echo "<script>window.location.href = 'office_assignments.php';</script>";
     } else {
-        die("提案重新提交失敗: " . $stmt->error);
+        die("提案提交失敗: " . $stmt->error);
     }
 
     $stmt->close();

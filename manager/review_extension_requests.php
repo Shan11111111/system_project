@@ -170,6 +170,31 @@ $result = $conn->query($sql);
         button:hover {
             background-color: #0056b3;
         }
+
+        /* 分頁樣式 */
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination a.active {
+            background-color: #0056b3;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -187,10 +212,11 @@ $result = $conn->query($sql);
         <a href="#">數據分析</a>
     </div>
 
+    <?php include "header.php";?>
     <!-- 頁面內容 -->
-    <div class="content">
+    <div>
         <!-- 頭部 -->
-        <div class="header">
+        <!-- <div class="header">
             <div class="profile">
                 <img src="../img/logo.png" alt="頭像" onclick="toggleDropdown()">
                 <div class="dropdown" id="dropdownMenu">
@@ -199,7 +225,7 @@ $result = $conn->query($sql);
                     <a href="#">登出</a>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <?php
         if ($result->num_rows > 0) {
@@ -223,3 +249,87 @@ $result = $conn->query($sql);
 
         $conn->close();
         ?>
+
+        <!-- 已批准的延期歷史紀錄 -->
+<h2 style="margin-top: 40px;">已批准的延期歷史紀錄</h2>
+<table>
+    <thead>
+        <tr>
+            <th>申請 ID</th>
+            <th>專案名稱</th>
+            <th>延後至</th>
+            <th>審核時間</th>
+            <th>管理員回應</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // 資料庫連線
+        $conn = new mysqli("localhost", "root", "", "system_project");
+        if ($conn->connect_error) {
+            die("資料庫連線失敗: " . $conn->connect_error);
+        }
+
+        // 搜尋條件
+        $approved_search = isset($_GET['approved_search']) ? $conn->real_escape_string($_GET['approved_search']) : '';
+
+        // 分頁邏輯
+        $approved_limit = 4; // 每頁顯示 4 筆資料
+        $approved_page = isset($_GET['approved_page']) ? intval($_GET['approved_page']) : 1;
+        $approved_offset = ($approved_page - 1) * $approved_limit;
+
+        // 查詢已批准的延期申請
+        $approved_sql = "SELECT fer.id, fp.title, fer.requested_extension_date, fer.created_at, fer.admin_response 
+                         FROM fundraising_extension_requests fer
+                         JOIN fundraising_projects fp ON fer.fundraising_project_id = fp.project_id
+                         WHERE fer.status = '已接受'";
+
+        if (!empty($approved_search)) {
+            $approved_sql .= " AND (fp.title LIKE '%$approved_search%' OR fer.admin_response LIKE '%$approved_search%')";
+        }
+
+        $approved_sql .= " LIMIT $approved_limit OFFSET $approved_offset";
+        $approved_result = $conn->query($approved_sql);
+
+        if ($approved_result->num_rows > 0) {
+            while ($row = $approved_result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['title']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['requested_extension_date']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                echo "<td>" . nl2br(htmlspecialchars($row['admin_response'])) . "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='5'>目前沒有已批准的延期紀錄。</td></tr>";
+        }
+
+        // 計算總頁數
+        $approved_total_sql = "SELECT COUNT(*) AS total FROM fundraising_extension_requests fer
+                               JOIN fundraising_projects fp ON fer.fundraising_project_id = fp.project_id
+                               WHERE fer.status = '已接受'";
+        if (!empty($approved_search)) {
+            $approved_total_sql .= " AND (fp.title LIKE '%$approved_search%' OR fer.admin_response LIKE '%$approved_search%')";
+        }
+        $approved_total_result = $conn->query($approved_total_sql);
+        $approved_total_row = $approved_total_result->fetch_assoc();
+        $approved_total_pages = ceil($approved_total_row['total'] / $approved_limit);
+
+        $conn->close();
+        ?>
+    </tbody>
+</table>
+
+<!-- 分頁 -->
+<div class="pagination">
+    <?php for ($i = 1; $i <= $approved_total_pages; $i++): ?>
+        <a href="review_extension_requests.php?approved_page=<?php echo $i; ?>&approved_search=<?php echo htmlspecialchars($approved_search); ?>" class="<?php echo $i == $approved_page ? 'active' : ''; ?>">
+            <?php echo $i; ?>
+        </a>
+    <?php endfor; ?>
+</div>
+    </div>
+</body>
+
+</html>

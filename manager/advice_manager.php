@@ -1,5 +1,5 @@
 <?php
-// session_start();
+session_start();
 // // 檢查是否已登入
 // if (!isset($_SESSION['user_id'])) {
 //     header("Location: login.php");
@@ -111,7 +111,7 @@ $total_pages = ceil($total_rows / $limit);
 
         /* 頁面內容 */
         .content {
-            margin-left: 280px;
+            /* margin-left: 280px; */
             padding: 20px;
             width: calc(100% - 250px);
         }
@@ -232,18 +232,7 @@ $total_pages = ceil($total_rows / $limit);
     </div>
 
     <!-- 頁面內容 -->
-    <div class="content">
-        <!-- 頭部 -->
-        <div class="header">
-            <div class="profile">
-                <img src="../img/logo.png" alt="頭像" onclick="toggleDropdown()">
-                <div class="dropdown" id="dropdownMenu">
-                    <a href="#">個人資料</a>
-                    <a href="#">設定</a>
-                    <a href="#">登出</a>
-                </div>
-            </div>
-        </div>
+    <?php include 'header.php'; ?>
 
         <!-- 搜尋表單 -->
         <form method="GET" action="advice_manager.php" style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding: 20px;">
