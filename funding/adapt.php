@@ -399,18 +399,7 @@ if (!$result) {
     </div>
 
     <!-- 個人資訊區 -->
-     <?php
-    // 獲取使用者名稱
-    $stmt = $conn->prepare("SELECT name,department FROM users WHERE user_id = ?");
-    if (!$stmt) {
-        die("SQL 準備失敗：" . $conn->error);
-    }
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($name,$department);
-    $stmt->fetch();
-    $stmt->close();
-    ?>
+    
     
 
     <div class="content">
@@ -429,7 +418,7 @@ if (!$result) {
             <?php if ($result->num_rows > 0): ?>
                 <?php while ($advice = $result->fetch_assoc()): ?>
                     <div class="card">
-                        <h3>建言 ID: <?php echo htmlspecialchars($advice['advice_id']); ?></h3>
+                        <?php echo "<h3><a href='../advice_detail.php?advice_id=" . htmlspecialchars($advice['advice_id']) . "' style='color: #007BFF; text-decoration: none;'>(點擊查看)建言 ID: " . htmlspecialchars($advice['advice_id']) . "</a></h3>"; ?>
                         <p><strong>建言人:</strong> <?php echo htmlspecialchars($advice['user_id']); ?></p>
                         <p><strong>建言內容:</strong> <?php echo htmlspecialchars($advice['advice_title']); ?></p>
                         <p><strong>覆議次數:</strong> <?php echo htmlspecialchars($advice['agree']); ?></p>

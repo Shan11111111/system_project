@@ -1,72 +1,92 @@
 <?php
-                // 資料庫連線
-                $conn = new mysqli("localhost", "root", "", "system_project");
-                if ($conn->connect_error) {
-                    die("資料庫連線失敗: " . $conn->connect_error);
-                }
+// 資料庫連線
+$conn = new mysqli("localhost", "root", "", "system_project");
+if ($conn->connect_error) {
+    die("資料庫連線失敗: " . $conn->connect_error);
+}
 
-                // 啟動 Session
-                session_start();
-                $office_id = $_SESSION['user_id'];
+// 啟動 Session
+session_start();
+$office_id = $_SESSION['user_id'];
 
-                // 引入個人資料模組
-                // include 'profile_module.php';
+// 引入個人資料模組
+// include 'profile_module.php';
 
-                // 每頁顯示的記錄數量
-                $records_per_page = 4;
+// 每頁顯示的記錄數量
+$records_per_page = 4;
 
-                // 獲取當前頁數，預設為第 1 頁
-                $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                if ($current_page < 1) {
-                    $current_page = 1;
-                }
+// 獲取當前頁數，預設為第 1 頁
+$current_page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+if ($current_page < 1) {
+    $current_page = 1;
+}
 
-                // 計算偏移量
-                $offset = ($current_page - 1) * $records_per_page;
+// 計算偏移量
+$offset = ($current_page - 1) * $records_per_page;
 
-                // 搜尋條件
-                $search = isset($_GET['search']) ? $_GET['search'] : '';
+// 搜尋條件
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$status = isset($_GET['status']) ? $_GET['status'] : '';
 
-                // 計算總記錄數
-                $count_sql = "SELECT COUNT(*) AS total FROM suggestion_assignments sa
+// 計算總記錄數
+$count_sql = "SELECT COUNT(*) AS total FROM suggestion_assignments sa
                               JOIN advice a ON sa.advice_id = a.advice_id
                               WHERE sa.office_id = ?";
-                if (!empty($search)) {
-                    $count_sql .= " AND (a.advice_title LIKE ? OR sa.advice_id LIKE ?)";
-                }
-                $count_stmt = $conn->prepare($count_sql);
-                if (!empty($search)) {
-                    $search_param = '%' . $search . '%';
-                    $count_stmt->bind_param("iss", $office_id, $search_param, $search_param);
-                } else {
-                    $count_stmt->bind_param("i", $office_id);
-                }
-                $count_stmt->execute();
-                $count_result = $count_stmt->get_result();
-                $total_records = $count_result->fetch_assoc()['total'];
-                $total_pages = ceil($total_records / $records_per_page); // 計算總頁數
-                $count_stmt->close();
+// 更新 SQL 查詢條件
+if (!empty($search)) {
+    $count_sql .= " AND (a.advice_title LIKE ? OR sa.advice_id LIKE ?)";
+}
+if (!empty($status)) {
+    $count_sql .= " AND sa.status = ?";
+}
+$count_stmt = $conn->prepare($count_sql);
+// 綁定參數
+if (!empty($search) && !empty($status)) {
+    $search_param = '%' . $search . '%';
+    $count_stmt->bind_param("isss", $office_id, $search_param, $search_param, $status);
+} elseif (!empty($search)) {
+    $search_param = '%' . $search . '%';
+    $count_stmt->bind_param("iss", $office_id, $search_param, $search_param);
+} elseif (!empty($status)) {
+    $count_stmt->bind_param("is", $office_id, $status);
+} else {
+    $count_stmt->bind_param("i", $office_id);
+}
+$count_stmt->execute();
+$count_result = $count_stmt->get_result();
+$total_records = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $records_per_page); // 計算總頁數
+$count_stmt->close();
 
-                // 查詢分派給該處所的建言
-                $sql = "SELECT sa.suggestion_assignments_id, sa.advice_id, a.advice_title, sa.status, sa.notification, sa.admin_feedback 
+// 查詢分派給該處所的建言
+$sql = "SELECT sa.suggestion_assignments_id, sa.advice_id, a.advice_title, sa.status, sa.notification, sa.admin_feedback 
                         FROM suggestion_assignments sa
                         JOIN advice a ON sa.advice_id = a.advice_id
                         WHERE sa.office_id = ?";
-                if (!empty($search)) {
-                    $sql .= " AND (a.advice_title LIKE ? OR sa.advice_id LIKE ?)";
-                }
-                $sql .= " ORDER BY sa.suggestion_assignments_id DESC LIMIT ? OFFSET ?";
+if (!empty($search)) {
+    $sql .= " AND (a.advice_title LIKE ? OR sa.advice_id LIKE ?)";
+}
+if (!empty($status)) {
+    $sql .= " AND sa.status = ?";
+}
+$sql .= " ORDER BY sa.suggestion_assignments_id DESC LIMIT ? OFFSET ?";
 
-                $stmt = $conn->prepare($sql);
-                if (!empty($search)) {
-                    $stmt->bind_param("issii", $office_id, $search_param, $search_param, $records_per_page, $offset);
-                } else {
-                    $stmt->bind_param("iii", $office_id, $records_per_page, $offset);
-                }
-                $stmt->execute();
-                $result = $stmt->get_result();
-                
-                ?>
+$stmt = $conn->prepare($sql);
+if (!empty($search) && !empty($status)) {
+    $search_param = '%' . $search . '%';
+    $stmt->bind_param("issii", $office_id, $search_param, $search_param, $status, $records_per_page, $offset);
+} elseif (!empty($search)) {
+    $search_param = '%' . $search . '%';
+    $stmt->bind_param("issii", $office_id, $search_param, $search_param, $records_per_page, $offset);
+} elseif (!empty($status)) {
+    $stmt->bind_param("isii", $office_id, $status, $records_per_page, $offset);
+} else {
+    $stmt->bind_param("iii", $office_id, $records_per_page, $offset);
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+?>
 <!DOCTYPE html>
 <html lang="zh-tw">
 
@@ -146,6 +166,29 @@
 
         .search-bar button:hover {
             background-color: #0056b3;
+        }
+
+        /* 美化下拉選單 */
+        .search-bar select {
+            padding: 8px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 1em;
+            color: #333;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"%3E%3Cpath fill="%23333" d="M2 0L0 2h4z" /%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 10px;
+            cursor: pointer;
+        }
+
+        .search-bar select:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
         /* 表格樣式 */
@@ -279,6 +322,64 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+
+        /* 頭部個人資訊區 */
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-info p {
+            margin: 0;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .profile img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            z-index: 1000;
+            width: 150px;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .dropdown a:hover {
+            background-color: rgb(159, 193, 255);
+        }
     </style>
 </head>
 
@@ -296,12 +397,23 @@
         <a href="data">數據分析</a>
     </div>
 
+
+
     <!-- 頁面內容 -->
     <div class="content">
         <h1>處所被分派之建言</h1>
+        <!-- 搜尋表單 -->
         <div class="search-bar">
             <form action="office_assignments.php" method="GET">
-                <input type="text" name="search" placeholder="輸入建言 ID 或標題進行搜尋" value="<?php echo htmlspecialchars($search); ?>">
+                <input type="text" name="search" placeholder="輸入建言 ID 或標題進行搜尋"
+                    value="<?php echo htmlspecialchars($search); ?>">
+                <select name="status">
+                    <option value="">所有狀態</option>
+                    <option value="草擬中" <?php echo $status === '草擬中' ? 'selected' : ''; ?>>草擬中</option>
+                    <option value="被退回" <?php echo $status === '被退回' ? 'selected' : ''; ?>>被退回</option>
+                    <option value="審核中" <?php echo $status === '審核中' ? 'selected' : ''; ?>>審核中</option>
+                    <option value="已通過" <?php echo $status === '已通過' ? 'selected' : ''; ?>>已通過</option>
+                </select>
                 <button type="submit">搜尋</button>
             </form>
         </div>
@@ -315,7 +427,7 @@
                     echo "<h3><a href='../advice_detail.php?advice_id=" . $row['advice_id'] . "' style='color: #007BFF; text-decoration: none;'>(點擊查看)建言 ID: " . htmlspecialchars($row['advice_id']) . "</a></h3>";
                     echo "<p><strong>建言標題:</strong> " . htmlspecialchars($row['advice_title']) . "</p>";
                     // echo "<p><strong>狀態:</strong> " . htmlspecialchars($row['status']) . "</p>";
-
+            
                     // 操作按鈕
                     echo "<div class='actions'>狀態:";
                     if ($row['notification']) {
@@ -357,18 +469,18 @@
         <!-- 分頁按鈕 -->
         <div class="pagination">
             <?php if ($current_page > 1): ?>
-                <a href="?page=<?php echo $current_page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>">上一頁</a>
+                <a href="?page=<?php echo $current_page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">上一頁</a>
             <?php endif; ?>
 
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>" 
-                   class="<?php echo $i === $current_page ? 'active' : ''; ?>">
-                   <?php echo $i; ?>
+                <a href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>"
+                    class="<?php echo $i === $current_page ? 'active' : ''; ?>">
+                    <?php echo $i; ?>
                 </a>
             <?php endfor; ?>
 
             <?php if ($current_page < $total_pages): ?>
-                <a href="?page=<?php echo $current_page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>">下一頁</a>
+                <a href="?page=<?php echo $current_page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">下一頁</a>
             <?php endif; ?>
         </div>
     </div>
