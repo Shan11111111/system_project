@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-07 12:14:48
+-- 產生時間： 2025-05-08 17:02:04
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -238,6 +238,21 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (71, 333333, 55),
 (72, 333333, 46),
 (73, 412402141, 60);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `announcement`
+--
+
+CREATE TABLE `announcement` (
+  `announcement_id` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `category` enum('建言','募資','系統') NOT NULL,
+  `update_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -676,6 +691,13 @@ ALTER TABLE `agree_record`
   ADD KEY `advice_id` (`advice_id`);
 
 --
+-- 資料表索引 `announcement`
+--
+ALTER TABLE `announcement`
+  ADD PRIMARY KEY (`announcement_id`),
+  ADD KEY `user_id` (`user_id`) USING BTREE;
+
+--
 -- 資料表索引 `collection`
 --
 ALTER TABLE `collection`
@@ -797,6 +819,12 @@ ALTER TABLE `advice_state`
 --
 ALTER TABLE `agree_record`
   MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `announcement`
+--
+ALTER TABLE `announcement`
+  MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
