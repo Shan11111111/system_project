@@ -441,13 +441,13 @@
 
                 if ($progress_result && $progress_result->num_rows > 0) {
                     while ($progress = $progress_result->fetch_assoc()) {
-                        echo '<div class="progress-card">';
+                        echo '<div class="progress-card" onclick="showFullContent(this)" data-full-content="' . htmlspecialchars($progress['content']) . '" data-title="' . htmlspecialchars($progress['title']) . '">';
                         echo '    <div class="progress-header">';
                         echo '        <h3 class="progress-title">' . htmlspecialchars($progress['title']) . '</h3>';
                         echo '        <span class="progress-date">' . htmlspecialchars($progress['updated_time']) . '</span>';
                         echo '    </div>';
                         echo '    <div class="progress-content">';
-                        echo '        ' . nl2br(htmlspecialchars($progress['content']));
+                        echo '        <div class="content-preview">' . nl2br(htmlspecialchars(mb_substr($progress['content'], 0, 100))) . '...</div>';
                         echo '    </div>';
                         if (!empty($progress['file_path'])) {
                             echo '    <div class="progress-footer">';
@@ -714,6 +714,22 @@
             item.classList.toggle('open');
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    function showFullContent(element) {
+        const fullContent = element.getAttribute('data-full-content');
+        const title = element.getAttribute('data-title'); // 獲取回報的標題
+        Swal.fire({
+            title: title, // 使用回報的標題
+            html: `<div style="text-align: left;">${fullContent.replace(/\n/g, '<br>')}</div>`,
+            confirmButtonText: '關閉',
+            confirmButtonColor: '#3085d6',
+        });
+    }
+</script>
+
+
 
 </body>
 

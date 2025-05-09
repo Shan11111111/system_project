@@ -15,26 +15,20 @@ $office_id = $_SESSION['user_id'];
 // 確認募資專案狀態
 $project_id = isset($_GET['project_id']) ? intval($_GET['project_id']) : 0;
 
-$sql = "SELECT status 
-        FROM fundraising_projects 
-        WHERE project_id = ?";
-$stmt = $conn->prepare($sql);
+// 查詢所有已完成的募資專案
+$completed_projects_sql = "SELECT project_id, title, description, funding_goal, start_date, end_date 
+                           FROM fundraising_projects 
+                           WHERE status = '已完成'";
+$completed_projects_result = $conn->query($completed_projects_sql);
 
-if (!$stmt) {
-    die("SQL 錯誤：" . $conn->error);
-}
-
-$stmt->bind_param("i", $project_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$project = $result->fetch_assoc();
 
 $status_message = "";
-if (!$project) {
+if ($completed_projects_result->num_rows === 0) {
     $status_message = "目前沒有已完成專案。";
-} elseif ($project['status'] !== '已完成') {
-    $status_message = "注意：此專案尚未完成，您仍可提交回報。";
+} else {
+    $status_message = "此專案已完成，您可以提交回報。";
 }
+
 
 // 處理表單提交
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -91,14 +85,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>募資專案進度回報</title>
 
     <style>
-        /* 保留原有的 CSS */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
+            background-color: #f4f4f9;
         }
 
+        /* 左側導覽列 */
         .sidebar {
             width: 250px;
             background-color: #007BFF;
@@ -112,37 +107,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .sidebar h2 {
-            margin: 0 0 20px;
-            font-size: 24px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .sidebar a {
             display: block;
             color: #fff;
             text-decoration: none;
-            margin: 10px 0;
-            padding: 10px;
+            padding: 10px 15px;
+            margin: 5px 0;
             border-radius: 4px;
-            transition: background-color 0.3s;
         }
 
         .sidebar a:hover {
             background-color: #0056b3;
         }
 
+        /* 頁面內容 */
         .content {
             margin-left: 280px;
             padding: 20px;
-            width: calc(100% - 250px);
+            width: calc(100% - 280px);
         }
 
+        h1,
+        h2 {
+            text-align: center;
+            color: #f9f9f9;
+        }
+
+        /* 表格樣式 */
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #007BFF;
+            color: #fff;
         }
 
         th,
@@ -152,13 +158,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ddd;
         }
 
+        th {
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: rgb(167, 185, 255);
+        }
+
+        /* 表單樣式 */
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #007BFF;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
         button {
-            padding: 8px 12px;
+            width: 100%;
+            padding: 10px;
             background-color: #007BFF;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
 
         button:hover {
@@ -171,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ddd;
             background-color: #f9f9f9;
             color: #333;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -200,20 +258,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
+        <!-- 已完成專案清單 -->
+        <h2>已完成的募資專案</h2>
+        <?php if ($completed_projects_result->num_rows > 0) : ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>專案 ID</th>
+                        <th>標題</th>
+                        <th>描述</th>
+                        <th>募資目標</th>
+                        <th>開始日期</th>
+                        <th>結束日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $completed_projects_result->fetch_assoc()) : ?>
+                        <tr>
+                            <td>
+                                <a href="../funding_detail.php?project_id=<?php echo htmlspecialchars($row['project_id']); ?>">
+                                    <?php echo htmlspecialchars($row['project_id']); ?>
+                                </a>
+                            </td>
+                            <td><?php echo htmlspecialchars($row['title']); ?></td>
+                            <td><?php echo htmlspecialchars($row['description']); ?></td>
+                            <td><?php echo htmlspecialchars($row['funding_goal']); ?></td>
+                            <td><?php echo htmlspecialchars($row['start_date']); ?></td>
+                            <td><?php echo htmlspecialchars($row['end_date']); ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        <?php else : ?>
+            <p>目前沒有已完成的募資專案。</p>
+        <?php endif; ?>
+
         <!-- 回報表單 -->
+        <h2>提交回報</h2>
         <form action="" method="POST" enctype="multipart/form-data">
-            <label for="title">回報標題：</label><br>
-            <input type="text" id="title" name="title" required><br><br>
+            <?php
+            // 重新執行查詢以獲取已完成的專案
+            $completed_projects_result = $conn->query($completed_projects_sql);
+            ?>
+            <label for="project_id">選擇專案：</label>
+            <select id="project_id" name="project_id" required>
+                <option value="">請選擇專案</option>
+                <?php while ($row = $completed_projects_result->fetch_assoc()) : ?>
+                    <option value="<?php echo htmlspecialchars($row['project_id']); ?>">
+                        <?php echo htmlspecialchars($row['title']); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
 
-            <label for="content">回報內容：</label><br>
-            <textarea id="content" name="content" rows="5" required></textarea><br><br>
+            <label for="title">回報標題：</label>
+            <input type="text" id="title" name="title" required>
 
-            <label for="file">上傳附件：</label><br>
-            <input type="file" id="file" name="file"><br><br>
+            <label for="content">回報內容：</label>
+            <textarea id="content" name="content" rows="5" required></textarea>
+
+            <label for="file">上傳附件：</label>
+            <input type="file" id="file" name="file">
 
             <button type="submit">提交回報</button>
         </form>
     </div>
+
 </body>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const projectId = document.getElementById('project_id').value;
+        if (!projectId) {
+            e.preventDefault();
+            alert('請選擇一個專案！');
+        }
+    });
+</script>
+
 
 </html>
