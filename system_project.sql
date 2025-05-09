@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-08 17:02:04
+-- 產生時間： 2025-05-09 16:28:28
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -45,7 +45,7 @@ CREATE TABLE `advice` (
 INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, `agree`, `category`, `advice_state`, `announce_date`) VALUES
 (24, 333333, 'gggg', '社團需要被企業看到，希望學校可以和更多企業合作', 3, 'club', '已分派', '2025-04-15'),
 (25, 333333, '學術發展', '我們應該積極讓我們的學生去比賽，如果學校沒供給錢做研究，大學會沒有競爭力', 0, 'academic', '未處理', '2025-04-18'),
-(26, 333333, '55', '超愛丟垃圾', 1, 'environment', '未處理', '2025-04-19'),
+(26, 333333, '55', '超愛丟垃圾', 3, 'environment', '未處理', '2025-04-19'),
 (27, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 1, 'environment', '未處理', '2025-04-19'),
 (32, 333333, 'ppp', 'ppp', 1, 'welfare', '未處理', '2025-04-19'),
 (33, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
@@ -61,7 +61,7 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (43, 333333, '設立休息區', '休息沒空間', 2, 'other', '未處理', '2025-04-19'),
 (44, 333333, '舉辦文化週', '交流太少', 3, 'other', '已分派', '2025-04-19'),
 (45, 333333, 'zjgojrzjjrg', 'zjgrogjigjjgojgji', 3, 'environment', '未處理', '2025-04-22'),
-(46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 2, 'welfare', '未處理', '2025-04-22'),
+(46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 3, 'welfare', '未處理', '2025-04-22'),
 (47, 412402141, '55', 'gOEJOJejoto', 0, 'welfare', '未處理', '2025-04-22'),
 (48, 412402141, 'jgozjojojoj', 'gjogjjgjgjojg', 0, 'academic', '未處理', '2025-04-22'),
 (49, 412402141, 'jwojajgjagjojg', 'gojaogjjagjjagjgjoojgj', 1, 'environment', '未處理', '2025-04-22'),
@@ -79,7 +79,19 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (61, 904, '提出建言', '提出建言', 0, 'academic', '未處理', '2025-04-29'),
 (62, 412402141, '一起救地球', '我們希望學校能夠發起學生救地球團體，前往各地參與各式各樣的環保行動', 0, 'environment', '未處理', '2025-05-07'),
 (63, 412402141, '一起玩音樂', '我們希望學校可以撥補一些場地與設備給我們熱門音樂社，我們的團員渴望有一個舞台，讓更多人發現他們的閃亮點!', 0, 'club', '未處理', '2025-05-07'),
-(64, 412402141, '我們希望可以得到贊助', '親愛的校方、師長好，我們是輔仁大學享食冰箱的負責人，近期發現越來越少人捐贈食物，很多人都向我們反映，學生的手頭經濟不充裕，我們希望可以藉由這個贊助幫助我們學校惡肚子的學生，謝謝大家的幫助TwT', 0, 'other', '未處理', '2025-05-07');
+(64, 412402141, '我們希望可以得到贊助', '親愛的校方、師長好，我們是輔仁大學享食冰箱的負責人，近期發現越來越少人捐贈食物，很多人都向我們反映，學生的手頭經濟不充裕，我們希望可以藉由這個贊助幫助我們學校惡肚子的學生，謝謝大家的幫助TwT', 0, 'other', '未處理', '2025-05-07'),
+(65, 412402141, '增加夜間自習教室數量', '目前圖書館晚上座位不足，建議開放更多教室供夜間自習，或延長開放時間', 2, 'equipment', '未處理', '2025-05-09'),
+(66, 412402141, '推出健康飲食選項', '希望學校合作餐廳提供更多低糖、低油、低鈉的餐點選擇，幫助學生維持健康飲食。', 3, 'other', '未處理', '2025-05-09'),
+(67, 409100001, '設置校園雨天地墊防滑措施', '下雨天走廊地面濕滑，建議放置止滑墊或改善排水設計以防止學生滑倒。', 3, 'equipment', '未處理', '2025-05-09'),
+(68, 409100001, '改善宿舍網路速度', '宿舍網路常常延遲嚴重，建議學校升級設備或提供多個頻道分流使用。', 1, 'equipment', '未處理', '2025-05-09'),
+(69, 409100001, '設立二手書交換平台', '學生每學期都需購買新書，建議建立線上平台讓學長姐轉售舊書給學弟妹。', 3, 'environment', '未處理', '2025-05-09'),
+(70, 409100001, '改善課堂投影片品質', '部分老師使用的投影片文字過多或排版不佳，建議統一培訓教學簡報設計原則。', 3, 'academic', '未處理', '2025-05-09'),
+(71, 409100001, '改善校園APP介面', '目前校園APP使用體驗不佳，建議重新設計UI/UX，讓查課表、查成績更直覺。', 2, 'other', '未處理', '2025-05-09'),
+(72, 409100001, '推行教室節能減碳計畫', '建議安裝節能燈具，並鼓勵學生下課關燈、空調溫度調整至26度以降低耗能。', 1, 'environment', '未處理', '2025-05-09'),
+(73, 412301092, '校園電梯壅塞問題改善', '上下課時段電梯過於擁擠，建議改用單層停靠或分層使用方式疏通人流。', 2, 'academic', '未處理', '2025-05-09'),
+(74, 412301092, '建議考試週實施減課制度', '期末週課業與考試壓力大，建議減少不必要課程，讓學生有更多準備時間。', 1, 'academic', '未處理', '2025-05-09'),
+(75, 412301092, '設立創意實作補助計畫', '希望學校提供小額創作或研究補助，鼓勵學生提出創新點子並實踐。', 0, 'academic', '未處理', '2025-05-09'),
+(76, 412301092, '環保愛地球', '希望學校發放免費的環保餐具', 0, 'environment', '未處理', '2025-05-09');
 
 -- --------------------------------------------------------
 
@@ -128,7 +140,11 @@ INSERT INTO `advice_image` (`img_id`, `file_name`, `file_path`, `advice_id`) VAL
 (32, 'S.png', 'uploads/68108aa9433c01.51546450.png', 61),
 (33, 'S__23527436.jpg', 'uploads/681b2fc96c4037.95908169.jpg', 62),
 (34, '唱歌.jpg', 'uploads/681b30ec11ba20.91962390.jpg', 63),
-(35, '御飯糰.jpeg', 'uploads/681b323a6a1d22.86093358.jpeg', 64);
+(35, '御飯糰.jpeg', 'uploads/681b323a6a1d22.86093358.jpeg', 64),
+(36, 'S__9764870.jpg', 'uploads/681e08382e8382.13230659.jpg', 66),
+(37, 'S__9764870.jpg', 'uploads/681e0a4aa13171.83662066.jpg', 73),
+(38, 'S__9764870.jpg', 'uploads/681e0a6bb66216.78288731.jpg', 74),
+(39, 'S__9764872.jpg', 'uploads/681e0a9a2e77a4.66277482.jpg', 75);
 
 -- --------------------------------------------------------
 
@@ -163,7 +179,13 @@ INSERT INTO `advice_state` (`advice_state_id`, `content`, `advice_id`, `state_ti
 (13, '附議達標', 52, '2025-04-29 16:16:56'),
 (14, '校方已回應', 52, '2025-04-29 16:19:28'),
 (15, '附議達標', 55, '2025-04-29 18:56:48'),
-(16, '附議達標', 60, '2025-05-07 17:59:54');
+(16, '附議達標', 60, '2025-05-07 17:59:54'),
+(17, '附議達標', 46, '2025-05-09 22:10:05'),
+(18, '附議達標', 70, '2025-05-09 22:14:18'),
+(19, '附議達標', 66, '2025-05-09 22:14:29'),
+(20, '附議達標', 26, '2025-05-09 22:15:34'),
+(21, '附議達標', 69, '2025-05-09 22:17:32'),
+(22, '附議達標', 67, '2025-05-09 22:19:38');
 
 -- --------------------------------------------------------
 
@@ -237,7 +259,31 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (70, 412402012, 52),
 (71, 333333, 55),
 (72, 333333, 46),
-(73, 412402141, 60);
+(73, 412402141, 60),
+(74, 409100001, 66),
+(75, 409100001, 65),
+(76, 409100001, 70),
+(77, 409100001, 68),
+(78, 409100001, 72),
+(79, 412301092, 73),
+(80, 412301092, 67),
+(81, 412301092, 26),
+(82, 412301092, 65),
+(83, 412301092, 69),
+(84, 412301092, 66),
+(85, 412301092, 70),
+(86, 412301092, 71),
+(87, 412301092, 46),
+(88, 412301092, 74),
+(89, 512020220, 69),
+(90, 512020220, 70),
+(91, 512020220, 66),
+(92, 512020220, 71),
+(93, 512020220, 67),
+(94, 512020220, 73),
+(95, 512020220, 26),
+(96, 333333, 69),
+(97, 333333, 67);
 
 -- --------------------------------------------------------
 
@@ -273,7 +319,9 @@ CREATE TABLE `collection` (
 
 INSERT INTO `collection` (`collection_id`, `advice_id`, `user_id`, `collection_created_at`) VALUES
 (1, 61, 333333, '2025-05-03 23:17:45'),
-(2, 58, 333333, '2025-05-03 23:45:45');
+(2, 58, 333333, '2025-05-03 23:45:45'),
+(3, 66, 409100001, '2025-05-09 21:54:47'),
+(4, 65, 412301092, '2025-05-09 22:04:03');
 
 -- --------------------------------------------------------
 
@@ -403,7 +451,8 @@ INSERT INTO `files` (`file_id`, `file_name`, `file_path`, `advice_id`) VALUES
 (2, '選課類別變動申請書.pdf', 'file_upload/68072a883f9a56.08837058.pdf', 45),
 (3, '選課類別變動申請書.pdf', 'file_upload/680a28881bb8b9.22274312.pdf', 55),
 (4, '選課類別變動申請書.pdf', 'file_upload/680a297b72d683.04934517.pdf', 56),
-(5, '輔系公告.pdf', 'file_upload/68108aa9461d27.10873957.pdf', 61);
+(5, '輔系公告.pdf', 'file_upload/68108aa9461d27.10873957.pdf', 61),
+(6, '選課類別變動申請書.pdf', 'file_upload/681e09131b8e24.27015869.pdf', 72);
 
 -- --------------------------------------------------------
 
@@ -650,13 +699,15 @@ INSERT INTO `users` (`user_id`, `password`, `name`, `level`, `email`, `departmen
 (409100001, '409100001', '王靜', 'student', '409100001@gmail.com', '外國語文學院'),
 (410101001, '410101001', '王安', 'student', 'abc@gmail.com', '傳播學院'),
 (411100011, '411100011', '王傑明', 'student', 'abc@gmail.com', '文學院'),
+(412301092, '412301092', '412301092', 'student', 'abc@gmail.com', '傳播學院'),
 (412380012, '444aa', '吉伊卡娃', 'student', 'a@gmail.com', '藝術學院'),
 (412401011, '412401011', '王同學', 'student', 'abc@gmail.com', '藝術學院'),
 (412402001, '412402001', '王小明', 'student', 'example@gmail.com', '資訊管理學系'),
 (412402002, 'sss', '吉伊卡娃二號', 'student', 'abc@gmail.com', '文學院'),
 (412402012, '012', '郭同學', 'student', 'sss@gmail.com', '管理學院'),
 (412402141, 'sss', ':0', 'student', 'abcd@gmail.com', '管理學院'),
-(413010021, '413010021', '王靜', 'student', '1@gmail.com', '醫學院');
+(413010021, '413010021', '王靜', 'student', '1@gmail.com', '醫學院'),
+(512020220, '512020220', '哀人', 'student', 'abc@gmail.com', '管理學院');
 
 --
 -- 已傾印資料表的索引
@@ -800,25 +851,25 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice`
 --
 ALTER TABLE `advice`
-  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `advice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_image`
 --
 ALTER TABLE `advice_image`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_state`
 --
 ALTER TABLE `advice_state`
-  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `announcement`
@@ -830,7 +881,7 @@ ALTER TABLE `announcement`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
 --
 ALTER TABLE `collection`
-  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
@@ -854,7 +905,7 @@ ALTER TABLE `execution_report`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
 --
 ALTER TABLE `files`
-  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_comments`

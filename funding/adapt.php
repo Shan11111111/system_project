@@ -40,7 +40,7 @@ $offset = ($page - 1) * $limit;
 // 更新查詢語句，加入 LIMIT 和 OFFSET
 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
 
-$sql = "SELECT user_id, advice_state, announce_date, advice.advice_id, advice_title, agree, state_time 
+$sql = "SELECT user_id, advice_state,category, announce_date, advice.advice_id, advice_title, agree, state_time 
         FROM advice
         INNER JOIN advice_state
         ON advice.advice_id = advice_state.advice_id
@@ -399,8 +399,8 @@ if (!$result) {
     </div>
 
     <!-- 個人資訊區 -->
-    
-    
+
+
 
     <div class="content">
         <h1>可認領的建言</h1>
@@ -408,7 +408,8 @@ if (!$result) {
         <!-- 搜尋欄 -->
         <div class="search-bar">
             <form action="adapt.php" method="GET">
-                <input type="text" name="search" placeholder="搜尋建言..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <input type="text" name="search" placeholder="搜尋建言..."
+                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                 <button type="submit">搜尋</button>
             </form>
         </div>
@@ -417,12 +418,23 @@ if (!$result) {
         <div class="card-container">
             <?php if ($result->num_rows > 0): ?>
                 <?php while ($advice = $result->fetch_assoc()): ?>
+
                     <div class="card">
-                        <?php echo "<h3><a href='../advice_detail.php?advice_id=" . htmlspecialchars($advice['advice_id']) . "' style='color: #007BFF; text-decoration: none;'>(點擊查看)建言 ID: " . htmlspecialchars($advice['advice_id']) . "</a></h3>"; ?>
+                        <?php echo "<h3><a href='../advice_detail.php?advice_id=" . htmlspecialchars($advice['advice_id']) . "' style='color: #007BFF; text-decoration: none;'>(點擊查看)建言 ID: " . htmlspecialchars($advice['advice_id']) . "</a></h3>";
+                        $categoryMap = [
+                            "all" => "全部分類",
+                            "equipment" => "設施改善",
+                            "academic" => "學術發展",
+                            "club" => "社團活動",
+                            "welfare" => "公益關懷",
+                            "environment" => "環保永續",
+                            "other" => "其他"
+                        ]; ?>
                         <p><strong>建言人:</strong> <?php echo htmlspecialchars($advice['user_id']); ?></p>
                         <p><strong>建言內容:</strong> <?php echo htmlspecialchars($advice['advice_title']); ?></p>
                         <p><strong>覆議次數:</strong> <?php echo htmlspecialchars($advice['agree']); ?></p>
-                        <p><strong>建言狀態:</strong> <?php echo htmlspecialchars($advice['advice_state']); ?></p>
+                        <p><strong>建言分類:</strong> <?php echo htmlspecialchars($categoryMap[$advice['category']] ?? '未知分類'); ?>
+                        </p>
                         <p><strong>達成時間:</strong> <?php echo htmlspecialchars($advice['state_time']); ?></p>
                         <form action="office_adapt.php" method="POST">
                             <input type="hidden" name="advice_id" value="<?php echo htmlspecialchars($advice['advice_id']); ?>">
