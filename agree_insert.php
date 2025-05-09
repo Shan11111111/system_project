@@ -36,13 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>動態網頁專案</title>
+            <title>處理中...</title>
             <link rel="stylesheet" href="css/styles.css">
         </head>
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">您已附議過了~~請勿重複附議!</p>
             </div>
@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">收到您的附議了! 附議成功!</p>
             </div>

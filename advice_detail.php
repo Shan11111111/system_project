@@ -816,7 +816,7 @@
 
 <!-- Fixed 按鈕 -->
 <div class="fixed-buttons">
-    <button class="back-btn" onclick="window.location.href='advice_search.php'"><i class="fa-solid fa-arrow-left"></i>
+    <button class="back-btn"onclick="history.back()"><i class="fa-solid fa-arrow-left"></i>
         <span>返回</span>
     </button>
     <!--

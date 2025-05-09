@@ -65,13 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>動態網頁專案</title>
+            <title>處理中...</title>
             <link rel="stylesheet" href="css/styles.css">
         </head>
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">請填寫全部! 重新導向中~~~</p>
             </div>
@@ -136,13 +136,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>動態網頁專案</title>
+            <title>處理中...</title>
             <link rel="stylesheet" href="css/styles.css">
         </head>
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">上傳成功! 資料處理中~~~</p>
             </div>
