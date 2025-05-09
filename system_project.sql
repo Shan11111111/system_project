@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-09 16:28:28
+-- 產生時間： 2025-05-09 18:16:36
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -296,9 +296,17 @@ CREATE TABLE `announcement` (
   `title` varchar(100) NOT NULL,
   `content` varchar(255) NOT NULL,
   `category` enum('建言','募資','系統') NOT NULL,
-  `update_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `user_id` int(11) NOT NULL
+  `file_path` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `update_at` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 傾印資料表的資料 `announcement`
+--
+
+INSERT INTO `announcement` (`announcement_id`, `title`, `content`, `category`, `file_path`, `user_id`, `update_at`) VALUES
+(7, '121', '121278', '募資', 'file_uploads/681e257b7824e_此為測試文件123123.pdf', 345678, '2025-05-09');
 
 -- --------------------------------------------------------
 
@@ -402,7 +410,9 @@ INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_a
 (13, '匿名', 6, 2000.00, '2025-05-06 14:18:12', '', NULL),
 (14, '匿名', 6, 500.00, '2025-05-06 14:18:30', '', NULL),
 (15, '匿名', 3, 1000.00, '2025-05-06 14:18:57', '', NULL),
-(16, '匿名', 3, 100.00, '2025-05-06 14:46:19', '', 904);
+(16, '匿名', 3, 100.00, '2025-05-06 14:46:19', '', 904),
+(17, '匿名', 3, 1000.00, '2025-05-09 23:03:08', '', 345678),
+(18, '匿名', 3, 2000.00, '2025-05-09 23:06:42', '', 345678);
 
 -- --------------------------------------------------------
 
@@ -427,7 +437,11 @@ INSERT INTO `execution_report` (`execution_report_id`, `project_id`, `title`, `c
 (3, 2, '0504', '測試', '', '2025-05-04 11:04:57'),
 (4, 2, '12212', '11111', '', '2025-05-04 11:04:57'),
 (5, 2, '1212', '1212', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12'),
-(6, 2, '11', '11111', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12');
+(6, 2, '11', '11111', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12'),
+(7, 0, '0509回報', '本日針對社團博覽會進行以下事項：\r\n\r\n場地確認： 已與學生活動中心完成5月活動場地的預約確認，時間定為5/20（週二）上午10:00至下午4:00。\r\n\r\n社團報名統整： 截至今日共有23個社團完成報名，其中包含音樂性社團8個、服務性社團5個、體育性社團6個、其他類型4個。\r\n\r\n宣傳設計： 宣傳海報初稿已完成並提交指導老師審核，預計5/11前定稿並開放下載。\r\n\r\n人力安排： 工作人員名單已初步排定，後續將依實際情況進行微調並安排志工培訓。\r\n\r\n後續將持續更新參展社團名單與場地動線規劃，預計5/13', '../file_upload/681e1961be1c1_此為測試文件123123.pdf', '2025-05-09 23:04:01'),
+(8, 0, '12112', '121212', '', '2025-05-09 23:06:53'),
+(9, 3, '12112', '121212', '', '2025-05-09 23:08:18'),
+(10, 3, '212', '12121', '', '2025-05-09 23:08:24');
 
 -- --------------------------------------------------------
 
@@ -577,7 +591,7 @@ CREATE TABLE `fundraising_projects` (
 INSERT INTO `fundraising_projects` (`project_id`, `suggestion_assignments_id`, `title`, `description`, `funding_goal`, `start_date`, `end_date`, `status`) VALUES
 (1, 3, '綠色校園', '購買校園消臭劑置放在校園內', 9000, '2025-04-22 21:40:49', '2025-04-27 00:00:00', '進行中'),
 (2, 6, '廁所施工聲音好吵', '我們會盡力監督', 10, '2025-04-24 21:29:40', '2025-04-28 20:58:32', '進行中'),
-(3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', '2025-05-24 20:58:32', '已完成'),
+(3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', '2025-05-24 20:58:32', ''),
 (4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', '2025-04-25 17:42:29', '進行中'),
 (5, 8, '捐血救人', '用於招募志工與工讀金的費用', 35000, '2025-04-24 22:17:25', '2025-05-24 20:58:32', '進行中'),
 (6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', '2025-05-10 00:00:00', '進行中');
@@ -746,7 +760,8 @@ ALTER TABLE `agree_record`
 --
 ALTER TABLE `announcement`
   ADD PRIMARY KEY (`announcement_id`),
-  ADD KEY `user_id` (`user_id`) USING BTREE;
+  ADD KEY `user_id` (`user_id`) USING BTREE,
+  ADD KEY `file_path` (`file_path`);
 
 --
 -- 資料表索引 `collection`
@@ -777,7 +792,8 @@ ALTER TABLE `donation_record`
 --
 ALTER TABLE `execution_report`
   ADD PRIMARY KEY (`execution_report_id`),
-  ADD KEY `fundraising_projects` (`project_id`);
+  ADD KEY `fundraising_projects` (`project_id`),
+  ADD KEY `file_path` (`file_path`);
 
 --
 -- 資料表索引 `files`
@@ -875,7 +891,7 @@ ALTER TABLE `agree_record`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `announcement`
 --
 ALTER TABLE `announcement`
-  MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
@@ -893,13 +909,13 @@ ALTER TABLE `comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `donation_record`
 --
 ALTER TABLE `donation_record`
-  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
 --
 ALTER TABLE `execution_report`
-  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
