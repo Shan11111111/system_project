@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">請填寫全部! 重新導向中~~~</p>
             </div>
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">上傳成功! 資料處理中~~~</p>
             </div>

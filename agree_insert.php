@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">您已附議過了~~請勿重複附議!</p>
             </div>
@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <body>
             <div class="logo-container">
-                <img src="./img/c01.png" alt="Logo" class="logo" id="logo">
+                <img src="./img/ch01.png" alt="Logo" class="logo" id="logo">
 
                 <p id="myobject">收到您的附議了! 附議成功!</p>
             </div>
