@@ -136,7 +136,7 @@ if (isset($_GET['delete'])) {
     <div class="sidebar">
         <h2>管理系統</h2>
         <a href="../homepage.php">孵仁首頁</a>
-        <a href="#">發布公告</a>
+        <a href="announcement.php">發布公告</a>
         <a href="adapt.php">自由認領達標建言區</a>
         <a href="office_assignments.php">提交提案與專案管理</a>
         <a href="office_apply_date.php">延後募款申請</a>

@@ -29,9 +29,14 @@ if ($completed_projects_result->num_rows === 0) {
     $status_message = "此專案已完成，您可以提交回報。";
 }
 
-
 // 處理表單提交
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $project_id = isset($_POST['project_id']) ? intval($_POST['project_id']) : 0;
+
+    if ($project_id <= 0) {
+        die("錯誤：請選擇有效的專案。");
+    }
+
     $title = $_POST['title'] ?? '';
     $content = $_POST['content'] ?? '';
     $file_path = '';
@@ -238,7 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="sidebar">
         <h2>管理系統</h2>
         <a href="../homepage.php">孵仁首頁</a>
-        <a href="#">發布公告</a>
+        <a href="announcement.php">發布公告</a>
         <a href="adapt.php">自由認領達標建言區</a>
         <a href="office_assignments.php">提交提案與專案管理</a>
         <a href="office_apply_date.php">延後募款申請</a>
@@ -249,17 +254,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- 右側內容區域 -->
     <div class="content">
-        <h1>募資專案進度回報</h1>
 
-        <!-- 狀態訊息 -->
-        <?php if (!empty($status_message)) : ?>
-            <div class="status-message">
-                <?php echo htmlspecialchars($status_message); ?>
-            </div>
-        <?php endif; ?>
 
         <!-- 已完成專案清單 -->
-        <h2>已完成的募資專案</h2>
+        <h2 style="color: black;">已完成的募資專案</h2>
         <?php if ($completed_projects_result->num_rows > 0) : ?>
             <table>
                 <thead>
@@ -294,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <!-- 回報表單 -->
-        <h2>提交回報</h2>
+        <h2 style="color: black;">提交回報</h2>
         <form action="" method="POST" enctype="multipart/form-data">
             <?php
             // 重新執行查詢以獲取已完成的專案
@@ -326,7 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 <script>
-    document.querySelector('form').addEventListener('submit', function (e) {
+    document.querySelector('form').addEventListener('submit', function(e) {
         const projectId = document.getElementById('project_id').value;
         if (!projectId) {
             e.preventDefault();
