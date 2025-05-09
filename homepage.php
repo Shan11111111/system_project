@@ -94,16 +94,16 @@
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
                     <a class="nav-item" href="<?php if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
-                                                    echo 'member_center.php';
-                                                } else if ($_SESSION['level'] == 'office') {
-                                                    echo 'funding/office_assignments.php';
-                                                } else if ($_SESSION['level'] == 'manager') {
-                                                    echo 'manager/advice_manager.php';
-                                                } ?>"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                        echo 'member_center.php';
+                    } else if ($_SESSION['level'] == 'office') {
+                        echo 'funding/office_assignments.php';
+                    } else if ($_SESSION['level'] == 'manager') {
+                        echo 'manager/advice_manager.php';
+                    } ?>"><?php echo $_SESSION['user_id'] ?>會員專區</a>
 
                     <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function() {
+                        document.getElementById('logout-link').addEventListener('click', function () {
                             // 彈出確認視窗
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
@@ -166,7 +166,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -211,7 +211,7 @@
                 </div>
             </a>
             <script>
-                document.getElementById('submitAdviceLink').addEventListener('click', function(event) {
+                document.getElementById('submitAdviceLink').addEventListener('click', function (event) {
                     const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
                     if (!isLoggedIn) {
                         event.preventDefault(); // 阻止跳轉
@@ -260,7 +260,43 @@
     <div class="philosophy">
         <div class="p_idea">讓你的建言破殼而出，孵化校園新未來！</div>
     </div>
+
+    <?php
+   require_once 'db_connection.php'; 
+
+    // 抓最新5筆公告
+    $sql = "SELECT announcement_id, title, category, update_at FROM announcement ORDER BY update_at DESC LIMIT 5";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
+
     <div class="container">
+
+        <div class="announcement-board">
+            <h2 class="announcement-title">最新公告</h2>
+            <ul class="announcement-list">
+            <?php if (count($announcements) > 0): ?>
+                <?php foreach ($announcements as $item): ?>
+                    <li class="announcement-item">
+                        <span class="announcement-category">【<?= htmlspecialchars($item['category']) ?>公告】</span>
+                        <a href="announcement_detail.php?id=<?= $item['announcement_id'] ?>" class="announcement-text">
+                                <?= htmlspecialchars($item['title']) ?>
+                            </a>
+                        <span class="announcement-date">公告日期：<?= date('Y-m-d', strtotime($item['update_at'])) ?></span>
+                    </li>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li class="announcement-item" style="justify-content: center; color: #aaa;">
+                    目前尚無公告
+                </li>
+            <?php endif; ?>
+            </ul>
+            <a href="#">
+                <h6 class="announcement_seemore">查看更多...</h6>
+            </a>
+        </div>
+
         <!--建言查看區--->
         <div class="seek_advice_area">
             <div class="seek_advice">查看建言</div>
@@ -289,7 +325,7 @@
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, a.advice_state, 
                ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<=2 ORDER BY a.agree DESC"; // 查詢最熱門的建言
-
+                            
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -314,8 +350,8 @@
                                     // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
-                            ?>
-                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                                    ?>
+                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
                                     <div class="swiper-slide">
                                         <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
                                             style="text-decoration: none; color: inherit;">
@@ -343,7 +379,7 @@
                                     </div>
 
 
-                            <?php }
+                                <?php }
                             }
                             ?>
                             <?php mysqli_close($link); ?>
@@ -400,7 +436,7 @@
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
                ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<3 ORDER BY a.announce_date DESC"; // 查詢最新的建言
-
+                            
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -421,12 +457,12 @@
                                     }
                                     $progress_width = $progress . "%"; // 計算進度條的寬度
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
-
+                            
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
 
-                            ?>
-                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                                    ?>
+                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                                     <div class="swiper-slide">
                                         <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
@@ -453,7 +489,7 @@
                                         </a>
                                     </div>
 
-                            <?php }
+                                <?php }
                             } ?>
 
                             <?php mysqli_close($link) ?>
@@ -505,7 +541,8 @@
                 <div class="swiper mySwiper3">
                     <div class="swiper-wrapper" id="funding-cards"></div>
                 </div>
-                <div id="no-project-message" style="display:none; text-align:center; margin-top:20px;">目前沒有進行中的募資專案。</div>
+                <div id="no-project-message" style="display:none; text-align:center; margin-top:20px;">目前沒有進行中的募資專案。
+                </div>
 
                 <script>
                     async function fetchOngoingFunding(page = 1) {
@@ -518,7 +555,7 @@
                             const noProjectMessage = document.getElementById('no-project-message');
                             cardsWrapper.innerHTML = '';
                             noProjectMessage.style.display = 'none';
-       
+
                             if (data.length === 0) {   // 如果沒有任何資料，顯示「沒有進行中專案」訊息並結束函數
                                 noProjectMessage.style.display = 'block';
                                 return;
@@ -665,19 +702,19 @@
     <!-- 初始化 Swiper -->
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
@@ -688,15 +725,15 @@
 
         /*CARD SLIDER*/
         const swiperConfigs = [{
-                container: ".mySwiper1",
-                next: ".swiper-button-next-1",
-                prev: ".swiper-button-prev-1"
-            },
-            {
-                container: ".mySwiper2",
-                next: ".swiper-button-next-2",
-                prev: ".swiper-button-prev-2"
-            }
+            container: ".mySwiper1",
+            next: ".swiper-button-next-1",
+            prev: ".swiper-button-prev-1"
+        },
+        {
+            container: ".mySwiper2",
+            next: ".swiper-button-next-2",
+            prev: ".swiper-button-prev-2"
+        }
         ];
 
         swiperConfigs.forEach(config => {
