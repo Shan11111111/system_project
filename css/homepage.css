@@ -265,10 +265,6 @@ body {
   }
 }
 
-.chicken {
-  animation: popIn 0.6s ease;
-}
-
 .chicken:hover::after {
   content: "🐣 咕咕～";
   position: absolute;
@@ -297,10 +293,10 @@ body {
 .banner1,
 .banner3 {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap; /* ✅ 允許自動換行 */
   justify-content: center;
-  gap: 40px;
-  flex: none;
+  align-items: center;
+  gap: 20px; /* ✅ 增加間距 */
 }
 
 .hot_propose {
@@ -318,7 +314,7 @@ body {
 }
 
 .new_propose .chicken {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-left: 90px;
 }
 
 .new_propose .chicken:hover {
@@ -327,7 +323,7 @@ body {
 }
 
 .new_fund .chicken {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-right: 90px;
 }
 
 .new_fund .chicken:hover {
@@ -433,6 +429,50 @@ body {
   transform: translateX(-90px);
   /* 向內靠近中心 */
 }
+@media (max-width: 768px) {
+  .banner {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto auto;
+    justify-items: center;
+    gap: 20px;
+    padding-top: 120px;
+  }
+
+  .banner1,
+  .banner3 {
+    display: contents; /* 讓 .bannerX 裡的雞按鈕直接變成 grid 子元素 */
+  }
+
+  .banner2 {
+    grid-column: 1 / span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  .chicken {
+    width: 110px;
+    height: 110px;
+  }
+
+  .banner2 .chicken {
+    width: 130px;
+    height: 130px;
+  }
+
+  .chicken_tag {
+    font-size: 14px;
+  }
+
+  .new_propose .chicken,
+  .new_fund .chicken {
+    margin: 0;
+    transform: none !important;
+  }
+}
+
 
 
 /*結束*/
