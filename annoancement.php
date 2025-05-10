@@ -171,9 +171,9 @@
         <div class="anno_space">
             <div class="tabs">
                 <div class="tab active" data-tab="all" onclick="switchTab('all')">全部</div>
-                <div class="tab" data-tab="建言" onclick="switchTab('建言')">建言</div>
-                <div class="tab" data-tab="募資" onclick="switchTab('募資')">募資</div>
-                <div class="tab" data-tab="系統" onclick="switchTab('系統')">系統</div>
+                <div class="tab" data-tab="advice" onclick="switchTab('advice')">建言</div>
+                <div class="tab" data-tab="fund" onclick="switchTab('fund')">募資</div>
+                <div class="tab" data-tab="system" onclick="switchTab('system')">系統</div>
             </div>
             <hr />
             <div class="filter-bar d-flex justify-content-between mb-3">
@@ -199,11 +199,13 @@
     <!-- 公告卡片樣板 -->
     <template id="anno-template">
         <div class="anno-card">
-            <div class="anno-title">{{title}}</div>
-            <div class="anno-meta">
-                <span class="badge type-label">{{typeText}}</span>
-                <span>發布單位：{{author}}</span>
-                <span>發布日：{{publishDate}}</span>
+            <div class="anno-content">
+                <div class="anno-title">{{title}}</div>
+                <div class="anno-meta">
+                    <span class="badge type-label"></span> <!-- 類型放這 -->
+                    <span>發布單位：{{author}}</span>
+                    <span>發布日：{{publishDate}}</span>
+                </div>
             </div>
         </div>
     </template>
@@ -310,9 +312,22 @@
                 const div = document.createElement('div');
                 div.innerHTML = template
                     .replace('{{title}}', item.title)
-                    .replace('{{typeText}}', item.category || '未分類')
                     .replace('{{author}}', item.author)
                     .replace('{{publishDate}}', item.update_at);
+
+                // 類別標籤處理：塞入文字與顏色 class
+                const badge = div.querySelector('.type-label');
+                badge.textContent = item.category;
+                const categoryMap = {
+                    '建言': 'advice',
+                    '募資': 'fund',
+                    '系統': 'system'
+                };
+
+                badge.classList.remove('type-advice', 'type-fund', 'type-system'); // 先清除
+                if (categoryMap[item.category]) {
+                    badge.classList.add(`type-${categoryMap[item.category]}`);
+                }
                 div.classList.add('anno-item');
                 div.onclick = () => {
                     window.location.href = `announcement_detail.php?id=${item.announcement_id}`;

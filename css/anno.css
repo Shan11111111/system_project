@@ -359,19 +359,21 @@
   }
     
   
-  
-  
   .anno-card {
     display: flex;
+    flex-direction: column;
     background: white;
     border: 1px solid #e0e0e0;
     align-items: center; /* 垂直置中對齊圖片與文字 */
-  
     border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    align-items: stretch; /* ✅ 讓子元素撐滿寬度 */
+    padding: 0; /* 拿掉內距，交給 content 控制 */
+
+
   }
   
   .anno-card:hover {
@@ -387,6 +389,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 12px 20px; /* ✅ 左右補 padding，才有一致留白 */
+    width: 100%; /* ✅ 撐滿卡片寬度 */
+
   
   }
   
@@ -435,14 +440,9 @@
     border-radius: 10px;
     color: white;
   }
-  
-  .status-passed {
-    background-color: #6db36d;
-  }
-  
-  .status-failed {
-    background-color: #d26a6a;
-  }
+.badge.type-advice { background-color: #eb8722 !important; }
+.badge.type-fund   { background-color: #278a41 !important; }
+.badge.type-system { background-color: #2b5ba8 !important; }
   
   .badge {
     display: inline-block;

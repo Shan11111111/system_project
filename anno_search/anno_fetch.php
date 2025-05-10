@@ -1,11 +1,18 @@
-<?php 
+<?php
 header('Content-Type: application/json');
 include('../db_connection.php');
 
 // 取得前端參數
-$keyword  = $_GET['keyword']  ?? '';
-$sort     = $_GET['sort']     ?? 'new'; // 'new', 'old'
-$category = $_GET['category'] ?? 'all'; // '建言', '募資', '系統', 或 'all'
+$categoryMap = [
+    'advice' => '建言',
+    'fund'   => '募資',
+    'system' => '系統',
+];
+$categoryKey = $_GET['category'] ?? 'all';     // 'advice', 'fund', 'system', or 'all'
+$categoryVal = $categoryMap[$categoryKey] ?? ''; // '建言', '募資', '系統' 對應 DB 中資料
+
+$keyword = trim($_GET['keyword'] ?? '');
+$sort    = $_GET['sort'] ?? 'new'; // 'new' or 'old'
 
 // 查詢公告資料 + 使用 JOIN 查發布單位（users）
 $sql = "
@@ -22,26 +29,27 @@ $sql = "
 ";
 
 // 條件：分類過濾
-if ($category !== 'all') {
+if ($categoryKey !== 'all') {
     $sql .= " AND a.category = :category ";
 }
 
-// 條件：關鍵字搜尋（標題與內容模糊比對）
-if (!empty($keyword)) {
-    $sql .= " AND (a.title LIKE :keyword OR a.content LIKE :keyword) ";
+// 條件：關鍵字搜尋（標題）
+if ($keyword !== '') {
+    $sql .= " AND a.title LIKE :keyword ";
 }
 
-// 預設排序（先交給 PHP 排）
+
+// 排序
 $sql .= " ORDER BY a.update_at DESC ";
 
 try {
     $stmt = $pdo->prepare($sql);
 
-    // 綁定參數
-    if ($category !== 'all') {
-        $stmt->bindValue(':category', $category, PDO::PARAM_STR);
+    // ✅ 綁定參數必須在 prepare 之後
+    if ($categoryKey !== 'all') {
+        $stmt->bindValue(':category', $categoryVal, PDO::PARAM_STR);
     }
-    if (!empty($keyword)) {
+    if ($keyword !== '') {
         $stmt->bindValue(':keyword', "%$keyword%", PDO::PARAM_STR);
     }
 
@@ -53,7 +61,7 @@ try {
         exit;
     }
 
-    // 排序：根據 sort 參數決定新→舊或舊→新
+    // 排序（保險起見，如果前面 SQL 沒完全控制順序）
     if ($sort === 'old') {
         usort($results, fn($a, $b) => strtotime($a['update_at']) <=> strtotime($b['update_at']));
     } else {
@@ -61,7 +69,6 @@ try {
     }
 
     echo json_encode($results, JSON_UNESCAPED_UNICODE);
-
 } catch (PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }
