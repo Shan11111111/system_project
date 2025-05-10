@@ -195,13 +195,14 @@
                     </div>
                 </div>
             </a>
+            <a href="annoancement.php">
             <div class="new_propose">
                 <div class="chicken">
                     <img src="img\6A7933B2-AA2E-498F-964B-259E5C7ACB2B.png">
-                    <div class="chicken_tag">關於我們</div>
+                    <div class="chicken_tag">最新消息</div>
                 </div>
-
             </div>
+            </a>
         </div>
         <div class="banner2">
             <a href="submitadvice.php" id="submitAdviceLink">
