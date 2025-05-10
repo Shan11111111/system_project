@@ -236,6 +236,15 @@
     margin-top: 100px;
     margin-bottom: 50px;
   }
+ .ano{
+  margin: 30px auto 10px auto;    /* ✅ 垂直留白好看些 */
+  padding-left: 12px;             /* ✅ 文字與線條的距離 */
+  font-size: 28px;
+  font-weight: bold;
+  color: #7c4d2b;
+  border-left: 8px solid #7c4d2b;
+  width: 90%;
+  }
   
   .anno_space {
     width: 90%;

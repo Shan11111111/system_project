@@ -167,7 +167,7 @@
     </nav>
 
     <div class="container">
-        <h2>公告</h2>
+        <div class="ano"> 最新消息 </div>
         <div class="anno_space">
             <div class="tabs">
                 <div class="tab active" data-tab="all" onclick="switchTab('all')">全部</div>

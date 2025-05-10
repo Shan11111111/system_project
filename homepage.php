@@ -292,7 +292,7 @@
                 </li>
             <?php endif; ?>
             </ul>
-            <a href="#">
+            <a href="annoancement.php">
                 <h6 class="announcement_seemore">查看更多...</h6>
             </a>
         </div>
