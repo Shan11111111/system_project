@@ -1,5 +1,3 @@
-
-
 <?php
 session_start();
 // // 檢查是否已登入
@@ -121,7 +119,7 @@ $total_pages = ceil($total_row['total'] / $limit);
             width: calc(100% - 250px);
         }
 
-        
+
 
         .profile {
             position: relative;
@@ -156,7 +154,7 @@ $total_pages = ceil($total_row['total'] / $limit);
         }
 
         .dropdown a:hover {
-            background-color:rgb(159, 193, 255);
+            background-color: rgb(159, 193, 255);
         }
 
         /* 表格樣式 */
@@ -189,7 +187,7 @@ $total_pages = ceil($total_row['total'] / $limit);
         }
 
         tr:hover {
-            background-color:rgb(167, 185, 255);
+            background-color: rgb(167, 185, 255);
         }
 
         input[type="number"] {
@@ -251,10 +249,11 @@ $total_pages = ceil($total_row['total'] / $limit);
         <!-- <a href="project_manager.php">募資管理</a> -->
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
+        <a href="../funding/announcement.php">發布公告</a>
         <a href="#">數據分析</a>
     </div>
 
-    <?php include "header.php";?>
+    <?php include "header.php"; ?>
     <!-- 頁面內容 -->
     <div>
         <!-- 頭部 -->
@@ -344,7 +343,7 @@ $total_pages = ceil($total_row['total'] / $limit);
         }
 
         // 點擊其他地方關閉下拉選單
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             const dropdown = document.getElementById('dropdownMenu');
             if (!event.target.matches('.profile img')) {
                 dropdown.style.display = 'none';

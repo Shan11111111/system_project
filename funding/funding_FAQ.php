@@ -55,14 +55,16 @@ if (isset($_GET['delete'])) {
     <meta charset="UTF-8">
     <title>募資常見問題</title>
     <style>
-        /* 保留原有的 CSS */
+        /* 保留原本的 CSS */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
+            background-color: #f4f4f9;
         }
 
+        /* 左側導覽列 */
         .sidebar {
             width: 250px;
             background-color: #007BFF;
@@ -76,24 +78,23 @@ if (isset($_GET['delete'])) {
         }
 
         .sidebar h2 {
-            margin: 0 0 20px;
-            font-size: 24px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .sidebar a {
             display: block;
             color: #fff;
             text-decoration: none;
-            margin: 10px 0;
-            padding: 10px;
+            padding: 10px 15px;
+            margin: 5px 0;
             border-radius: 4px;
-            transition: background-color 0.3s;
         }
 
         .sidebar a:hover {
             background-color: #0056b3;
         }
+
 
         .content {
             margin-left: 280px;
@@ -220,37 +221,37 @@ if (isset($_GET['delete'])) {
         }
         ?>
         <?php
-// 從資料庫中取得所有募資專案
-$projects = $conn->query("SELECT project_id, title FROM fundraising_projects");
-?>
-<form action="funding_FAQ.php" method="POST" style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-    <input type="hidden" name="faq_id" value="<?php echo $faq_id; ?>">
-    <div style="margin-bottom: 15px;">
-        <label for="project_id" style="font-weight: bold; display: block; margin-bottom: 5px;">選擇募資專案：</label>
-        <select name="project_id" id="project_id" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-            <option value="">請選擇專案</option>
-            <?php
-            if ($projects->num_rows > 0) {
-                while ($project = $projects->fetch_assoc()) {
-                    $selected = ($project['project_id'] == $project_id) ? 'selected' : '';
-                    echo "<option value='" . $project['project_id'] . "' $selected>" . htmlspecialchars($project['title']) . "</option>";
-                }
-            }
-            ?>
-        </select>
-    </div>
-    <div style="margin-bottom: 15px;">
-        <label for="question" style="font-weight: bold; display: block; margin-bottom: 5px;">問題：</label>
-        <textarea name="question" id="question" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($question); ?></textarea>
-    </div>
-    <div style="margin-bottom: 15px;">
-        <label for="reply" style="font-weight: bold; display: block; margin-bottom: 5px;">回覆：</label>
-        <textarea name="reply" id="reply" rows="5" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($reply); ?></textarea>
-    </div>
-    <button type="submit" style="background-color: #007BFF; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-        <?php echo isset($_GET['edit']) ? "更新" : "新增"; ?>
-    </button>
-</form>
+        // 從資料庫中取得所有募資專案
+        $projects = $conn->query("SELECT project_id, title FROM fundraising_projects");
+        ?>
+        <form action="funding_FAQ.php" method="POST" style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <input type="hidden" name="faq_id" value="<?php echo $faq_id; ?>">
+            <div style="margin-bottom: 15px;">
+                <label for="project_id" style="font-weight: bold; display: block; margin-bottom: 5px;">選擇募資專案：</label>
+                <select name="project_id" id="project_id" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">請選擇專案</option>
+                    <?php
+                    if ($projects->num_rows > 0) {
+                        while ($project = $projects->fetch_assoc()) {
+                            $selected = ($project['project_id'] == $project_id) ? 'selected' : '';
+                            echo "<option value='" . $project['project_id'] . "' $selected>" . htmlspecialchars($project['title']) . "</option>";
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="question" style="font-weight: bold; display: block; margin-bottom: 5px;">問題：</label>
+                <textarea name="question" id="question" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($question); ?></textarea>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="reply" style="font-weight: bold; display: block; margin-bottom: 5px;">回覆：</label>
+                <textarea name="reply" id="reply" rows="5" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($reply); ?></textarea>
+            </div>
+            <button type="submit" style="background-color: #007BFF; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+                <?php echo isset($_GET['edit']) ? "更新" : "新增"; ?>
+            </button>
+        </form>
     </div>
 </body>
 

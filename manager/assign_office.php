@@ -246,6 +246,7 @@ if (!$result) {
         <a href="review_proposals.php">募資專案審核</a>
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
+        <a href="../funding/announcement.php">發布公告</a>
         <a href="#">數據分析</a>
     </div>
 

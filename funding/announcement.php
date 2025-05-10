@@ -4,13 +4,16 @@ $conn = new mysqli("localhost", "root", "", "system_project");
 if ($conn->connect_error) {
     die("資料庫連線失敗: " . $conn->connect_error);
 }
-
-// 假設 user_id 和 user_role 是從 session 中取得
 session_start();
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-    die("錯誤：您尚未登入，請先登入系統。");
+
+// 確保使用者已登入
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
-$user_id = $_SESSION['user_id'];
+
+// 獲取使用者的 level
+$user_level = $_SESSION['level'] ?? '';
 
 // 處理刪除公告
 if (isset($_GET['delete_id'])) {
@@ -300,14 +303,30 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
 <body>
     <div class="sidebar">
         <h2>管理系統</h2>
-        <a href="../homepage.php">孵仁首頁</a>
-        <a href="announcement.php">發布公告</a>
-        <a href="adapt.php">自由認領達標建言區</a>
-        <a href="office_assignments.php">提交提案與專案管理</a>
-        <a href="office_apply_date.php">延後募款申請</a>
-        <a href="funding_FAQ.php">募資常見問題</a>
-        <a href="funding_return.php">募資進度回報</a>
-        <a href="data">數據分析</a>
+        <?php if ($user_level === 'office'): ?>
+            <!-- Office 使用者的導覽列 -->
+            <a href="../homepage.php">孵仁首頁</a>
+            <a href="announcement.php">發布公告</a>
+            <a href="adapt.php">自由認領達標建言區</a>
+            <a href="office_assignments.php">提交提案與專案管理</a>
+            <a href="office_apply_date.php">延後募款申請</a>
+            <a href="funding_FAQ.php">募資常見問題</a>
+            <a href="funding_return.php">募資進度回報</a>
+            <a href="data">數據分析</a>
+        <?php elseif ($user_level === 'manager'): ?>
+            <!-- Manager 使用者的導覽列 -->
+            <a href="../homepage.php">孵仁首頁</a>
+            <a href="../manager/advice_manager.php">建言管理</a>
+            <a href="../manager/assign_office.php">達標建言分配處所</a>
+            <a href="../manager/review_proposals.php">募資專案審核</a>
+            <a href="../manager/review_extension_requests.php">延後募資申請審核</a>
+            <a href="../manager/people_manager.php">人員處理</a>
+            <a href="../funding/announcement.php">發布公告</a>
+            <a href="#">數據分析</a>
+        <?php else: ?>
+            <!-- 預設顯示 -->
+            <p>您沒有權限訪問此頁面。</p>
+        <?php endif; ?>
     </div>
 
     <div class="content">

@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start()
 ?>
 
@@ -9,8 +9,6 @@ session_start()
     <meta charset="UTF-8">
     <title>審核提案</title>
     <style>
-        
-
         /* 左側導覽列 */
         .sidebar {
             width: 250px;
@@ -162,7 +160,7 @@ session_start()
         }
 
         .dropdown a:hover {
-            background-color:rgb(159, 193, 255);
+            background-color: rgb(159, 193, 255);
         }
 
         /* 表格樣式 */
@@ -195,7 +193,7 @@ session_start()
         }
 
         tr:hover {
-            background-color:rgb(167, 185, 255);
+            background-color: rgb(167, 185, 255);
         }
 
         input[type="number"] {
@@ -277,14 +275,15 @@ session_start()
         <a href="review_proposals.php">募資專案審核</a>
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
+        <a href="../funding/announcement.php">發布公告</a>
         <a href="#">數據分析</a>
     </div>
     <?php include 'header.php'; ?>
-    
+
     <!-- 頁面內容 -->
     <div>
 
-    <!-- <div class="profile" style="background-color: #fff; padding: 10px 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; text-align: right;">
+        <!-- <div class="profile" style="background-color: #fff; padding: 10px 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; text-align: right;">
         <p style="margin: 0; font-size: 1.2em; font-weight: bold;">歡迎, <?php echo htmlspecialchars($_SESSION['user_id']); ?></p>
         
     </div> -->
