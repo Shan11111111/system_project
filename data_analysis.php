@@ -1,14 +1,9 @@
 <?php
 // 建立資料庫連接
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "system_project";
-<?php
 $host = 'localhost';
-$dbname = 'school_system';
-$username = 'your_username';
-$password = 'your_password';
+$dbname = 'system_project';  // ←這裡請用你資料庫實際名稱
+$username = 'root';          // ← 這裡是 XAMPP 預設使用者
+$password = '';              // ← 預設無密碼
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
