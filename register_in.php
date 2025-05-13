@@ -122,7 +122,7 @@ if (mysqli_num_rows($check_result) > 0) {
                     progressText.textContent = `${progress}%`;
                     progressBarInner.style.width = `${progress}%`;
                     progress++;
-                    setTimeout(simulateLoading, 30); // 模擬加載速度
+                    setTimeout(simulateLoading, 3); // 模擬加載速度
                 } else {
                     window.location.href = 'homepage.php';
                 }
