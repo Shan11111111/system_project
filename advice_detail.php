@@ -89,8 +89,8 @@
                 <div class="dropdown">
                     <button class="dropbtn">募資</button>
                     <div class="dropdown-content">
-                        <a href="ongoing_funding_search.php">進行中計畫</a>
-                        <a href="due_funding_search.php">已結束案例</a>
+                        <a href="ongoing_funding_search.php">進行中募資</a>
+                        <a href="due_funding_search.php">已結束募資</a>
                     </div>
                 </div>
             </div>
@@ -156,8 +156,8 @@
             <div class="dropdown">
                 <button class="dropbtn">募資</button>
                 <div class="dropdown-content">
-                    <a href="ongoing_funding_search.php">進行中計畫</a>
-                    <a href="due_funding_search.php">已結束案例</a>
+                    <a href="ongoing_funding_search.php">進行中募資</a>
+                    <a href="due_funding_search.php">已結束募資</a>
                 </div>
             </div>
 
@@ -476,7 +476,8 @@
                                         <input type="hidden" name="advice_id" value="<?= htmlspecialchars($advice_id) ?>">
                                         <button type="submit" class="collect-btn">
                                             <?= $isCollected ? '已收藏' : '收藏' ?>&nbsp;
-                                            <i class="<?= $isCollected ? 'fa-solid fa-heart' : 'fa-regular fa-heart' ?>"></i>
+                                            <i
+                                                class="<?= $isCollected ? 'fa-solid fa-heart' : 'fa-regular fa-heart' ?>"></i>
 
                                         </button>
                                     </form>
@@ -506,33 +507,31 @@
                     <section class="content">
                         <p id="advice-content"><?php echo nl2br(htmlspecialchars($row['advice_content'])); ?></p>
                         <?php
-                        // 連接資料庫
-                        $link = mysqli_connect('localhost', 'root', '', 'system_project');
-                        if (!$link) {
-                            die('資料庫連線失敗: ' . mysqli_connect_error());
-                        }
+                        require_once 'db_connection.php';
 
-                        // 取得建言 ID
+                        
                         $advice_id = $_GET['advice_id'] ?? 0;
 
                         // 查詢附加檔案
-                        $sql_file = "SELECT file_name, file_path FROM files WHERE advice_id = ?";
-                        $stmt_file = mysqli_prepare($link, $sql_file);
-                        mysqli_stmt_bind_param($stmt_file, 'i', $advice_id);
-                        mysqli_stmt_execute($stmt_file);
-                        $result_file = mysqli_stmt_get_result($stmt_file);
+                        $sql = "SELECT file_name, file_path FROM files WHERE advice_id = ?";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute([$advice_id]);
+                        $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         // 有檔案才顯示
-                        if (mysqli_num_rows($result_file) > 0) {
+                        if (count($files) > 0) {
                             echo '<div class="file-list">';
-                            while ($file = mysqli_fetch_assoc($result_file)) {
+                            foreach ($files as $file) {
                                 echo '<div class="file-item">';
-                                echo '<i class="fa-solid fa-file"></i> 附加文件:<a href="' . htmlspecialchars($file['file_path']) . '" download="' . htmlspecialchars($file['file_name']) . '">' . htmlspecialchars($file['file_name']) . '</a>';
+                                echo '<i class="fa-solid fa-file"></i> 附加文件: ';
+                                echo '<a href="' . htmlspecialchars($file['file_path']) . '" download="' . htmlspecialchars($file['file_name']) . '">'
+                                    . htmlspecialchars($file['file_name']) . '</a>';
                                 echo '</div>';
                             }
                             echo '</div>';
                         }
                         ?>
+
 
                     </section>
 
@@ -816,7 +815,7 @@
 
 <!-- Fixed 按鈕 -->
 <div class="fixed-buttons">
-    <button class="back-btn"onclick="history.back()"><i class="fa-solid fa-arrow-left"></i>
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i>
         <span>返回</span>
     </button>
     <!--
