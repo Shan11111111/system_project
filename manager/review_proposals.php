@@ -1,6 +1,6 @@
 <?php
 session_start()
-?>
+    ?>
 
 <!DOCTYPE html>
 <html lang="zh-tw">
@@ -294,7 +294,8 @@ session_start()
         <!-- 搜尋欄 -->
         <div class="search-bar">
             <form action="review_proposals.php" method="GET">
-                <input type="text" name="search" placeholder="搜尋提案..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <input type="text" name="search" placeholder="搜尋提案..."
+                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                 <button type="submit">搜尋</button>
             </form>
         </div>
@@ -303,12 +304,12 @@ session_start()
         <table>
             <thead>
                 <tr>
-                    <th>提案 ID</th>
-                    <th>建言 ID</th>
+                    <th>提案編號</th>
+                    <th>建言連結</th>
                     <th>提案內容</th>
-                    <th>資金金額</th>
-                    <th>檔案</th>
-                    <th>狀態</th>
+                    <th>提案金額</th>
+                    <th>企劃書</th>
+                    <th>提案處所</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -329,8 +330,8 @@ session_start()
                 $offset = ($page - 1) * $limit;
 
                 // 查詢提案
-                $sql = "SELECT suggestion_assignments_id, advice_id, proposal_text, funding_amount, proposal_file_path, status 
-                        FROM suggestion_assignments 
+                $sql = "SELECT department,suggestion_assignments_id, advice_id, proposal_text, funding_amount, proposal_file_path, status 
+                        FROM suggestion_assignments join users on suggestion_assignments.office_id = users.user_id
                         WHERE status = '審核中'";
 
                 if (!empty($search)) {
@@ -344,11 +345,39 @@ session_start()
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['suggestion_assignments_id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['advice_id']) . "</td>";
+                        echo "<td><a href='../advice_detail.php?advice_id=" . urlencode($row['advice_id']) . "' style='text-decoration: none;'>" . htmlspecialchars($row['advice_id']) . "</a></td>";
                         echo "<td>" . nl2br(htmlspecialchars($row['proposal_text'])) . "</td>";
                         echo "<td>" . htmlspecialchars($row['funding_amount']) . "</td>";
-                        echo "<td><a href='" . htmlspecialchars($row['proposal_file_path']) . "' download>下載檔案</a></td>";
-                        echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+
+
+                        if (!empty($row['proposal_file_path'])) {
+                            $filePath = $row['proposal_file_path'];      // e.g., uploads/chicken.png
+                            $fullPath = '../' . $filePath;               // 相對於 manager/ 資料夾
+                            $safePath = htmlspecialchars($fullPath);     // 安全處理路徑
+                            $fileName = basename($filePath);             // 取得檔案名稱（不含路徑）
+                
+                            if (file_exists($fullPath)) {
+                                // 不管是圖片或文件，一律下載
+                                echo "<td><a href='$safePath' download='$fileName' style='background-color:rgb(43, 61, 255); /* 綠色背景 */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 8px;
+        transition: 0.3s;'>下載檔案</a></td>";
+                            } else {
+                                echo "<td>檔案不存在</td>";
+                            }
+                        } else {
+                            echo "<td>無檔案</td>";
+                        }
+
+
+
+                        echo "<td>" . htmlspecialchars($row['department']) . "</td>";
                         echo "<td>
                                 <form action='approve_proposal.php' method='POST'>
                                     <input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>
@@ -384,7 +413,8 @@ session_start()
         <!-- 分頁 -->
         <div class="pagination">
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="review_proposals.php?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>" class="<?php echo $i == $page ? 'active' : ''; ?>">
+                <a href="review_proposals.php?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>"
+                    class="<?php echo $i == $page ? 'active' : ''; ?>">
                     <?php echo $i; ?>
                 </a>
             <?php endfor; ?>
@@ -395,12 +425,12 @@ session_start()
         <table>
             <thead>
                 <tr>
-                    <th>提案 ID</th>
-                    <th>建言 ID</th>
+                    <th>提案編號</th>
+                    <th>建言連結</th>
                     <th>提案內容</th>
-                    <th>資金金額</th>
-                    <th>檔案</th>
-                    <th>狀態</th>
+                    <th>提案金額</th>
+                    <th>企劃書</th>
+                    <th>負責處所</th>
                 </tr>
             </thead>
             <tbody>
@@ -420,8 +450,8 @@ session_start()
                 $approved_offset = ($approved_page - 1) * $approved_limit;
 
                 // 查詢已批准的提案
-                $approved_sql = "SELECT suggestion_assignments_id, advice_id, proposal_text, funding_amount, proposal_file_path, status 
-                                 FROM suggestion_assignments 
+                $approved_sql = "SELECT department,suggestion_assignments_id, advice_id, proposal_text, funding_amount, proposal_file_path, status 
+                                 FROM suggestion_assignments join users on suggestion_assignments.office_id = users.user_id
                                  WHERE status = '已通過'";
 
                 if (!empty($approved_search)) {
@@ -435,11 +465,36 @@ session_start()
                     while ($row = $approved_result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['suggestion_assignments_id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['advice_id']) . "</td>";
+                         echo "<td><a href='../advice_detail.php?advice_id=" . urlencode($row['advice_id']) . "' style='text-decoration: none;'>" . htmlspecialchars($row['advice_id']) . "</a></td>";
                         echo "<td>" . nl2br(htmlspecialchars($row['proposal_text'])) . "</td>";
                         echo "<td>" . htmlspecialchars($row['funding_amount']) . "</td>";
-                        echo "<td><a href='" . htmlspecialchars($row['proposal_file_path']) . "' download>下載檔案</a></td>";
-                        echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+
+                        if (!empty($row['proposal_file_path'])) {
+                            $filePath = $row['proposal_file_path'];      // e.g., uploads/chicken.png
+                            $fullPath = '../' . $filePath;               // 相對於 manager/ 資料夾
+                            $safePath = htmlspecialchars($fullPath);     // 安全處理路徑
+                            $fileName = basename($filePath);             // 取得檔案名稱（不含路徑）
+                
+                            if (file_exists($fullPath)) {
+                                // 不管是圖片或文件，一律下載
+                                echo "<td><a href='$safePath' download='$fileName' style='background-color:rgb(43, 61, 255); /* 綠色背景 */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 8px;
+        transition: 0.3s;'>下載檔案</a></td>";
+                            } else {
+                                echo "<td>檔案不存在</td>";
+                            }
+                        } else {
+                            echo "<td>無檔案</td>";
+                        }
+
+                        echo "<td>" . htmlspecialchars($row['department']) . "</td>";
                         echo "</tr>";
                     }
                 } else {
@@ -463,7 +518,8 @@ session_start()
         <!-- 已批准提案分頁 -->
         <div class="pagination">
             <?php for ($i = 1; $i <= $approved_total_pages; $i++): ?>
-                <a href="review_proposals.php?approved_page=<?php echo $i; ?>&approved_search=<?php echo htmlspecialchars($approved_search); ?>" class="<?php echo $i == $approved_page ? 'active' : ''; ?>">
+                <a href="review_proposals.php?approved_page=<?php echo $i; ?>&approved_search=<?php echo htmlspecialchars($approved_search); ?>"
+                    class="<?php echo $i == $approved_page ? 'active' : ''; ?>">
                     <?php echo $i; ?>
                 </a>
             <?php endfor; ?>
