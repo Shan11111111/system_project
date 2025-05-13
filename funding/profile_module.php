@@ -44,7 +44,7 @@ $stmt->close();
             <img src="../img/logo.png" alt="個人頭像">
         </div>
         <div id="dropdownMenu" class="dropdown">
-            <a href="edit_profile.php">編輯個人資料</a>
+            <!-- <a href="edit_profile.php">編輯個人資料</a> -->
             <a href="../logout.php">登出</a>
         </div>
     </div>
