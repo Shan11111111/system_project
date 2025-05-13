@@ -1,22 +1,29 @@
 <?php
-// 建立資料庫連接
+// 建立 PDO 資料庫連線
 $host = 'localhost';
-$dbname = 'system_project';  // ←這裡請用你資料庫實際名稱
-$username = 'root';          // ← 這裡是 XAMPP 預設使用者
-$password = '';              // ← 預設無密碼
+$dbname = 'system_project';
+$username = 'root';
+$password = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $departments = ['教務處', '學務處', '總務處', '輔導室', '資訊中心', '體育組', '人事室', '圖書館'];
+    echo "<h2>📊 建言統計報告（含加值功能）</h2>";
 
-    echo "<h2>建言統計報告（含加值功能）</h2>";
+    // 🔍 自動抓取所有出現過的部門
+    $stmt = $pdo->query("SELECT DISTINCT department FROM suggestions ORDER BY department");
+    $departments = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    if (empty($departments)) {
+        echo "<p>⚠️ 尚無任何部門資料</p>";
+        exit;
+    }
 
     foreach ($departments as $dept) {
-        echo "<h3>$dept</h3>";
+        echo "<h3>📌 $dept</h3>";
 
-        // 1. 狀態數量統計
+        // 1️⃣ 狀態數量統計
         $stmt = $pdo->prepare("
             SELECT status, COUNT(*) AS count 
             FROM suggestions 
@@ -30,15 +37,15 @@ try {
         $completed = $statusData['已完成'] ?? 0;
         $completionRate = $total > 0 ? round($completed / $total * 100, 2) : 0;
 
-        echo "<p>建言總數：$total</p>";
-        echo "<p>完成率：$completionRate%</p>";
+        echo "<p>總建言數：<strong>$total</strong></p>";
+        echo "<p>完成率：<strong>$completionRate%</strong></p>";
         echo "<ul>
             <li>未處理：" . ($statusData['未處理'] ?? 0) . "</li>
             <li>處理中：" . ($statusData['處理中'] ?? 0) . "</li>
             <li>已完成：" . ($statusData['已完成'] ?? 0) . "</li>
         </ul>";
 
-        // 2. 平均處理時間（天）
+        // 2️⃣ 平均處理時間（天）
         $stmt = $pdo->prepare("
             SELECT AVG(DATEDIFF(resolved_at, created_at)) AS avg_days 
             FROM suggestions 
@@ -48,7 +55,7 @@ try {
         $avgDays = round($stmt->fetchColumn(), 1);
         echo "<p>平均處理時間：" . ($avgDays ? "$avgDays 天" : "無") . "</p>";
 
-        // 3. 平均滿意度（1~5）
+        // 3️⃣ 平均滿意度（1~5）
         $stmt = $pdo->prepare("
             SELECT AVG(satisfaction) AS avg_satisfaction 
             FROM suggestions 
@@ -58,7 +65,7 @@ try {
         $avgSatisfaction = round($stmt->fetchColumn(), 1);
         echo "<p>平均滿意度：" . ($avgSatisfaction ? "$avgSatisfaction / 5 ⭐" : "無回饋") . "</p>";
 
-        // 4. 最新3則回覆摘要
+        // 4️⃣ 最新回覆摘要
         $stmt = $pdo->prepare("
             SELECT title, response 
             FROM suggestions 
@@ -84,6 +91,6 @@ try {
     }
 
 } catch (PDOException $e) {
-    echo "資料庫連線失敗：" . $e->getMessage();
+    echo "<p style='color:red;'>❌ 資料庫連線失敗：" . $e->getMessage() . "</p>";
 }
 ?>
