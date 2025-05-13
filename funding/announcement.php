@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 處理檔案上傳
     if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = 'file_uploads/'; // 上傳目錄
+        $upload_dir = 'file_upload/'; // 上傳目錄
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true); // 建立目錄（若不存在）
         }
