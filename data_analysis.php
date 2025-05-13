@@ -10,21 +10,24 @@ try {
 
     $departments = ['教務處', '學務處', '總務處', '輔導室', '資訊中心', '體育組', '人事室', '圖書館'];
 
-    echo "<!DOCTYPE html>
-    <html lang='zh-Hant'>
-    <head>
-        <meta charset='UTF-8'>
-        <title>建言數據分析報告</title>
-        <style>
-            body { font-family: Arial; padding: 20px; background: #f8f8f8; color: #333; }
-            h2 { color: #2c3e50; }
-            h3 { margin-top: 40px; color: #34495e; }
-            p, ul { line-height: 1.6; }
-            hr { margin: 30px 0; border: none; border-top: 1px solid #ccc; }
-        </style>
-    </head>
-    <body>
-    <h2>建言統計報告（含加值功能）</h2>";
+    // 使用 heredoc 語法輸出 HTML 內容
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang='zh-Hant'>
+<head>
+    <meta charset='UTF-8'>
+    <title>建言數據分析報告</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f8f8f8; color: #333; }
+        h2 { color: #2c3e50; }
+        h3 { margin-top: 40px; color: #34495e; }
+        p, ul { line-height: 1.6; }
+        hr { margin: 30px 0; border: none; border-top: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+<h2>建言統計報告（含加值功能）</h2>
+HTML;
 
     foreach ($departments as $dept) {
         echo "<h3>$dept</h3>";
