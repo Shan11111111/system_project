@@ -403,7 +403,7 @@ document.getElementById('mobile-menu-toggle').addEventListener('click', function
                 <div class="school_info">
                     <div>關於我們</div>
                     <div>學校處室</div>
-                    <div>意見箱</div>
+                    <div><a href="suggestion_box.php" style="color: black; text-decoration: none;">意見箱</a></div>
                 </div>
                 <div class="connection">
                     <div>242新北市新莊區中正路510號.</div>
