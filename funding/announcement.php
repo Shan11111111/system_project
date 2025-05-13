@@ -317,7 +317,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <!-- Manager 使用者的導覽列 -->
             <a href="../homepage.php">孵仁首頁</a>
             <a href="../manager/advice_manager.php">建言管理</a>
-            <a href="../manager/assign_office.php">達標建言分配處所</a>
+            <!-- <a href="../manager/assign_office.php">達標建言分配處所</a> -->
             <a href="../manager/review_proposals.php">募資專案審核</a>
             <a href="../manager/review_extension_requests.php">延後募資申請審核</a>
             <a href="../manager/people_manager.php">人員處理</a>
