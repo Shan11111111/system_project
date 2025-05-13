@@ -15,12 +15,23 @@ $office_id = $_SESSION['user_id'];
 // 確認募資專案狀態
 $project_id = isset($_GET['project_id']) ? intval($_GET['project_id']) : 0;
 
-// 查詢所有已完成的募資專案
+// 設定每頁顯示的專案數量
+$limit = 5; // 每頁顯示 5 筆
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1; // 當前頁數
+$offset = ($page - 1) * $limit; // 計算偏移量
+
+// 計算總專案數量
+$count_sql = "SELECT COUNT(*) AS total FROM fundraising_projects WHERE status = '已完成'";
+$count_result = $conn->query($count_sql);
+$total_rows = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_rows / $limit); // 計算總頁數
+
+// 查詢當前頁的專案
 $completed_projects_sql = "SELECT project_id, title, description, funding_goal, start_date, end_date 
                            FROM fundraising_projects 
-                           WHERE status = '已完成'";
+                           WHERE status = '已完成'
+                           LIMIT $limit OFFSET $offset";
 $completed_projects_result = $conn->query($completed_projects_sql);
-
 
 $status_message = "";
 if ($completed_projects_result->num_rows === 0) {
@@ -288,6 +299,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endwhile; ?>
                 </tbody>
             </table>
+
+            <!-- 分頁按鈕 -->
+            <div class="pagination" style="text-align: center; margin-top: 20px;">
+                <?php if ($page > 1): ?>
+                    <a href="?page=<?= $page - 1 ?>" style="margin-right: 10px; text-decoration: none; color: #007BFF;">上一頁</a>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?page=<?= $i ?>" style="margin-right: 10px; text-decoration: none; <?= $i == $page ? 'font-weight: bold; color: #000;' : 'color: #007BFF;' ?>"><?= $i ?></a>
+                <?php endfor; ?>
+
+                <?php if ($page < $total_pages): ?>
+                    <a href="?page=<?= $page + 1 ?>" style="text-decoration: none; color: #007BFF;">下一頁</a>
+                <?php endif; ?>
+            </div>
         <?php else : ?>
             <p>目前沒有已完成的募資專案。</p>
         <?php endif; ?>

@@ -353,6 +353,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <button type="submit"><?= $edit_id ? '更新公告' : '發布公告' ?></button>
         </form>
 
+
         <h2 style="color: #333;">已發布公告</h2>
         <table>
             <thead>
@@ -368,28 +369,31 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             </thead>
             <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= $row['announcement_id'] ?></td>
-                        <td><?= htmlspecialchars($row['title']) ?></td>
-                        <td><?= htmlspecialchars($row['content']) ?></td>
-                        <td><?= htmlspecialchars($row['category']) ?></td>
-                        <td><?= $row['update_at'] ?></td>
-                        <td>
-                            <?php if (!empty($row['file_path'])): ?>
-                                <?php
-                                $file_name = basename($row['file_path']);
-                                $original_file_name = explode('_', $file_name, 2)[1] ?? $file_name;
-                                ?>
-                                <a href="<?= htmlspecialchars($row['file_path']) ?>" target="_blank"><?= htmlspecialchars($original_file_name) ?></a>
-                            <?php else: ?>
-                                無
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <a href="announcement.php?edit_id=<?= $row['announcement_id'] ?>">修改</a>
-                            <a href="announcement.php?delete_id=<?= $row['announcement_id'] ?>" onclick="return confirm('確定要刪除嗎？');">刪除</a>
-                        </td>
-                    </tr>
+                    <?php if ($row['user_id'] == $user_id): // 只顯示屬於當前使用者的公告 
+                    ?>
+                        <tr>
+                            <td><?= $row['announcement_id'] ?></td>
+                            <td><?= htmlspecialchars($row['title']) ?></td>
+                            <td><?= htmlspecialchars($row['content']) ?></td>
+                            <td><?= htmlspecialchars($row['category']) ?></td>
+                            <td><?= $row['update_at'] ?></td>
+                            <td>
+                                <?php if (!empty($row['file_path'])): ?>
+                                    <?php
+                                    $file_name = basename($row['file_path']);
+                                    $original_file_name = explode('_', $file_name, 2)[1] ?? $file_name;
+                                    ?>
+                                    <a href="<?= htmlspecialchars($row['file_path']) ?>" target="_blank"><?= htmlspecialchars($original_file_name) ?></a>
+                                <?php else: ?>
+                                    無
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <a href="announcement.php?edit_id=<?= $row['announcement_id'] ?>">修改</a>
+                                <a href="announcement.php?delete_id=<?= $row['announcement_id'] ?>" onclick="return confirm('確定要刪除嗎？');">刪除</a>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                 <?php endwhile; ?>
             </tbody>
         </table>

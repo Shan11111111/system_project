@@ -47,6 +47,38 @@ if (isset($_GET['delete'])) {
     header("Location: funding_FAQ.php");
     exit();
 }
+
+// 設定每頁顯示的常見問題數量
+$limit = 5; // 每頁顯示 5 筆
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1; // 當前頁數
+$offset = ($page - 1) * $limit; // 計算偏移量
+
+// 計算總常見問題數量
+$count_sql = "SELECT COUNT(*) AS total FROM funding_FAQ WHERE user_id = ?";
+$count_stmt = $conn->prepare($count_sql);
+$count_stmt->bind_param("i", $office_id);
+$count_stmt->execute();
+$count_result = $count_stmt->get_result();
+$total_rows = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_rows / $limit); // 計算總頁數
+$count_stmt->close();
+
+// 查詢當前頁的常見問題
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$sql = "SELECT funding_FAQ_id, project_id, question, reply, updated_on FROM funding_FAQ WHERE user_id = ?";
+if (!empty($search)) {
+    $sql .= " AND (funding_FAQ_id LIKE ? OR project_id LIKE ? OR question LIKE ? OR reply LIKE ?)";
+}
+$sql .= " LIMIT ? OFFSET ?"; // 加入分頁的限制條件
+$stmt = $conn->prepare($sql);
+if (!empty($search)) {
+    $search_param = '%' . $search . '%';
+    $stmt->bind_param("issssii", $office_id, $search_param, $search_param, $search_param, $search_param, $limit, $offset);
+} else {
+    $stmt->bind_param("iii", $office_id, $limit, $offset);
+}
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="zh-tw">
@@ -165,21 +197,9 @@ if (isset($_GET['delete'])) {
                     <th style="padding: 12px 15px; text-align: center; border: 1px solid #ddd;">操作</th>
                 </tr>
             </thead>
+
             <tbody>
                 <?php
-                $search = isset($_GET['search']) ? $_GET['search'] : '';
-                $sql = "SELECT funding_FAQ_id, project_id, question, reply, updated_on FROM funding_FAQ";
-                if (!empty($search)) {
-                    $sql .= " WHERE funding_FAQ_id LIKE ? OR project_id LIKE ? OR question LIKE ? OR reply LIKE ?";
-                }
-                $stmt = $conn->prepare($sql);
-                if (!empty($search)) {
-                    $search_param = '%' . $search . '%';
-                    $stmt->bind_param("ssss", $search_param, $search_param, $search_param, $search_param);
-                }
-                $stmt->execute();
-                $result = $stmt->get_result();
-
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
@@ -201,6 +221,21 @@ if (isset($_GET['delete'])) {
                 ?>
             </tbody>
         </table>
+
+        <!-- 分頁按鈕 -->
+        <div class="pagination" style="text-align: center; margin-top: 20px;">
+            <?php if ($page > 1): ?>
+                <a href="?page=<?= $page - 1 ?>&search=<?= htmlspecialchars($search) ?>" style="margin-right: 10px; text-decoration: none; color: #007BFF;">上一頁</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <a href="?page=<?= $i ?>&search=<?= htmlspecialchars($search) ?>" style="margin-right: 10px; text-decoration: none; <?= $i == $page ? 'font-weight: bold; color: #000;' : 'color: #007BFF;' ?>"><?= $i ?></a>
+            <?php endfor; ?>
+
+            <?php if ($page < $total_pages): ?>
+                <a href="?page=<?= $page + 1 ?>&search=<?= htmlspecialchars($search) ?>" style="text-decoration: none; color: #007BFF;">下一頁</a>
+            <?php endif; ?>
+        </div>
 
         <h2><?php echo isset($_GET['edit']) ? "編輯常見問題" : "新增常見問題"; ?></h2>
         <?php
