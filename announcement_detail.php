@@ -188,10 +188,10 @@
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $announcement_id = (int) $_GET['id'];
 
-        $sql = "SELECT a.title, a.content, a.category, a.update_at, u.department AS author
-            FROM announcement a
-            JOIN users u ON a.user_id = u.user_id
-            WHERE a.announcement_id = :id";
+        $sql = "SELECT a.title, a.content, a.category, a.file_path, a.update_at, u.department AS author
+                FROM announcement a
+                JOIN users u ON a.user_id = u.user_id
+                WHERE a.announcement_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id' => $announcement_id]);
         $announcement = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -226,7 +226,18 @@
                 <!-- 內文 -->
                 <section class="content">
                     <p id="announcement-content"><?= nl2br(htmlspecialchars($announcement['content'])) ?></p>
+                    <?php if (!empty($announcement['file_path'])): ?>
+                        <section class="file-download">
+                            <p>附件下載：
+                                <a href="<?= htmlspecialchars($announcement['file_path']) ?>" download
+                                    class="download-link">
+                                    <?= basename($announcement['file_path']) ?>
+                                </a>
+                            </p>
+                        </section>
+                    <?php endif; ?>
                 </section>
+
             </div>
 
 
@@ -235,8 +246,7 @@
     </div>
 
     <div class="fixed-buttons">
-        <button class="back-btn"onclick="history.back()"><i
-                class="fa-solid fa-arrow-left"></i>
+        <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i>
             <span>返回</span>
         </button><a href="#top" class="top-btn">Top</a>
     </div>
