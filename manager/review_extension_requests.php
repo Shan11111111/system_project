@@ -210,12 +210,12 @@ $result = $conn->query($sql);
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
         <a href="../funding/announcement.php">發布公告</a>
-        <a href="#">數據分析</a>
+        <!-- <a href="#">數據分析</a> -->
     </div>
 
-    <?php include "header.php"; ?>
+
     <!-- 頁面內容 -->
-    <div>
+    <div class="content">
         <!-- 頭部 -->
         <!-- <div class="header">
             <div class="profile">

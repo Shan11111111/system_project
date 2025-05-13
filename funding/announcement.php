@@ -348,7 +348,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <textarea id="content" name="content" rows="5" required><?= htmlspecialchars($edit_content) ?></textarea>
 
             <label for="file">上傳檔案：</label>
-            <input type="file" id="file" name="file">
+            <input type="file" id="file" name="file" required>
 
             <button type="submit"><?= $edit_id ? '更新公告' : '發布公告' ?></button>
         </form>

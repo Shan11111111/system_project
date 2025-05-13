@@ -167,7 +167,7 @@ $stmt->close();
         <a href="../manager/review_proposals.php">募資專案審核</a>
         <a href="../manager/review_extension_requests.php">延後募資申請審核</a>
         <a href="../manager/people_manager.php">人員處理</a>
-        <a href="#">數據分析</a>
+        <!-- <a href="#">數據分析</a> -->
     </div>
 
     <div class="content">

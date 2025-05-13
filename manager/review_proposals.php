@@ -112,7 +112,7 @@ session_start()
 
         /* 頁面內容 */
         .content {
-            /* margin-left: 280px; */
+            margin-left: 280px;
             padding: 20px;
             width: calc(100% - 250px);
         }
@@ -276,12 +276,12 @@ session_start()
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
         <a href="../funding/announcement.php">發布公告</a>
-        <a href="#">數據分析</a>
+        <!-- <a href="#">數據分析</a> -->
     </div>
-    <?php include 'header.php'; ?>
+    
 
     <!-- 頁面內容 -->
-    <div>
+    <div class="content">
 
         <!-- <div class="profile" style="background-color: #fff; padding: 10px 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; text-align: right;">
         <p style="margin: 0; font-size: 1.2em; font-weight: bold;">歡迎, <?php echo htmlspecialchars($_SESSION['user_id']); ?></p>

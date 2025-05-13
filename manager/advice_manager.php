@@ -31,7 +31,7 @@ if ($conn->connect_error) {
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'desc'; // 預設為公告日期近到遠
 $agree_sort = isset($_GET['agree_sort']) ? $_GET['agree_sort'] : ''; // 預設不排序覆議次數
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // 預設為第1頁
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // 預設為第1頁
 $limit = 8; // 每頁顯示8筆資料
 $offset = ($page - 1) * $limit;
 
@@ -111,7 +111,8 @@ $total_pages = ceil($total_rows / $limit);
 
         /* 頁面內容 */
         .content {
-            /* margin-left: 280px; */
+            margin-left: 280px;
+            /* 與 sidebar 寬度一致 */
             padding: 20px;
             width: calc(100% - 250px);
         }
@@ -159,7 +160,7 @@ $total_pages = ceil($total_rows / $limit);
         }
 
         .dropdown a:hover {
-            background-color:rgb(159, 193, 255);
+            background-color: rgb(159, 193, 255);
         }
 
         /* 表格樣式 */
@@ -192,7 +193,7 @@ $total_pages = ceil($total_rows / $limit);
         }
 
         tr:hover {
-            background-color:rgb(167, 185, 255);
+            background-color: rgb(167, 185, 255);
         }
 
         input[type="number"] {
@@ -229,29 +230,34 @@ $total_pages = ceil($total_rows / $limit);
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
         <a href="../funding/announcement.php">發布公告</a>
+
+
         <!-- <a href="#">數據分析</a> -->
     </div>
 
-    <!-- 頁面內容 -->
-    <?php include 'header.php'; ?>
+    <div class="content">
 
         <!-- 搜尋表單 -->
-        <form method="GET" action="advice_manager.php" style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding: 20px;">
-            <input type="text" name="search" placeholder="搜尋建言..." value="<?php echo htmlspecialchars($search); ?>" 
-                   style="padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+        <form method="GET" action="advice_manager.php"
+            style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding: 20px;">
+            <input type="text" name="search" placeholder="搜尋建言..." value="<?php echo htmlspecialchars($search); ?>"
+                style="padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
             <select name="sort" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
                 <option value="desc" <?php echo $sort === 'desc' ? 'selected' : ''; ?>>公告日期：近到遠</option>
                 <option value="asc" <?php echo $sort === 'asc' ? 'selected' : ''; ?>>公告日期：遠到近</option>
             </select>
-            <select name="agree_sort" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+            <select name="agree_sort"
+                style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
                 <option value="" <?php echo $agree_sort === '' ? 'selected' : ''; ?>>覆議次數排序</option>
                 <option value="desc" <?php echo $agree_sort === 'desc' ? 'selected' : ''; ?>>覆議次數：高到低</option>
                 <option value="asc" <?php echo $agree_sort === 'asc' ? 'selected' : ''; ?>>覆議次數：低到高</option>
             </select>
-            <button type="submit" style="padding: 10px 20px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+            <button type="submit"
+                style="padding: 10px 20px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
                 搜尋
             </button>
-            <a href="advice_manager.php" style="padding: 10px 20px; background-color: #6c757d; color: #fff; text-decoration: none; border-radius: 4px; font-size: 14px; text-align: center;">
+            <a href="advice_manager.php"
+                style="padding: 10px 20px; background-color: #6c757d; color: #fff; text-decoration: none; border-radius: 4px; font-size: 14px; text-align: center;">
                 清除篩選
             </a>
         </form>
@@ -301,9 +307,9 @@ $total_pages = ceil($total_rows / $limit);
         <!-- 分頁按鈕 -->
         <div style="text-align: center; margin-top: 20px;">
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?search=<?php echo urlencode($search); ?>&sort=<?php echo $sort; ?>&agree_sort=<?php echo $agree_sort; ?>&page=<?php echo $i; ?>" 
-                   style="margin: 0 5px; <?php echo $i === $page ? 'font-weight: bold;' : ''; ?>">
-                   <?php echo $i; ?>
+                <a href="?search=<?php echo urlencode($search); ?>&sort=<?php echo $sort; ?>&agree_sort=<?php echo $agree_sort; ?>&page=<?php echo $i; ?>"
+                    style="margin: 0 5px; <?php echo $i === $page ? 'font-weight: bold;' : ''; ?>">
+                    <?php echo $i; ?>
                 </a>
             <?php endfor; ?>
         </div>

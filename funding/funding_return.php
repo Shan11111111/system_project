@@ -74,9 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("isss", $project_id, $title, $content, $file_path);
 
     if ($stmt->execute()) {
-        echo "回報已成功提交！";
+       echo "<script>alert('回報已成功提交！');location.href='funding_return.php';</script>";
     } else {
         echo "回報提交失敗：" . $conn->error;
+        echo "<script>alert('回報提交失敗！');location.href='funding_return.php';</script>";
     }
 }
 ?>
@@ -256,8 +257,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="content">
 
 
-        <!-- 已完成專案清單 -->
-        <h2 style="color: black;">已完成的募資專案</h2>
+        <!-- 金額達標專案清單 -->
+        <h2 style="color: black;">金額達標的募資專案</h2>
         <?php if ($completed_projects_result->num_rows > 0) : ?>
             <table>
                 <thead>
@@ -330,6 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             e.preventDefault();
             alert('請選擇一個專案！');
         }
+        
     });
 </script>
 
