@@ -9,6 +9,21 @@ if ($conn->connect_error) {
 session_start();
 $office_id = $_SESSION['user_id'];
 
+// 統一 $cat 判斷
+if ($_SESSION['user_id'] == '123') {
+    $cat = 'academic';
+} else if ($_SESSION['user_id'] == '345678') {
+    $cat = 'club';
+} else if ($_SESSION['user_id'] == '2222') {
+    $cat = 'equipment';
+} else if ($_SESSION['user_id'] == '0909') {
+    $cat = 'welfare';
+} else if ($_SESSION['user_id'] == '0904') {
+    $cat = 'environment';
+} else {
+    $cat = 'other';
+}
+
 // 引入個人資料模組
 // include 'profile_module.php';
 
@@ -86,6 +101,12 @@ if (!empty($search) && !empty($status)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
+// 取得所有處所（只查一次，建議放在 while 迴圈外面，這裡為簡化直接查詢）
+$offices_result = $conn->query("SELECT user_id, department FROM users where level='office'");
+$offices = [];
+while ($office_row = $offices_result->fetch_assoc()) {
+    $offices[] = $office_row;
+}
 ?>
 <!DOCTYPE html>
 <html lang="zh-tw">
@@ -380,6 +401,120 @@ $result = $stmt->get_result();
         .dropdown a:hover {
             background-color: rgb(159, 193, 255);
         }
+
+        /* 轉移提案表單美化 */
+        .transfer-form {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .transfer-form select {
+            padding: 8px 12px;
+            border: 1.5px solid #007BFF;
+            border-radius: 6px;
+            background-color: #f4f8ff;
+            font-size: 1em;
+            color: #007BFF;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .transfer-form select:focus {
+            border-color: #0056b3;
+            background-color: #e6f0ff;
+        }
+
+        .transfer-form .transfer-btn {
+            padding: 8px 18px;
+            background: linear-gradient(90deg, #007BFF 60%, #0056b3 100%);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 123, 255, 0.08);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .transfer-form .transfer-btn:hover {
+            background: linear-gradient(90deg, #0056b3 60%, #007BFF 100%);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+        }
+
+        /* 懸浮按鈕樣式 */
+        #fab {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #007BFF;
+            color: #fff;
+            font-size: 12px;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 999;
+            /* 新增 relative 以便紅點定位 */
+            position: fixed;
+            /* 讓紅點能定位在按鈕內 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #fab:hover {
+            background: #0056b3;
+        }
+
+        /* Modal 樣式 */
+        .fab-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .fab-modal-content {
+            background: #fff;
+            margin: 10% auto;
+            padding: 30px 20px;
+            border-radius: 8px;
+            width: 320px;
+            position: relative;
+        }
+
+        .fab-close {
+            position: absolute;
+            right: 16px;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .fab-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 14px;
+            height: 14px;
+            background: red;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            z-index: 1001;
+            display: inline-block;
+            box-shadow: 0 0 2px #333;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -426,8 +561,22 @@ $result = $stmt->get_result();
                     echo "<div class='card'>";
                     echo "<h3><a href='../advice_detail.php?advice_id=" . $row['advice_id'] . "' style='color: #007BFF; text-decoration: none;'>(點擊查看)建言 ID: " . htmlspecialchars($row['advice_id']) . "</a></h3>";
                     echo "<p><strong>建言標題:</strong> " . htmlspecialchars($row['advice_title']) . "</p>";
-                    // echo "<p><strong>狀態:</strong> " . htmlspecialchars($row['status']) . "</p>";
-            
+
+                    // 轉移提案表單
+                    echo "<form action='transfer_assignment.php' method='POST' class='transfer-form'>";
+                    echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
+                    echo "<select name='new_office_id' required>";
+                    echo "<option value=''>選擇轉移處所</option>";
+                    foreach ($offices as $office) {
+                        // 不顯示目前的處所
+                        if ($office['user_id'] == $office_id)
+                            continue;
+                        echo "<option value='" . htmlspecialchars($office['user_id']) . "'>" . htmlspecialchars($office['department']) . "</option>";
+                    }
+                    echo "</select>";
+                    echo "<button type='submit' class='transfer-btn'>轉移提案</button>";
+                    echo "</form>";
+
                     // 操作按鈕
                     echo "<div class='actions'>狀態:";
                     if ($row['notification']) {
@@ -469,7 +618,8 @@ $result = $stmt->get_result();
         <!-- 分頁按鈕 -->
         <div class="pagination">
             <?php if ($current_page > 1): ?>
-                <a href="?page=<?php echo $current_page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">上一頁</a>
+                <a
+                    href="?page=<?php echo $current_page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">上一頁</a>
             <?php endif; ?>
 
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -480,7 +630,8 @@ $result = $stmt->get_result();
             <?php endfor; ?>
 
             <?php if ($current_page < $total_pages): ?>
-                <a href="?page=<?php echo $current_page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">下一頁</a>
+                <a
+                    href="?page=<?php echo $current_page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">下一頁</a>
             <?php endif; ?>
         </div>
     </div>
@@ -515,6 +666,114 @@ $result = $stmt->get_result();
             }
         }
     </script>
+
+    <?php
+    // ...原本的 session 與 $cat 判斷...
+    
+    // 判斷有無可加入的建言
+    $has_new_advice = false;
+    $stmt = $conn->prepare("SELECT COUNT(*) AS cnt FROM advice WHERE category = ? AND advice_state = '未處理' AND agree > 2");
+    if ($stmt) {
+        $stmt->bind_param("s", $cat);
+        $stmt->execute();
+        $stmt->bind_result($cnt);
+        $stmt->fetch();
+        if ($cnt > 0)
+            $has_new_advice = true;
+        $stmt->close();
+    }
+    ?>
+    <!-- 懸浮按鈕 -->
+    <button id="fab" onclick="openFabModal()" <?php if (!$has_new_advice) echo 'disabled style="background:#aaa;cursor:not-allowed;"'; ?>>
+    <?php if ($has_new_advice): ?>
+        有新的建言需要加入!
+        <span class="fab-dot"></span>
+    <?php else: ?>
+        目前無新的建言需要加入
+    <?php endif; ?>
+</button>
+
+    <!-- 彈出表單 Modal -->
+    <div id="fabModal" class="fab-modal">
+        <div class="fab-modal-content">
+            <span class="fab-close" onclick="closeFabModal()">&times;</span>
+            <h3>請將達標建言加入提案!</h3>
+            <form id="fabForm" method="POST" action="abc.php">
+                <label for="advice_category">待處理建言：</label>
+                <table>
+                    <?php
+                    $conn = new mysqli("localhost", "root", "", "system_project");
+                    if ($conn->connect_error) {
+                        die("連線失敗: " . $conn->connect_error);
+                    }
+
+                    if ($_SESSION['user_id'] == '123') {
+                        $cat = 'academic';
+                    } else if ($_SESSION['user_id'] == '345678') {
+                        $cat = 'club';
+                    } else if ($_SESSION['user_id'] == '2222') {
+                        $cat = 'equipment';
+                    } else if ($_SESSION['user_id'] == '0909') {
+                        $cat = 'welfare';
+                    } else if ($_SESSION['user_id'] == '0904') {
+                        $cat = 'environment';
+
+                    } else {
+                        $cat = 'other';
+                    }
+
+                    $stmt = $conn->prepare("SELECT advice_id, advice_title, category FROM advice  WHERE  category = ? AND advice_state = '未處理' AND agree > 2");
+                    if ($stmt) {
+                        $stmt->bind_param("s", $cat);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        $has_result = false;
+                        // 先收集所有資料
+                        $rows = [];
+                        while ($row = $result->fetch_assoc()) {
+                            $has_result = true;
+                            $rows[] = $row;
+                        }
+                        if ($has_result) {
+                            // 只輸出一次表頭
+                            echo "<tr><th>標題</th><th>分類</th></tr>";
+                            foreach ($rows as $row) {
+                                echo "<tr><td>" . htmlspecialchars($row['advice_title']) . "</td><td>" . htmlspecialchars($row['category']) . "</td></tr>";
+                                // 用 hidden 欄位傳遞所有 advice_id
+                                echo "<input type='hidden' name='advice_id[]' value='" . htmlspecialchars($row['advice_id']) . "'>";
+                            }
+                        } else {
+                            echo "<p>目前沒有可加入的建言</p>";
+                        }
+                        $stmt->close();
+                    } else {
+                        echo "<p>查詢失敗：" . htmlspecialchars($conn->error) . "</p>";
+                    }
+                    ?>
+                </table>
+                <br><br>
+                <button type="submit">加入提案</button>
+            </form>
+        </div>
+    </div>
+
+    
+
+    <script>
+        function openFabModal() {
+            document.getElementById('fabModal').style.display = 'block';
+        }
+        function closeFabModal() {
+            document.getElementById('fabModal').style.display = 'none';
+        }
+        // 點擊 modal 外部關閉
+        window.onclick = function (event) {
+            var modal = document.getElementById('fabModal');
+            if (event.target === modal) modal.style.display = "none";
+        }
+    </script>
+
 </body>
 
 </html>

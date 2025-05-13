@@ -119,6 +119,7 @@ session_start();
     <!-- 左側導覽列 -->
     <div class="sidebar">
         <h2>管理系統</h2>
+        <a href="../homepage.php">孵仁首頁</a>
         <a href="announcement.php">發布公告</a>
         <a href="adapt.php">自由認領達標建言區</a>
         <a href="office_assignments.php">提交提案與專案管理</a>
