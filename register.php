@@ -72,7 +72,12 @@ session_start();
 
                     <input type="int" name="user_id" placeholder="學號/教職員編號" required />
                     <input type="email" name="email" placeholder="Email" required />
-                    <input type="text" name="name" placeholder="暱稱" required />
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" name="name" id="nickname" placeholder="暱稱" required />
+                        <button type="button" id="random-nickname-btn" title="隨機產生暱稱" style="margin-left:8px; padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer;">
+                            🎲
+                        </button>
+                    </div>
                     <input type="password" id="password" name="password" placeholder="密碼" required />
                     <input type="password" id="confirm-password" placeholder="確認密碼" required />
 
@@ -106,6 +111,16 @@ session_start();
                 event.preventDefault();
                 alert('密碼與確認密碼不相符，請重新輸入！');
             }
+        });
+
+        // 隨機暱稱功能
+        const nicknames = [
+            "小太陽", "星空貓", "藍莓派", "閃電狼", "微笑魚", "樂樂", "小宇", "阿寶", "雲朵", "小熊餅乾",
+            "橘子汽水", "小狐狸", "大樹", "小企鵝", "甜甜圈", "小花", "阿奇", "小米", "小新", "小丸子"
+        ];
+        document.getElementById('random-nickname-btn').addEventListener('click', function () {
+            const randomName = nicknames[Math.floor(Math.random() * nicknames.length)];
+            document.getElementById('nickname').value = randomName;
         });
     </script>
 </body>
