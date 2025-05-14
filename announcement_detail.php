@@ -236,7 +236,7 @@
                     <?php if (!empty($announcement['file_path'])): ?>
                         <section class="file-download">
                             <p>附件下載：
-                                <a href="<?= htmlspecialchars($announcement['file_path']) ?>" download
+                                <a href="funding/<?= htmlspecialchars($announcement['file_path']) ?>" download
                                     class="download-link">
                                     <?= basename($announcement['file_path']) ?>
                                 </a>
