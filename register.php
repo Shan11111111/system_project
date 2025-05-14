@@ -90,13 +90,20 @@ session_start();
     </div>
 
     <script>
-        // 表單提交時進行密碼驗證
         document.getElementById('register-form').addEventListener('submit', function (event) {
+            const userId = document.querySelector('input[name="user_id"]').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
 
+            // 檢查 user_id 是否為純數字
+            if (!/^\d+$/.test(userId)) {
+                event.preventDefault();
+                alert('學號/教職員編號必須為數字！');
+                return;
+            }
+
             if (password !== confirmPassword) {
-                event.preventDefault(); // 阻止表單提交
+                event.preventDefault();
                 alert('密碼與確認密碼不相符，請重新輸入！');
             }
         });

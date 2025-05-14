@@ -23,22 +23,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("i", $advice_id);
 
         if ($stmt->execute()) {
-            echo "建言 ID $advice_id 已成功刪除";
+            // echo "建言 ID $advice_id 已成功刪除";
+            echo "<script>alert('建言 ID $advice_id 已成功刪除');</script>";
+            echo "<script>window.location.href='advice_manager.php';</script>";
+
         } else {
             echo "刪除失敗: " . $stmt->error;
+            echo "<script>window.location.href='advice_manager.php';</script>";
+
         }
 
         $stmt->close();
     } else {
         echo "無效的建言 ID";
+        echo "<script>window.location.href='advice_manager.php';</script>";
+
     }
 } else {
     echo "未提交刪除請求";
+    echo "<script>window.location.href='advice_manager.php';</script>";
+
 }
 
 $conn->close();
 
 // 返回管理頁面
-header("Location: advice_manager.php");
+// header("Location: advice_manager.php");
 exit();
 ?>

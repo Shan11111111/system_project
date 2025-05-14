@@ -23,22 +23,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("i", $user_id);
 
         if ($stmt->execute()) {
-            echo "建言 ID $user_id 已成功刪除";
+            echo "<script>alert('使用者 ID $user_id 已成功刪除');</script>";
+            echo "<script>window.location.href='people_manager.php';</script>";
+
         } else {
             echo "刪除失敗: " . $stmt->error;
+            echo "<script>window.location.href='people_manager.php';</script>";
+
         }
 
         $stmt->close();
     } else {
-        echo "無效的建言 ID";
+        echo "無效的使用者 ID $user_id";
     }
 } else {
     echo "未提交刪除請求";
+    echo "<script>alert('未提交刪除請求');</script>";
+    echo "<script>window.location.href='people_manager.php';</script>";
 }
 
 $conn->close();
 
 // 返回管理頁面
-header("Location: people_manager.php");
+// header("Location: people_manager.php");
 exit();
 ?>
