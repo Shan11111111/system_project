@@ -61,6 +61,17 @@ $count_sql = "SELECT COUNT(*) as total FROM advice
 $count_result = $conn->query($count_sql);
 $total_rows = $count_result->fetch_assoc()['total'];
 $total_pages = ceil($total_rows / $limit);
+
+// 建立分類對照表
+$categoryMap = [
+    "all" => "全部分類",
+    "equipment" => "設施改善",
+    "academic" => "學術發展",
+    "club" => "社團活動",
+    "welfare" => "公益關懷",
+    "environment" => "環保永續",
+    "other" => "其他"
+];
 ?>
 
 <!DOCTYPE html>
@@ -281,11 +292,13 @@ $total_pages = ceil($total_rows / $limit);
                 <?php
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
+                        // 取得中文分類名稱
+                        $categoryName = $categoryMap[$row['category']] ?? $row['category'];
                         echo "<tr>";
                         echo "<td>" . $row['advice_id'] . "</td>";
                         echo "<td>" . htmlspecialchars($row['advice_title']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['advice_content']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                        echo "<td>" . htmlspecialchars($categoryName) . "</td>";
                         echo "<td>" . ($row['advice_state'] ?? '未處理') . "</td>";
                         echo "<td>" . $row['announce_date'] . "</td>";
                         echo "<td>" . $row['agree'] . "</td>";
