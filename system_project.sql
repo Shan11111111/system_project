@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-13 08:35:32
+-- 產生時間： 2025-05-14 13:09:46
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -45,11 +45,8 @@ CREATE TABLE `advice` (
 INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, `agree`, `category`, `advice_state`, `announce_date`) VALUES
 (24, 333333, 'gggg', '社團需要被企業看到，希望學校可以和更多企業合作', 3, 'club', '已分派', '2025-04-15'),
 (25, 333333, '學術發展', '我們應該積極讓我們的學生去比賽，如果學校沒供給錢做研究，大學會沒有競爭力', 0, 'academic', '未處理', '2025-04-18'),
-(26, 333333, '55', '超愛丟垃圾', 3, 'environment', '未處理', '2025-04-19'),
+(26, 333333, '55', '超愛丟垃圾', 3, 'environment', '已分派', '2025-04-19'),
 (27, 333333, '今天學校蚊子很多', '學校可以多多除蚊', 1, 'environment', '未處理', '2025-04-19'),
-(32, 333333, 'ppp', 'ppp', 1, 'welfare', '未處理', '2025-04-19'),
-(33, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
-(34, 333333, 'ppp', 'ppp', 0, 'welfare', '未處理', '2025-04-19'),
 (35, 333333, '改善廁所', '清潔太差了', 0, 'equipment', '未處理', '2025-02-02'),
 (36, 333333, '延長開館', '讀書時間短', 0, 'equipment', '未處理', '2025-04-19'),
 (37, 333333, '設立寫作班', '缺乏論文訓練', 1, 'academic', '未處理', '2025-04-19'),
@@ -60,11 +57,8 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (42, 333333, '社團博覽會', '宣傳太少', 4, 'club', '已回覆', '2025-04-19'),
 (43, 333333, '設立休息區', '休息沒空間', 2, 'other', '未處理', '2025-04-19'),
 (44, 333333, '舉辦文化週', '交流太少', 3, 'other', '已分派', '2025-04-19'),
-(45, 333333, 'zjgojrzjjrg', 'zjgrogjigjjgojgji', 3, 'environment', '未處理', '2025-04-22'),
-(46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 3, 'welfare', '未處理', '2025-04-22'),
-(47, 412402141, '55', 'gOEJOJejoto', 0, 'welfare', '未處理', '2025-04-22'),
-(48, 412402141, 'jgozjojojoj', 'gjogjjgjgjojg', 0, 'academic', '未處理', '2025-04-22'),
-(49, 412402141, 'jwojajgjagjojg', 'gojaogjjagjjagjgjoojgj', 1, 'environment', '未處理', '2025-04-22'),
+(45, 333333, 'zjgojrzjjrg', 'zjgrogjigjjgojgji', 3, 'environment', '已分派', '2025-04-22'),
+(46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 3, 'welfare', '已分派', '2025-04-22'),
 (50, 412401011, '廁所施工聲音好吵', '請學校督促工人在課堂期間做好隔音', 3, 'equipment', '已回覆', '2025-04-24'),
 (51, 412401011, '輔仁醫院附近有變態', '我們發現輔仁醫院這裡有一位怪怪的老伯伯，他常來醫院附近和學生搭訕，我們覺得學校應該加強校安，希望可以加強校安人手。', 3, 'other', '已回覆', '2025-04-24'),
 (52, 412401011, '專題經費不足', '我們希望學校可以多給研究經費，尤其是我們要往更人工智慧發展，需要額外的金錢，我希望學校可以多給學生研究費用!尤其，教育部有給津貼，我覺得學校可以做更多的事情幫助學生更好!', 3, 'academic', '已回覆', '2025-04-24'),
@@ -76,7 +70,6 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (58, 412401011, '舉辦下一次的社團展覽', '去年我們舉辦的社團展覽有很好的回響，今年需要一筆資金來籌辦社團展覽', 3, 'club', '已回覆', '2025-04-24'),
 (59, 412401011, '動漫電玩研習社的同學帶來活力四射的舞蹈', '動漫電玩研習社的同學帶來活力四射的舞蹈，請幫他們應援! 我們還需要100份應援球', 1, 'club', '未處理', '2025-04-24'),
 (60, 412401011, '課外活動指導組的社團博覽會籌備團隊及燈光', '課外活動指導組的社團博覽會籌備團隊及燈光音響組工作人員，我們需要燈光設備兩台和麥可風五個', 3, 'club', '已分派', '2025-04-24'),
-(61, 904, '提出建言', '提出建言', 0, 'academic', '未處理', '2025-04-29'),
 (62, 412402141, '一起救地球', '我們希望學校能夠發起學生救地球團體，前往各地參與各式各樣的環保行動', 0, 'environment', '未處理', '2025-05-07'),
 (63, 412402141, '一起玩音樂', '我們希望學校可以撥補一些場地與設備給我們熱門音樂社，我們的團員渴望有一個舞台，讓更多人發現他們的閃亮點!', 0, 'club', '未處理', '2025-05-07'),
 (64, 412402141, '我們希望可以得到贊助', '親愛的校方、師長好，我們是輔仁大學享食冰箱的負責人，近期發現越來越少人捐贈食物，很多人都向我們反映，學生的手頭經濟不充裕，我們希望可以藉由這個贊助幫助我們學校惡肚子的學生，謝謝大家的幫助TwT', 0, 'other', '未處理', '2025-05-07'),
@@ -84,7 +77,7 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (66, 412402141, '推出健康飲食選項', '希望學校合作餐廳提供更多低糖、低油、低鈉的餐點選擇，幫助學生維持健康飲食。', 3, 'other', '未處理', '2025-05-09'),
 (67, 409100001, '設置校園雨天地墊防滑措施', '下雨天走廊地面濕滑，建議放置止滑墊或改善排水設計以防止學生滑倒。', 3, 'equipment', '未處理', '2025-05-09'),
 (68, 409100001, '改善宿舍網路速度', '宿舍網路常常延遲嚴重，建議學校升級設備或提供多個頻道分流使用。', 1, 'equipment', '未處理', '2025-05-09'),
-(69, 409100001, '設立二手書交換平台', '學生每學期都需購買新書，建議建立線上平台讓學長姐轉售舊書給學弟妹。', 3, 'environment', '未處理', '2025-05-09'),
+(69, 409100001, '設立二手書交換平台', '學生每學期都需購買新書，建議建立線上平台讓學長姐轉售舊書給學弟妹。', 3, 'environment', '已分派', '2025-05-09'),
 (70, 409100001, '改善課堂投影片品質', '部分老師使用的投影片文字過多或排版不佳，建議統一培訓教學簡報設計原則。', 3, 'academic', '未處理', '2025-05-09'),
 (71, 409100001, '改善校園APP介面', '目前校園APP使用體驗不佳，建議重新設計UI/UX，讓查課表、查成績更直覺。', 2, 'other', '未處理', '2025-05-09'),
 (72, 409100001, '推行教室節能減碳計畫', '建議安裝節能燈具，並鼓勵學生下課關燈、空調溫度調整至26度以降低耗能。', 1, 'environment', '未處理', '2025-05-09'),
@@ -313,7 +306,10 @@ CREATE TABLE `announcement` (
 --
 
 INSERT INTO `announcement` (`announcement_id`, `title`, `content`, `category`, `update_at`, `file_path`, `user_id`) VALUES
-(5, '122', '1212', '募資', '2025-05-13 14:33:36', 'file_upload/6822e7c01ddab_系統分析與設計.pdf', 1111);
+(5, '122', '1212', '募資', '2025-05-13 14:33:36', 'file_upload/6822e7c01ddab_系統分析與設計.pdf', 1111),
+(6, '知識', 'fff', '建言', '2025-05-13 15:17:33', 'file_upload/6822f20dd3fa3_公設檢查表.pdf', 345678),
+(7, '系統維修(5/23-5/29)', '親愛的同學您好，請注意這段時間請勿登入系統，謝謝配合', '系統', '2025-05-14 18:45:30', 'file_upload/6824744a98a10_1747218631_公設檢查表.pdf', 1111),
+(8, '處所請注意!請勿發布金額過高的募資', '近來發現處所提案的募資金額過高，請注意是否需要的真實量', '募資', '2025-05-14 18:47:15', 'file_upload/682474b3c6849_輔系公告 (1).pdf', 1111);
 
 -- --------------------------------------------------------
 
@@ -333,7 +329,6 @@ CREATE TABLE `collection` (
 --
 
 INSERT INTO `collection` (`collection_id`, `advice_id`, `user_id`, `collection_created_at`) VALUES
-(1, 61, 333333, '2025-05-03 23:17:45'),
 (2, 58, 333333, '2025-05-03 23:45:45'),
 (3, 66, 409100001, '2025-05-09 21:54:47'),
 (4, 65, 412301092, '2025-05-09 22:04:03'),
@@ -419,7 +414,10 @@ INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_a
 (13, '匿名', 6, 2000.00, '2025-05-06 14:18:12', '', NULL),
 (14, '匿名', 6, 500.00, '2025-05-06 14:18:30', '', NULL),
 (15, '匿名', 3, 1000.00, '2025-05-06 14:18:57', '', NULL),
-(16, '匿名', 3, 100.00, '2025-05-06 14:46:19', '', 904);
+(16, '匿名', 3, 100.00, '2025-05-06 14:46:19', '', 904),
+(17, '匿名', 3, 100.00, '2025-05-13 15:24:41', '', 345678),
+(18, '匿名', 9, 1000.00, '2025-05-14 18:35:47', '', 1111),
+(19, '匿名', 5, 2000.00, '2025-05-14 18:35:58', '', 1111);
 
 -- --------------------------------------------------------
 
@@ -444,7 +442,13 @@ INSERT INTO `execution_report` (`execution_report_id`, `project_id`, `title`, `c
 (3, 2, '0504', '測試', '', '2025-05-04 11:04:57'),
 (4, 2, '12212', '11111', '', '2025-05-04 11:04:57'),
 (5, 2, '1212', '1212', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12'),
-(6, 2, '11', '11111', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12');
+(6, 2, '11', '11111', 'file_upload/680a297b72d683.04934517.pdf', '2025-05-04 12:31:12'),
+(7, 3, '知識', 'dsdsd', '', '2025-05-13 15:18:28'),
+(8, 3, '知識', 'dsdsd', '', '2025-05-13 15:18:35'),
+(9, 3, 'sss', 'sss', '', '2025-05-13 15:22:08'),
+(10, 3, 'sss', 'sss', '', '2025-05-13 15:23:36'),
+(11, 3, 'cdjcodoj', 'vsijodvjsojvj', '', '2025-05-13 15:23:45'),
+(12, 3, 'fojsfjooojf', 'fojjgjoajogojg', '', '2025-05-13 15:27:00');
 
 -- --------------------------------------------------------
 
@@ -584,7 +588,8 @@ INSERT INTO `fundraising_projects` (`project_id`, `suggestion_assignments_id`, `
 (3, 5, '社團博覽會', '幫助學生在社團活動發光發熱', 8000, '2025-04-24 21:43:54', '2025-05-24 20:58:32', '已完成'),
 (4, 7, '輔仁醫院附近有變態', '防狼噴霧普發1000瓶', 20000, '2025-04-24 22:15:43', '2025-04-25 17:42:29', '進行中'),
 (5, 8, '捐血救人', '用於招募志工與工讀金的費用', 35000, '2025-04-24 22:17:25', '2025-05-24 20:58:32', '進行中'),
-(6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', '2025-05-10 00:00:00', '進行中');
+(6, 10, '舉辦下一次的社團展覽', '幫助社團募資', 25000, '2025-04-24 22:22:11', '2025-05-10 00:00:00', '進行中'),
+(9, 23, 'zjgojrzjjrg', '舉辦南非參訪大使團六天五夜', 65000, '2025-05-14 18:32:23', '2025-06-13 18:32:23', '進行中');
 
 -- --------------------------------------------------------
 
@@ -655,7 +660,7 @@ CREATE TABLE `suggestion_assignments` (
 
 INSERT INTO `suggestion_assignments` (`suggestion_assignments_id`, `advice_id`, `office_id`, `proposal_text`, `funding_amount`, `proposal_file_path`, `submitted`, `approved_by_admin`, `admin_feedback`, `status`, `submitted_at`, `reviewed_at`, `notification`) VALUES
 (3, 41, 904, '購買校園消臭劑置放在校園內', 9000, 'uploads/chicken.png', 1, 1, '可以，希望有效', '已通過', '2025-04-22 21:37:32', '2025-04-22 21:40:49', 0),
-(4, 44, 123, '文化季經費:食材費', 12000, 'uploads/附件一113學年度(學士班)輔系開班一覽表 (1).pdf', 1, 0, '你們要買甚麼?請寫好', '被退回', '2025-04-22 21:46:56', '2025-04-24 21:18:08', 1),
+(4, 44, 123, '文化季經費:食材費', 12000, 'uploads/附件一113學年度(學士班)輔系開班一覽表 (1).pdf', 1, 0, '你們要買甚麼?請寫好', '被退回', '2025-04-22 21:46:56', '2025-04-24 21:18:08', 0),
 (5, 42, 345678, '幫助學生在社團活動發光發熱', 8000, 'uploads/動漫社同學.jpg', 1, 1, '不錯喔，祝順利', '已通過', '2025-04-24 21:43:02', '2025-04-24 21:43:54', 0),
 (6, 50, 904, '我們會盡力監督', 0, 'uploads/廁所.jpg', 1, 1, '加油!', '已通過', '2025-04-24 21:10:31', '2025-04-24 21:29:40', 0),
 (7, 51, 345678, '防狼噴霧普發1000瓶', 20000, 'uploads/醫院.jpg', 1, 1, '好的，祝順利', '已通過', '2025-04-24 22:15:17', '2025-04-24 22:15:43', 0),
@@ -665,9 +670,13 @@ INSERT INTO `suggestion_assignments` (`suggestion_assignments_id`, `advice_id`, 
 (11, 24, 345678, 'fjafoif', 2000, 'uploads/soap球.png', 1, 1, '', '已通過', '2025-04-29 16:42:12', '2025-04-29 16:46:20', 0),
 (12, 52, 345678, 'fijoapofjiog', 3000, 'uploads/輔系公告 (1).pdf', 1, 1, 'ok', '已通過', '2025-04-29 16:24:48', '2025-04-29 16:25:04', 0),
 (13, 57, 123, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
-(14, 54, 345678, 'cl3jfofjfjoof', 2000, 'uploads/1745924654_c01.png', 1, 0, '', '被退回', '2025-04-29 19:04:14', '2025-05-13 13:57:46', 1),
+(14, 54, 345678, 'cl3jfofjfjoof', 2000, 'uploads/1745924654_c01.png', 1, 0, '', '被退回', '2025-04-29 19:04:14', '2025-05-13 13:57:46', 0),
 (15, 55, 904, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
-(16, 60, 345678, '校慶燈光秀創意提案：打造光影展演，結合投影技術與學生創意。', 12000, 'uploads/1747113507_公設檢查表.pdf', 1, NULL, NULL, '審核中', '2025-05-13 13:18:27', NULL, 0);
+(16, 60, 345678, '校慶燈光秀創意提案：打造光影展演，結合投影技術與學生創意。', 12000, 'uploads/1747113507_公設檢查表.pdf', 1, NULL, NULL, '審核中', '2025-05-13 13:18:27', NULL, 0),
+(20, 26, 904, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
+(21, 45, 904, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
+(22, 69, 345678, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
+(23, 46, 909, '舉辦南非參訪大使團六天五夜', 65000, 'uploads/1747218631_公設檢查表.pdf', 1, 1, '期待你們的表現!', '已通過', '2025-05-14 18:30:31', '2025-05-14 18:32:23', 1);
 
 -- --------------------------------------------------------
 
@@ -752,8 +761,7 @@ ALTER TABLE `agree_record`
 --
 ALTER TABLE `announcement`
   ADD PRIMARY KEY (`announcement_id`),
-  ADD KEY `user_id` (`user_id`) USING BTREE,
-  ADD KEY `file_path` (`file_path`);
+  ADD KEY `user_id` (`user_id`) USING BTREE;
 
 --
 -- 資料表索引 `collection`
@@ -876,13 +884,13 @@ ALTER TABLE `agree_record`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `announcement`
 --
 ALTER TABLE `announcement`
-  MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
 --
 ALTER TABLE `collection`
-  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `collection_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `comments`
@@ -894,13 +902,13 @@ ALTER TABLE `comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `donation_record`
 --
 ALTER TABLE `donation_record`
-  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
 --
 ALTER TABLE `execution_report`
-  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
@@ -930,7 +938,7 @@ ALTER TABLE `fundraising_extension_requests`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_projects`
 --
 ALTER TABLE `fundraising_projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `replies`
@@ -942,7 +950,7 @@ ALTER TABLE `replies`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `suggestion_assignments`
 --
 ALTER TABLE `suggestion_assignments`
-  MODIFY `suggestion_assignments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `suggestion_assignments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- 已傾印資料表的限制式
