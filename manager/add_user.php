@@ -1,52 +1,52 @@
 <?php
-// add_user.php
+ob_start();
 header('Content-Type: application/json');
-$data = json_decode(file_get_contents('php://input'), true);
 
-// 基本欄位驗證
-if (
-    !isset($data['userId'], $data['name'], $data['email'], $data['department'], $data['level']) ||
-    empty(trim($data['userId'])) ||
-    empty(trim($data['name'])) ||
-    empty(trim($data['email'])) ||
-    empty(trim($data['department'])) ||
-    empty(trim($data['level']))
-) {
-    echo json_encode(['success' => false, 'message' => '所有欄位皆為必填']);
-    exit;
+// 引入 PDO 連線（你提供的版本）
+include '../db_connection.php'; // 這裡取得 $pdo 而不是 $conn
+
+// 解析 JSON 輸入
+$data = json_decode(file_get_contents("php://input"), true);
+if (!$data) {
+    ob_clean();
+    echo json_encode(["success" => false, "message" => "無效的資料格式"]);
+    exit();
 }
 
-// 資料庫連線
-$conn = new mysqli("localhost", "root", "", "system_project");
-if ($conn->connect_error) {
-    echo json_encode(['success' => false, 'message' => '資料庫連線失敗']);
-    exit;
+// 抓欄位
+$user_id = trim($data['userId'] ?? '');
+$name = trim($data['name'] ?? '');
+$email = trim($data['email'] ?? '');
+$department = trim($data['department'] ?? '');
+$password = trim($data['password'] ?? '');
+$level = trim($data['level'] ?? '');
+
+// 檢查欄位
+if (!$user_id || !$name || !$email || !$department || !$password || !$level) {
+    ob_clean();
+    echo json_encode(["success" => false, "message" => "請填寫所有欄位"]);
+    exit();
 }
 
-// 確認 user_id 是否已存在，避免重複
-$check = $conn->prepare("SELECT user_id FROM users WHERE user_id = ?");
-$check->bind_param("s", $data['userId']);
-$check->execute();
-$check->store_result();
-if ($check->num_rows > 0) {
-    echo json_encode(['success' => false, 'message' => '此帳號已存在']);
-    $check->close();
-    $conn->close();
-    exit;
+try {
+    // 預備語句
+    $stmt = $pdo->prepare("INSERT INTO users (user_id, password, name, level, email, department) 
+                           VALUES (:user_id, :password, :name, :level, :email, :department)");
+
+    $stmt->execute([
+        ':user_id'   => $user_id,
+        ':password'  => $password,
+        ':name'      => $name,
+        ':level'     => $level,
+        ':email'     => $email,
+        ':department'=> $department
+    ]);
+
+    ob_clean();
+    echo json_encode(["success" => true]);
+
+} catch (PDOException $e) {
+    ob_clean();
+    echo json_encode(["success" => false, "message" => "新增失敗：" . $e->getMessage()]);
 }
-$check->close();
-
-// 預設密碼同 user_id
-$password = $data['userId'];
-
-$stmt = $conn->prepare("INSERT INTO users (user_id, password, name, email, department, level) VALUES (?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssss", $data['userId'], $password, $data['name'], $data['email'], $data['department'], $data['level']);
-
-if ($stmt->execute()) {
-    echo json_encode(['success' => true]);
-} else {
-    echo json_encode(['success' => false, 'message' => '新增失敗：' . $stmt->error]);
-}
-
-$stmt->close();
-$conn->close();
+?>

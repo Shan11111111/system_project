@@ -326,3 +326,121 @@ button:hover {
   border: 1px solid #f6d55c;
   pointer-events: none;
 }
+
+#userFormModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 18px 20px;
+  z-index: 999;
+  border-radius: 10px;
+  width: 320px;
+  max-height: 80vh;  /* ✅ 限制最大高度為視窗高度的 80% */
+  overflow-y: auto;  /* ✅ 超出就滾動 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  font-family: "Segoe UI", sans-serif;
+}
+
+#userFormModal h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  text-align: center;
+  color: #333;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eee;
+}
+
+#userFormModal label {
+  margin: 4px 0 2px;
+  font-size: 13px;
+}
+
+#userFormModal input,
+#userFormModal select {
+  margin-bottom: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+}
+
+#userFormModal input:focus,
+#userFormModal select:focus {
+  border-color: #f6a623;
+  outline: none;
+}
+
+#userFormModal button {
+  padding: 6px 12px;
+  margin-top: 6px;
+  margin-right: 8px;
+  background-color: #f6a623;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#userFormModal button[type="button"] {
+  background-color: #999;
+}
+
+#userFormModal button:hover {
+  opacity: 0.9;
+}
+
+#formResult {
+  margin-top: 6px;
+  font-size: 13px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center; /* 對齊 icon 垂直置中 */
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 36px; /* 預留空間給眼睛 */
+  box-sizing: border-box;
+  height: 36px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;  /* 垂直置中 icon */
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #888;
+}
+    #userFormModal input,
+    #userFormModal select {
+        width: 100%;
+        margin-bottom: 8px;
+        padding: 6px 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    #userFormModal label {
+        font-weight: bold;
+        margin-bottom: 4px;
+        display: block;
+        font-size: 14px;
+    }
+    #userFormModal button {
+        margin-top: 8px;
+        margin-right: 6px;
+        padding: 6px 12px;
+    }
