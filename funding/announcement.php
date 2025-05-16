@@ -160,7 +160,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
     </div>
 
     <div class="content">
-        <h1 style="color: #333;">公告功能</h1>
+        <h1>公告功能</h1>
         <div class="tab-wrapper">
             <button class="tab-btn active" onclick="switchTab(this, 'publishForm')">發布公告</button>
             <button class="tab-btn" onclick="switchTab(this, 'announcementList')">已發布公告</button>
