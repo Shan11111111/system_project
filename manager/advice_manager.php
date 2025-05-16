@@ -1,16 +1,5 @@
 <?php
 session_start();
-// // 檢查是否已登入
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: login.php");
-//     exit();
-// }
-// // 檢查使用者權限
-// if ($_SESSION['user_role'] !== 'manager') {
-//     echo "您沒有權限訪問此頁面。";
-//     header("Location: ../homepage.php");
-//     exit();
-// }
 
 
 // 資料庫連線設定
@@ -81,6 +70,8 @@ $categoryMap = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>建言管理頁面</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -174,6 +165,68 @@ $categoryMap = [
             background-color: rgb(159, 193, 255);
         }
 
+        /*form*/
+
+        /* 搜尋欄容器：搜尋在左，清除在右 */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* 搜尋表單本體 */
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .filter-form input[type="text"],
+        .filter-form select {
+            padding: 10px;
+            min-width: 180px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            flex-shrink: 1;
+        }
+
+        .filter-form button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            height: 42px;
+            padding: 0 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .filter-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 清除篩選按鈕樣式（獨立） */
+        .clear-btn {
+            background-color: #6c757d;
+            color: #fff;
+            text-decoration: none;
+            height: 42px;
+            padding: 0 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
         /* 表格樣式 */
         table {
             width: 100%;
@@ -183,9 +236,29 @@ $categoryMap = [
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .table-ellipsis {
+            max-width: 150px;
+            /* 自行調整欄位寬度 */
+            max-height: 60px;
+            /* 自行調整欄位高度 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            text-align: left;
+            /* ✅ 只改內容靠左 */
+
+        }
+
+
         thead {
             background-color: #007BFF;
             color: #fff;
+        }
+
+        th {
+            text-align: center;
+            /* ✅ 表頭維持置中（預設也是） */
         }
 
         th,
@@ -226,6 +299,45 @@ $categoryMap = [
         button:hover {
             background-color: #0056b3;
         }
+
+        .my-popup {
+            font-size: 16px;
+        }
+
+        .my-confirm-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 16px;
+        }
+
+        .page-link {
+            display: inline-block;
+            padding: 6px 10px;
+            color: #5c2e91;
+            border-bottom: 2px solid transparent;
+            text-decoration: none;
+            margin: 0 4px;
+            transition: all 0.2s ease;
+        }
+
+        .page-link:hover {
+            border-color: #5c2e91;
+            color: #2c0d77;
+        }
+
+        .page-link.active {
+            font-weight: bold;
+            border-color: #5c2e91;
+            color: #5c2e91;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -247,34 +359,27 @@ $categoryMap = [
     </div>
 
     <div class="content">
+        <h1>建言管理頁面</h1>
 
         <!-- 搜尋表單 -->
-        <form method="GET" action="advice_manager.php"
-            style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding: 20px;">
-            <input type="text" name="search" placeholder="搜尋建言..." value="<?php echo htmlspecialchars($search); ?>"
-                style="padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
-            <select name="sort" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
-                <option value="desc" <?php echo $sort === 'desc' ? 'selected' : ''; ?>>公告日期：近到遠</option>
-                <option value="asc" <?php echo $sort === 'asc' ? 'selected' : ''; ?>>公告日期：遠到近</option>
-            </select>
-            <select name="agree_sort"
-                style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
-                <option value="" <?php echo $agree_sort === '' ? 'selected' : ''; ?>>覆議次數排序</option>
-                <option value="desc" <?php echo $agree_sort === 'desc' ? 'selected' : ''; ?>>覆議次數：高到低</option>
-                <option value="asc" <?php echo $agree_sort === 'asc' ? 'selected' : ''; ?>>覆議次數：低到高</option>
-            </select>
-            <button type="submit"
-                style="padding: 10px 20px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
-                搜尋
-            </button>
-            <a href="advice_manager.php"
-                style="padding: 10px 20px; background-color: #6c757d; color: #fff; text-decoration: none; border-radius: 4px; font-size: 14px; text-align: center;">
-                清除篩選
-            </a>
-        </form>
+        <div class="filter-bar">
+            <form method="GET" action="advice_manager.php" class="filter-form">
+                <input type="text" name="search" placeholder="搜尋建言..." value="<?php echo htmlspecialchars($search); ?>">
+                <select name="sort">
+                    <option value="desc" <?php echo $sort === 'desc' ? 'selected' : ''; ?>>公告日期：近到遠</option>
+                    <option value="asc" <?php echo $sort === 'asc' ? 'selected' : ''; ?>>公告日期：遠到近</option>
+                </select>
+                <select name="agree_sort">
+                    <option value="" <?php echo $agree_sort === '' ? 'selected' : ''; ?>>覆議次數排序</option>
+                    <option value="desc" <?php echo $agree_sort === 'desc' ? 'selected' : ''; ?>>覆議次數：高到低</option>
+                    <option value="asc" <?php echo $agree_sort === 'asc' ? 'selected' : ''; ?>>覆議次數：低到高</option>
+                </select>
+                <button type="submit">搜尋</button>
+            </form>
+            <a href="advice_manager.php" class="clear-btn">清除篩選</a>
+        </div>
 
         <!-- 表格內容 -->
-        <h1>建言管理頁面</h1>
         <table>
             <thead>
                 <tr>
@@ -296,8 +401,9 @@ $categoryMap = [
                         $categoryName = $categoryMap[$row['category']] ?? $row['category'];
                         echo "<tr>";
                         echo "<td>" . $row['advice_id'] . "</td>";
-                        echo "<td>" . htmlspecialchars($row['advice_title']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['advice_content']) . "</td>";
+                        echo "<td class='table-ellipsis' title='" . htmlspecialchars($row['advice_title']) . "' onclick='showFullText(\"" . htmlspecialchars(addslashes($row['advice_title'])) . "\", \"" . htmlspecialchars(addslashes($row['advice_content'])) . "\")'>" . htmlspecialchars($row['advice_title']) . "</td>";
+                        echo "<td class='table-ellipsis' title='" . htmlspecialchars($row['advice_content']) . "' onclick='showFullText(\"" . htmlspecialchars(addslashes($row['advice_title'])) . "\", \"" . htmlspecialchars(addslashes($row['advice_content'])) . "\")'>" . htmlspecialchars($row['advice_content']) . "</td>";
+
                         echo "<td>" . htmlspecialchars($categoryName) . "</td>";
                         echo "<td>" . ($row['advice_state'] ?? '未處理') . "</td>";
                         echo "<td>" . $row['announce_date'] . "</td>";
@@ -316,15 +422,60 @@ $categoryMap = [
                 ?>
             </tbody>
         </table>
+        <!-- 引入 SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function showFullText(title, content) {
+                Swal.fire({
+                    title: title,
+                    html: `
+            <div style="
+                max-height: 300px;
+                overflow-y: auto;
+                text-align: left;
+                padding-right: 10px;
+                line-height: 1.6;
+                font-size: 18px;">
+                ${content}
+            </div>
+        `,
+                    width: 600,
+                    showCloseButton: false,
+                    confirmButtonText: '關閉',
+                    customClass: {
+                        confirmButton: 'my-confirm-btn'
+                    }
+                });
+            }
+        </script>
+
 
         <!-- 分頁按鈕 -->
-        <div style="text-align: center; margin-top: 20px;">
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?search=<?php echo urlencode($search); ?>&sort=<?php echo $sort; ?>&agree_sort=<?php echo $agree_sort; ?>&page=<?php echo $i; ?>"
-                    style="margin: 0 5px; <?php echo $i === $page ? 'font-weight: bold;' : ''; ?>">
-                    <?php echo $i; ?>
+        <div class="pagination">
+            <?php
+            $visiblePages = 5; // 最多顯示幾個分頁按鈕
+            $start = max(1, $page - floor($visiblePages / 2));
+            $end = min($start + $visiblePages - 1, $total_pages);
+
+            // 修正 start 若接近尾頁時會超出 total_pages
+            $start = max(1, $end - $visiblePages + 1);
+            ?>
+
+            <?php if ($page > 1): ?>
+                <a href="?search=<?= urlencode($search); ?>&sort=<?= $sort; ?>&agree_sort=<?= $agree_sort; ?>&page=<?= $page - 1 ?>" class="page-link">&laquo; 上一頁</a>
+            <?php endif; ?>
+
+            <?php for ($i = $start; $i <= $end; $i++): ?>
+                <a href="?search=<?= urlencode($search); ?>&sort=<?= $sort; ?>&agree_sort=<?= $agree_sort; ?>&page=<?= $i ?>"
+                    class="page-link <?= ($i === $page) ? 'active' : '' ?>">
+                    <?= $i ?>
                 </a>
             <?php endfor; ?>
+
+            <?php if ($page < $total_pages): ?>
+                <a href="?search=<?= urlencode($search); ?>&sort=<?= $sort; ?>&agree_sort=<?= $agree_sort; ?>&page=<?= $page + 1 ?>" class="page-link">下一頁 &raquo;</a>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -335,7 +486,7 @@ $categoryMap = [
         }
 
         // 點擊其他地方關閉下拉選單
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             const dropdown = document.getElementById('dropdownMenu');
             if (!event.target.matches('.profile img')) {
                 dropdown.style.display = 'none';
