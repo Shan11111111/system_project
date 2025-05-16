@@ -1,0 +1,190 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #007bff;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 4px;
+}
+
+.sidebar a:hover {
+  background-color: #0056b3;
+}
+
+.content {
+  margin-left: 280px;
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+
+.tab-btn {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tab-btn:hover {
+  background-color: #0056b3;
+}
+
+.search-bar input[type="text"] {
+  width: 320px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-bar button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.table-ellipsis {
+  max-width: 200px; /* 可依實際需求調整 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+thead {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #d1e0ff;
+}
+
+.btn {
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.reject {
+  background-color: #dc3545;
+}
+
+.btn.reject:hover {
+  background-color: #a71d2a;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #0056b3;
+  font-weight: bold;
+}
+
+.pagination a:hover {
+  background-color: #0056b3;
+}
+.tab-wrapper {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.tab-btn:hover {
+  background-color: #fff4d9;
+  color: #5f370e;
+}
+
+.tab-btn.active {
+  color: #5f370e; /* 深褐色 */
+  background-color: #fef6e6; /* 淺黃奶茶底 */
+  font-weight: bold;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 4px;
+  background-color: #f7b84b; /* 橘黃底線 */
+  border-radius: 2px;
+}
