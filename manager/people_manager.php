@@ -119,8 +119,45 @@ $total_pages = ceil($total_row['total'] / $limit);
                     <button type="submit">篩選</button>
                 </div>
             </div>
-            <button type="button" onclick="openAddUserModal()">📝 新增人員</button>
+            <button type="button" onclick="openForm()">📝 新增人員</button>
         </form>
+        <!-- 彈出表單 -->
+        <div id="userFormModal" style="display: none; position: fixed; top: 10%; left: 50%; transform: translateX(-50%);
+    background-color: white; border: 2px solid #ccc; padding: 20px; z-index: 999; border-radius: 10px; width: 300px;">
+            <h3>新增人員</h3>
+            <form id="addUserForm">
+                <label>學號 / 教職員編號</label>
+                <input type="text" id="userId" required>
+
+                <label>姓名</label>
+                <input type="text" id="name" required>
+
+                <label>Email</label>
+                <input type="email" id="email" required>
+
+                <label>科系</label>
+                <input type="text" id="department" required>
+
+                <label for="password">密碼</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" required>
+                    <span class="toggle-password" onclick="togglePassword()">👁</span>
+                </div>
+
+                <label>身分</label>
+                <select id="userLevel" required>
+                    <option value="" disabled selected>選擇身分</option>
+                    <option value="student">學生</option>
+                    <option value="teacher">教職員</option>
+                    <option value="office">處所負責人</option>
+                    <option value="manager">系統管理員</option>
+                </select>
+
+                <button type="submit">送出</button>
+                <button type="button" onclick="closeForm()">取消</button>
+            </form>
+            <div id="formResult" style="margin-top: 10px; color: red;"></div>
+        </div>
 
         <!-- 表格內容 -->
         <table>
@@ -190,6 +227,12 @@ $total_pages = ceil($total_row['total'] / $limit);
     </div>
 
     <script>
+        //眼睛
+        function togglePassword() {
+            const pwdInput = document.getElementById('password');
+            pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+        }
+        //
         function toggleDropdown() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
@@ -202,58 +245,61 @@ $total_pages = ceil($total_row['total'] / $limit);
                 dropdown.style.display = 'none';
             }
         }
-
-        function openAddUserModal() {
-            Swal.fire({
-                title: '新增人員',
-                html: `<input id="userId" class="swal2-input" placeholder="學號 / 教職員編號">
-       <input id="name" class="swal2-input" placeholder="姓名">
-       <input id="email" class="swal2-input" placeholder="Email">
-       <input id="department" class="swal2-input" placeholder="科系">
-       <select id="level" class="swal2-select">
-         <option value="disabled selected">選擇身分</option>
-         <option value="student">學生</option>
-         <option value="teacher">教職員</option>
-         <option value="office">處所負責人</option>
-         <option value="manager">管理員</option>
-
-       </select>`,
-                focusConfirm: false,
-                showCancelButton: true,
-                confirmButtonText: '送出',
-                cancelButtonText: '取消',
-                preConfirm: () => {
-                    const data = {
-                        userId: document.getElementById('userId').value,
-                        name: document.getElementById('name').value,
-                        email: document.getElementById('email').value,
-                        department: document.getElementById('department').value,
-                        level: document.getElementById('level').value
-                    };
-                    if (!data.userId || !data.name || !data.email || !data.department || !data.level) {
-                        Swal.showValidationMessage('請填寫所有欄位');
-                        return false;
-                    }
-
-                    // 這裡可以送 AJAX 請求到後端
-                    fetch('add_user.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        })
-                        .then(res => res.json())
-                        .then(response => {
-                            if (response.success) {
-                                Swal.fire('成功', '人員已新增', 'success').then(() => location.reload());
-                            } else {
-                                Swal.fire('錯誤', response.message || '新增失敗', 'error');
-                            }
-                        });
-                }
-            });
+        //表單
+        function openForm() {
+            document.getElementById("userFormModal").style.display = "block";
         }
+
+        function closeForm() {
+            document.getElementById("userFormModal").style.display = "none";
+            document.getElementById("formResult").innerText = "";
+            document.getElementById("addUserForm").reset();
+        }
+
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const levelEl = document.getElementById('userLevel');
+            const levelValue = levelEl.options[levelEl.selectedIndex].value;
+
+            const data = {
+                userId: document.getElementById('userId').value.trim(),
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                department: document.getElementById('department').value.trim(),
+                password: document.getElementById('password').value.trim(),
+                level: levelValue
+            };
+
+            if (!data.userId || !data.name || !data.email || !data.department || !data.password || !data.level) {
+                document.getElementById('formResult').innerText = "❗請填寫所有欄位";
+                return;
+            }
+
+            fetch('add_user.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(response => {
+                    if (response.success) {
+                        document.getElementById('formResult').style.color = 'green';
+                        document.getElementById('formResult').innerText = "✅ 使用者新增成功";
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        document.getElementById('formResult').style.color = 'red';
+                        document.getElementById('formResult').innerText = "❌ " + response.message;
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('formResult').innerText = "❌ 錯誤：" + err;
+                });
+        });
+    </script>
+
     </script>
 
 </body>
