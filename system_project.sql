@@ -705,7 +705,7 @@ INSERT INTO `users` (`user_id`, `password`, `name`, `level`, `email`, `departmen
 (907, '0907', '陳先生', 'office', 'pubwww@mail.fju.edu.tw', '人事處'),
 (908, '0908', '陳先生', 'office', 'pubwww@mail.fju.edu.tw', '資訊處'),
 (909, '0909', '張先生', 'office', 'pubwww@mail.fju.edu.tw', '資金與資源中心'),
-(1111, '1111', '系統管理者', 'manager', 'pubwww@mail.fju.edu.tw', '0'),
+(1111, '1111', '系統管理者', 'manager', 'pubwww@mail.fju.edu.tw', '孵仁管理員'),
 (2222, '2222', '王安石', 'office', 'pubwww@mail.fju.edu.tw', '總務處'),
 (332478, '332478', '安教授', 'teacher', '332478@m365.fju.edu.tw', '資訊管理學系'),
 (333333, '333333', '王傑明', 'teacher', 'abcd@gmail.com', '外國語文學院'),

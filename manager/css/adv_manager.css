@@ -74,7 +74,9 @@ h1 {
   margin-left: 10px;
 }
 
-
+h2{
+  color: var(--color-dark-brown);
+}
 
 /* 頁面內容 */
 .content {

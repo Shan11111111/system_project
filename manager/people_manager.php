@@ -73,169 +73,8 @@ $total_pages = ceil($total_row['total'] / $limit);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人員管理頁面</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        /* 左側導覽列 */
-        .sidebar {
-            width: 250px;
-            background-color: #007BFF;
-            color: #fff;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 15px;
-            margin: 5px 0;
-            border-radius: 4px;
-        }
-
-        .sidebar a:hover {
-            background-color: #0056b3;
-        }
-
-        /* 頁面內容 */
-        .content {
-            margin-left: 280px;
-            padding: 20px;
-            width: calc(100% - 250px);
-        }
-
-
-
-        .profile {
-            position: relative;
-            display: inline-block;
-        }
-
-        .profile img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            z-index: 1000;
-            width: 150px;
-        }
-
-        .dropdown a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .dropdown a:hover {
-            background-color: rgb(159, 193, 255);
-        }
-
-        /* 表格樣式 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        thead {
-            background-color: #007BFF;
-            color: #fff;
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: rgb(167, 185, 255);
-        }
-
-        input[type="number"] {
-            padding: 8px;
-            width: 80%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 8px 12px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        /* 分頁樣式 */
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .pagination a {
-            margin: 0 5px;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #007BFF;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .pagination a.active {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-        }
-
-        .pagination a:hover {
-            background-color: #0056b3;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="css\adv_manager.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -253,40 +92,34 @@ $total_pages = ceil($total_row['total'] / $limit);
         <!-- <a href="#">數據分析</a> -->
     </div>
 
-    
+
     <!-- 頁面內容 -->
     <div class="content">
-        <!-- 頭部 -->
-        <!-- <div class="header">
-            <div class="profile">
-                <img src="../img/logo.png" alt="頭像" onclick="toggleDropdown()">
-                <div class="dropdown" id="dropdownMenu">
-                    <a href="#">個人資料</a>
-                    <a href="#">設定</a>
-                    <a href="#">登出</a>
-                </div>
-            </div>
-        </div> -->
 
         <!-- 篩選表單 -->
         <h1>人員管理頁面</h1>
-        <form method="GET" action="people_manager.php" style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; background-color: #f9f9f9; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-            <div style="display: flex; flex-direction: column;">
-                <label for="level" style="font-weight: bold; margin-bottom: 5px;">篩選身分:</label>
-                <select name="level" id="level" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 200px;">
-                    <option value="">全部</option>
-                    <option value="student" <?php if ($filter_level == 'student') echo 'selected'; ?>>學生</option>
-                    <option value="teacher" <?php if ($filter_level == 'teacher') echo 'selected'; ?>>教職員</option>
-                    <option value="office" <?php if ($filter_level == 'office') echo 'selected'; ?>>處所負責人</option>
-                </select>
+        <form method="GET" action="people_manager.php" class="filter-form">
+            <div class="filter-left">
+                <!-- 查詢欄 -->
+                <div class="form-group">
+                    <input type="text" name="search" id="search" placeholder="查詢:輸入學號、名字、email或科系" value="<?= htmlspecialchars($search_query) ?>">
+                </div>
+
+                <!-- 身分欄 -->
+                <div class="form-group">
+                    <select name="level" id="level">
+                        <option value="">篩選身分:全部</option>
+                        <option value="student" <?= $filter_level == 'student' ? 'selected' : '' ?>>學生</option>
+                        <option value="teacher" <?= $filter_level == 'teacher' ? 'selected' : '' ?>>教職員</option>
+                        <option value="office" <?= $filter_level == 'office' ? 'selected' : '' ?>>處所負責人</option>
+                    </select>
+                </div>
+                <!-- 篩選按鈕 -->
+                <div class="form-group">
+                    <button type="submit">篩選</button>
+                </div>
             </div>
-            <div style="display: flex; flex-direction: column;">
-                <label for="search" style="font-weight: bold; margin-bottom: 5px;">查詢:</label>
-                <input type="text" name="search" id="search" placeholder="輸入學號、名字、email或科系" value="<?php echo htmlspecialchars($search_query); ?>" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
-            </div>
-            <div>
-                <button type="submit" style="padding: 10px 20px 10px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">篩選</button>
-            </div>
+            <button type="button" onclick="openAddUserModal()">📝 新增人員</button>
         </form>
 
         <!-- 表格內容 -->
@@ -328,11 +161,31 @@ $total_pages = ceil($total_row['total'] / $limit);
 
         <!-- 分頁 -->
         <div class="pagination">
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="people_manager.php?page=<?php echo $i; ?>&level=<?php echo htmlspecialchars($filter_level); ?>&search=<?php echo htmlspecialchars($search_query); ?>" class="<?php echo $i == $page ? 'active' : ''; ?>">
-                    <?php echo $i; ?>
-                </a>
-            <?php endfor; ?>
+            <?php
+            $max_buttons = 5;
+            $half = floor($max_buttons / 2);
+            $start = max(1, $page - $half);
+            $end = min($total_pages, $start + $max_buttons - 1);
+            if ($end - $start + 1 < $max_buttons) {
+                $start = max(1, $end - $max_buttons + 1);
+            }
+
+            // 上一頁
+            if ($page > 1) {
+                echo "<a href='people_manager.php?page=" . ($page - 1) . "&level=" . urlencode($filter_level) . "&search=" . urlencode($search_query) . "' class='page-link'>&laquo; 上一頁</a>";
+            }
+
+            // 頁碼
+            for ($i = $start; $i <= $end; $i++) {
+                $active = ($i == $page) ? 'active' : '';
+                echo "<a href='people_manager.php?page=$i&level=" . urlencode($filter_level) . "&search=" . urlencode($search_query) . "' class='page-link $active'>$i</a>";
+            }
+
+            // 下一頁
+            if ($page < $total_pages) {
+                echo "<a href='people_manager.php?page=" . ($page + 1) . "&level=" . urlencode($filter_level) . "&search=" . urlencode($search_query) . "' class='page-link'>下一頁 &raquo;</a>";
+            }
+            ?>
         </div>
     </div>
 
@@ -349,7 +202,60 @@ $total_pages = ceil($total_row['total'] / $limit);
                 dropdown.style.display = 'none';
             }
         }
+
+        function openAddUserModal() {
+            Swal.fire({
+                title: '新增人員',
+                html: `<input id="userId" class="swal2-input" placeholder="學號 / 教職員編號">
+       <input id="name" class="swal2-input" placeholder="姓名">
+       <input id="email" class="swal2-input" placeholder="Email">
+       <input id="department" class="swal2-input" placeholder="科系">
+       <select id="level" class="swal2-select">
+         <option value="disabled selected">選擇身分</option>
+         <option value="student">學生</option>
+         <option value="teacher">教職員</option>
+         <option value="office">處所負責人</option>
+         <option value="manager">管理員</option>
+
+       </select>`,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: '送出',
+                cancelButtonText: '取消',
+                preConfirm: () => {
+                    const data = {
+                        userId: document.getElementById('userId').value,
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        department: document.getElementById('department').value,
+                        level: document.getElementById('level').value
+                    };
+                    if (!data.userId || !data.name || !data.email || !data.department || !data.level) {
+                        Swal.showValidationMessage('請填寫所有欄位');
+                        return false;
+                    }
+
+                    // 這裡可以送 AJAX 請求到後端
+                    fetch('add_user.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(res => res.json())
+                        .then(response => {
+                            if (response.success) {
+                                Swal.fire('成功', '人員已新增', 'success').then(() => location.reload());
+                            } else {
+                                Swal.fire('錯誤', response.message || '新增失敗', 'error');
+                            }
+                        });
+                }
+            });
+        }
     </script>
+
 </body>
 
 </html>
