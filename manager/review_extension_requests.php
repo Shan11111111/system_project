@@ -29,74 +29,48 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>延期申請審核頁面</title>
+    <link rel="stylesheet" href="css/adv_manager.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #007BFF;
-            color: #fff;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px;
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 15px;
-            margin: 5px 0;
-            border-radius: 4px;
-        }
-
-        .sidebar a:hover {
-            background-color: #0056b3;
-        }
-
-        .content {
-            margin-left: 280px;
-            padding: 20px;
-            width: calc(100% - 250px);
-        }
-
         .tab-bar {
             display: flex;
-            margin-bottom: 20px;
+            background-color: #fff8e7;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .tab-btn {
-            padding: 10px 20px;
-            background: none;
+            flex: 1;
+            padding: 15px;
+            background-color: transparent;
             border: none;
-            border-bottom: 3px solid transparent;
+            font-weight: bold;
             font-size: 16px;
+            color: #999;
             cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
         }
 
         .tab-btn.active {
-            border-color: #007BFF;
-            color: #007BFF;
+            color: #5c3900;
+            background-color: #fff8e7;
         }
 
-        .tab-content {
-            display: none;
+        .tab-btn.active::after {
+            content: "";
+            position: absolute;
+            left: 30%;
+            bottom: 4px;
+            width: 40%;
+            height: 4px;
+            background-color: #f6a623;
+            border-radius: 2px;
         }
 
-        .tab-content.active {
-            display: block;
+        .tab-btn:hover {
+            color: #5c3900;
+            background-color: #fff3d6;
         }
 
         .card-grid {
@@ -199,9 +173,10 @@ $result = $conn->query($sql);
     </div>
 
     <div class="content">
+        <h1>延期申請審核</h1>
         <div class="tab-bar">
-            <button class="tab-btn active" data-target="#tab-pending">待審核申請</button>
-            <button class="tab-btn" data-target="#tab-approved">已批准紀錄</button>
+            <button class="tab-btn" data-tab="review" onclick="showTab('review')">審核提案</button>
+            <button class="tab-btn" data-tab="approved" onclick="showTab('approved')">已批准提案</button>
         </div>
 
         <div id="tab-pending" class="tab-content active">
@@ -320,19 +295,26 @@ $result = $conn->query($sql);
         </div>
     </div>
     <script>
-        document.querySelectorAll('.tab-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                // 移除所有按鈕的 active 狀態
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                // 隱藏所有 tab-content
-                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        function showTab(tabName) {
+            const review = document.getElementById('tab-pending');
+            const approved = document.getElementById('tab-approved');
+            const buttons = document.querySelectorAll('.tab-btn');
 
-                // 加入目前按鈕與對應內容的 active 狀態
-                button.classList.add('active');
-                const target = button.getAttribute('data-target');
-                document.querySelector(target).classList.add('active');
+            review.style.display = (tabName === 'review') ? 'block' : 'none';
+            approved.style.display = (tabName === 'approved') ? 'block' : 'none';
+
+            buttons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
             });
-        });
+        }
+
+        // 根據網址參數自動切換 tab
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('approved_page') || params.has('approved_search')) {
+            showTab('approved');
+        } else {
+            showTab('review');
+        }
     </script>
 
 </body>
