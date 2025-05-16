@@ -86,20 +86,58 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <title>募資常見問題</title>
+    <!-- cdn link -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <style>
-        /* 保留原本的 CSS */
+        :root {
+            /* 主色調 */
+            --color-yellow: #fff6da;
+            /* 鵝黃色 - 小雞感 */
+            /*navbar*/
+            --color-orange-brown: #D9A679;
+            /* 溫柔橘棕 - 強調/按鈕  */
+            --color-dark-brown: #7c4d2b;
+            /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+            --color-soft-green: #dddfab7f;
+            /* 嫩綠色 - 自然感 */
+            --color-cream: #fff8ed;
+            /* 奶油白 - 背景 */
+
+            /* 字體與邊線 */
+            --color-text: #4B3F2F;
+            /* 深褐灰 - 內文字體 */
+            --color-line: #D7CBB8;
+            --navbar-text: #fff6da;
+            /* 淡褐線條 */
+
+            /* 狀態/互動 */
+            --color-orange: #f6a623;
+
+            /* hover/active 狀態用的柔橘 */
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            background-color: #f4f4f9;
+            background-color: var(--color-cream);
+            color: #333;
         }
 
         /* 左側導覽列 */
         .sidebar {
             width: 250px;
-            background-color: #007BFF;
+            background-color: var(--color-yellow);
             color: #fff;
             height: 100vh;
             position: fixed;
@@ -112,21 +150,24 @@ $result = $stmt->get_result();
         .sidebar h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5em;
+            color: var(--color-dark-brown);
         }
 
         .sidebar a {
             display: block;
-            color: #fff;
+            color: var(--color-dark-brown);
             text-decoration: none;
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
+            font-size: 1em;
+            font-weight: bold;
         }
 
         .sidebar a:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
-
 
         .content {
             margin-left: 280px;
@@ -134,19 +175,117 @@ $result = $stmt->get_result();
             width: calc(100% - 250px);
         }
 
-        table {
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-bottom: none;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .tab.active {
+            background: rgb(245, 222, 172);
+            font-weight: bold;
+            border-bottom: 2px solid #e6b800;
+
+        }
+
+        /* 被點擊後的狀態（現在有） */
+        .tab.active {
+            background: var(--color-yellow);
+            font-weight: bold;
+            border-bottom: 3px solid #e6b800;
+            color: var(--color-dark-brown);
+        }
+
+        .tab.active:hover {
+            background-color: #ffe48a;
+            color: var(--color-dark-brown);
+        }
+
+        h1 {
+            color: var(--color-dark-brown);
+        }
+
+
+        
+        .table-wrapper {
             width: 100%;
+
+        }
+
+        .faq-table {
+            width: 1100px;
+            /* 或可用 max-width */
+            table-layout: fixed;
             border-collapse: collapse;
-            margin: 20px 0;
             background-color: #fff;
+            margin-left: 0;
+            margin-top: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        th,
-        td {
+
+
+
+
+        .faq-table th,
+        .faq-table td {
             padding: 12px 15px;
-            text-align: center;
             border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .faq-table td.text-left {
+            text-align: left;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .faq-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+
+        }
+
+        .clickable {
+            cursor: pointer;
+
+        }
+
+        .clickable:hover {
+            text-decoration: underline;
+        }
+
+
+
+
+
+
+        .action-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .action-links a {
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .action-links a.edit {
+            color: #007BFF;
+        }
+
+        .action-links a.delete {
+            color: #FF0000;
         }
 
         button {
@@ -161,6 +300,46 @@ $result = $stmt->get_result();
         button:hover {
             background-color: #0056b3;
         }
+
+        #faq-form {
+            scroll-margin-left: 1000px;
+            /* 根據你的 navbar 高度微調 */
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .page-link {
+            display: inline-block;
+            min-width: 36px;
+            padding: 10px 3px;
+            margin: 0 4px;
+            background-color: #fff8cc;
+            color: #222;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .page-link:hover {
+            background-color: #ffe885;
+            color: #000;
+        }
+
+        .page-link.active {
+            background-color: #f4d35e;
+            color: #000;
+            font-weight: bold;
+            border: 1px solid #f4d35e;
+        }
+        #faq-form form{
+            width: 90%;
+        }
+        
     </style>
 </head>
 
@@ -180,114 +359,234 @@ $result = $stmt->get_result();
 
     <div class="content">
         <h1>募資常見問題</h1>
-        <div class="search-bar">
-            <form action="funding_FAQ.php" method="GET">
-                <input type="text" name="search" placeholder="輸入常見問題 ID、募資專案 ID、問題或回覆進行搜尋" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" style="width: 80%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                <button type="submit" style="padding: 10px 20px; background-color: #007BFF; color: #fff; border: none; border-radius: 4px; cursor: pointer;">搜尋</button>
-            </form>
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('faq-list', this)">發布紀錄</div>
+            <div class="tab" onclick="switchTab('faq-form', this)">新增修改常見問題</div>
         </div>
-        <table style="width: 100%; border-collapse: collapse; margin: 20px 0; background-color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-            <thead>
-                <tr style="background-color: #007BFF; color: #fff;">
-                    <th style="padding: 12px 15px; text-align: center; border: 1px solid #ddd;">常見問題 ID</th>
-                    <th style="padding: 12px 15px; text-align: center; border: 1px solid #ddd;">募資專案 ID</th>
-                    <th style="padding: 12px 15px; text-align: center; border: 1px solid #ddd;">問題</th>
-                    <th style="padding: 12px 15px; text-align: center; border: 1px solid #ddd;">回覆</th>
-                    <th style="padding: 12px 15px; text-align: center; border: 1px solid #ddd;">更新時間</th>
-                    <th style="padding: 12px 15px; text-align: center; border: 1px solid #ddd;">操作</th>
-                </tr>
-            </thead>
 
-            <tbody>
-                <?php
+        <div id="faq-list">
+            <div class="search-bar">
+                <form action="funding_FAQ.php" method="GET">
+                    <input type="text" name="search" placeholder="輸入常見問題 ID、募資專案 ID、問題或回覆進行搜尋"
+                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+                        style="width: 80%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit"
+                        style="padding: 10px 20px; background-color: #f4d35e; color: #333; border: none; border-radius: 4px; cursor: pointer;"><i
+                            class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+            <div class="table-wrapper">
+                <table class="faq-table">
+                    <thead>
+                        <tr style="background-color: #7c4d2b; color: #fff;">
+                            <th style="width: 8%;">問題 ID</th>
+                            <th style="width: 8%;">募資 ID</th>
+                            <th style="width: 15%;">問題</th>
+                            <th style="width: 30%;">回覆</th>
+                            <th style="width: 12%;">更新時間</th>
+                            <th style="width: 8%;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . htmlspecialchars($row['funding_FAQ_id']) . "</td>";
+                                echo "<td><a href='../funding_detail.php?project_id=" . htmlspecialchars($row['project_id']) . "' style='color: #333;'>" . htmlspecialchars($row['project_id']) . "</a></td>";
+
+                                echo "<td class='faq-content clickable' onclick=\"showFullText('" . htmlspecialchars($row['question'], ENT_QUOTES) . "', '" . htmlspecialchars($row['reply'], ENT_QUOTES) . "')\">" . htmlspecialchars($row['question']) . "</td>";
+
+                                echo "<td class='faq-content clickable' onclick=\"showFullText('" . htmlspecialchars($row['question'], ENT_QUOTES) . "', '" . htmlspecialchars($row['reply'], ENT_QUOTES) . "')\">" . htmlspecialchars($row['reply']) . "</td>";
+
+                                echo "<td>" . htmlspecialchars($row['updated_on']) . "</td>";
+                                echo "<td>
+                    <div class='action-links'>
+                     <a href='funding_FAQ.php?edit=" . $row['funding_FAQ_id'] . "' class='edit'>編輯</a>
+                      <a href='funding_FAQ.php?delete=" . $row['funding_FAQ_id'] . "' class='delete' onclick='return confirm(\"確定要刪除嗎？\");'>刪除</a>
+                    </div>
+                  </td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='6'>目前沒有常見問題</td></tr>";
+                        }
+                        $stmt->close();
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- 分頁按鈕 -->
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <a href="?page=<?= $page - 1 ?>&search=<?= htmlspecialchars($search) ?>" class="page-link">←</a>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?page=<?= $i ?>&search=<?= htmlspecialchars($search) ?>"
+                        class="page-link <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
+                <?php endfor; ?>
+
+                <?php if ($page < $total_pages): ?>
+                    <a href="?page=<?= $page + 1 ?>&search=<?= htmlspecialchars($search) ?>" class="page-link">→</a>
+                <?php endif; ?>
+            </div>
+
+        </div>
+        <div id="faq-form" style="display: none;margin-left:25px;">
+            <h2 style="color: #7c4d2b;"><?php echo isset($_GET['edit']) ? "編輯常見問題" : "新增常見問題"; ?></h2>
+            <?php if (isset($_GET['edit'])): ?>
+                <div id="switch-to-create" style="margin: 10px 0;">
+                    <button type="button" onclick="switchTabAndClearForm()"
+                        style="background-color:  #f6a623; color: white; padding: 6px 12px; border:rgba(249, 182, 75, 0.21) solid 5px ; border-radius: 20px; cursor: pointer;">
+                        切換為新增
+                    </button>
+                </div>
+            <?php endif; ?>
+
+
+
+            <?php
+            $faq_id = $question = $reply = '';
+            if (isset($_GET['edit'])) {
+                $faq_id = intval($_GET['edit']);
+                $stmt = $conn->prepare("SELECT * FROM funding_FAQ WHERE funding_FAQ_id = ?");
+                $stmt->bind_param("i", $faq_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
                 if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['funding_FAQ_id']) . "</td>";
-                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'><a href='../funding_detail.php?project_id=" . htmlspecialchars($row['project_id']) . "' style='color: #007BFF; text-decoration: none;'>" . htmlspecialchars($row['project_id']) . "</a></td>";
-                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['question']) . "</td>";
-                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['reply']) . "</td>";
-                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>" . htmlspecialchars($row['updated_on']) . "</td>";
-                        echo "<td style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>";
-                        echo "<a href='funding_FAQ.php?edit=" . $row['funding_FAQ_id'] . "' style='color: #007BFF; text-decoration: none; margin-right: 10px;'>編輯</a>";
-                        echo "<a href='funding_FAQ.php?delete=" . $row['funding_FAQ_id'] . "' style='color: #FF0000; text-decoration: none;' onclick='return confirm(\"確定要刪除嗎？\");'>刪除</a>";
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='6' style='padding: 12px 15px; text-align: center; border: 1px solid #ddd;'>目前沒有常見問題</td></tr>";
+                    $row = $result->fetch_assoc();
+                    $project_id = $row['project_id'];
+                    $question = $row['question'];
+                    $reply = $row['reply'];
                 }
                 $stmt->close();
-                ?>
-            </tbody>
-        </table>
-
-        <!-- 分頁按鈕 -->
-        <div class="pagination" style="text-align: center; margin-top: 20px;">
-            <?php if ($page > 1): ?>
-                <a href="?page=<?= $page - 1 ?>&search=<?= htmlspecialchars($search) ?>" style="margin-right: 10px; text-decoration: none; color: #007BFF;">上一頁</a>
-            <?php endif; ?>
-
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=<?= $i ?>&search=<?= htmlspecialchars($search) ?>" style="margin-right: 10px; text-decoration: none; <?= $i == $page ? 'font-weight: bold; color: #000;' : 'color: #007BFF;' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-
-            <?php if ($page < $total_pages): ?>
-                <a href="?page=<?= $page + 1 ?>&search=<?= htmlspecialchars($search) ?>" style="text-decoration: none; color: #007BFF;">下一頁</a>
-            <?php endif; ?>
-        </div>
-
-        <h2><?php echo isset($_GET['edit']) ? "編輯常見問題" : "新增常見問題"; ?></h2>
-        <?php
-        $faq_id = $question = $reply = '';
-        if (isset($_GET['edit'])) {
-            $faq_id = intval($_GET['edit']);
-            $stmt = $conn->prepare("SELECT * FROM funding_FAQ WHERE funding_FAQ_id = ?");
-            $stmt->bind_param("i", $faq_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $project_id = $row['project_id'];
-                $question = $row['question'];
-                $reply = $row['reply'];
             }
-            $stmt->close();
-        }
-        ?>
-        <?php
-        // 從資料庫中取得所有募資專案
-        $projects = $conn->query("SELECT project_id, title FROM fundraising_projects");
-        ?>
-        <form action="funding_FAQ.php" method="POST" style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-            <input type="hidden" name="faq_id" value="<?php echo $faq_id; ?>">
-            <div style="margin-bottom: 15px;">
-                <label for="project_id" style="font-weight: bold; display: block; margin-bottom: 5px;">選擇募資專案：</label>
-                <select name="project_id" id="project_id" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    <option value="">請選擇專案</option>
-                    <?php
-                    if ($projects->num_rows > 0) {
-                        while ($project = $projects->fetch_assoc()) {
-                            $selected = ($project['project_id'] == $project_id) ? 'selected' : '';
-                            echo "<option value='" . $project['project_id'] . "' $selected>" . htmlspecialchars($project['title']) . "</option>";
+            ?>
+            <?php
+            // 從資料庫中取得所有募資專案
+            $projects = $conn->query("SELECT project_id, title FROM fundraising_projects");
+            ?>
+            <form action="funding_FAQ.php" method="POST"
+                style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); ">
+                <input type="hidden" name="faq_id" value="<?php echo $faq_id; ?>">
+                <div style="margin-bottom: 15px;">
+                    <label for="project_id"
+                        style="font-weight: bold; display: block; margin-bottom: 5px;">選擇募資專案：</label>
+                    <select name="project_id" id="project_id" required
+                        style="width: 92%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="">請選擇專案</option>
+                        <?php
+                        if ($projects->num_rows > 0) {
+                            while ($project = $projects->fetch_assoc()) {
+                                $selected = ($project['project_id'] == $project_id) ? 'selected' : '';
+                                echo "<option value='" . $project['project_id'] . "' $selected>" . htmlspecialchars($project['title']) . "</option>";
+                            }
                         }
-                    }
-                    ?>
-                </select>
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label for="question" style="font-weight: bold; display: block; margin-bottom: 5px;">問題：</label>
-                <textarea name="question" id="question" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($question); ?></textarea>
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label for="reply" style="font-weight: bold; display: block; margin-bottom: 5px;">回覆：</label>
-                <textarea name="reply" id="reply" rows="5" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($reply); ?></textarea>
-            </div>
-            <button type="submit" style="background-color: #007BFF; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-                <?php echo isset($_GET['edit']) ? "更新" : "新增"; ?>
-            </button>
-        </form>
+                        ?>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="question" style="font-weight: bold; display: block; margin-bottom: 5px;">問題：</label>
+                    <textarea name="question" id="question" rows="3" required
+                        style="width: 90%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($question); ?></textarea>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="reply" style="font-weight: bold; display: block; margin-bottom: 5px;">回覆：</label>
+                    <textarea name="reply" id="reply" rows="5" required
+                        style="width: 90%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo htmlspecialchars($reply); ?></textarea>
+                </div>
+                <button type="submit"
+                    style="background-color:  #f6a623; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+                    <?php echo isset($_GET['edit']) ? "更新" : "新增"; ?>
+                </button>
+            </form>
+        </div>
     </div>
+
+    <script>
+        function switchTab(showId, clickedTab) {
+            // 顯示該區塊
+            document.getElementById('faq-list').style.display = (showId === 'faq-list') ? 'block' : 'none';
+            document.getElementById('faq-form').style.display = (showId === 'faq-form') ? 'block' : 'none';
+
+            // 更新 tab 樣式
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            clickedTab.classList.add('active');
+        }
+    </script>
+    <script>
+        function showFullText(question, reply) {
+            Swal.fire({
+                title: question || '（無問題內容）',
+                text: reply || '（無回覆內容）',
+                confirmButtonText: '關閉',
+                customClass: {
+                    popup: 'swal-wide'
+                }
+            });
+        }
+    </script>
+    <?php if (isset($_GET['edit'])): ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // 自動切換 tab
+                const targetTab = document.querySelector('.tab[onclick*="faq-form"]');
+                if (targetTab) {
+                    switchTab('faq-form', targetTab);
+                }
+
+                // 自動捲動表單
+                const formBlock = document.getElementById('faq-form');
+                if (formBlock) {
+                    formBlock.scrollIntoView({ behavior: 'instant' });
+                }
+            });
+        </script>
+
+        <script>
+            function switchTabAndClearForm() {
+                // 切換 tab 顯示
+                const tabToClick = document.querySelector('.tab[onclick*="faq-form"]');
+                if (tabToClick) {
+                    switchTab('faq-form', tabToClick);
+                }
+
+                // 清空表單欄位值
+                document.querySelector('input[name="faq_id"]').value = '';
+                document.querySelector('select[name="project_id"]').selectedIndex = 0;
+                document.querySelector('textarea[name="question"]').value = '';
+                document.querySelector('textarea[name="reply"]').value = '';
+
+                // 捲動
+                const form = document.getElementById("faq-form");
+                if (form) {
+                    setTimeout(() => {
+                        form.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 100);
+                }
+
+                // 更新表單標題和按鈕
+                document.querySelector('#faq-form h2').innerText = '新增常見問題';
+                document.querySelector('#faq-form button[type="submit"]').innerText = '新增';
+
+                // ✅ 隱藏「切換為新增」按鈕區塊
+                const toggleBtn = document.getElementById('switch-to-create');
+                if (toggleBtn) {
+                    toggleBtn.style.display = 'none';
+                }
+            }
+
+        </script>
+
+
+    <?php endif; ?>
+
+
+
+
 </body>
 
 </html>
