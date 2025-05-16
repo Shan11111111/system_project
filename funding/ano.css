@@ -1,0 +1,342 @@
+:root {
+    /* 主色調 */
+    --color-yellow: #fff6da;
+    /* 鵝黃色 - 小雞感 */
+    /*navbar*/
+    --color-orange-brown: #D9A679;
+    /* 溫柔橘棕 - 強調/按鈕  */
+    --color-dark-brown: #7c4d2b;
+    /* 深咖啡 - 導航、標題 * 文字的hover/ 
+  
+    /* 輔助色 */
+    --color-soft-green: #dddfab7f;
+    /* 嫩綠色 - 自然感 */
+    --color-cream: #fff8ed;
+    /* 奶油白 - 背景 */
+  
+    /* 字體與邊線 */
+    --color-text: #4B3F2F;
+    /* 深褐灰 - 內文字體 */
+    --color-line: #D7CBB8;
+    --navbar-text: #fff6da
+      /* 淡褐線條 */
+  
+      /* 狀態/互動 */
+      --color-hover: #EFC89C;
+    /* hover/active 狀態用的柔橘 */
+  }
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background-color: var(--color-cream);
+
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--color-yellow);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  display: block;
+  color: var(--color-dark-brown);
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+
+.sidebar a:hover {
+  background-color: var(--color-orange-brown);
+}
+ h2{
+  margin-bottom: 20px;
+  color: var(--color-dark-brown);
+}
+
+h1{
+    color: var(--color-dark-brown);
+    margin-left: 10px;
+}
+
+.content {
+  margin-left: 280px;
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+
+.tab-btn {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tab-btn:hover {
+  background-color: #ac8f46;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.search-bar input[type="text"] {
+  width: 320px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.search-bar button {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f6d55c;
+  color:#333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.search-bar button:hover {
+  background-color: #c3ab56;
+}
+.tab-wrapper {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  position: relative;
+  border-radius: 6px 6px 0 0;
+}
+
+.tab-btn:hover {
+  background-color: #fff4d9;
+  color: #5f370e;
+}
+
+.tab-btn.active {
+  color: #5f370e;
+  background-color: #fef6e6;
+  font-weight: bold;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #f7b84b;
+  border-radius: 2px;
+}
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #007BFF;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--color-orange-brown);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #f6d55c;
+        }
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+/* ✅ 表格設定：保持固定寬度運作 */
+table {
+  width: 100%;
+  table-layout: fixed; /* ⭐ 確保 ellipsis 生效 */
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 標題欄（第2欄）縮小為 120px */
+td:nth-child(2), th:nth-child(2) {
+  width: 100px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* ✅ 內容欄（第3欄）縮小為 220px */
+td:nth-child(3), th:nth-child(3) {
+  width: 200px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* ✅ 保留省略樣式 */
+.table-ellipsis {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+    cursor: pointer;  /* 鼠標變手指 */
+
+}
+td:nth-child(6), th:nth-child(6) {
+  width: 100px;                /* 固定欄寬 */
+  padding-left: 10px;          /* 左側縮排 */
+  text-align: left;
+  vertical-align: middle;
+}
+
+td:nth-child(6) a {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;         /* 不換行 */
+  overflow: hidden;            /* 超出隱藏 */
+  text-overflow: ellipsis;     /* 出現省略號 */
+}
+
+thead {
+  background-color: var(--color-dark-brown);
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: rgb(211, 211, 211);
+}
+
+.btn {
+  padding: 6px 12px;
+  background-color: #46b96c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.reject {
+  background-color: #dc3545;
+}
+
+.btn.reject:hover {
+  background-color: #a71d2a;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;  /* ⭐ 讓整個分頁列置中 */
+  align-items: center;       /* 垂直置中（保險） */
+  gap: 8px;                  /* 每顆按鈕間距 */
+  margin: 30px 0;
+}
+
+.page-link {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 0 4px;
+  border-radius: 8px;
+  background-color: #fff8dc;
+  border: 1px solid #ddd;
+  color: #000;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  
+}
+
+.page-link:hover {
+  background-color: #f6d55c;
+  color: #000;
+}
+
+.page-link.active {
+  background-color: #f6d55c;
+  color: #000;
+  font-weight: bold;
+  border: 1px solid #f6d55c;
+  pointer-events: none;
+}

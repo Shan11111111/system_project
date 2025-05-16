@@ -102,16 +102,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-// 分頁邏輯
-$limit = 5; // 每頁顯示的公告數量
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1; // 當前頁數
-$offset = ($page - 1) * $limit; // 計算偏移量
+//分頁功能
+$limit = 5;
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
 
-// 獲取總公告數量
 $total_result = $conn->query("SELECT COUNT(*) AS total FROM announcement");
 $total_row = $total_result->fetch_assoc();
 $total_announcements = $total_row['total'];
-$total_pages = ceil($total_announcements / $limit); // 計算總頁數
+$total_pages = ceil($total_announcements / $limit);
 
 // 獲取當前頁的公告
 $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT $limit OFFSET $offset");
@@ -124,185 +123,15 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>發布公告</title>
-    <style>
-        /* 保留原本的 CSS */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            background-color: #f4f4f9;
-        }
+    <link rel="stylesheet" href="ano.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        /* 左側導覽列 */
-        .sidebar {
-            width: 250px;
-            background-color: #007BFF;
-            color: #fff;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 15px;
-            margin: 5px 0;
-            border-radius: 4px;
-        }
-
-        .sidebar a:hover {
-            background-color: #0056b3;
-        }
-
-        .content {
-            margin-left: 280px;
-            padding: 20px;
-            width: calc(100% - 280px);
-        }
-
-        h1,
-        h2 {
-            color: #f9f9f9;
-            text-align: center;
-        }
-
-        form {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #007BFF;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid #ddd;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #007BFF;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .action-buttons a {
-            margin-right: 10px;
-            text-decoration: none;
-            color: #007BFF;
-        }
-
-        .action-buttons a:hover {
-            text-decoration: underline;
-        }
-
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .pagination a {
-            margin: 0 5px;
-            text-decoration: none;
-            color: #007BFF;
-            padding: 5px 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .pagination a:hover {
-            background-color: #007BFF;
-            color: white;
-        }
-
-        .pagination .active {
-            background-color: #007BFF;
-            color: white;
-            border: 1px solid #007BFF;
-        }
-    </style>
 </head>
 
 <body>
     <div class="sidebar">
         <h2>管理系統</h2>
+
         <?php if ($user_level === 'office'): ?>
             <!-- Office 使用者的導覽列 -->
             <a href="../homepage.php">孵仁首頁</a>
@@ -330,90 +159,161 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
     </div>
 
     <div class="content">
-        <h1 style="color: #333;">發布公告</h1>
-        <form action="" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="edit_id" value="<?= $edit_id ?>">
-            <label for="category">選擇類別：</label>
-            <select id="category" name="category" required>
-                <option value="">請選擇類別</option>
-                <option value="建言" <?= $edit_category == '建言' ? 'selected' : '' ?>>建言</option>
-                <option value="募資" <?= $edit_category == '募資' ? 'selected' : '' ?>>募資</option>
-                <option value="系統" <?= $edit_category == '系統' ? 'selected' : '' ?>>系統</option>
-            </select>
-
-            <label for="title">公告標題：</label>
-            <input type="text" id="title" name="title" value="<?= htmlspecialchars($edit_title) ?>" required>
-
-            <label for="content">公告內容：</label>
-            <textarea id="content" name="content" rows="5" required><?= htmlspecialchars($edit_content) ?></textarea>
-
-            <label for="file">上傳檔案：</label>
-            <input type="file" id="file" name="file" required>
-
-            <button type="submit"><?= $edit_id ? '更新公告' : '發布公告' ?></button>
-        </form>
-
-
-        <h2 style="color: #333;">已發布公告</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>標題</th>
-                    <th>內容</th>
-                    <th>類別</th>
-                    <th>發布時間</th>
-                    <th>檔案</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <?php if ($row['user_id'] == $user_id): // 只顯示屬於當前使用者的公告 
-                    ?>
-                        <tr>
-                            <td><?= $row['announcement_id'] ?></td>
-                            <td><?= htmlspecialchars($row['title']) ?></td>
-                            <td><?= htmlspecialchars($row['content']) ?></td>
-                            <td><?= htmlspecialchars($row['category']) ?></td>
-                            <td><?= $row['update_at'] ?></td>
-                            <td>
-                                <?php if (!empty($row['file_path'])): ?>
-                                    <?php
-                                    $file_name = basename($row['file_path']);
-                                    $original_file_name = explode('_', $file_name, 2)[1] ?? $file_name;
-                                    ?>
-                                    <a href="<?= htmlspecialchars($row['file_path']) ?>" target="_blank"><?= htmlspecialchars($original_file_name) ?></a>
-                                <?php else: ?>
-                                    無
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <a href="announcement.php?edit_id=<?= $row['announcement_id'] ?>">修改</a>
-                                <a href="announcement.php?delete_id=<?= $row['announcement_id'] ?>" onclick="return confirm('確定要刪除嗎？');">刪除</a>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-
-        <!-- 分頁功能 -->
-        <div class="pagination">
-            <?php if ($page > 1): ?>
-                <a href="?page=<?= $page - 1 ?>">上一頁</a>
-            <?php endif; ?>
-
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=<?= $i ?>" class="<?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-
-            <?php if ($page < $total_pages): ?>
-                <a href="?page=<?= $page + 1 ?>">下一頁</a>
-            <?php endif; ?>
+        <h1 style="color: #333;">公告功能</h1>
+        <div class="tab-wrapper">
+            <button class="tab-btn active" onclick="switchTab(this, 'publishForm')">發布公告</button>
+            <button class="tab-btn" onclick="switchTab(this, 'announcementList')">已發布公告</button>
         </div>
+        <div id="publishForm" class="tab-content" style="display: block;">
 
+            <form action="" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="edit_id" value="<?= $edit_id ?>">
+                <label for="category">選擇類別：</label>
+                <select id="category" name="category" required>
+                    <option value="">請選擇類別</option>
+                    <option value="建言" <?= $edit_category == '建言' ? 'selected' : '' ?>>建言</option>
+                    <option value="募資" <?= $edit_category == '募資' ? 'selected' : '' ?>>募資</option>
+                    <option value="系統" <?= $edit_category == '系統' ? 'selected' : '' ?>>系統</option>
+                </select>
+
+                <label for="title">公告標題：</label>
+                <input type="text" id="title" name="title" value="<?= htmlspecialchars($edit_title) ?>" required>
+
+                <label for="content">公告內容：</label>
+                <textarea id="content" name="content" rows="5" required><?= htmlspecialchars($edit_content) ?></textarea>
+
+                <label for="file">上傳檔案：</label>
+                <input type="file" id="file" name="file" required>
+
+                <button type="submit"><?= $edit_id ? '更新公告' : '發布公告' ?></button>
+            </form>
+        </div>
+        <!-- 已發布公告區塊 -->
+        <div id="announcementList" class="tab-content" style="display: none;">
+
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>標題</th>
+                        <th>內容</th>
+                        <th>類別</th>
+                        <th>發布時間</th>
+                        <th>檔案</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <?php if ($row['user_id'] == $user_id): // 只顯示屬於當前使用者的公告 
+                        ?>
+                            <tr>
+                                <td><?= $row['announcement_id'] ?></td>
+                                <td>
+                                    <span class="table-ellipsis"
+                                        onclick="showFullText('<?= addslashes(htmlspecialchars($row['title'])) ?>', '<?= addslashes(htmlspecialchars($row['content'])) ?>')"
+                                        title="點擊查看完整內容">
+                                        <?= htmlspecialchars($row['content']) ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="table-ellipsis"
+                                        onclick="showFullText('<?= addslashes(htmlspecialchars($row['title'])) ?>', '<?= addslashes(htmlspecialchars($row['content'])) ?>')"
+                                        title="點擊查看完整內容">
+                                        <?= htmlspecialchars($row['content']) ?>
+                                    </span>
+                                </td>
+                                <td><?= htmlspecialchars($row['category']) ?></td>
+                                <td><?= $row['update_at'] ?></td>
+                                <td>
+                                    <?php if (!empty($row['file_path'])): ?>
+                                        <?php
+                                        $file_name = basename($row['file_path']);
+                                        $original_file_name = explode('_', $file_name, 2)[1] ?? $file_name;
+                                        ?>
+                                        <a href="<?= htmlspecialchars($row['file_path']) ?>" target="_blank"><?= htmlspecialchars($original_file_name) ?></a>
+                                    <?php else: ?>
+                                        無
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a href="announcement.php?edit_id=<?= $row['announcement_id'] ?>">修改</a>
+                                    <a href="announcement.php?delete_id=<?= $row['announcement_id'] ?>" onclick="return confirm('確定要刪除嗎？');">刪除</a>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+
+            <!-- 分頁功能 -->
+            <?php
+            $max_buttons = 5;
+            $half = floor($max_buttons / 2);
+
+            $start = max(1, $page - $half);
+            $end = min($total_pages, $start + $max_buttons - 1);
+            if ($end - $start + 1 < $max_buttons) {
+                $start = max(1, $end - $max_buttons + 1);
+            }
+
+            $tab = 'announcementList';
+            ?>
+
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <a class="page-link" href="announcement.php?tab=<?= $tab ?>&page=<?= $page - 1 ?>">&laquo; 上一頁</a>
+                <?php endif; ?>
+
+                <?php for ($i = $start; $i <= $end; $i++): ?>
+                    <a class="page-link <?= $i == $page ? 'active' : '' ?>" href="announcement.php?tab=<?= $tab ?>&page=<?= $i ?>"><?= $i ?></a>
+                <?php endfor; ?>
+
+                <?php if ($page < $total_pages): ?>
+                    <a class="page-link" href="announcement.php?tab=<?= $tab ?>&page=<?= $page + 1 ?>">下一頁 &raquo;</a>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
+    <script>
+        function switchTab(clicked, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+
+            if (clicked) clicked.classList.add('active');
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab');
+
+            if (tab === 'announcementList') {
+                // 觸發第二顆 tab 的按鈕（已發布公告）
+                const secondTabBtn = document.querySelector('.tab-btn:nth-child(2)');
+                switchTab(secondTabBtn, 'announcementList');
+            } else {
+                // 預設是第一顆 tab（發布公告）
+                const firstTabBtn = document.querySelector('.tab-btn:nth-child(1)');
+                switchTab(firstTabBtn, 'publishForm');
+            }
+        });
+
+        function showFullText(title, content) {
+            Swal.fire({
+                title: '完整公告',
+                html: `
+      <div style="text-align:left; max-height:300px; overflow:auto;">
+        <strong>標題：</strong>${title}<br><br>
+        <strong>內容：</strong>${content}
+      </div>
+    `,
+                confirmButtonText: '關閉'
+            });
+        }
+    </script>
+
 </body>
 
 </html>
