@@ -36,17 +36,47 @@ $result = $stmt->get_result();
     <meta charset="UTF-8">
     <title>處所分派建言</title>
     <style>
+        :root {
+            /* 主色調 */
+            --color-yellow: #fff6da;
+            /* 鵝黃色 - 小雞感 */
+            /*navbar*/
+            --color-orange-brown: #D9A679;
+            /* 溫柔橘棕 - 強調/按鈕  */
+            --color-dark-brown: #7c4d2b;
+            /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+            --color-soft-green: #dddfab7f;
+            /* 嫩綠色 - 自然感 */
+            --color-cream: #fff8ed;
+            /* 奶油白 - 背景 */
+
+            /* 字體與邊線 */
+            --color-text: #4B3F2F;
+            /* 深褐灰 - 內文字體 */
+            --color-line: #D7CBB8;
+            --navbar-text: #fff6da;
+            /* 淡褐線條 */
+
+            /* 狀態/互動 */
+            --color-orange: #f6a623;
+
+            /* hover/active 狀態用的柔橘 */
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
+            background-color: var(--color-cream);
+            color: #333;
         }
 
         /* 左側導覽列 */
         .sidebar {
             width: 250px;
-            background-color: #007BFF;
+            background-color: var(--color-yellow);
             color: #fff;
             height: 100vh;
             position: fixed;
@@ -59,106 +89,80 @@ $result = $stmt->get_result();
         .sidebar h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5em;
+            color: var(--color-dark-brown);
         }
 
         .sidebar a {
             display: block;
-            color: #fff;
+            color: var(--color-dark-brown);
             text-decoration: none;
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
+            font-size: 1em;
+            font-weight: bold;
         }
 
         .sidebar a:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
 
         /* 頁面內容 */
         .content {
             margin-left: 280px;
             padding: 20px;
-            width: calc(100% - 250px);
         }
 
-        /* 頭部個人資料 */
-        .header {
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: var(--color-dark-brown);
+        }
+
+        .tabs {
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tab {
             padding: 10px 20px;
-            background-color: #f4f4f9;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile {
-            position: relative;
-            display: inline-block;
-        }
-
-        .profile img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            border-bottom: none;
             cursor: pointer;
+            color: #555;
         }
 
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            z-index: 1000;
-            width: 150px;
-        }
-
-        .dropdown a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .dropdown a:hover {
-            background-color: rgb(159, 193, 255);
-        }
-
-        /* 表格樣式 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        thead {
-            background-color: #007BFF;
-            color: #fff;
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        th {
+        .tab.active {
+            background: rgb(245, 222, 172);
             font-weight: bold;
+            border-bottom: 2px solid #e6b800;
+
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        /* 被點擊後的狀態（現在有） */
+        .tab.active {
+            background: var(--color-yellow);
+            font-weight: bold;
+            border-bottom: 3px solid #e6b800;
+            color: var(--color-dark-brown);
         }
 
-        tr:hover {
-            background-color: rgb(167, 185, 255);
+        .tab.active:hover {
+            background-color: #ffe48a;
+            color: var(--color-dark-brown);
         }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+
+
+
 
         input[type="number"] {
             padding: 8px;
@@ -169,7 +173,7 @@ $result = $stmt->get_result();
 
         button {
             padding: 8px 12px;
-            background-color: #007BFF;
+            background-color: var(--color-orange);
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -177,7 +181,7 @@ $result = $stmt->get_result();
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color:var(--color-orange-brown);
         }
 
         .reply-records {
@@ -206,29 +210,35 @@ $result = $stmt->get_result();
             color: #555;
         }
 
-        /* 搜尋表單樣式 */
-        .search-bar {
-            margin-bottom: 20px;
+      
+        
+
+        table.expired-table {
+            width: 1050px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-family: Arial;
         }
 
-        .search-bar input[type="text"] {
-            padding: 8px;
-            width: 300px;
+        .expired-table th,
+        .expired-table td {
             border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
         }
 
-        .search-bar button {
-            padding: 8px 12px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .expired-table th {
+            background-color: #7c4d2b;
+            color: white;
         }
 
-        .search-bar button:hover {
-            background-color: #0056b3;
+        .expired-table td {
+            background-color: white;
+            color: black;
+        }
+
+        .expired-table form {
+            margin: 0;
         }
     </style>
 </head>
@@ -247,96 +257,112 @@ $result = $stmt->get_result();
         <a href="data">數據分析</a>
     </div>
 
-    <div style="margin-left: 300px; padding: 20px;">
-        <!-- 這裡放專案卡片列表 -->
 
+    <div style="margin-left: 300px; padding: 20px;">
+        <h1>已過期的募資專案</h1>
+        
+        <!-- 這裡放專案卡片列表 -->
+        <div class="tabs">
+            <div class="tab active" data-target="applied">已申請延期</div>
+            <div class="tab" data-target="not-applied">尚未申請延期</div>
+        </div>
+
+
+        <script>
+            function switchTab(tabName, event) {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                event.target.classList.add('active');
+            }
+
+        </script>
 
         <?php
-
-        echo "<h1>已過期的募資專案</h1>";
-
         if ($result->num_rows > 0) {
+            // 已申請延期 tab
+            echo '<div class="tab-content active" data-tab="applied">';
+            echo "<table class='expired-table'><thead><tr><th>專案名稱</th><th>截止日期</th><th>延期狀態</th><th>操作</th></tr></thead><tbody>";
+            mysqli_data_seek($result, 0);
             while ($row = $result->fetch_assoc()) {
-                echo "<div style='margin-bottom: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);'>";
-                echo "<h3>📌 專案名稱：<span style='color: #007bff;'>" . htmlspecialchars($row['title']) . "</span></h3>";
-                echo "<p>📅 截止日期：" . htmlspecialchars($row['end_date']) . "</p>";
-
-                // 這裡查詢該專案是否有"待審查"的延期申請
                 $projectId = $row['project_id'];
-                $extensionSql = "SELECT * FROM fundraising_extension_requests WHERE fundraising_project_id = $projectId AND status = '待審核' LIMIT 1";
-                $extensionResult = $conn->query($extensionSql);
-
-                if ($extensionResult->num_rows > 0) {
-                    $extensionRow = $extensionResult->fetch_assoc();
-                    echo "<p>⏳ 已申請延期至：" . htmlspecialchars($extensionRow['requested_extension_date']) . "</p>";
-
-                    // 顯示「已提交」按鈕，不能按
-                    echo "<button type='button' disabled style='background-color: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: not-allowed;'>已提交</button>";
-
-                    // 顯示「取消申請」按鈕
-                    echo "<form action='' method='POST' style='display:inline; margin-left:10px;'>";
-                    echo "<input type='hidden' name='cancel_request_id' value='" . $extensionRow['id'] . "'>";
-                    echo "<button type='submit' style='background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px;'>取消申請</button>";
-                    echo "</form>";
-                } else {
-                    // 沒有 待審查 申請，顯示可填寫的表單
-                    echo "<form action='' method='POST'>";
-                    echo "<input type='hidden' name='fundraising_project_id' value='" . $row['project_id'] . "'>";
-                    echo "<label for='requested_extension_date'>申請延後至：</label>";
-                    echo "<input type='date' name='requested_extension_date' required>";
-                    echo "<button type='submit' style='background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 5px;'>提交申請</button>";
-                    echo "</form>";
+                $title = htmlspecialchars($row['title']);
+                $endDate = htmlspecialchars($row['end_date']);
+                $check = $conn->query("SELECT * FROM fundraising_extension_requests WHERE fundraising_project_id = $projectId AND status = '待審核' LIMIT 1");
+                if ($check->num_rows > 0) {
+                    $extension = $check->fetch_assoc();
+                    echo "<tr><td style='color:#black;'>$title</td><td>$endDate</td><td>已申請延期至：<strong>" . $extension['requested_extension_date'] . "</strong></td><td>
+           
+            <form method='POST' style='display:inline;'><input type='hidden' name='cancel_request_id' value='" . $extension['id'] . "'><button type='submit' style='background-color:#dc3545;color:#fff;border:none;padding:6px 10px;border-radius:5px;'>取消申請</button></form>
+            </td></tr>";
                 }
-
-                echo "</div>";
             }
+            echo "</tbody></table></div>";
+
+            // 尚未申請 tab
+        
+            $stmt->execute();
+            $result = $stmt->get_result();
+            echo '<div class="tab-content" data-tab="not-applied">';
+            echo "<table class='expired-table'><thead><tr><th>專案名稱</th><th>截止日期</th><th>延期狀態</th><th>操作</th></tr></thead><tbody>";
+            while ($row = $result->fetch_assoc()) {
+                $projectId = $row['project_id'];
+                $title = htmlspecialchars($row['title']);
+                $endDate = htmlspecialchars($row['end_date']);
+                $check = $conn->query("SELECT * FROM fundraising_extension_requests WHERE fundraising_project_id = $projectId AND status = '待審核' LIMIT 1");
+                if ($check->num_rows === 0) {
+                    echo "<tr><td style='color:black;'>$title</td><td>$endDate</td><td>尚未申請延期</td><td>
+            <form method='POST'><input type='hidden' name='fundraising_project_id' value='$projectId'><input type='date' name='requested_extension_date' required>
+            <button type='submit' style='color:white;border:none;padding:6px 10px;border-radius:5px;'>提交申請</button></form></td></tr>";
+                }
+            }
+            echo "</tbody></table></div>";
         } else {
-            echo "<p>目前沒有已過期的募資專案。</p>";
+            echo "<p style='text-align:center;'>目前沒有已過期的募資專案。</p>";
         }
 
         if (isset($_POST['cancel_request_id'])) {
-            $cancelRequestId = intval($_POST['cancel_request_id']);
-            $deleteSql = "DELETE FROM fundraising_extension_requests WHERE id = $cancelRequestId";
+            $cancel_id = intval($_POST['cancel_request_id']);
+            $conn->query("DELETE FROM fundraising_extension_requests WHERE id = $cancel_id");
+            echo "<script>alert('申請已取消');location.href='office_apply_date.php';</script>";
+        }
 
-           ?>
-            <?php
-            if ($conn->query($deleteSql) === TRUE) {
-                echo "<script>alert('申請已取消'); window.location.href='office_apply_date.php';</script>";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fundraising_project_id'])) {
+            $fid = intval($_POST['fundraising_project_id']);
+            $date = $_POST['requested_extension_date'];
+            $sql = "INSERT INTO fundraising_extension_requests (fundraising_project_id, requested_by_office_id, requested_extension_date, status) VALUES (?, ?, ?, '待審核')";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iis", $fid, $office_id, $date);
+            if ($stmt->execute()) {
+                echo "<script>alert('申請已送出');location.href='office_apply_date.php';</script>";
             } else {
-                echo "<script>alert('取消申請失敗，請稍後再試'); window.location.href='office_apply_date.php';</script>";
+                echo "<script>alert('送出失敗');</script>";
             }
+            $stmt->close();
         }
+        $conn->close();
         ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const tabs = document.querySelectorAll(".tab");
+                const contents = document.querySelectorAll(".tab-content");
 
+                tabs.forEach(tab => {
+                    tab.addEventListener("click", () => {
+                        const target = tab.dataset.target;
 
+                        // 移除所有 active 狀態
+                        tabs.forEach(t => t.classList.remove("active"));
+                        contents.forEach(c => c.classList.remove("active"));
 
-    </div>
+                        // 新增 active 狀態
+                        tab.classList.add("active");
+                        document.querySelector(`[data-tab="${target}"]`).classList.add("active");
+                    });
+                });
+            });
+        </script>
 
-    <?php
-    $stmt->close();
+</body>
 
-    // 處理申請邏輯
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $fundraising_project_id = intval($_POST['fundraising_project_id']);
-        $requested_extension_date = $_POST['requested_extension_date'];
-
-        // 插入申請到 fundraising_extension_requests 表
-        $insert_sql = "INSERT INTO fundraising_extension_requests (fundraising_project_id, requested_by_office_id, requested_extension_date,status) 
-                   VALUES (?, ?, ?, '待審核')";
-        $insert_stmt = $conn->prepare($insert_sql);
-        if (!$insert_stmt) {
-            die("SQL 錯誤: " . $conn->error);
-        }
-
-        $insert_stmt->bind_param("iis", $fundraising_project_id, $office_id, $requested_extension_date);
-        if ($insert_stmt->execute()) {
-            echo "<script>alert('延後募款截止日申請已提交，等待管理者審核'); window.location.href='office_apply_date.php';</script>";
-        } else {
-            echo "<script>alert('申請提交失敗，請稍後再試'); window.location.href='office_apply_date.php';</script>";
-        }
-
-        $insert_stmt->close();
-    }
-
-    $conn->close();
-    ?>
+</html>
