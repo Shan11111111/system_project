@@ -107,7 +107,23 @@ $limit = 5;
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 
-$total_result = $conn->query("SELECT COUNT(*) AS total FROM announcement");
+// 搜尋處理（如果未來要加）
+$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+$search_condition = "";
+if (!empty($search)) {
+    $search_condition = "AND (title LIKE '%$search%' OR content LIKE '%$search%')";
+}
+
+// 根據權限選擇查詢條件
+if ($user_level === 'manager') {
+    $total_result = $conn->query("SELECT COUNT(*) AS total FROM announcement WHERE 1 $search_condition");
+    $result = $conn->query("SELECT * FROM announcement WHERE 1 $search_condition ORDER BY update_at DESC LIMIT $limit OFFSET $offset");
+} else {
+    // office：只能看自己的
+    $total_result = $conn->query("SELECT COUNT(*) AS total FROM announcement WHERE user_id = $user_id $search_condition");
+    $result = $conn->query("SELECT * FROM announcement WHERE user_id = $user_id $search_condition ORDER BY update_at DESC LIMIT $limit OFFSET $offset");
+}
+
 $total_row = $total_result->fetch_assoc();
 $total_announcements = $total_row['total'];
 $total_pages = ceil($total_announcements / $limit);
@@ -191,7 +207,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
         </div>
         <!-- 已發布公告區塊 -->
         <div id="announcementList" class="tab-content" style="display: none;">
-          <!--
+            <!--
   <form class="search-bar" method="GET">
                 <input
                     type="text"
