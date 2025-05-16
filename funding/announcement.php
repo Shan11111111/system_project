@@ -322,7 +322,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <a href="../manager/review_extension_requests.php">延後募資申請審核</a>
             <a href="../manager/people_manager.php">人員處理</a>
             <a href="../funding/announcement.php">發布公告</a>
-            <a href="#">數據分析</a>
+            <!-- <a href="#">數據分析</a> -->
         <?php else: ?>
             <!-- 預設顯示 -->
             <p>您沒有權限訪問此頁面。</p>
