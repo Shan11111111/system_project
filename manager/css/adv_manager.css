@@ -1,0 +1,275 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+/* 左側導覽列 */
+.sidebar {
+  width: 250px;
+  background-color: #007bff;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 4px;
+}
+
+.sidebar a:hover {
+  background-color: #0056b3;
+}
+
+/* 頁面內容 */
+.content {
+  margin-left: 280px;
+  /* 與 sidebar 寬度一致 */
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+
+/* 頭部個人資料 */
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f4f4f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile {
+  position: relative;
+  display: inline-block;
+}
+
+.profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1000;
+  width: 150px;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown a:hover {
+  background-color: rgb(159, 193, 255);
+}
+
+/* form 排版區塊 */
+.filter-form {
+  display: flex;
+  justify-content: space-between;
+  /* 將清除篩選推到最右邊 */
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  width: 100%;
+}
+
+/* 左側欄位群組（搜尋欄、選單、搜尋按鈕） */
+.filter-left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* 🔍 搜尋欄（加長） */
+.filter-form input[type="text"] {
+  width: 320px;
+  height: 38px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* 📅與💬 選單（縮短） */
+.filter-form select {
+  width: 180px;
+  height: 38px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* 統一按鈕樣式 */
+.filter-form button,
+.filter-form a {
+  height: 38px;
+  padding: 6px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/* 🔵 搜尋按鈕 */
+.filter-form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.filter-form button:hover {
+  background-color: #0056b3;
+}
+
+/* 🚫 清除篩選按鈕 */
+.filter-form a.clear-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+}
+
+/* 表格樣式 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-ellipsis {
+  max-width: 150px;
+  /* 自行調整欄位寬度 */
+  max-height: 60px;
+  /* 自行調整欄位高度 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  text-align: left;
+  /* ✅ 只改內容靠左 */
+}
+
+thead {
+  background-color: #007bff;
+  color: #fff;
+}
+
+th {
+  text-align: center;
+  /* ✅ 表頭維持置中（預設也是） */
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+th {
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: rgb(167, 185, 255);
+}
+
+input[type="number"] {
+  padding: 8px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.my-popup {
+  font-size: 16px;
+}
+
+.my-confirm-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 20px;
+  font-size: 14px;
+}
+
+.pagination {
+  text-align: center;
+  margin: 30px 0;
+  font-size: 16px;
+}
+
+.page-link {
+  display: inline-block;
+  padding: 6px 10px;
+  color: #5c2e91;
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+  margin: 0 4px;
+  transition: all 0.2s ease;
+}
+
+.page-link:hover {
+  border-color: #5c2e91;
+  color: #2c0d77;
+}
+
+.page-link.active {
+  font-weight: bold;
+  border-color: #5c2e91;
+  color: #5c2e91;
+  pointer-events: none;
+}
