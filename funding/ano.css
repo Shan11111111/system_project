@@ -95,10 +95,17 @@ h1{
   background-color: #ac8f46;
 }
 .search-bar {
-  display: flex;
+  display: flex;               /* 這是關鍵！ */
   align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
+  justify-content: center;
+  gap: 10px;
+  align-items: stretch; /* ✅ 保證高度一致 */
+  flex-wrap: nowrap;
+  max-width: 600px;
+  margin: 0 auto 4px auto;
+  background: none;
+  box-shadow: none;
+  border: none;
 }
 
 .search-bar input[type="text"] {
@@ -233,7 +240,7 @@ table {
   width: 100%;
   table-layout: fixed; /* ⭐ 確保 ellipsis 生效 */
   border-collapse: collapse;
-  margin: 20px 0;
+  margin: 10px 0;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -340,3 +347,4 @@ tr:hover {
   border: 1px solid #f6d55c;
   pointer-events: none;
 }
+

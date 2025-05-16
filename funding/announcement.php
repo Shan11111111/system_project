@@ -125,6 +125,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
     <title>發布公告</title>
     <link rel="stylesheet" href="ano.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 
@@ -190,7 +191,19 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
         </div>
         <!-- 已發布公告區塊 -->
         <div id="announcementList" class="tab-content" style="display: none;">
-
+          <!--
+  <form class="search-bar" method="GET">
+                <input
+                    type="text"
+                    name="search"
+                    class="search-input"
+                    placeholder="搜尋標題或內容…"
+                    value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                <button type="submit" class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        -->
 
             <table>
                 <thead>
