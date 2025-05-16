@@ -1,5 +1,16 @@
 <?php
 session_start();
+// // 檢查是否已登入
+// if (!isset($_SESSION['user_id'])) {
+//     header("Location: login.php");
+//     exit();
+// }
+// // 檢查使用者權限
+// if ($_SESSION['user_role'] !== 'manager') {
+//     echo "您沒有權限訪問此頁面。";
+//     header("Location: ../homepage.php");
+//     exit();
+// }
 
 
 // 資料庫連線設定
@@ -167,64 +178,53 @@ $categoryMap = [
 
         /*form*/
 
-        /* 搜尋欄容器：搜尋在左，清除在右 */
-        .filter-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        /* 搜尋表單本體 */
         .filter-form {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             align-items: center;
-            flex-grow: 1;
-            min-width: 0;
+            margin-bottom: 20px;
+            padding: 20px 0;
         }
 
         .filter-form input[type="text"],
         .filter-form select {
             padding: 10px;
-            min-width: 180px;
+            width: 220px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
-            flex-shrink: 1;
+            flex-shrink: 0;
+        }
+
+        .filter-form button,
+        .filter-form a {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            display: inline-block;
+            text-align: center;
+            white-space: nowrap;
+            height: 42px;
+            /* ✅ 統一高度 */
+            line-height: 20px;
         }
 
         .filter-form button {
             background-color: #007BFF;
             color: #fff;
             border: none;
-            height: 42px;
-            padding: 0 20px;
-            font-size: 14px;
-            border-radius: 4px;
-            cursor: pointer;
         }
 
         .filter-form button:hover {
             background-color: #0056b3;
         }
 
-        /* 清除篩選按鈕樣式（獨立） */
-        .clear-btn {
+        .filter-form a {
             background-color: #6c757d;
             color: #fff;
             text-decoration: none;
-            height: 42px;
-            padding: 0 20px;
-            font-size: 14px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
+            line-height: 20px;
         }
 
         /* 表格樣式 */
@@ -378,7 +378,7 @@ $categoryMap = [
             </form>
             <a href="advice_manager.php" class="clear-btn">清除篩選</a>
         </div>
-
+        
         <!-- 表格內容 -->
         <table>
             <thead>
