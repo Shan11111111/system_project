@@ -1,15 +1,44 @@
+:root {
+    /* 主色調 */
+    --color-yellow: #fff6da;
+    /* 鵝黃色 - 小雞感 */
+    /*navbar*/
+    --color-orange-brown: #D9A679;
+    /* 溫柔橘棕 - 強調/按鈕  */
+    --color-dark-brown: #7c4d2b;
+    /* 深咖啡 - 導航、標題 * 文字的hover/ 
+  
+    /* 輔助色 */
+    --color-soft-green: #dddfab7f;
+    /* 嫩綠色 - 自然感 */
+    --color-cream: #fff8ed;
+    /* 奶油白 - 背景 */
+  
+    /* 字體與邊線 */
+    --color-text: #4B3F2F;
+    /* 深褐灰 - 內文字體 */
+    --color-line: #D7CBB8;
+    --navbar-text: #fff6da
+      /* 淡褐線條 */
+  
+      /* 狀態/互動 */
+      --color-hover: #EFC89C;
+    /* hover/active 狀態用的柔橘 */
+  }
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
+  background-color: var(--color-cream);
 }
 
 /* 左側導覽列 */
 .sidebar {
   width: 250px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--color-yellow);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   height: 100vh;
   position: fixed;
   top: 0;
@@ -25,16 +54,27 @@ body {
 
 .sidebar a {
   display: block;
-  color: #fff;
+  color: var(--color-dark-brown);
   text-decoration: none;
   padding: 10px 15px;
   margin: 5px 0;
   border-radius: 4px;
+  font-weight: bold;
 }
 
+
 .sidebar a:hover {
-  background-color: #0056b3;
+  background-color: var(--color-orange-brown);
 }
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: var(--color-dark-brown);
+  margin-left: 10px;
+}
+
+
 
 /* 頁面內容 */
 .content {
@@ -147,23 +187,30 @@ body {
 }
 
 /* 🔵 搜尋按鈕 */
-.filter-form button {
-  background-color: #007bff;
-  color: white;
+.filter-form button { 
+  background-color: #f4d35e;
+  color: rgb(45, 45, 45);
   border: none;
 }
 
 .filter-form button:hover {
-  background-color: #0056b3;
+  background-color: #b79e41;
+  color: #ffffff;
 }
 
 /* 🚫 清除篩選按鈕 */
 .filter-form a.clear-btn {
-  background-color: #6c757d;
-  color: white;
+  background-color: #f4d35e;
+  color:#333;
   border: none;
 }
 
+.filter-form a.clear-btn:hover {
+  background-color: rgb(153, 87, 30);
+  color: white;
+  border: none;
+
+}
 /* 表格樣式 */
 table {
   width: 100%;
@@ -187,7 +234,7 @@ table {
 }
 
 thead {
-  background-color: #007bff;
+  background-color: var(--color-dark-brown);
   color: #fff;
 }
 
@@ -212,7 +259,7 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: rgb(167, 185, 255);
+  background-color: rgb(211, 211, 211);
 }
 
 input[type="number"] {
@@ -224,15 +271,16 @@ input[type="number"] {
 
 button {
   padding: 8px 12px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #f4d35e;
+  color: #333;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-orange-brown);
+  color: #ddd;
 }
 
 .my-popup {
@@ -240,12 +288,11 @@ button:hover {
 }
 
 .my-confirm-btn {
-  background-color: #007bff;
+  background-color: #f4d35e;
   color: white;
   padding: 8px 20px;
   font-size: 14px;
 }
-
 .pagination {
   text-align: center;
   margin: 30px 0;
@@ -254,22 +301,26 @@ button:hover {
 
 .page-link {
   display: inline-block;
-  padding: 6px 10px;
-  color: #5c2e91;
-  border-bottom: 2px solid transparent;
-  text-decoration: none;
+  padding: 8px 14px;
   margin: 0 4px;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: normal;
+  background-color: #fff8dc; /* 淡黃色 */
+  border: 1px solid #ddd;
+  color: #000;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .page-link:hover {
-  border-color: #5c2e91;
-  color: #2c0d77;
+  background-color: #f6d55c; /* hover 時稍微變亮 */
+  color: #000;
 }
 
 .page-link.active {
+  background-color: #f6d55c; /* 鮮黃色 */
+  color: #000;
   font-weight: bold;
-  border-color: #5c2e91;
-  color: #5c2e91;
+  border: 1px solid #f6d55c;
   pointer-events: none;
 }

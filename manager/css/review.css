@@ -1,14 +1,44 @@
+:root {
+    /* 主色調 */
+    --color-yellow: #fff6da;
+    /* 鵝黃色 - 小雞感 */
+    /*navbar*/
+    --color-orange-brown: #D9A679;
+    /* 溫柔橘棕 - 強調/按鈕  */
+    --color-dark-brown: #7c4d2b;
+    /* 深咖啡 - 導航、標題 * 文字的hover/ 
+  
+    /* 輔助色 */
+    --color-soft-green: #dddfab7f;
+    /* 嫩綠色 - 自然感 */
+    --color-cream: #fff8ed;
+    /* 奶油白 - 背景 */
+  
+    /* 字體與邊線 */
+    --color-text: #4B3F2F;
+    /* 深褐灰 - 內文字體 */
+    --color-line: #D7CBB8;
+    --navbar-text: #fff6da
+      /* 淡褐線條 */
+  
+      /* 狀態/互動 */
+      --color-hover: #EFC89C;
+    /* hover/active 狀態用的柔橘 */
+  }
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
+  background-color: var(--color-cream);
+
 }
 
 .sidebar {
   width: 250px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--color-yellow);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   height: 100vh;
   position: fixed;
   top: 0;
@@ -24,15 +54,26 @@ body {
 
 .sidebar a {
   display: block;
-  color: #fff;
+  color: var(--color-dark-brown);
   text-decoration: none;
   padding: 10px 15px;
   margin: 5px 0;
   border-radius: 4px;
+  font-weight: bold;
 }
 
+
 .sidebar a:hover {
-  background-color: #0056b3;
+  background-color: var(--color-orange-brown);
+}
+ h2{
+  margin-bottom: 20px;
+  color: var(--color-dark-brown);
+}
+
+h1{
+    color: var(--color-dark-brown);
+    margin-left: 10px;
 }
 
 .content {
@@ -51,23 +92,40 @@ body {
 }
 
 .tab-btn:hover {
-  background-color: #0056b3;
+  background-color: #ac8f46;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
 .search-bar input[type="text"] {
   width: 320px;
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 16px;
 }
 
 .search-bar button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f6d55c;
+  color:#333;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.search-bar button:hover {
+  background-color: #c3ab56;
 }
 
 .table-ellipsis {
@@ -96,7 +154,7 @@ td {
 }
 
 thead {
-  background-color: #007bff;
+  background-color: var(--color-dark-brown);
   color: white;
 }
 
@@ -105,12 +163,12 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: #d1e0ff;
+  background-color: rgb(211, 211, 211);
 }
 
 .btn {
   padding: 6px 12px;
-  background-color: #007bff;
+  background-color: #46b96c;
   color: white;
   border: none;
   border-radius: 4px;
@@ -126,27 +184,37 @@ tr:hover {
 }
 
 .pagination {
-  text-align: center;
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;  /* ⭐ 讓整個分頁列置中 */
+  align-items: center;       /* 垂直置中（保險） */
+  gap: 8px;                  /* 每顆按鈕間距 */
+  margin: 30px 0;
 }
 
-.pagination a {
+.page-link {
   display: inline-block;
-  margin: 0 5px;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
+  padding: 8px 14px;
+  margin: 0 4px;
+  border-radius: 8px;
+  background-color: #fff8dc;
+  border: 1px solid #ddd;
+  color: #000;
   text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  
 }
 
-.pagination a.active {
-  background-color: #0056b3;
+.page-link:hover {
+  background-color: #f6d55c;
+  color: #000;
+}
+
+.page-link.active {
+  background-color: #f6d55c;
+  color: #000;
   font-weight: bold;
-}
-
-.pagination a:hover {
-  background-color: #0056b3;
+  border: 1px solid #f6d55c;
+  pointer-events: none;
 }
 .tab-wrapper {
   display: flex;

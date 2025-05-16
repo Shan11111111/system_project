@@ -10,6 +10,7 @@ session_start();
     <title>審核提案</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css\review.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 
@@ -37,13 +38,10 @@ session_start();
 
         <!-- 審核中區塊 -->
         <div id="review-section">
-            <div class="search-bar">
-                <form action="review_proposals.php" method="GET">
-                    <input type="text" name="search" placeholder="搜尋提案..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                    <button type="submit">搜尋</button>
-                </form>
-            </div>
-
+            <form action="review_proposals.php" method="GET" class="search-bar">
+                <input type="text" name="search" placeholder="搜尋提案..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
             <table>
                 <thead>
                     <tr>
@@ -208,22 +206,22 @@ session_start();
 
                 $start = max(1, $page - $half);
                 $end = min($total_pages, $start + $max_buttons - 1);
-                // 若尾端不足 5 頁，從前面補
+
                 if ($end - $start + 1 < $max_buttons) {
                     $start = max(1, $end - $max_buttons + 1);
                 }
-                // 上一頁
+
                 if ($page > 1) {
-                    echo "<a href='review_proposals.php?page=" . ($page - 1) . "&search=" . urlencode($search) . "'>上一頁</a>";
+                    echo "<a class='page-link' href='review_proposals.php?page=" . ($page - 1) . "&search=" . urlencode($search) . "'>&laquo; 上一頁</a>";
                 }
-                // 分頁按鈕
+
                 for ($i = $start; $i <= $end; $i++) {
-                    $active = ($i == $page) ? 'active' : '';
-                    echo "<a href='review_proposals.php?page=$i&search=" . htmlspecialchars($search) . "' class='$active'>$i</a>";
+                    $active = ((int)$i === (int)$page) ? 'active' : '';
+                    echo "<a href='review_proposals.php?page=$i&search=" . htmlspecialchars($search) . "' class='page-link $active'>$i</a>";
                 }
-                // 下一頁
+
                 if ($page < $total_pages) {
-                    echo "<a href='review_proposals.php?page=" . ($page + 1) . "&search=" . urlencode($search) . "'>下一頁</a>";
+                    echo "<a class='page-link' href='review_proposals.php?page=" . ($page + 1) . "&search=" . urlencode($search) . "'>下一頁 &raquo;</a>";
                 }
                 ?>
             </div>
@@ -297,26 +295,24 @@ session_start();
                 $max_buttons = 5;
                 $half = floor($max_buttons / 2);
 
-                // 動態計算開始與結束頁碼
                 $approved_start = max(1, $approved_page - $half);
                 $approved_end = min($approved_total_pages, $approved_start + $max_buttons - 1);
 
-                // 修正當結尾太小時往前補齊
                 if ($approved_end - $approved_start + 1 < $max_buttons) {
                     $approved_start = max(1, $approved_end - $max_buttons + 1);
                 }
-                // 上一頁
+
                 if ($approved_page > 1) {
-                    echo "<a href='review_proposals.php?approved_page=" . ($approved_page - 1) . "&approved_search=" . urlencode($approved_search) . "'>上一頁</a>";
+                    echo "<a class='page-link' href='review_proposals.php?approved_page=" . ($approved_page - 1) . "&approved_search=" . urlencode($approved_search) . "'>&laquo; 上一頁</a>";
                 }
-                // 中間頁碼
+
                 for ($i = $approved_start; $i <= $approved_end; $i++) {
-                    $active = ($i == $approved_page) ? 'active' : '';
-                    echo "<a href='review_proposals.php?approved_page=$i&approved_search=" . htmlspecialchars($approved_search) . "' class='$active'>$i</a>";
+                    $active = ((int)$i === (int)$approved_page) ? 'active' : '';
+                    echo "<a href='review_proposals.php?approved_page=$i&approved_search=" . htmlspecialchars($approved_search) . "' class='page-link $active'>$i</a>";
                 }
-                // 下一頁
+
                 if ($approved_page < $approved_total_pages) {
-                    echo "<a href='review_proposals.php?approved_page=" . ($approved_page + 1) . "&approved_search=" . urlencode($approved_search) . "'>下一頁</a>";
+                    echo "<a class='page-link' href='review_proposals.php?approved_page=" . ($approved_page + 1) . "&approved_search=" . urlencode($approved_search) . "'>下一頁 &raquo;</a>";
                 }
                 ?>
             </div>

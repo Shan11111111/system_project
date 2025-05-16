@@ -83,12 +83,14 @@ $categoryMap = [
     <title>建言管理頁面</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css/adv_manager.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 
 <body>
     <!-- 左側導覽列 -->
     <div class="sidebar">
-        <h2>管理系統</h2>
+        <h2 style="color:#7c4d2b;">管理系統</h2>
         <a href="../homepage.php">孵仁首頁</a>
         <a href="advice_manager.php">建言管理</a>
         <!-- <a href="assign_office.php">達標建言分配處所</a> -->
@@ -118,7 +120,7 @@ $categoryMap = [
                     <option value="desc" <?php echo $agree_sort === 'desc' ? 'selected' : ''; ?>>覆議次數：高到低</option>
                     <option value="asc" <?php echo $agree_sort === 'asc' ? 'selected' : ''; ?>>覆議次數：低到高</option>
                 </select>
-                <button type="submit">搜尋</button>
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <a href="advice_manager.php" class="clear-btn">清除篩選</a>
         </form>
@@ -212,7 +214,7 @@ $categoryMap = [
 
             <?php for ($i = $start; $i <= $end; $i++): ?>
                 <a href="?search=<?= urlencode($search); ?>&sort=<?= $sort; ?>&agree_sort=<?= $agree_sort; ?>&page=<?= $i ?>"
-                    class="page-link <?= ($i === $page) ? 'active' : '' ?>">
+                    class="page-link <?= ((int)$i === (int)$page) ? 'active' : '' ?>">
                     <?= $i ?>
                 </a>
             <?php endfor; ?>
