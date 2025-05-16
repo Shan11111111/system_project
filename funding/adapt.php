@@ -14,8 +14,8 @@ if ($conn->connect_error) {
     die("連接失敗：" . $conn->connect_error);
 }
 
-// 引入個人資料模組
-include 'profile_module.php';
+
+
 
 // 計算資料總數
 $total_sql = "SELECT COUNT(*) AS total FROM advice
@@ -31,7 +31,7 @@ $total_result = $conn->query($total_sql);
 $total_row = $total_result->fetch_assoc();
 $total_records = $total_row['total'];
 
-$limit = 10; // 每頁顯示的資料數量
+$limit = 9; // 每頁顯示的資料數量
 $total_pages = ceil($total_records / $limit); // 計算總頁數
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -73,19 +73,56 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>建言認領</title>
+    <!-- cdn link -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
     <style>
+        :root {
+            /* 主色調 */
+            --color-yellow: #fff6da;
+            /* 鵝黃色 - 小雞感 */
+            /*navbar*/
+            --color-orange-brown: #D9A679;
+            /* 溫柔橘棕 - 強調/按鈕  */
+            --color-dark-brown: #7c4d2b;
+            /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+            --color-soft-green: #dddfab7f;
+            /* 嫩綠色 - 自然感 */
+            --color-cream: #fff8ed;
+            /* 奶油白 - 背景 */
+
+            /* 字體與邊線 */
+            --color-text: #4B3F2F;
+            /* 深褐灰 - 內文字體 */
+            --color-line: #D7CBB8;
+            --navbar-text: #fff6da;
+            /* 淡褐線條 */
+
+            /* 狀態/互動 */
+            --color-orange: #f6a623;
+
+            /* hover/active 狀態用的柔橘 */
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: var(--color-cream);
             color: #333;
         }
 
         /* 左側導覽列 */
         .sidebar {
             width: 250px;
-            background-color: #007BFF;
+            background-color: var(--color-yellow);
             color: #fff;
             height: 100vh;
             position: fixed;
@@ -99,20 +136,22 @@ if (!$result) {
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.5em;
+            color: var(--color-dark-brown);
         }
 
         .sidebar a {
             display: block;
-            color: #fff;
+            color: var(--color-dark-brown);
             text-decoration: none;
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
             font-size: 1em;
+            font-weight: bold;
         }
 
         .sidebar a:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
 
         /* 頁面內容 */
@@ -124,64 +163,12 @@ if (!$result) {
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
-            color: #007BFF;
+            color: var(--color-dark-brown);
         }
 
-        /* 表格樣式 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
 
-        thead {
-            background-color: #007BFF;
-            color: #fff;
-        }
-
-        th,
-        td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            font-weight: bold;
-            font-size: 1em;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #e6f0ff;
-        }
-
-        td {
-            font-size: 0.95em;
-        }
-
-        /* 按鈕樣式 */
-        button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
+        
+        
         /* 搜尋表單樣式 */
         .search-bar {
             margin-bottom: 20px;
@@ -200,8 +187,8 @@ if (!$result) {
 
         .search-bar button {
             padding: 10px 15px;
-            background-color: #007BFF;
-            color: #fff;
+            background-color: #f4d35e;
+            color: black;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -209,7 +196,7 @@ if (!$result) {
         }
 
         .search-bar button:hover {
-            background-color: #0056b3;
+            background-color:rgb(197, 155, 3);
         }
 
         /* 分頁樣式 */
@@ -218,82 +205,9 @@ if (!$result) {
             text-align: center;
         }
 
-        .pagination a {
-            margin: 0 5px;
-            padding: 10px 15px;
-            text-decoration: none;
-            background-color: #007BFF;
-            color: #fff;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
+       
 
-        .pagination a.active {
-            background-color: #0056b3;
-            font-weight: bold;
-        }
 
-        .pagination a:hover {
-            background-color: #0056b3;
-        }
-
-        /* 頭部個人資訊區 */
-        .header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f4f4f9;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .profile-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .profile-info p {
-            margin: 0;
-            font-size: 1em;
-            color: #333;
-        }
-
-        .profile img {
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            z-index: 1000;
-            width: 150px;
-        }
-
-        .dropdown a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-            font-size: 0.9em;
-        }
-
-        .dropdown a:hover {
-            background-color: rgb(159, 193, 255);
-        }
 
         /* 卡片樣式 */
         .card-container {
@@ -304,34 +218,51 @@ if (!$result) {
         }
 
         .card {
-            background-color: #fff;
+            background-color: var(--color-yellow);
             border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
             padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         .card h3 {
-            margin: 0 0 10px;
+            margin: 0 0 12px;
             font-size: 1.2em;
-            color: #007BFF;
+            color: #5a3c1a;
+            /* 深咖啡主色系 */
         }
 
         .card p {
-            margin: 5px 0;
+            margin: 6px 0;
             font-size: 0.95em;
             color: #333;
+            line-height: 1.4;
         }
+
+        /* 單行省略標題 */
+        .title-ellipsis {
+            display: inline-block;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: bottom;
+        }
+
+       
 
         .card button {
             padding: 10px 15px;
-            background-color: #007BFF;
+            background-color: var(--color-orange);
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -341,31 +272,34 @@ if (!$result) {
         }
 
         .card button:hover {
-            background-color: #0056b3;
+            background-color: rgb(197, 155, 3);
         }
 
         .pagination {
-            margin-top: 20px;
-            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
         }
+
 
         .pagination a {
             margin: 0 5px;
             padding: 10px 15px;
             text-decoration: none;
-            background-color: #007BFF;
-            color: #fff;
+            background-color: rgb(255, 241, 159);
+            color: black;
             border-radius: 4px;
             font-size: 0.9em;
         }
 
         .pagination a.active {
-            background-color: #0056b3;
+            background-color: #ffd966;
             font-weight: bold;
         }
 
         .pagination a:hover {
-            background-color: #0056b3;
+            background-color: #ffd966;
         }
     </style>
     <script>
@@ -410,7 +344,7 @@ if (!$result) {
             <form action="adapt.php" method="GET">
                 <input type="text" name="search" placeholder="搜尋建言..."
                     value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                <button type="submit">搜尋</button>
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
         </div>
 
@@ -420,8 +354,14 @@ if (!$result) {
                 <?php while ($advice = $result->fetch_assoc()): ?>
 
                     <div class="card">
-                        <?php echo "<h3><a href='../advice_detail.php?advice_id=" . htmlspecialchars($advice['advice_id']) . "' style='color: #007BFF; text-decoration: none;'>(點擊查看)建言 ID: " . htmlspecialchars($advice['advice_id']) . "</a></h3>";
-                        $categoryMap = [
+                        <h3>
+                            <a href="../advice_detail.php?advice_id=<?php echo htmlspecialchars($advice['advice_id']); ?>"
+                                style="color: #7c4d2b; text-decoration: none;">
+                                <span class="title-ellipsis"><?php echo htmlspecialchars($advice['advice_title']); ?></span>
+                                (點擊查看)
+                            </a>
+                        </h3>
+                        <?php $categoryMap = [
                             "all" => "全部分類",
                             "equipment" => "設施改善",
                             "academic" => "學術發展",
@@ -430,8 +370,8 @@ if (!$result) {
                             "environment" => "環保永續",
                             "other" => "其他"
                         ]; ?>
+                        <p><strong>建言ID:</strong> <?php echo htmlspecialchars($advice['advice_id']); ?></p>
                         <p><strong>建言人:</strong> <?php echo htmlspecialchars($advice['user_id']); ?></p>
-                        <p><strong>建言內容:</strong> <?php echo htmlspecialchars($advice['advice_title']); ?></p>
                         <p><strong>覆議次數:</strong> <?php echo htmlspecialchars($advice['agree']); ?></p>
                         <p><strong>建言分類:</strong> <?php echo htmlspecialchars($categoryMap[$advice['category']] ?? '未知分類'); ?>
                         </p>
