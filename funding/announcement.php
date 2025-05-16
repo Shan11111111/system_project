@@ -234,16 +234,19 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                        <?php if ($row['user_id'] == $user_id): // 只顯示屬於當前使用者的公告 
-                        ?>
+                    <?php
+                    $hasData = false;
+                    while ($row = $result->fetch_assoc()):
+                        if ($row['user_id'] == $user_id):
+                            $hasData = true;
+                    ?>
                             <tr>
                                 <td><?= $row['announcement_id'] ?></td>
                                 <td>
                                     <span class="table-ellipsis"
                                         onclick="showFullText('<?= addslashes(htmlspecialchars($row['title'])) ?>', '<?= addslashes(htmlspecialchars($row['content'])) ?>')"
                                         title="點擊查看完整內容">
-                                        <?= htmlspecialchars($row['content']) ?>
+                                        <?= htmlspecialchars($row['title']) ?>
                                     </span>
                                 </td>
                                 <td>
@@ -271,8 +274,15 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
                                     <a href="announcement.php?delete_id=<?= $row['announcement_id'] ?>" onclick="return confirm('確定要刪除嗎？');">刪除</a>
                                 </td>
                             </tr>
-                        <?php endif; ?>
-                    <?php endwhile; ?>
+                        <?php
+                        endif;
+                    endwhile;
+                    if (!$hasData):
+                        ?>
+                        <tr>
+                            <td colspan="7" style="text-align: center;">查無資料</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
 
