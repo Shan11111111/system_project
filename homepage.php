@@ -93,32 +93,85 @@
 
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
-                    <a class="nav-item" href="<?php if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
-                        echo 'member_center.php';
-                    } else if ($_SESSION['level'] == 'office') {
-                        echo 'funding/office_assignments.php';
-                    } else if ($_SESSION['level'] == 'manager') {
-                        echo 'manager/advice_manager.php';
-                    } ?>"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                    <a class="nav-item" href="<?php
+                                                if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
+                                                    echo 'member_center.php';
+                                                } else if ($_SESSION['level'] == 'office') {
+                                                    echo 'funding/office_assignments.php';
+                                                } else if ($_SESSION['level'] == 'manager') {
+                                                    echo 'manager/advice_manager.php';
+                                                }
+                                                ?>">
+                        <i class="fas fa-user-circle"></i>
+                        <?php
+                        if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
+                            echo "會員專區";
+                        } else if ($_SESSION['level'] == 'office') {
+                            echo "行政專區";
+                        } else if ($_SESSION['level'] == 'manager') {
+                            echo "後台管理";
+                        }
+                        ?>
+                    </a>
 
-                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">
+                        <i class="fas fa-sign-out-alt"></i> 登出
+                    </a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
-                            // 彈出確認視窗
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
-                                // 如果用戶選擇確定，導向登出頁面
                                 window.location.href = "logout.php";
                             }
-                            // 如果用戶選擇取消，什麼都不做
                         });
                     </script>
                 <?php } else { ?>
-                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="login.php" class="nav-item"><i class="fas fa-sign-in-alt"></i> 登入</a>
                     <a href="register.php" class="nav-item">註冊</a>
                 <?php } ?>
             </div>
         </div>
+        <?php
+        if (isset($_SESSION['just_logged_in']) && $_SESSION['just_logged_in']) {
+            $name = isset($_SESSION['name']) ? $_SESSION['name'] : $_SESSION['user_id'];
+            $level = $_SESSION['level'] ?? '';
+
+            if ($level === 'teacher') {
+                $welcomeName = $name . "老師";
+            } else {
+                $welcomeName = $name;
+            }
+
+            echo "<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: '歡迎回來！',
+html: '<div style=\"text-align:center;\"><p style=\"font-size: 18px; margin-top: 10px;\">" . addslashes($welcomeName) . "，祝您使用愉快！</p></div>',
+                confirmButtonText: '開始使用',
+                customClass: {
+                    confirmButton: 'my-confirm-button'
+                }
+            });
+        });
+    </script>";
+
+            unset($_SESSION['just_logged_in']);
+        }
+        ?>
+        <style>
+            .my-confirm-button {
+                background-color: #f6a623 !important;
+                color: white !important;
+                border: none !important;
+                border-radius: 5px !important;
+                font-size: 20px;
+                padding: 10px 24px;
+            }
+
+            .my-confirm-button:hover {
+                background-color: #e39f17 !important;
+            }
+        </style>
 
         <!-- 手機版選單 -->
         <div class="mobile-menu" id="mobile-menu">
@@ -166,7 +219,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         // 彈出確認視窗
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
@@ -196,12 +249,12 @@
                 </div>
             </a>
             <a href="annoancement.php">
-            <div class="new_propose">
-                <div class="chicken">
-                    <img src="img\6A7933B2-AA2E-498F-964B-259E5C7ACB2B.png">
-                    <div class="chicken_tag">最新消息</div>
+                <div class="new_propose">
+                    <div class="chicken">
+                        <img src="img\6A7933B2-AA2E-498F-964B-259E5C7ACB2B.png">
+                        <div class="chicken_tag">最新消息</div>
+                    </div>
                 </div>
-            </div>
             </a>
         </div>
         <div class="banner2">
@@ -212,7 +265,7 @@
                 </div>
             </a>
             <script>
-                document.getElementById('submitAdviceLink').addEventListener('click', function (event) {
+                document.getElementById('submitAdviceLink').addEventListener('click', function(event) {
                     const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
                     if (!isLoggedIn) {
                         event.preventDefault(); // 阻止跳轉
@@ -263,7 +316,7 @@
     </div>
 
     <?php
-   require_once 'db_connection.php'; 
+    require_once 'db_connection.php';
 
     // 抓最新5筆公告
     $sql = "SELECT announcement_id, title, category, update_at FROM announcement ORDER BY update_at DESC LIMIT 5";
@@ -277,21 +330,21 @@
         <div class="announcement-board">
             <h2 class="announcement-title">最新公告</h2>
             <ul class="announcement-list">
-            <?php if (count($announcements) > 0): ?>
-                <?php foreach ($announcements as $item): ?>
-                    <li class="announcement-item">
-                        <span class="announcement-category">【<?= htmlspecialchars($item['category']) ?>公告】</span>
-                        <a href="announcement_detail.php?id=<?= $item['announcement_id'] ?>" class="announcement-text">
+                <?php if (count($announcements) > 0): ?>
+                    <?php foreach ($announcements as $item): ?>
+                        <li class="announcement-item">
+                            <span class="announcement-category">【<?= htmlspecialchars($item['category']) ?>公告】</span>
+                            <a href="announcement_detail.php?id=<?= $item['announcement_id'] ?>" class="announcement-text">
                                 <?= htmlspecialchars($item['title']) ?>
                             </a>
-                        <span class="announcement-date">公告日期：<?= date('Y-m-d', strtotime($item['update_at'])) ?></span>
+                            <span class="announcement-date">公告日期：<?= date('Y-m-d', strtotime($item['update_at'])) ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="announcement-item" style="justify-content: center; color: #aaa;">
+                        目前尚無公告
                     </li>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <li class="announcement-item" style="justify-content: center; color: #aaa;">
-                    目前尚無公告
-                </li>
-            <?php endif; ?>
+                <?php endif; ?>
             </ul>
             <a href="annoancement.php">
                 <h6 class="announcement_seemore">查看更多...</h6>
@@ -326,7 +379,7 @@
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, a.advice_state, 
                ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<=2 ORDER BY a.agree DESC"; // 查詢最熱門的建言
-                            
+
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -351,8 +404,8 @@
                                     // 這裡是模擬的圖片網址，實際上應該從資料庫中獲取
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
-                                    ?>
-                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                            ?>
+                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
                                     <div class="swiper-slide">
                                         <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
                                             style="text-decoration: none; color: inherit;">
@@ -380,7 +433,7 @@
                                     </div>
 
 
-                                <?php }
+                            <?php }
                             }
                             ?>
                             <?php mysqli_close($link); ?>
@@ -437,7 +490,7 @@
                             // 查詢資料庫中的建言資料
                             $sql = "SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.agree, 
                ai.file_path FROM advice a LEFT JOIN advice_image ai ON a.advice_id = ai.advice_id where a.agree<3 ORDER BY a.announce_date DESC"; // 查詢最新的建言
-                            
+
                             $result = mysqli_query($link, $sql);
                             if (!$result) {
                                 die("查詢失敗: " . mysqli_error($link));
@@ -458,12 +511,12 @@
                                     }
                                     $progress_width = $progress . "%"; // 計算進度條的寬度
                                     // 這裡可以根據需要顯示建言的內容，例如標題、進度等
-                            
+
                                     // 獲取圖片路徑，若無圖片則使用預設圖片
                                     $image_url = !empty($row['file_path']) ? $row['file_path'] : 'img\homepage.png';
 
-                                    ?>
-                            <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
+                            ?>
+                                    <!-- 模擬 8 筆資料，每個都是 swiper-slide -->
 
                                     <div class="swiper-slide">
                                         <a href="advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"
@@ -490,7 +543,7 @@
                                         </a>
                                     </div>
 
-                                <?php }
+                            <?php }
                             } ?>
 
                             <?php mysqli_close($link) ?>
@@ -550,14 +603,14 @@
                         try {
                             const response = await fetch(`funding_function/fetch_funding_cards.php?page_type=ongoing&page=${page}`);
                             const result = await response.json();
-                            const data = result.data || [];   // 取出資料，若為空則給空陣列
+                            const data = result.data || []; // 取出資料，若為空則給空陣列
 
                             const cardsWrapper = document.getElementById('funding-cards');
                             const noProjectMessage = document.getElementById('no-project-message');
                             cardsWrapper.innerHTML = '';
                             noProjectMessage.style.display = 'none';
 
-                            if (data.length === 0) {   // 如果沒有任何資料，顯示「沒有進行中專案」訊息並結束函數
+                            if (data.length === 0) { // 如果沒有任何資料，顯示「沒有進行中專案」訊息並結束函數
                                 noProjectMessage.style.display = 'block';
                                 return;
                             }
@@ -703,19 +756,19 @@
     <!-- 初始化 Swiper -->
     <script>
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
@@ -726,15 +779,15 @@
 
         /*CARD SLIDER*/
         const swiperConfigs = [{
-            container: ".mySwiper1",
-            next: ".swiper-button-next-1",
-            prev: ".swiper-button-prev-1"
-        },
-        {
-            container: ".mySwiper2",
-            next: ".swiper-button-next-2",
-            prev: ".swiper-button-prev-2"
-        }
+                container: ".mySwiper1",
+                next: ".swiper-button-next-1",
+                prev: ".swiper-button-prev-1"
+            },
+            {
+                container: ".mySwiper2",
+                next: ".swiper-button-next-2",
+                prev: ".swiper-button-prev-2"
+            }
         ];
 
         swiperConfigs.forEach(config => {

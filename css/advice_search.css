@@ -128,7 +128,9 @@ body {
   background-color: var(--color-yellow);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  min-width: 150px;
+  width: max-content;       /* ✅ 依文字寬度調整 */
+  min-width: 120px;         /* ✅ 設個下限避免過窄 */
+  padding: 5px 10px;
   z-index: 9999;
   /* 提高層級，蓋過其他東西 */
 }
