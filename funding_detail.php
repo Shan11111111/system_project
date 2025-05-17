@@ -333,8 +333,8 @@
         $current_amount = $row['current_amount'];
         if ($current_amount >= $funding_goal) {
             $funding_status_text = "專案募資成功！";
-            $state_sql = "UPDATE fundraising_projects SET status = '已成功' WHERE project_id = $project_id";
-            mysqli_query($link, $state_sql);
+            // $state_sql = "UPDATE fundraising_projects SET status = '已成功' WHERE project_id = $project_id";
+            // mysqli_query($link, $state_sql);
         } else {
             $funding_status_text = "募資專案尚未達標";
         }
