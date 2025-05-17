@@ -621,7 +621,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
         }
 
         /* 提交按鈕 */
-        .fab-modal-content button[type="submit"] {
+        .fab-modal-content-btn {
             background-color: var(--color-orange-brown);
             color: white;
             padding: 10px 20px;
@@ -631,7 +631,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
             font-size: 15px;
         }
 
-        .fab-modal-content button[type="submit"]:hover {
+        .fab-modal-content-btn:hover {
             background-color: var(--color-orange);
         }
 
@@ -760,7 +760,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
                         echo "<form action='submit_reply.php' method='POST'>";
                         echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
                         echo "<textarea name='reply_text' rows='5' style='border-radius: 8px; width:100%' placeholder='輸入回覆內容...' required></textarea>";
-                        echo "<br><div style='text-align:center;'><button class='btn2' type='submit' style='width:90%;'>提交回覆</button></div>";
+                        echo "<br><div style='text-align:center;'><button class='fab-modal-content-btn' type='submit' style='width:90%;'>提交回覆</button></div>";
                         echo "</form>";
 
                         // 查看回覆紀錄按鈕和下拉內容
