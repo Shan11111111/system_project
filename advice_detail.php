@@ -102,28 +102,40 @@ session_start();
 
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
-                    <a class="nav-item" href="<?php if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
-                        echo 'member_center.php';
-                    } else if ($_SESSION['level'] == 'office') {
-                        echo 'funding/office_assignments.php';
-                    } else if ($_SESSION['level'] == 'manager') {
-                        echo 'manager/advice_manager.php';
-                    } ?>"><?php echo $_SESSION['user_id'] ?>會員專區</a>
+                    <a class="nav-item" href="<?php
+                                                if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
+                                                    echo 'member_center.php';
+                                                } else if ($_SESSION['level'] == 'office') {
+                                                    echo 'funding/office_assignments.php';
+                                                } else if ($_SESSION['level'] == 'manager') {
+                                                    echo 'manager/advice_manager.php';
+                                                }
+                                                ?>">
+                        <i class="fas fa-user-circle"></i>
+                        <?php
+                        if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
+                            echo "會員專區";
+                        } else if ($_SESSION['level'] == 'office') {
+                            echo "行政專區";
+                        } else if ($_SESSION['level'] == 'manager') {
+                            echo "後台管理";
+                        }
+                        ?>
+                    </a>
 
-                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">
+                        <i class="fas fa-sign-out-alt"></i> 登出
+                    </a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
-                            // 彈出確認視窗
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
-                                // 如果用戶選擇確定，導向登出頁面
                                 window.location.href = "logout.php";
                             }
-                            // 如果用戶選擇取消，什麼都不做
                         });
                     </script>
                 <?php } else { ?>
-                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="login.php" class="nav-item"><i class="fas fa-sign-in-alt"></i> 登入</a>
                     <a href="register.php" class="nav-item">註冊</a>
                 <?php } ?>
             </div>

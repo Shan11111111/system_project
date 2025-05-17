@@ -86,10 +86,32 @@
 
             <div class="nav-right desktop-menu">
                 <?php if (isset($_SESSION['user_id'])) { ?>
-                    <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
-                    <a href="javascript:void(0);" class="nav-item" id="logout-link">登出</a>
+                    <a class="nav-item" href="<?php
+                                                if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
+                                                    echo 'member_center.php';
+                                                } else if ($_SESSION['level'] == 'office') {
+                                                    echo 'funding/office_assignments.php';
+                                                } else if ($_SESSION['level'] == 'manager') {
+                                                    echo 'manager/advice_manager.php';
+                                                }
+                                                ?>">
+                        <i class="fas fa-user-circle"></i>
+                        <?php
+                        if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
+                            echo "{$_SESSION['user_id']} 會員專區";
+                        } else if ($_SESSION['level'] == 'office') {
+                            echo "行政專區";
+                        } else if ($_SESSION['level'] == 'manager') {
+                            echo "後台管理";
+                        }
+                        ?>
+                    </a>
+
+                    <a href="javascript:void(0);" class="nav-item" id="logout-link">
+                        <i class="fas fa-sign-out-alt"></i> 登出
+                    </a>
                     <script>
-                        document.getElementById('logout-link').addEventListener('click', function () {
+                        document.getElementById('logout-link').addEventListener('click', function() {
                             const confirmLogout = confirm("確定要登出嗎？");
                             if (confirmLogout) {
                                 window.location.href = "logout.php";
@@ -97,7 +119,7 @@
                         });
                     </script>
                 <?php } else { ?>
-                    <a href="login.php" class="nav-item">登入</a>
+                    <a href="login.php" class="nav-item"><i class="fas fa-sign-in-alt"></i> 登入</a>
                     <a href="register.php" class="nav-item">註冊</a>
                 <?php } ?>
             </div>
@@ -130,7 +152,7 @@
                 <a class="nav-item"><?php echo $_SESSION['user_id'] ?>會員專區</a>
                 <a class="nav-item" id="logout-link-mobile">登出</a>
                 <script>
-                    document.getElementById('logout-link-mobile').addEventListener('click', function () {
+                    document.getElementById('logout-link-mobile').addEventListener('click', function() {
                         const confirmLogout = confirm("確定要登出嗎？");
                         if (confirmLogout) {
                             window.location.href = "logout.php";
@@ -174,7 +196,7 @@
 
         // 監聽每個 link 的點擊
         sidebarLinks.forEach(link => {
-            link.addEventListener('click', function () {
+            link.addEventListener('click', function() {
                 // 先清掉所有 a 的 active class
                 sidebarLinks.forEach(l => l.classList.remove('active'));
                 // 再給目前點到的 a 加上 active
@@ -182,23 +204,23 @@
             });
         });
 
-       
 
-        
+
+
         // 點擊漢堡切換 menu
-        document.getElementById('mobile-menu-toggle').addEventListener('click', function () {
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('active');
         });
 
         // 手機 dropdown 點擊展開
         document.querySelectorAll('.mobile-menu .dropdown .dropbtn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault(); // 防止跳頁
                 const parent = btn.parentElement;
                 parent.classList.toggle('active');
             });
         });
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 400) {
                 navbar.classList.add('scrolled');
@@ -206,7 +228,6 @@
                 navbar.classList.remove('scrolled');
             }
         });
-
     </script>
 
 </body>
