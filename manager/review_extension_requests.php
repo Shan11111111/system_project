@@ -45,7 +45,7 @@ $result = $conn->query($sql);
             background-color: transparent;
             border: none;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
             color: #999;
             cursor: pointer;
             position: relative;
@@ -60,12 +60,12 @@ $result = $conn->query($sql);
         .tab-btn.active::after {
             content: "";
             position: absolute;
-            left: 30%;
-            bottom: 4px;
-            width: 40%;
+            left: 0;
+            bottom: 0;
+            /* 貼到底 */
+            width: 100%;
             height: 4px;
             background-color: #f6a623;
-            border-radius: 2px;
         }
 
         .tab-btn:hover {
@@ -80,15 +80,18 @@ $result = $conn->query($sql);
         }
 
         .card {
-            background: #f9f9f9;
+            background: #fff6da;
             border: 1px solid #ccc;
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px;
+            margin: 1rem;
+            /* 新增這行：相當於 m-3 效果 */
+
         }
 
         .card h3 {
             margin: 0 0 10px;
-            color: #007BFF;
+            color: #5c3900;
         }
 
         .card textarea {
@@ -101,62 +104,19 @@ $result = $conn->query($sql);
             margin-right: 10px;
         }
 
-        .table-ellipsis {
-            max-width: 200px;
-            /* 可依實際需求調整 */
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            display: inline-block;
-            vertical-align: middle;
-            text-align: left;
-        }
-
-        table {
+        .card textarea {
             width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        thead {
-            background-color: #007bff;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #d1e0ff;
-        }
-
-        .pagination {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .pagination a {
-            padding: 8px 12px;
-            margin: 0 5px;
-            background: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-
-        .pagination a.active {
-            background: #0056b3;
-            pointer-events: none;
+            height: 100px;
+            /* 調高高度 */
+            font-size: 16px;
+            /* 字體變大 */
+            padding: 10px;
+            /* 內距增加，讓輸入舒適 */
+            border: 2px solid #333;
+            /* 可選：讓邊框更清楚 */
+            border-radius: 6px;
+            resize: vertical;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -210,10 +170,28 @@ $result = $conn->query($sql);
             $total_pages = ceil($total_row['total'] / $limit);
 
             echo '<div class="pagination">';
-            for ($i = 1; $i <= $total_pages; $i++) {
-                $active = ($i == $page) ? "active" : "";
-                echo "<a href='review_extension_requests.php?page=$i' class='$active'>$i</a> ";
+
+            $visiblePages = 5;
+            $start = max(1, $page - floor($visiblePages / 2));
+            $end = min($start + $visiblePages - 1, $total_pages);
+            $start = max(1, $end - $visiblePages + 1); // 防止尾頁不足5個按鈕
+
+            // 上一頁按鈕
+            if ($page > 1) {
+                echo "<a href='review_extension_requests.php?tab=review&page=" . ($page - 1) . "' class='page-link'>&laquo; 上一頁</a>";
             }
+
+            // 分頁按鈕
+            for ($i = $start; $i <= $end; $i++) {
+                $active = ($i == $page) ? "active" : "";
+                echo "<a href='review_extension_requests.php?tab=review&page=$i' class='page-link $active'>$i</a>";
+            }
+
+            // 下一頁按鈕
+            if ($page < $total_pages) {
+                echo "<a href='review_extension_requests.php?tab=review&page=" . ($page + 1) . "' class='page-link'>下一頁 &raquo;</a>";
+            }
+
             echo '</div>';
 
             $conn->close();
@@ -221,7 +199,7 @@ $result = $conn->query($sql);
         </div>
         <!-- 已批准的延期歷史紀錄 -->
         <div id="tab-approved" class="tab-content">
-            <h2 style="margin-top: 0;">已批准的延期歷史紀錄</h2>
+            <h2 style="margin:10px;">已批准的延期歷史紀錄</h2>
             <table>
                 <thead>
                     <tr>
@@ -285,12 +263,25 @@ $result = $conn->query($sql);
             </table>
 
             <div class="pagination">
-                <?php for ($i = 1; $i <= $approved_total_pages; $i++): ?>
-                    <a href="review_extension_requests.php?approved_page=<?php echo $i; ?>&approved_search=<?php echo htmlspecialchars($approved_search); ?>"
-                        class="<?php echo $i == $approved_page ? 'active' : ''; ?>">
-                        <?php echo $i; ?>
-                    </a>
-                <?php endfor; ?>
+                <?php
+                $visiblePages = 5;
+                $start = max(1, $approved_page - floor($visiblePages / 2));
+                $end = min($start + $visiblePages - 1, $approved_total_pages);
+                $start = max(1, $end - $visiblePages + 1);
+
+                if ($approved_page > 1) {
+                    echo "<a href='review_extension_requests.php?tab=approved&approved_page=" . ($approved_page - 1) . "&approved_search=" . urlencode($approved_search) . "' class='page-link'>&laquo; 上一頁</a>";
+                }
+
+                for ($i = $start; $i <= $end; $i++) {
+                    $active = ($i == $approved_page) ? "active" : "";
+                    echo "<a href='review_extension_requests.php?tab=approved&approved_page=$i&approved_search=" . urlencode($approved_search) . "' class='page-link $active'>$i</a>";
+                }
+
+                if ($approved_page < $approved_total_pages) {
+                    echo "<a href='review_extension_requests.php?tab=approved&approved_page=" . ($approved_page + 1) . "&approved_search=" . urlencode($approved_search) . "' class='page-link'>下一頁 &raquo;</a>";
+                }
+                ?>
             </div>
         </div>
     </div>
@@ -310,7 +301,7 @@ $result = $conn->query($sql);
 
         // 根據網址參數自動切換 tab
         const params = new URLSearchParams(window.location.search);
-        if (params.has('approved_page') || params.has('approved_search')) {
+        if (params.get('tab') === 'approved') {
             showTab('approved');
         } else {
             showTab('review');
