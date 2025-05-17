@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("isss", $project_id, $title, $content, $file_path);
 
     if ($stmt->execute()) {
-       echo "<script>alert('回報已成功提交！');location.href='funding_return.php';</script>";
+        echo "<script>alert('回報已成功提交！');location.href='funding_return.php';</script>";
     } else {
         echo "回報提交失敗：" . $conn->error;
         echo "<script>alert('回報提交失敗！');location.href='funding_return.php';</script>";
@@ -102,18 +102,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>募資專案進度回報</title>
 
     <style>
+        :root {
+            /* 主色調 */
+            --color-yellow: #fff6da;
+            /* 鵝黃色 - 小雞感 */
+            /*navbar*/
+            --color-orange-brown: #D9A679;
+            /* 溫柔橘棕 - 強調/按鈕  */
+            --color-dark-brown: #7c4d2b;
+            /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+            --color-soft-green: #dddfab7f;
+            /* 嫩綠色 - 自然感 */
+            --color-cream: #fff8ed;
+            /* 奶油白 - 背景 */
+
+            /* 字體與邊線 */
+            --color-text: #4B3F2F;
+            /* 深褐灰 - 內文字體 */
+            --color-line: #D7CBB8;
+            --navbar-text: #fff6da;
+            /* 淡褐線條 */
+
+            /* 狀態/互動 */
+            --color-orange: #f6a623;
+
+            /* hover/active 狀態用的柔橘 */
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            background-color: #f4f4f9;
+            background-color: var(--color-cream);
+            color: #333;
         }
 
         /* 左側導覽列 */
         .sidebar {
             width: 250px;
-            background-color: #007BFF;
+            background-color: var(--color-yellow);
             color: #fff;
             height: 100vh;
             position: fixed;
@@ -126,33 +155,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .sidebar h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5em;
+            color: var(--color-dark-brown);
         }
 
         .sidebar a {
             display: block;
-            color: #fff;
+            color: var(--color-dark-brown);
             text-decoration: none;
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
+            font-size: 1em;
+            font-weight: bold;
         }
 
         .sidebar a:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
+
 
         /* 頁面內容 */
         .content {
             margin-left: 280px;
             padding: 20px;
-            width: calc(100% - 280px);
         }
 
-        h1,
-        h2 {
-            text-align: center;
-            color: #f9f9f9;
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: var(--color-dark-brown);
         }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+            background-color: #fff8ec;
+            width: 100%;
+        }
+
+        .tab {
+            flex: 1;
+            /* 每個 tab 平均分配寬度 */
+            text-align: center;
+            padding: 14px 0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #999;
+            background-color: transparent;
+            border: none;
+            position: relative;
+            border-radius: 12px 12px 0 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* 選取中 */
+        .tab.active {
+            background-color: #fff5dd;
+            color: #5c3a00;
+        }
+
+        /* 下底線，佔滿 tab 寬度 */
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--color-orange);
+        }
+
+        /* hover 效果 */
+        .tab:hover:not(.active) {
+            background-color: #fff0d6;
+            color: #666;
+        }
+
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
 
         /* 表格樣式 */
         table {
@@ -164,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         thead {
-            background-color: #007BFF;
+            background-color: var(--color-dark-brown);
             color: #fff;
         }
 
@@ -189,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         /* 表單樣式 */
         form {
-            max-width: 600px;
+            max-width: 750px;
             margin: 20px auto;
             padding: 20px;
             background-color: #fff;
@@ -207,7 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input,
         textarea,
         select {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
@@ -218,15 +306,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input:focus,
         textarea:focus,
         select:focus {
-            border-color: #007BFF;
+            border-color: var(--color-orange-brown);
             outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            box-shadow: 0 0 5px rgba(94, 85, 1, 0.5);
         }
 
         button {
             width: 100%;
             padding: 10px;
-            background-color: #007BFF;
+            background-color: var(--color-orange);
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -236,7 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
 
         .status-message {
@@ -269,97 +357,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <!-- 金額達標專案清單 -->
-        <h2 style="color: black;">金額達標的募資專案</h2>
-        <?php if ($completed_projects_result->num_rows > 0) : ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>專案 ID</th>
-                        <th>標題</th>
-                        <th>描述</th>
-                        <th>募資目標</th>
-                        <th>開始日期</th>
-                        <th>結束日期</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($row = $completed_projects_result->fetch_assoc()) : ?>
+        <h1>募資進度回報</h1>
+        <!-- HTML 開始 -->
+        <div class="tabs">
+            <div class="tab active" data-target="achieve">金額達標的募資專案</div>
+            <div class="tab" data-target="report_progress">提交回報</div> <!-- ⚠️ 修正 data-target 名稱 -->
+        </div>
+
+        <!-- 第一個 tab 內容 -->
+        <div class="tab-content active" data-tab="achieve">
+            <?php if ($completed_projects_result->num_rows > 0): ?>
+                <table>
+                    <thead>
                         <tr>
-                            <td>
-                                <a href="../funding_detail.php?project_id=<?php echo htmlspecialchars($row['project_id']); ?>">
-                                    <?php echo htmlspecialchars($row['project_id']); ?>
-                                </a>
-                            </td>
-                            <td><?php echo htmlspecialchars($row['title']); ?></td>
-                            <td><?php echo htmlspecialchars($row['description']); ?></td>
-                            <td><?php echo htmlspecialchars($row['funding_goal']); ?></td>
-                            <td><?php echo htmlspecialchars($row['start_date']); ?></td>
-                            <td><?php echo htmlspecialchars($row['end_date']); ?></td>
+                            <th>專案 ID</th>
+                            <th>標題</th>
+                            <th>描述</th>
+                            <th>募資目標</th>
+                            <th>開始日期</th>
+                            <th>結束日期</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $completed_projects_result->fetch_assoc()): ?>
+                            <tr>
+                                <td>
+                                    <a href="../funding_detail.php?project_id=<?= htmlspecialchars($row['project_id']); ?>">
+                                        <?= htmlspecialchars($row['project_id']); ?>
+                                    </a>
+                                </td>
+                                <td><?= htmlspecialchars($row['title']); ?></td>
+                                <td><?= htmlspecialchars($row['description']); ?></td>
+                                <td><?= htmlspecialchars($row['funding_goal']); ?></td>
+                                <td><?= htmlspecialchars($row['start_date']); ?></td>
+                                <td><?= htmlspecialchars($row['end_date']); ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+
+                <!-- 分頁 -->
+                <div class="pagination" style="text-align: center; margin-top: 20px;">
+                    <?php if ($page > 1): ?>
+                        <a href="?page=<?= $page - 1 ?>"
+                            style="margin-right: 10px; text-decoration: none; color: #ffd966;">上一頁</a>
+                    <?php endif; ?>
+
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <a href="?page=<?= $i ?>"
+                            style="margin-right: 10px; text-decoration: none; <?= $i == $page ? 'font-weight: bold; color: #000;' : 'color: #ffd966;' ?>"><?= $i ?></a>
+                    <?php endfor; ?>
+
+                    <?php if ($page < $total_pages): ?>
+                        <a href="?page=<?= $page + 1 ?>" style="text-decoration: none; color: #ffd966;">下一頁</a>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <p>目前沒有已完成的募資專案。</p>
+            <?php endif; ?>
+        </div>
+
+        <!-- 第二個 tab 內容 -->
+        <div class="tab-content" data-tab="report_progress">
+            <form action="" method="POST" enctype="multipart/form-data">
+                <?php $completed_projects_result = $conn->query($completed_projects_sql); ?>
+                <label for="project_id">選擇專案：</label>
+                <select id="project_id" name="project_id" required>
+                    <option value="">請選擇專案</option>
+                    <?php while ($row = $completed_projects_result->fetch_assoc()): ?>
+                        <option value="<?= htmlspecialchars($row['project_id']); ?>"><?= htmlspecialchars($row['title']); ?>
+                        </option>
                     <?php endwhile; ?>
-                </tbody>
-            </table>
+                </select>
 
-            <!-- 分頁按鈕 -->
-            <div class="pagination" style="text-align: center; margin-top: 20px;">
-                <?php if ($page > 1): ?>
-                    <a href="?page=<?= $page - 1 ?>" style="margin-right: 10px; text-decoration: none; color: #007BFF;">上一頁</a>
-                <?php endif; ?>
+                <label for="title">回報標題：</label>
+                <input type="text" id="title" name="title" required>
 
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <a href="?page=<?= $i ?>" style="margin-right: 10px; text-decoration: none; <?= $i == $page ? 'font-weight: bold; color: #000;' : 'color: #007BFF;' ?>"><?= $i ?></a>
-                <?php endfor; ?>
+                <label for="content">回報內容：</label>
+                <textarea id="content" name="content" rows="5" required></textarea>
 
-                <?php if ($page < $total_pages): ?>
-                    <a href="?page=<?= $page + 1 ?>" style="text-decoration: none; color: #007BFF;">下一頁</a>
-                <?php endif; ?>
-            </div>
-        <?php else : ?>
-            <p>目前沒有已完成的募資專案。</p>
-        <?php endif; ?>
+                <label for="file">上傳附件：</label>
+                <input type="file" id="file" name="file">
 
-        <!-- 回報表單 -->
-        <h2 style="color: black;">提交回報</h2>
-        <form action="" method="POST" enctype="multipart/form-data">
-            <?php
-            // 重新執行查詢以獲取已完成的專案
-            $completed_projects_result = $conn->query($completed_projects_sql);
-            ?>
-            <label for="project_id">選擇專案：</label>
-            <select id="project_id" name="project_id" required>
-                <option value="">請選擇專案</option>
-                <?php while ($row = $completed_projects_result->fetch_assoc()) : ?>
-                    <option value="<?php echo htmlspecialchars($row['project_id']); ?>">
-                        <?php echo htmlspecialchars($row['title']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-
-            <label for="title">回報標題：</label>
-            <input type="text" id="title" name="title" required>
-
-            <label for="content">回報內容：</label>
-            <textarea id="content" name="content" rows="5" required></textarea>
-
-            <label for="file">上傳附件：</label>
-            <input type="file" id="file" name="file">
-
-            <button type="submit">提交回報</button>
-        </form>
+                <button type="submit">提交回報</button>
+            </form>
+        </div>
     </div>
 
-</body>
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tabs = document.querySelectorAll(".tab");
+            const contents = document.querySelectorAll(".tab-content");
 
-<script>
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const projectId = document.getElementById('project_id').value;
-        if (!projectId) {
-            e.preventDefault();
-            alert('請選擇一個專案！');
-        }
-        
-    });
-</script>
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    const target = tab.dataset.target;
+                    const content = document.querySelector(`[data-tab="${target}"]`);
+                    if (!content) return; // 容錯
 
+                    tabs.forEach(t => t.classList.remove("active"));
+                    contents.forEach(c => c.classList.remove("active"));
 
-</html>
+                    tab.classList.add("active");
+                    content.classList.add("active");
+                });
+            });
+        });
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const projectId = document.getElementById('project_id').value;
+            if (!projectId) {
+                e.preventDefault();
+                alert('請選擇一個專案！');
+            }
+        });
+    </script>
