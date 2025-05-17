@@ -71,7 +71,7 @@
     ?>
 
 
-    
+
     <div class="profile_container">
         <div class="profile-header">
             <div class="user"><i class="fa-solid fa-user fa-3x" style="color:white"></i></i></div>
@@ -84,22 +84,23 @@
 
 
         <div class="profile-stats">
-            <div class="stat-card">
+            <a href="member_favorites.php" class="stat-card" style="text-decoration: none;">
                 <div class="stat-title">收藏建言</div>
                 <div class="stat-value"><?= $collectionCount ?> 件</div>
-            </div>
-            <div class="stat-card">
+            </a>
+            <a href="member_advice.php" class="stat-card" style="text-decoration: none;">
                 <div class="stat-title">提交的建言</div>
                 <div class="stat-value"><?= $adviceCount ?> 件</div>
-            </div>
-            <div class="stat-card">
+            </a>
+            <a href="member_agreements.php" class="stat-card" style="text-decoration: none;">
                 <div class="stat-title">附議紀錄</div>
                 <div class="stat-value"><?= $agreeCount ?> 件</div>
-            </div>
-            <div class="stat-card">
+            </a>
+            <a href="member_fundings.php" class="stat-card" style="text-decoration: none;">
                 <div class="stat-title">募資紀錄</div>
                 <div class="stat-value"><?= $donationCount ?> 件</div>
-            </div>
+            </a>
+
         </div>
     </div>
 
