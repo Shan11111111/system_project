@@ -15,7 +15,13 @@ $office_id = $_SESSION['user_id'];
 // 新增或編輯常見問題
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $faq_id = isset($_POST['faq_id']) ? intval($_POST['faq_id']) : null;
-    $project_id = intval($_POST['project_id']);
+    // 這裡優先用搜尋欄的 project_id
+    $project_id = null;
+    if (!empty($_POST['project_search'])) {
+        $project_id = intval($_POST['project_search']);
+    } else if (!empty($_POST['project_id'])) {
+        $project_id = intval($_POST['project_id']);
+    }
     $question = $_POST['question'];
     $reply = $_POST['reply'];
 
@@ -509,19 +515,113 @@ $result = $stmt->get_result();
                 <input type="hidden" name="faq_id" value="<?php echo $faq_id; ?>">
                 <div style="margin-bottom: 15px;">
                     <label for="project_id"
-                        style="font-weight: bold; display: block; margin-bottom: 5px;">選擇募資專案：</label>
-                    <select name="project_id" id="project_id" required
-                        style="width: 92%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                        <option value="">請選擇專案</option>
+                        style="font-weight: bold; display: block; margin-bottom: 5px;">專案名稱：</label>
+                    <?php if (isset($_GET['edit'])): ?>
                         <?php
-                        if ($projects->num_rows > 0) {
-                            while ($project = $projects->fetch_assoc()) {
-                                $selected = ($project['project_id'] == $project_id) ? 'selected' : '';
-                                echo "<option value='" . $project['project_id'] . "' $selected>" . htmlspecialchars($project['title']) . "</option>";
-                            }
+                        // 取得該常見問題的專案名稱
+                        $project_title = '';
+                        if (!empty($project_id)) {
+                            $stmt = $conn->prepare("SELECT title FROM fundraising_projects WHERE project_id = ?");
+                            $stmt->bind_param("i", $project_id);
+                            $stmt->execute();
+                            $stmt->bind_result($project_title);
+                            $stmt->fetch();
+                            $stmt->close();
                         }
                         ?>
-                    </select>
+                        <input type="hidden" name="project_id" value="<?php echo htmlspecialchars($project_id); ?>">
+                        <div style="padding: 10px 0 0 0; font-size: 1.1em; color: #333;">
+                            <?php echo htmlspecialchars($project_title); ?>
+                        </div>
+                    <?php else: ?>
+                        <select name="project_id" id="project_id" required
+                            style="width: 92%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="">請選擇專案</option>
+                            <?php
+                            // 這裡要重新查詢一次專案資料
+                            $projects = $conn->query("SELECT project_id, title FROM fundraising_projects");
+                            if ($projects && $projects->num_rows > 0) {
+                                while ($project = $projects->fetch_assoc()) {
+                                    echo "<option value='" . $project['project_id'] . "'>" . htmlspecialchars($project['title']) . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                        <div style="margin-top:8px; position:relative;">
+                            <label for="project_search" style="font-size: 0.95em; color: #666;">或搜尋募資專案：</label>
+                            <input type="text" id="project_search" name="project_search"
+                                placeholder="輸入專案ID或名稱搜尋"
+                                autocomplete="off"
+                                style="width: 92%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-top:2px;">
+                            <div id="search_suggestions" style="position:absolute; z-index:10; background:#fff; border:1px solid #ccc; width:92%; display:none; max-height:180px; overflow-y:auto; border-radius:4px;"></div>
+                        </div>
+                        <script>
+                        // 互斥控制
+                        const select = document.getElementById('project_id');
+                        const search = document.getElementById('project_search');
+                        const suggestions = document.getElementById('search_suggestions');
+
+                        select.addEventListener('change', function() {
+                            if (this.value) {
+                                search.disabled = true;
+                                suggestions.style.display = 'none';
+                            } else {
+                                search.disabled = false;
+                            }
+                        });
+
+                        search.addEventListener('input', function() {
+                            if (this.value.trim() !== '') {
+                                select.disabled = true;
+                                select.required = false;
+                                // AJAX 搜尋
+                                fetch('search_projects.php?keyword=' + encodeURIComponent(this.value.trim()))
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (Array.isArray(data) && data.length > 0) {
+                                            suggestions.innerHTML = data.map(item =>
+                                                `<div class="suggest-item" style="padding:8px; cursor:pointer; border-bottom:1px solid #eee;" data-id="${item.project_id}">${item.project_id} - ${item.title}</div>`
+                                            ).join('');
+                                            suggestions.style.display = 'block';
+                                        } else {
+                                            suggestions.innerHTML = '<div style="padding:8px; color:#888;">查無相關專案</div>';
+                                            suggestions.style.display = 'block';
+                                        }
+                                    });
+                            } else {
+                                select.disabled = false;
+                                select.required = true;
+                                suggestions.style.display = 'none';
+                            }
+                        });
+
+                        // 點選建議
+                        suggestions.addEventListener('click', function(e) {
+                            if (e.target.classList.contains('suggest-item')) {
+                                // 讓搜尋欄顯示「project_id - title」
+                                search.value = e.target.textContent;
+                                // 另外存 project_id 到一個隱藏欄位（送出時用）
+                                let hidden = document.getElementById('project_search_id');
+                                if (!hidden) {
+                                    hidden = document.createElement('input');
+                                    hidden.type = 'hidden';
+                                    hidden.name = 'project_search';
+                                    hidden.id = 'project_search_id';
+                                    search.form.appendChild(hidden);
+                                }
+                                hidden.value = e.target.getAttribute('data-id');
+                                suggestions.style.display = 'none';
+                            }
+                        });
+
+                        // 點擊外部隱藏建議
+                        document.addEventListener('click', function(e) {
+                            if (!search.contains(e.target) && !suggestions.contains(e.target)) {
+                                suggestions.style.display = 'none';
+                            }
+                        });
+                        </script>
+                    <?php endif; ?>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label for="question" style="font-weight: bold; display: block; margin-bottom: 5px;">問題：</label>
@@ -583,37 +683,45 @@ $result = $stmt->get_result();
 
         <script>
             function switchTabAndClearForm() {
-                // 切換 tab 顯示
+                // 切換到「新增常見問題」tab
                 const tabToClick = document.querySelector('.tab[onclick*="faq-form"]');
                 if (tabToClick) {
                     switchTab('faq-form', tabToClick);
                 }
 
-                // 清空表單欄位值
+                // 清空表單欄位
                 document.querySelector('input[name="faq_id"]').value = '';
-                document.querySelector('select[name="project_id"]').selectedIndex = 0;
-                document.querySelector('textarea[name="question"]').value = '';
-                document.querySelector('textarea[name="reply"]').value = '';
-
-                // 捲動
-                const form = document.getElementById("faq-form");
-                if (form) {
-                    setTimeout(() => {
-                        form.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }, 100);
+                // 如果有 select，重設選擇
+                const select = document.getElementById('project_id');
+                if (select) {
+                    select.selectedIndex = 0;
+                    select.disabled = false;
                 }
+                // 如果有搜尋欄，清空並啟用
+                const search = document.getElementById('project_search');
+                if (search) {
+                    search.value = '';
+                    search.disabled = false;
+                }
+                // 隱藏建議
+                const suggestions = document.getElementById('search_suggestions');
+                if (suggestions) {
+                    suggestions.style.display = 'none';
+                }
+                // 清空問題與回覆
+                document.getElementById('question').value = '';
+                document.getElementById('reply').value = '';
 
-                // 更新表單標題和按鈕
+                // 更新表單標題與按鈕
                 document.querySelector('#faq-form h2').innerText = '新增常見問題';
                 document.querySelector('#faq-form button[type="submit"]').innerText = '新增';
 
-                // ✅ 隱藏「切換為新增」按鈕區塊
+                // 隱藏「切換為新增」按鈕
                 const toggleBtn = document.getElementById('switch-to-create');
                 if (toggleBtn) {
                     toggleBtn.style.display = 'none';
                 }
             }
-
         </script>
 
 
