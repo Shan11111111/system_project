@@ -161,7 +161,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
 
 <body>
     <div class="sidebar">
-        <h2>管理系統</h2>
+        <h2><?php echo($user_level === 'office') ? '行政專區' : '管理系統'; ?></h2>
 
         <?php if ($user_level === 'office'): ?>
             <!-- Office 使用者的導覽列 -->
@@ -198,7 +198,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
                 }
             });
         </script>
-        
+
     </div>
 
     <div class="content">
