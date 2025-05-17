@@ -16,17 +16,24 @@ $limit = 5;
 $offset = ($page - 1) * $limit;
 
 // 修正分頁總數查詢
-$count_sql = "SELECT COUNT(*) AS total FROM fundraising_projects WHERE status = '已完成' AND office_id = $office_id";
+$count_sql = "SELECT COUNT(*) AS total
+    FROM fundraising_projects f
+    JOIN suggestion_assignments s ON f.suggestion_assignments_id = s.suggestion_assignments_id
+    WHERE f.status = '已完成' AND s.office_id = $office_id";
 $count_result = $conn->query($count_sql);
+if (!$count_result) {
+    die("SQL執行失敗: " . $conn->error . "<br>語法: " . $count_sql);
+}
 $total_rows = $count_result->fetch_assoc()['total'];
 $total_pages = ceil($total_rows / $limit);
 
 // 查詢當前頁的專案
-$completed_projects_sql = "SELECT project_id, title, description, funding_goal, start_date, end_date 
-                           FROM fundraising_projects 
-                           WHERE status = '已完成' AND office_id = $office_id
-                           ORDER BY end_date DESC
-                           LIMIT $limit OFFSET $offset";
+$completed_projects_sql = "SELECT f.project_id, f.title, f.description, f.funding_goal, f.start_date, f.end_date 
+    FROM fundraising_projects f
+    JOIN suggestion_assignments s ON f.suggestion_assignments_id = s.suggestion_assignments_id
+    WHERE f.status = '已完成' AND s.office_id = $office_id
+    ORDER BY f.end_date DESC
+    LIMIT $limit OFFSET $offset";
 $completed_projects_result = $conn->query($completed_projects_sql);
 
 $status_message = "";
@@ -86,6 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "回報提交失敗：" . $conn->error;
         echo "<script>alert('回報提交失敗！');location.href='funding_return.php';</script>";
     }
+}
+
+if (!is_numeric($office_id)) {
+    die("office_id 非數字，請檢查登入狀態。");
 }
 ?>
 
