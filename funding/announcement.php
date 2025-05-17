@@ -82,6 +82,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['edit_id']) && !empty($_POST['edit_id'])) {
         // 更新公告
         $edit_id = intval($_POST['edit_id']);
+
+        // 先查詢原本的 file_path
+        $stmt = $conn->prepare("SELECT file_path FROM announcement WHERE announcement_id = ?");
+        $stmt->bind_param("i", $edit_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $original_file_path = $row['file_path'];
+
+        // 如果沒有新上傳檔案，保留原本的 file_path
+        if (empty($file_path)) {
+            $file_path = $original_file_path;
+        }
+
         $stmt = $conn->prepare("UPDATE announcement SET title = ?, content = ?, category = ?, update_at = NOW(), file_path = ? WHERE announcement_id = ?");
         $stmt->bind_param("ssssi", $title, $content, $category, $file_path, $edit_id);
         if ($stmt->execute()) {
@@ -200,7 +214,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
                 <textarea id="content" name="content" rows="5" required><?= htmlspecialchars($edit_content) ?></textarea>
 
                 <label for="file">上傳檔案：</label>
-                <input type="file" id="file" name="file" required>
+                <input type="file" id="file" name="file" >
 
                 <button type="submit"><?= $edit_id ? '更新公告' : '發布公告' ?></button>
             </form>
