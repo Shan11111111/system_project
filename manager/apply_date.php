@@ -1,5 +1,3 @@
-
-
 <?php
 $conn = new mysqli("localhost", "root", "", "system_project");
 if ($conn->connect_error) {
@@ -39,12 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$update_stmt) {
                 die("SQL prepare failed: " . $conn->error);
             }
-            $update_stmt->bind_param("si",$requested_extension_date,  $request_id);
+            $update_stmt->bind_param("si", $requested_extension_date, $request_id);
             if ($update_stmt->execute()) {
                 echo "<script>alert('募款專案的截止日已更新。');</script>";
                 echo "<script>window.location.href='review_extension_requests.php';</script>";
             } else {
                 echo "<script>alert('更新募款專案的截止日失敗: " . addslashes($conn->error) . "');</script>";
+                echo "<script>window.location.href='review_extension_requests.php';</script>";
+
             }
             $update_stmt->close();
         } else {
@@ -53,6 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         echo "<script>alert('更新失敗: " . addslashes($conn->error) . "');</script>";
+        echo "<script>window.location.href='review_extension_requests.php';</script>";
+
     }
 
     $stmt->close();
