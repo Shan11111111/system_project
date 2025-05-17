@@ -28,7 +28,7 @@ if ($_SESSION['user_id'] == '123') {
 // include 'profile_module.php';
 
 // 每頁顯示的記錄數量
-$records_per_page = 4;
+$records_per_page = 6;
 
 // 獲取當前頁數，預設為第 1 頁
 $current_page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -115,19 +115,56 @@ while ($office_row = $offices_result->fetch_assoc()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>處所分派建言</title>
+    <!-- cdn link -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
     <style>
+        :root {
+            /* 主色調 */
+            --color-yellow: #fff6da;
+            /* 鵝黃色 - 小雞感 */
+            /*navbar*/
+            --color-orange-brown: #D9A679;
+            /* 溫柔橘棕 - 強調/按鈕  */
+            --color-dark-brown: #7c4d2b;
+            /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+            --color-soft-green: #dddfab7f;
+            /* 嫩綠色 - 自然感 */
+            --color-cream: #fff8ed;
+            /* 奶油白 - 背景 */
+
+            /* 字體與邊線 */
+            --color-text: #4B3F2F;
+            /* 深褐灰 - 內文字體 */
+            --color-line: #D7CBB8;
+            --navbar-text: #fff6da;
+            /* 淡褐線條 */
+
+            /* 狀態/互動 */
+            --color-orange: #f6a623;
+
+            /* hover/active 狀態用的柔橘 */
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            background-color: #f4f4f9;
+            background-color: var(--color-cream);
+            color: #333;
         }
 
         /* 左側導覽列 */
         .sidebar {
             width: 250px;
-            background-color: #007BFF;
+            background-color: var(--color-yellow);
             color: #fff;
             height: 100vh;
             position: fixed;
@@ -140,53 +177,71 @@ while ($office_row = $offices_result->fetch_assoc()) {
         .sidebar h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5em;
+            color: var(--color-dark-brown);
         }
 
         .sidebar a {
             display: block;
-            color: #fff;
+            color: var(--color-dark-brown);
             text-decoration: none;
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
+            font-size: 1em;
+            font-weight: bold;
         }
 
         .sidebar a:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
+
 
         /* 頁面內容 */
         .content {
             margin-left: 280px;
             padding: 20px;
-            width: calc(100% - 280px);
         }
+
+        .main-content {
+            margin-left: 8px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: var(--color-dark-brown);
+        }
+
 
         /* 搜尋表單樣式 */
         .search-bar {
             margin-bottom: 20px;
             display: flex;
+            align-items: center;
             gap: 10px;
         }
 
         .search-bar input[type="text"] {
-            padding: 8px;
+            padding: 10px;
             width: 300px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 0.9em;
         }
 
         .search-bar button {
-            padding: 8px 12px;
-            background-color: #007BFF;
-            color: #fff;
+            padding: 10px 15px;
+            background-color: #f4d35e;
+            color: black;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 0.9em;
         }
 
         .search-bar button:hover {
-            background-color: #0056b3;
+            background-color: rgb(217, 173, 15);
         }
 
         /* 美化下拉選單 */
@@ -208,91 +263,65 @@ while ($office_row = $offices_result->fetch_assoc()) {
 
         .search-bar select:focus {
             outline: none;
-            border-color: #007BFF;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            border-color: #f4d35e;
+            box-shadow: 0 0 5px #f4d35e;
         }
 
-        /* 表格樣式 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
 
-        thead {
-            background-color: #007BFF;
-            color: #fff;
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: rgb(167, 185, 255);
-        }
 
         /* 分頁樣式 */
         .pagination {
-            margin-top: 20px;
-            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
         }
+
 
         .pagination a {
             margin: 0 5px;
-            padding: 8px 12px;
+            padding: 10px 15px;
             text-decoration: none;
-            background-color: #007BFF;
-            color: #fff;
+            background-color: rgb(255, 241, 159);
+            color: black;
             border-radius: 4px;
+            font-size: 0.9em;
         }
 
         .pagination a.active {
-            background-color: #0056b3;
+            background-color: #ffd966;
             font-weight: bold;
         }
 
         .pagination a:hover {
-            background-color: #0056b3;
+            background-color: #ffd966;
         }
 
         /* 卡片樣式 */
         .card-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
         }
 
         .card {
-            background-color: #fff;
+            background-color: var(--color-yellow);
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            width: 300px;
+            width: 280px;
             text-align: center;
         }
 
         .card h3 {
             margin: 0 0 10px;
+            color: var(--color-dark-brown);
         }
 
         .card h3 a {
-            color: #007BFF;
+            color: var(--color-dark-brown);
             text-decoration: none;
         }
 
@@ -300,40 +329,109 @@ while ($office_row = $offices_result->fetch_assoc()) {
             text-decoration: underline;
         }
 
-        .card p {
-            margin: 5px 0;
+        .title-wrap {
+            margin: 0;
+            padding: 0;
+        }
+
+        .title-link {
+            display: block;
+            max-width: 100%;
+            /* 或固定寬度 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .full-title {
+            display: inline;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .actions {
             margin-top: 10px;
         }
 
+        .status-label.alert {
+            color: red;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
         .btn {
+            padding: 6px 12px;
+            margin-right: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            color: white;
+        }
+
+        .btn-notify {
+            background-color: #dc3545;
+
+        }
+
+        .btn-draft {
+            background-color: #007bff;
+        
+        }
+
+        .btn-reject {
+            background-color: #fd7e14;
+         
+        }
+
+        .btn-pending {
+            background-color: #6c757d;
+       
+        }
+
+        .btn-approved {
+            background-color: #28a745;
+            /* 綠 */
+        }
+
+        .btn.disabled {
+            cursor: default;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .btn2 {
             display: inline-block;
             margin: 5px 0;
             padding: 8px 12px;
-            background-color: #007BFF;
+            background-color: var(--color-orange-brown);
             color: #fff;
             text-decoration: none;
             border-radius: 4px;
         }
 
-        .btn:hover {
-            background-color: #0056b3;
+        .btn2:hover {
+            background-color: var(--color-orange);
         }
 
         .toggle-replies-btn {
             margin-top: 10px;
             padding: 8px 12px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
+            background-color: var(--color-soft-green);
+            color: #333;
+            border: #333 1px solid;
             border-radius: 4px;
             cursor: pointer;
         }
 
         .toggle-replies-btn:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
 
         .replies {
@@ -344,38 +442,6 @@ while ($office_row = $offices_result->fetch_assoc()) {
             border-radius: 4px;
         }
 
-        /* 頭部個人資訊區 */
-        .header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f4f4f9;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .profile-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .profile-info p {
-            margin: 0;
-            font-size: 1em;
-            color: #333;
-        }
-
-        .profile img {
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
 
         .dropdown {
             display: none;
@@ -390,17 +456,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
             width: 150px;
         }
 
-        .dropdown a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-            font-size: 0.9em;
-        }
-
-        .dropdown a:hover {
-            background-color: rgb(159, 193, 255);
-        }
+        
 
         /* 轉移提案表單美化 */
         .transfer-form {
@@ -413,23 +469,23 @@ while ($office_row = $offices_result->fetch_assoc()) {
 
         .transfer-form select {
             padding: 8px 12px;
-            border: 1.5px solid #007BFF;
+            border: 1.5px solid var(--color-dark-brown);
             border-radius: 6px;
             background-color: #f4f8ff;
             font-size: 1em;
-            color: #007BFF;
+            color: var(--color-dark-brown);
             transition: border-color 0.2s;
             outline: none;
         }
 
         .transfer-form select:focus {
-            border-color: #0056b3;
+            border-color: var(--color-dark-brown);
             background-color: #e6f0ff;
         }
 
         .transfer-form .transfer-btn {
             padding: 8px 18px;
-            background: linear-gradient(90deg, #007BFF 60%, #0056b3 100%);
+            background: linear-gradient(90deg, var(--color-orange-brown) 60%, var(--color-orange-brown) 100%);
             color: #fff;
             border: none;
             border-radius: 6px;
@@ -441,19 +497,28 @@ while ($office_row = $offices_result->fetch_assoc()) {
         }
 
         .transfer-form .transfer-btn:hover {
-            background: linear-gradient(90deg, #0056b3 60%, #007BFF 100%);
+            background: var(--color-orange);
             box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
         }
+
+        .actions {
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
 
         /* 懸浮按鈕樣式 */
         #fab {
             position: fixed;
             right: 40px;
             bottom: 40px;
-            width: 60px;
-            height: 60px;
+            width: 68px;
+            height: 68px;
             border-radius: 50%;
-            background: #007BFF;
+            background: var(--color-orange);
             color: #fff;
             font-size: 12px;
             border: none;
@@ -469,51 +534,118 @@ while ($office_row = $offices_result->fetch_assoc()) {
         }
 
         #fab:hover {
-            background: #0056b3;
+            background: var(--color-orange-brown);
         }
 
-        /* Modal 樣式 */
-        .fab-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .fab-modal-content {
-            background: #fff;
-            margin: 10% auto;
-            padding: 30px 20px;
-            border-radius: 8px;
-            width: 320px;
-            position: relative;
-        }
-
-        .fab-close {
-            position: absolute;
-            right: 16px;
-            top: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
+       
+       
 
         .fab-dot {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 14px;
-            height: 14px;
-            background: red;
+            top: 0px;
+            right: 0px;
+            width: 16px;
+            height: 16px;
+            background: rgb(255, 54, 54);
             border-radius: 50%;
-            border: 2px solid #fff;
             z-index: 1001;
             display: inline-block;
             box-shadow: 0 0 2px #333;
             pointer-events: none;
+        }
+
+        /* 模糊背景遮罩 */
+        .fab-modal {
+            display: none;
+            /* 預設隱藏，開啟時由 JS 控制 */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* 半透明黑背景 */
+            backdrop-filter: blur(2px);
+        }
+
+        /* Modal 主體 */
+        .fab-modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px 40px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* 關閉按鈕 (×) */
+        .fab-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+        }
+
+        .fab-close:hover {
+            color: #000;
+        }
+
+        /* 表格樣式 */
+        .fab-modal-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .fab-modal-content th,
+        .fab-modal-content td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .fab-modal-content th {
+            background-color:var(--color-dark-brown);
+            font-weight: bold;
+            color: white;
+        }
+
+        /* 提交按鈕 */
+        .fab-modal-content button[type="submit"] {
+            background-color: var(--color-orange-brown);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .fab-modal-content button[type="submit"]:hover {
+            background-color: var(--color-orange);
+        }
+
+        /* 動畫 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -530,6 +662,18 @@ while ($office_row = $offices_result->fetch_assoc()) {
         <a href="funding_FAQ.php">募資常見問題</a>
         <a href="funding_return.php">募資進度回報</a>
         <a href="data">數據分析</a>
+        <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
+        <script>
+            document.getElementById('logout-link').addEventListener('click', function () {
+                // 彈出確認視窗
+                const confirmLogout = confirm("確定要登出嗎？");
+                if (confirmLogout) {
+                    // 如果用戶選擇確定，導向登出頁面
+                    window.location.href = "../logout.php";
+                }
+                // 如果用戶選擇取消，什麼都不做
+            });
+        </script>
     </div>
 
 
@@ -538,101 +682,120 @@ while ($office_row = $offices_result->fetch_assoc()) {
     <div class="content">
         <h1>處所被分派之建言</h1>
         <!-- 搜尋表單 -->
-        <div class="search-bar">
-            <form action="office_assignments.php" method="GET">
-                <input type="text" name="search" placeholder="輸入建言 ID 或標題進行搜尋"
-                    value="<?php echo htmlspecialchars($search); ?>">
-                <select name="status">
-                    <option value="">所有狀態</option>
-                    <option value="草擬中" <?php echo $status === '草擬中' ? 'selected' : ''; ?>>草擬中</option>
-                    <option value="被退回" <?php echo $status === '被退回' ? 'selected' : ''; ?>>被退回</option>
-                    <option value="審核中" <?php echo $status === '審核中' ? 'selected' : ''; ?>>審核中</option>
-                    <option value="已通過" <?php echo $status === '已通過' ? 'selected' : ''; ?>>已通過</option>
-                </select>
-                <button type="submit">搜尋</button>
-            </form>
-        </div>
+        <div class="main-content">
+            <div class="search-bar">
+                <form action="office_assignments.php" method="GET">
+                    <input type="text" name="search" placeholder="輸入建言 ID 或標題進行搜尋"
+                        value="<?php echo htmlspecialchars($search); ?>">
+                    <select name="status">
+                        <option value="">所有狀態</option>
+                        <option value="草擬中" <?php echo $status === '草擬中' ? 'selected' : ''; ?>>草擬中</option>
+                        <option value="被退回" <?php echo $status === '被退回' ? 'selected' : ''; ?>>被退回</option>
+                        <option value="審核中" <?php echo $status === '審核中' ? 'selected' : ''; ?>>審核中</option>
+                        <option value="已通過" <?php echo $status === '已通過' ? 'selected' : ''; ?>>已通過</option>
+                    </select>
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
 
-        <!-- 卡片顯示建言 -->
-        <div class="card-container">
-            <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<div class='card'>";
-                    echo "<h3><a href='../advice_detail.php?advice_id=" . $row['advice_id'] . "' style='color: #007BFF; text-decoration: none;'>(點擊查看)建言 ID: " . htmlspecialchars($row['advice_id']) . "</a></h3>";
-                    echo "<p><strong>建言標題:</strong> " . htmlspecialchars($row['advice_title']) . "</p>";
+            <!-- 卡片顯示建言 -->
+            <div class="card-container">
+                <?php
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<div class='card'>";
+                        echo "<h3 class='title-wrap'>
+        <a href='../advice_detail.php?advice_id={$row['advice_id']}' class='title-link'>
+            <span class='full-title'>" . htmlspecialchars($row['advice_title']) . "(點擊查看)</span>
+        </a>
+      </h3>";
 
-                    // 轉移提案表單
-                    echo "<form action='transfer_assignment.php' method='POST' class='transfer-form'>";
-                    echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
-                    echo "<select name='new_office_id' required>";
-                    echo "<option value=''>選擇轉移處所</option>";
-                    foreach ($offices as $office) {
-                        // 不顯示目前的處所
-                        if ($office['user_id'] == $office_id)
-                            continue;
-                        echo "<option value='" . htmlspecialchars($office['user_id']) . "'>" . htmlspecialchars($office['department']) . "</option>";
+
+
+
+                        echo "<p><strong>建言ID:</strong> " . htmlspecialchars($row['advice_id']) . "</p>";
+
+                        // 轉移提案表單
+                        echo "<form action='transfer_assignment.php' method='POST' class='transfer-form'>";
+                        echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
+                        echo "<select name='new_office_id' required>";
+                        echo "<option value=''>選擇轉移處所</option>";
+                        foreach ($offices as $office) {
+                            // 不顯示目前的處所
+                            if ($office['user_id'] == $office_id)
+                                continue;
+                            echo "<option value='" . htmlspecialchars($office['user_id']) . "'>" . htmlspecialchars($office['department']) . "</option>";
+                        }
+                        echo "</select>";
+                        echo "<button type='submit' class='transfer-btn'>轉移提案</button>";
+                        echo "</form>";
+
+                        // 操作按鈕區塊
+                        echo "<div class='actions'>募資提案狀態：";
+
+                        if ($row['notification']) {
+                            echo "<span class='status-label alert'>有新的審核結果</span>";
+                            echo "<a class='btn btn-notify' href='reset_notification.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>查看通知</a>";
+                        }
+
+                        switch ($row['status']) {
+                            case '草擬中':
+                                echo "<a class='btn btn-draft' href='submit_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>提交提案</a>";
+                                break;
+                            case '被退回':
+                                echo "<a class='btn btn-reject' href='submit_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>重新提交</a>";
+                                break;
+                            case '審核中':
+                                echo "<span class='btn btn-pending disabled'>等待審核</span>";
+                                break;
+                            case '已通過':
+                                echo "<span class='btn btn-approved disabled'>已通過</span>";
+                                break;
+                        }
+
+                        echo "</div>";
+
+                        echo "<hr>";
+                        // 回覆表單
+                        echo "<form action='submit_reply.php' method='POST'>";
+                        echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
+                        echo "<textarea name='reply_text' rows='5' style='border-radius: 8px; width:100%' placeholder='輸入回覆內容...' required></textarea>";
+                        echo "<br><div class='btn2' type='submit' style='width:90%;'>提交回覆</div>";
+                        echo "</form>";
+
+                        // 查看回覆紀錄按鈕和下拉內容
+                        echo "<button class='toggle-replies-btn' onclick='loadReplies(this, " . $row['advice_id'] . ")'>查看回覆紀錄</button>";
+                        echo "<div class='replies' style='display: none;'>";
+                        echo "<p>回覆紀錄載入中...</p>";
+                        echo "</div>";
+
+                        echo "</div>";
                     }
-                    echo "</select>";
-                    echo "<button type='submit' class='transfer-btn'>轉移提案</button>";
-                    echo "</form>";
-
-                    // 操作按鈕
-                    echo "<div class='actions'>狀態:";
-                    if ($row['notification']) {
-                        echo "<span style='color: red;'>有新的審核結果</span>";
-                        echo " <a class='btn' href='reset_notification.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>查看通知</a>";
-                    }
-                    if ($row['status'] === '草擬中') {
-                        echo " <a class='btn' href='submit_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>提交提案</a>";
-                    } elseif ($row['status'] === '被退回') {
-                        echo " <a class='btn' href='submit_proposal.php?suggestion_assignments_id=" . $row['suggestion_assignments_id'] . "'>重新提交</a>";
-                    } elseif ($row['status'] === '審核中') {
-                        echo " <span>等待審核</span>";
-                    } elseif ($row['status'] === '已通過') {
-                        echo " <span>已通過</span>";
-                    }
-                    echo "</div>";
-
-                    // 回覆表單
-                    echo "<form action='submit_reply.php' method='POST'>";
-                    echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
-                    echo "<textarea name='reply_text' rows='5' style='border-radius: 8px; width:100%' placeholder='輸入回覆內容...' required></textarea>";
-                    echo "<br><button type='submit' style='width:100%;'>提交回覆</button>";
-                    echo "</form>";
-
-                    // 查看回覆紀錄按鈕和下拉內容
-                    echo "<button class='toggle-replies-btn' onclick='loadReplies(this, " . $row['advice_id'] . ")'>查看回覆紀錄</button>";
-                    echo "<div class='replies' style='display: none;'>";
-                    echo "<p>回覆紀錄載入中...</p>";
-                    echo "</div>";
-
-                    echo "</div>";
+                } else {
+                    echo "<p>目前沒有分派的建言</p>";
                 }
-            } else {
-                echo "<p>目前沒有分派的建言</p>";
-            }
-            ?>
-        </div>
+                ?>
+            </div>
 
-        <!-- 分頁按鈕 -->
-        <div class="pagination">
-            <?php if ($current_page > 1): ?>
-                <a
-                    href="?page=<?php echo $current_page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">上一頁</a>
-            <?php endif; ?>
+            <!-- 分頁按鈕 -->
+            <div class="pagination">
+                <?php if ($current_page > 1): ?>
+                    <a
+                        href="?page=<?php echo $current_page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">上一頁</a>
+                <?php endif; ?>
 
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>"
-                    class="<?php echo $i === $current_page ? 'active' : ''; ?>">
-                    <?php echo $i; ?>
-                </a>
-            <?php endfor; ?>
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>"
+                        class="<?php echo $i === $current_page ? 'active' : ''; ?>">
+                        <?php echo $i; ?>
+                    </a>
+                <?php endfor; ?>
 
-            <?php if ($current_page < $total_pages): ?>
-                <a
-                    href="?page=<?php echo $current_page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">下一頁</a>
-            <?php endif; ?>
+                <?php if ($current_page < $total_pages): ?>
+                    <a
+                        href="?page=<?php echo $current_page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>&status=<?php echo htmlspecialchars($status); ?>">下一頁</a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
@@ -684,14 +847,15 @@ while ($office_row = $offices_result->fetch_assoc()) {
     }
     ?>
     <!-- 懸浮按鈕 -->
-    <button id="fab" onclick="openFabModal()" <?php if (!$has_new_advice) echo 'disabled style="background:#aaa;cursor:not-allowed;"'; ?>>
-    <?php if ($has_new_advice): ?>
-        有新的建言需要加入!
-        <span class="fab-dot"></span>
-    <?php else: ?>
-        目前無新的建言需要加入
-    <?php endif; ?>
-</button>
+    <button id="fab" onclick="openFabModal()" <?php if (!$has_new_advice)
+        echo 'disabled style="background:#aaa;cursor:not-allowed;"'; ?>>
+        <?php if ($has_new_advice): ?>
+            有新的建言需要加入!
+            <span class="fab-dot"></span>
+        <?php else: ?>
+            目前無新的建言需要加入
+        <?php endif; ?>
+    </button>
 
     <!-- 彈出表單 Modal -->
     <div id="fabModal" class="fab-modal">
@@ -758,7 +922,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
         </div>
     </div>
 
-    
+
 
     <script>
         function openFabModal() {
