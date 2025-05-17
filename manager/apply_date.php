@@ -31,8 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $requested_extension_date = $end_date;
             // 更新募款專案的截止日
             $update_stmt = $conn->prepare(
-                "UPDATE fundraising_projects f SET f.status='進行中', f.end_date = ? 
-                WHERE f.project_id = (SELECT fer.fundraising_project_id FROM fundraising_extension_requests fer WHERE fer.id = ?)"
+                "UPDATE fundraising_projects f 
+                 SET f.status = CASE WHEN f.status != '已完成' THEN '進行中' ELSE f.status END, 
+                     f.end_date = ? 
+                 WHERE f.project_id = (SELECT fer.fundraising_project_id FROM fundraising_extension_requests fer WHERE fer.id = ?)"
             );
             if (!$update_stmt) {
                 die("SQL prepare failed: " . $conn->error);
