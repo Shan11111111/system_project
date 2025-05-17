@@ -8,7 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <title>提交提案</title>
     <style>
-         :root {
+        :root {
             /* 主色調 */
             --color-yellow: #fff6da;
             /* 鵝黃色 - 小雞感 */
@@ -79,6 +79,7 @@ session_start();
         .sidebar a:hover {
             background-color: var(--color-orange-brown);
         }
+
         /* 頁面內容 */
         .content {
             margin-left: 280px;
@@ -158,6 +159,18 @@ session_start();
         <a href="funding_FAQ.php">募資常見問題</a>
         <a href="funding_return.php">募資進度回報</a>
         <a href="data">數據分析</a>
+        <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
+        <script>
+            document.getElementById('logout-link').addEventListener('click', function () {
+                // 彈出確認視窗
+                const confirmLogout = confirm("確定要登出嗎？");
+                if (confirmLogout) {
+                    // 如果用戶選擇確定，導向登出頁面
+                    window.location.href = "../logout.php";
+                }
+                // 如果用戶選擇取消，什麼都不做
+            });
+        </script>
     </div>
 
     <!-- 頁面內容 -->
