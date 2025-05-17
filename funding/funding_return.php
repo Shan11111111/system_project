@@ -10,26 +10,22 @@ session_start();
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     die("錯誤：您尚未登入，請先登入系統。");
 }
-$office_id = $_SESSION['user_id'];
+$office_id = intval($_SESSION['user_id']);
+$page = max(1, intval($_GET['page'] ?? 1));
+$limit = 5;
+$offset = ($page - 1) * $limit;
 
-// 確認募資專案狀態
-$project_id = isset($_GET['project_id']) ? intval($_GET['project_id']) : 0;
-
-// 設定每頁顯示的專案數量
-$limit = 5; // 每頁顯示 5 筆
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1; // 當前頁數
-$offset = ($page - 1) * $limit; // 計算偏移量
-
-// 計算總專案數量
-$count_sql = "SELECT COUNT(*) AS total FROM fundraising_projects WHERE status = '已完成'";
+// 修正分頁總數查詢
+$count_sql = "SELECT COUNT(*) AS total FROM fundraising_projects WHERE status = '已完成' AND office_id = $office_id";
 $count_result = $conn->query($count_sql);
 $total_rows = $count_result->fetch_assoc()['total'];
-$total_pages = ceil($total_rows / $limit); // 計算總頁數
+$total_pages = ceil($total_rows / $limit);
 
 // 查詢當前頁的專案
 $completed_projects_sql = "SELECT project_id, title, description, funding_goal, start_date, end_date 
                            FROM fundraising_projects 
-                           WHERE status = '已完成'
+                           WHERE status = '已完成' AND office_id = $office_id
+                           ORDER BY end_date DESC
                            LIMIT $limit OFFSET $offset";
 $completed_projects_result = $conn->query($completed_projects_sql);
 
@@ -492,3 +488,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
     </script>
+</body>
+
+</html>
