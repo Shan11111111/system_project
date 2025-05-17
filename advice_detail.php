@@ -318,7 +318,7 @@ session_start();
                 $announceDate = new DateTime($row['announce_date']);
                 $now = new DateTime();
 
-                // 附議期限 = 提案日 + 15 天
+                // 附議期限 = 提案日 + 30 天
                 $dueDate = clone $announceDate;
                 $dueDate->modify('+30 days');
 

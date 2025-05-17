@@ -680,7 +680,16 @@ body {
   border-radius: 8px;
   margin-left: 30px;
   font-size: 18px;
+  max-width: 95%;
 }
+
+#advice-content {
+  word-wrap: break-word; /* 對長單字換行 */
+  overflow-wrap: break-word; /* 舊名稱，兼容性用途 */
+  white-space: pre-wrap; /* 保留空白與換行符號 */
+  line-height: 1.6;
+}
+
 /* 
 .file-list {
   margin-top: 20px;
