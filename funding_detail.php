@@ -298,10 +298,10 @@
                     $image_row = mysqli_fetch_assoc($image_result);
                     $image_path = $image_row['file_path'];
                 } else {
-                    $image_path = 'homepage.png';
+                    $image_path = 'uploads/homepage.png';
                 }
             } else {
-                $image_path = 'homepage.png';
+                $image_path = 'uploads/homepage.png';
             }
         } else {
             $image_path = 'homepage.png';
