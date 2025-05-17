@@ -440,7 +440,7 @@ session_start();
                             <div class="deadline">
                                 <!--<p><i class="fa-solid fa-user icon-circle"></i>已有 <strong>30</strong> 人參與募資</p>-->
                                 <p><i class="fa-solid fa-hourglass-half  icon-circle"></i></i> <strong>
-                                        截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +15 days')); ?></strong>
+                                        截止日：<?php echo date('Y/m/d', strtotime($row['announce_date'] . ' +30days')); ?></strong>
                                 </p>
 
                             </div>
