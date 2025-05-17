@@ -48,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $update_stmt->close();
         } else {
-            echo "<script>alert('申請已成功更新。');</script>";
+            echo "<script>alert('已退回募資專案的申請。');</script>";
+            echo "<script>window.location.href='review_extension_requests.php';</script>";
         }
     } else {
         echo "<script>alert('更新失敗: " . addslashes($conn->error) . "');</script>";
