@@ -174,14 +174,6 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <a href="funding_return.php">募資進度回報</a>
             <a href="data">數據分析</a>
             <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
-            <script>
-                document.getElementById('logout-link').addEventListener('click', function() {
-                    const confirmLogout = confirm("確定要登出嗎？");
-                    if (confirmLogout) {
-                        window.location.href = "logout.php";
-                    }
-                });
-            </script>
         <?php elseif ($user_level === 'manager'): ?>
             <!-- Manager 使用者的導覽列 -->
             <a href="../homepage.php">孵仁首頁</a>
@@ -198,6 +190,15 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <!-- 預設顯示 -->
             <p>您沒有權限訪問此頁面。</p>
         <?php endif; ?>
+        <script>
+            document.getElementById('logout-link').addEventListener('click', function() {
+                const confirmLogout = confirm("確定要登出嗎？");
+                if (confirmLogout) {
+                    window.location.href = "../logout.php";
+                }
+            });
+        </script>
+        
     </div>
 
     <div class="content">
