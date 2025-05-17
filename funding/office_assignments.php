@@ -382,17 +382,17 @@ while ($office_row = $offices_result->fetch_assoc()) {
 
         .btn-draft {
             background-color: #007bff;
-        
+
         }
 
         .btn-reject {
             background-color: #fd7e14;
-         
+
         }
 
         .btn-pending {
             background-color: #6c757d;
-       
+
         }
 
         .btn-approved {
@@ -456,7 +456,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
             width: 150px;
         }
 
-        
+
 
         /* 轉移提案表單美化 */
         .transfer-form {
@@ -537,8 +537,8 @@ while ($office_row = $offices_result->fetch_assoc()) {
             background: var(--color-orange-brown);
         }
 
-       
-       
+
+
 
         .fab-dot {
             position: absolute;
@@ -615,7 +615,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
         }
 
         .fab-modal-content th {
-            background-color:var(--color-dark-brown);
+            background-color: var(--color-dark-brown);
             font-weight: bold;
             color: white;
         }
@@ -664,7 +664,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
         <a href="data">數據分析</a>
         <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
         <script>
-            document.getElementById('logout-link').addEventListener('click', function () {
+            document.getElementById('logout-link').addEventListener('click', function() {
                 // 彈出確認視窗
                 const confirmLogout = confirm("確定要登出嗎？");
                 if (confirmLogout) {
@@ -760,7 +760,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
                         echo "<form action='submit_reply.php' method='POST'>";
                         echo "<input type='hidden' name='suggestion_assignments_id' value='" . $row['suggestion_assignments_id'] . "'>";
                         echo "<textarea name='reply_text' rows='5' style='border-radius: 8px; width:100%' placeholder='輸入回覆內容...' required></textarea>";
-                        echo "<br><div class='btn2' type='submit' style='width:90%;'>提交回覆</div>";
+                        echo "<br><div style='text-align:center;'><button class='btn2' type='submit' style='width:90%;'>提交回覆</button></div>";
                         echo "</form>";
 
                         // 查看回覆紀錄按鈕和下拉內容
@@ -832,7 +832,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
 
     <?php
     // ...原本的 session 與 $cat 判斷...
-    
+
     // 判斷有無可加入的建言
     $has_new_advice = false;
     $stmt = $conn->prepare("SELECT COUNT(*) AS cnt FROM advice WHERE category = ? AND advice_state = '未處理' AND agree > 2");
@@ -848,7 +848,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
     ?>
     <!-- 懸浮按鈕 -->
     <button id="fab" onclick="openFabModal()" <?php if (!$has_new_advice)
-        echo 'disabled style="background:#aaa;cursor:not-allowed;"'; ?>>
+                                                    echo 'disabled style="background:#aaa;cursor:not-allowed;"'; ?>>
         <?php if ($has_new_advice): ?>
             有新的建言需要加入!
             <span class="fab-dot"></span>
@@ -881,7 +881,6 @@ while ($office_row = $offices_result->fetch_assoc()) {
                         $cat = 'welfare';
                     } else if ($_SESSION['user_id'] == '0904') {
                         $cat = 'environment';
-
                     } else {
                         $cat = 'other';
                     }
@@ -928,11 +927,12 @@ while ($office_row = $offices_result->fetch_assoc()) {
         function openFabModal() {
             document.getElementById('fabModal').style.display = 'block';
         }
+
         function closeFabModal() {
             document.getElementById('fabModal').style.display = 'none';
         }
         // 點擊 modal 外部關閉
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             var modal = document.getElementById('fabModal');
             if (event.target === modal) modal.style.display = "none";
         }
