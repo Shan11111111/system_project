@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 ?>
 <!DOCTYPE html>
@@ -8,17 +8,47 @@ session_start();
     <meta charset="UTF-8">
     <title>提交提案</title>
     <style>
+         :root {
+            /* 主色調 */
+            --color-yellow: #fff6da;
+            /* 鵝黃色 - 小雞感 */
+            /*navbar*/
+            --color-orange-brown: #D9A679;
+            /* 溫柔橘棕 - 強調/按鈕  */
+            --color-dark-brown: #7c4d2b;
+            /* 深咖啡 - 導航、標題 * 文字的hover/ 
+
+  /* 輔助色 */
+            --color-soft-green: #dddfab7f;
+            /* 嫩綠色 - 自然感 */
+            --color-cream: #fff8ed;
+            /* 奶油白 - 背景 */
+
+            /* 字體與邊線 */
+            --color-text: #4B3F2F;
+            /* 深褐灰 - 內文字體 */
+            --color-line: #D7CBB8;
+            --navbar-text: #fff6da;
+            /* 淡褐線條 */
+
+            /* 狀態/互動 */
+            --color-orange: #f6a623;
+
+            /* hover/active 狀態用的柔橘 */
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f6f9;
+            background-color: var(--color-cream);
+            color: #333;
         }
 
         /* 左側導覽列 */
         .sidebar {
             width: 250px;
-            background-color: #007BFF;
+            background-color: var(--color-yellow);
             color: #fff;
             height: 100vh;
             position: fixed;
@@ -32,33 +62,34 @@ session_start();
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.5em;
+            color: var(--color-dark-brown);
         }
 
         .sidebar a {
             display: block;
-            color: #fff;
+            color: var(--color-dark-brown);
             text-decoration: none;
             padding: 10px 15px;
             margin: 5px 0;
             border-radius: 4px;
-            transition: background-color 0.3s ease;
+            font-size: 1em;
+            font-weight: bold;
         }
 
         .sidebar a:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
-
         /* 頁面內容 */
         .content {
             margin-left: 280px;
             padding: 40px;
-            background-color: #f4f6f9;
+            background-color: var(--color-cream);
             min-height: 100vh;
         }
 
         .content h1 {
             font-size: 2em;
-            color: #333;
+            color: var(---color-dark-brown);
             margin-bottom: 20px;
         }
 
@@ -67,7 +98,7 @@ session_start();
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            max-width: 90%;
             margin: 0 auto;
         }
 
@@ -92,7 +123,7 @@ session_start();
 
         .form-container button {
             padding: 12px 20px;
-            background-color: #007BFF;
+            background-color: var(--color-orange);
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -103,7 +134,7 @@ session_start();
         }
 
         .form-container button:hover {
-            background-color: #0056b3;
+            background-color: var(--color-orange-brown);
         }
 
         .form-container .note {
@@ -131,26 +162,27 @@ session_start();
 
     <!-- 頁面內容 -->
     <div class="content">
-        <h1>提交提案</h1>
+        <h1 style="color: #7c4d2b;">提交提案</h1>
         <div class="form-container">
             <form action="process_proposal.php" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="suggestion_assignments_id" value="<?php echo htmlspecialchars($_GET['suggestion_assignments_id']); ?>">
+                <input type="hidden" name="suggestion_assignments_id"
+                    value="<?php echo htmlspecialchars($_GET['suggestion_assignments_id']); ?>">
                 <label for="proposal_text">提案內容:</label>
                 <textarea name="proposal_text" id="proposal_text" rows="5" required><?php
-                    // 如果是重新提交，預填舊的提案內容
-                    $conn = new mysqli("localhost", "root", "", "system_project");
-                    $suggestion_assignments_id = intval($_GET['suggestion_assignments_id']);
-                    $sql = "SELECT proposal_text FROM suggestion_assignments WHERE suggestion_assignments_id = ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("i", $suggestion_assignments_id);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    if ($result->num_rows > 0) {
-                        $row = $result->fetch_assoc();
-                        echo htmlspecialchars($row['proposal_text']);
-                    }
-                    $stmt->close();
-                    $conn->close();
+                // 如果是重新提交，預填舊的提案內容
+                $conn = new mysqli("localhost", "root", "", "system_project");
+                $suggestion_assignments_id = intval($_GET['suggestion_assignments_id']);
+                $sql = "SELECT proposal_text FROM suggestion_assignments WHERE suggestion_assignments_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $suggestion_assignments_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    echo htmlspecialchars($row['proposal_text']);
+                }
+                $stmt->close();
+                $conn->close();
                 ?></textarea>
                 <label for="funding_amount">資金金額:</label>
                 <input type="text" name="funding_amount" id="funding_amount" placeholder="請輸入資金金額..." required>
