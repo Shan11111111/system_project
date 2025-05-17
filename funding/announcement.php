@@ -174,17 +174,14 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <a href="funding_return.php">募資進度回報</a>
             <a href="data">數據分析</a>
             <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
-        <script>
-            document.getElementById('logout-link').addEventListener('click', function () {
-                // 彈出確認視窗
-                const confirmLogout = confirm("確定要登出嗎？");
-                if (confirmLogout) {
-                    // 如果用戶選擇確定，導向登出頁面
-                    window.location.href = "../logout.php";
-                }
-                // 如果用戶選擇取消，什麼都不做
-            });
-        </script>
+            <script>
+                document.getElementById('logout-link').addEventListener('click', function() {
+                    const confirmLogout = confirm("確定要登出嗎？");
+                    if (confirmLogout) {
+                        window.location.href = "logout.php";
+                    }
+                });
+            </script>
         <?php elseif ($user_level === 'manager'): ?>
             <!-- Manager 使用者的導覽列 -->
             <a href="../homepage.php">孵仁首頁</a>
@@ -194,6 +191,8 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
             <a href="../manager/review_extension_requests.php">延後募資申請審核</a>
             <a href="../manager/people_manager.php">人員處理</a>
             <a href="../funding/announcement.php">發布公告</a>
+            <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
+
             <!-- <a href="#">數據分析</a> -->
         <?php else: ?>
             <!-- 預設顯示 -->
@@ -226,7 +225,7 @@ $result = $conn->query("SELECT * FROM announcement ORDER BY update_at DESC LIMIT
                 <textarea id="content" name="content" rows="5" required><?= htmlspecialchars($edit_content) ?></textarea>
 
                 <label for="file">上傳檔案：</label>
-                <input type="file" id="file" name="file" >
+                <input type="file" id="file" name="file">
 
                 <button type="submit"><?= $edit_id ? '更新公告' : '發布公告' ?></button>
             </form>

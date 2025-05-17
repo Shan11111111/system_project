@@ -75,6 +75,8 @@ $total_pages = ceil($total_row['total'] / $limit);
     <title>人員管理頁面</title>
     <link rel="stylesheet" href="css\adv_manager.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 
 <body>
@@ -89,6 +91,16 @@ $total_pages = ceil($total_row['total'] / $limit);
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
         <a href="../funding/announcement.php">發布公告</a>
+        <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
+        <script>
+            document.getElementById('logout-link').addEventListener('click', function() {
+                const confirmLogout = confirm("確定要登出嗎？");
+                if (confirmLogout) {
+                    window.location.href = "logout.php";
+                }
+            });
+        </script>
+
         <!-- <a href="#">數據分析</a> -->
     </div>
 
