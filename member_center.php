@@ -98,7 +98,7 @@
                         <i class="fas fa-user-circle"></i>
                         <?php
                         if ($_SESSION['level'] == 'student' || $_SESSION['level'] == 'teacher') {
-                            echo "{$_SESSION['user_id']} 會員專區";
+                            echo "會員專區";
                         } else if ($_SESSION['level'] == 'office') {
                             echo "行政專區";
                         } else if ($_SESSION['level'] == 'manager') {
