@@ -11,6 +11,18 @@ if ($conn->connect_error) {
 if (isset($_GET['suggestion_assignments_id'])) {
     $suggestion_assignments_id = intval($_GET['suggestion_assignments_id']);
 
+    // 查詢管理者回饋
+    $feedback_sql = "SELECT admin_feedback FROM suggestion_assignments WHERE suggestion_assignments_id = ?";
+    $feedback_stmt = $conn->prepare($feedback_sql);
+    $admin_feedback = '';
+    if ($feedback_stmt) {
+        $feedback_stmt->bind_param("i", $suggestion_assignments_id);
+        $feedback_stmt->execute();
+        $feedback_stmt->bind_result($admin_feedback);
+        $feedback_stmt->fetch();
+        $feedback_stmt->close();
+    }
+
     // 更新 notification 欄位為 FALSE
     $sql = "UPDATE suggestion_assignments SET notification = FALSE WHERE suggestion_assignments_id = ?";
     $stmt = $conn->prepare($sql);
@@ -20,7 +32,7 @@ if (isset($_GET['suggestion_assignments_id'])) {
 
     $stmt->bind_param("i", $suggestion_assignments_id);
     if ($stmt->execute()) {
-        echo "<script>alert('通知已查看');</script>";
+        echo "<script>alert('通知已查看，管理者回饋: " . htmlspecialchars($admin_feedback) . "');</script>";
         echo "<script>window.location.href = 'office_assignments.php';</script>";
     } else {
         die("重置通知失敗: " . $stmt->error);

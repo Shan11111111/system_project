@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-17 02:48:34
+-- 產生時間： 2025-05-17 16:48:06
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -55,7 +55,7 @@ INSERT INTO `advice` (`advice_id`, `user_id`, `advice_title`, `advice_content`, 
 (40, 333333, '交友', '舉辦聚餐交友', 0, 'other', '未處理', '2025-04-19'),
 (41, 333333, '綠色校園', '綠色校園', 3, 'environment', '已回覆', '2025-04-19'),
 (42, 333333, '社團博覽會', '宣傳太少', 4, 'club', '已回覆', '2025-04-19'),
-(43, 333333, '設立休息區', '休息沒空間', 2, 'other', '未處理', '2025-04-19'),
+(43, 333333, '設立休息區', '休息沒空間', 3, 'other', '未處理', '2025-04-19'),
 (44, 333333, '舉辦文化週', '交流太少', 3, 'other', '已分派', '2025-04-19'),
 (45, 333333, 'zjgojrzjjrg', 'zjgrogjigjjgojgji', 3, 'environment', '已分派', '2025-04-22'),
 (46, 412402141, 'zjgojrzjjrg', 'jiojojoojjguihl', 3, 'welfare', '已分派', '2025-04-22'),
@@ -183,7 +183,8 @@ INSERT INTO `advice_state` (`advice_state_id`, `content`, `advice_id`, `state_ti
 (20, '附議達標', 26, '2025-05-09 22:15:34'),
 (21, '附議達標', 69, '2025-05-09 22:17:32'),
 (22, '附議達標', 67, '2025-05-09 22:19:38'),
-(23, '附議達標', 65, '2025-05-09 22:32:22');
+(23, '附議達標', 65, '2025-05-09 22:32:22'),
+(24, '附議達標', 43, '2025-05-17 22:39:42');
 
 -- --------------------------------------------------------
 
@@ -283,7 +284,8 @@ INSERT INTO `agree_record` (`agree_record_id`, `user_id`, `advice_id`) VALUES
 (96, 333333, 69),
 (97, 333333, 67),
 (98, 412402141, 65),
-(99, 412303291, 77);
+(99, 412303291, 77),
+(100, 909, 43);
 
 -- --------------------------------------------------------
 
@@ -448,7 +450,9 @@ INSERT INTO `execution_report` (`execution_report_id`, `project_id`, `title`, `c
 (9, 3, 'sss', 'sss', '', '2025-05-13 15:22:08'),
 (10, 3, 'sss', 'sss', '', '2025-05-13 15:23:36'),
 (11, 3, 'cdjcodoj', 'vsijodvjsojvj', '', '2025-05-13 15:23:45'),
-(12, 3, 'fojsfjooojf', 'fojjgjoajogojg', '', '2025-05-13 15:27:00');
+(12, 3, 'fojsfjooojf', 'fojjgjoajogojg', '', '2025-05-13 15:27:00'),
+(13, 3, '正在執行', '歡迎來看社團表演', '', '2025-05-17 20:27:27'),
+(14, 3, '我們在認真籌備', '我們在認真籌備', '', '2025-05-17 20:32:13');
 
 -- --------------------------------------------------------
 
@@ -670,9 +674,9 @@ INSERT INTO `suggestion_assignments` (`suggestion_assignments_id`, `advice_id`, 
 (11, 24, 345678, 'fjafoif', 2000, 'uploads/soap球.png', 1, 1, '', '已通過', '2025-04-29 16:42:12', '2025-04-29 16:46:20', 0),
 (12, 52, 345678, 'fijoapofjiog', 3000, 'uploads/輔系公告 (1).pdf', 1, 1, 'ok', '已通過', '2025-04-29 16:24:48', '2025-04-29 16:25:04', 0),
 (13, 57, 123, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
-(14, 54, 345678, 'cl3jfofjfjoof', 2000, 'uploads/1745924654_c01.png', 1, 0, '', '被退回', '2025-04-29 19:04:14', '2025-05-13 13:57:46', 0),
+(14, 54, 345678, '求求大家多捐血', 20000, 'uploads/1747490633_1747218631_公設檢查表.pdf', 1, 0, '有點爛', '被退回', '2025-05-17 22:03:53', '2025-05-17 22:17:14', 0),
 (15, 55, 904, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
-(16, 60, 345678, '校慶燈光秀創意提案：打造光影展演，結合投影技術與學生創意。', 12000, 'uploads/1747113507_公設檢查表.pdf', 1, NULL, NULL, '審核中', '2025-05-13 13:18:27', NULL, 0),
+(16, 60, 345678, '校慶燈光秀創意提案：打造光影展演，結合投影技術與學生創意。', 30000, 'uploads/1747491960_唱歌.jpg', 1, 0, '內容有點少，請寫詳細點', '審核中', '2025-05-17 22:26:00', '2025-05-17 22:23:42', 0),
 (20, 26, 904, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
 (21, 45, 904, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
 (22, 69, 345678, NULL, NULL, NULL, 0, NULL, NULL, '草擬中', NULL, NULL, 0),
@@ -872,13 +876,13 @@ ALTER TABLE `advice_image`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `advice_state`
 --
 ALTER TABLE `advice_state`
-  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `advice_state_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `agree_record`
 --
 ALTER TABLE `agree_record`
-  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `agree_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `announcement`
@@ -908,7 +912,7 @@ ALTER TABLE `donation_record`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
 --
 ALTER TABLE `execution_report`
-  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `execution_report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `files`
