@@ -1,12 +1,13 @@
 <?php
 // 資料庫連線
+session_start();
 $conn = new mysqli("localhost", "root", "", "system_project");
 if ($conn->connect_error) {
     die("資料庫連線失敗: " . $conn->connect_error);
 }
 
 // 假設 user_id 是從 session 中取得
-session_start();
+
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     die("錯誤：您尚未登入，請先登入系統。");
 }
@@ -88,6 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("isss", $project_id, $title, $content, $file_path);
 
     if ($stmt->execute()) {
+        // 送出回報後，查詢該專案 status
+        $debug_sql = "SELECT status FROM fundraising_projects WHERE project_id = $project_id";
+        $debug_result = $conn->query($debug_sql);
+        $debug_row = $debug_result->fetch_assoc();
+        error_log("DEBUG: project_id=$project_id, status=" . $debug_row['status']);
         echo "<script>alert('回報已成功提交！');location.href='funding_return.php';</script>";
     } else {
         echo "回報提交失敗：" . $conn->error;
