@@ -29,7 +29,7 @@ session_start();
             document.getElementById('logout-link').addEventListener('click', function() {
                 const confirmLogout = confirm("確定要登出嗎？");
                 if (confirmLogout) {
-                    window.location.href = "logout.php";
+                    window.location.href = "../logout.php";
                 }
             });
         </script>
