@@ -146,7 +146,7 @@
             if (data.length === 0) {
                 const noResult = document.createElement('div');
                 noResult.className = 'no-result';
-                noResult.innerHTML = '<p>你尚未收藏任何建言</p>';
+                noResult.innerHTML = '<p>查無收藏結果</p>';
                 list.appendChild(noResult);
                 renderPagination(0);
                 return;
