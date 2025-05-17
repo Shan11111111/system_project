@@ -172,39 +172,62 @@ $result = $stmt->get_result();
         .content {
             margin-left: 280px;
             padding: 20px;
-            width: calc(100% - 250px);
+            width: calc(100% - 320px);
         }
 
         .tabs {
             display: flex;
-            margin-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+            background-color: #fff8ec;
+            width: 100%;
+            margin-bottom: 25px;
         }
 
         .tab {
-            padding: 10px 20px;
-            border-bottom: none;
+            flex: 1;
+            /* 每個 tab 平均分配寬度 */
+            text-align: center;
+            padding: 14px 0;
             cursor: pointer;
-            color: #555;
-        }
-
-        .tab.active {
-            background: rgb(245, 222, 172);
             font-weight: bold;
-            border-bottom: 2px solid #e6b800;
-
+            color: #999;
+            background-color: transparent;
+            border: none;
+            position: relative;
+            border-radius: 12px 12px 0 0;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* 被點擊後的狀態（現在有） */
+        /* 選取中 */
         .tab.active {
-            background: var(--color-yellow);
-            font-weight: bold;
-            border-bottom: 3px solid #e6b800;
-            color: var(--color-dark-brown);
+            background-color: #fff5dd;
+            color: #5c3a00;
         }
 
-        .tab.active:hover {
-            background-color: #ffe48a;
-            color: var(--color-dark-brown);
+        /* 下底線，佔滿 tab 寬度 */
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--color-orange);
+        }
+
+        /* hover 效果 */
+        .tab:hover:not(.active) {
+            background-color: #fff0d6;
+            color: #666;
+        }
+
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         h1 {
@@ -212,7 +235,7 @@ $result = $stmt->get_result();
         }
 
 
-        
+
         .table-wrapper {
             width: 100%;
 
@@ -336,10 +359,10 @@ $result = $stmt->get_result();
             font-weight: bold;
             border: 1px solid #f4d35e;
         }
-        #faq-form form{
+
+        #faq-form form {
             width: 90%;
         }
-        
     </style>
 </head>
 
