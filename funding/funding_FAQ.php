@@ -242,7 +242,7 @@ $result = $stmt->get_result();
         }
 
         .faq-table {
-            width: 1100px;
+            width: 920px;
             /* 或可用 max-width */
             table-layout: fixed;
             border-collapse: collapse;
