@@ -1,12 +1,13 @@
 <?php
 // 資料庫連線
+session_start();
 $conn = new mysqli("localhost", "root", "", "system_project");
 if ($conn->connect_error) {
     die("資料庫連線失敗: " . $conn->connect_error);
 }
 
 // 假設 user_id 是從 session 中取得
-session_start();
+
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     die("錯誤：您尚未登入，請先登入系統。");
 }
@@ -16,17 +17,24 @@ $limit = 5;
 $offset = ($page - 1) * $limit;
 
 // 修正分頁總數查詢
-$count_sql = "SELECT COUNT(*) AS total FROM fundraising_projects WHERE status = '已完成' AND office_id = $office_id";
+$count_sql = "SELECT COUNT(*) AS total
+    FROM fundraising_projects f
+    JOIN suggestion_assignments s ON f.suggestion_assignments_id = s.suggestion_assignments_id
+    WHERE f.status = '已完成' AND s.office_id = $office_id";
 $count_result = $conn->query($count_sql);
+if (!$count_result) {
+    die("SQL執行失敗: " . $conn->error . "<br>語法: " . $count_sql);
+}
 $total_rows = $count_result->fetch_assoc()['total'];
 $total_pages = ceil($total_rows / $limit);
 
 // 查詢當前頁的專案
-$completed_projects_sql = "SELECT project_id, title, description, funding_goal, start_date, end_date 
-                           FROM fundraising_projects 
-                           WHERE status = '已完成' AND office_id = $office_id
-                           ORDER BY end_date DESC
-                           LIMIT $limit OFFSET $offset";
+$completed_projects_sql = "SELECT f.project_id, f.title, f.description, f.funding_goal, f.start_date, f.end_date 
+    FROM fundraising_projects f
+    JOIN suggestion_assignments s ON f.suggestion_assignments_id = s.suggestion_assignments_id
+    WHERE f.status = '已完成' AND s.office_id = $office_id
+    ORDER BY f.end_date DESC
+    LIMIT $limit OFFSET $offset";
 $completed_projects_result = $conn->query($completed_projects_sql);
 
 $status_message = "";
@@ -81,11 +89,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("isss", $project_id, $title, $content, $file_path);
 
     if ($stmt->execute()) {
+        // 送出回報後，查詢該專案 status
+        $debug_sql = "SELECT status FROM fundraising_projects WHERE project_id = $project_id";
+        $debug_result = $conn->query($debug_sql);
+        $debug_row = $debug_result->fetch_assoc();
+        error_log("DEBUG: project_id=$project_id, status=" . $debug_row['status']);
         echo "<script>alert('回報已成功提交！');location.href='funding_return.php';</script>";
     } else {
         echo "回報提交失敗：" . $conn->error;
         echo "<script>alert('回報提交失敗！');location.href='funding_return.php';</script>";
     }
+}
+
+if (!is_numeric($office_id)) {
+    die("office_id 非數字，請檢查登入狀態。");
 }
 ?>
 
