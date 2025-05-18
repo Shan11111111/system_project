@@ -683,44 +683,12 @@ $result = $stmt->get_result();
 
         <script>
             function switchTabAndClearForm() {
-                // 切換到「新增常見問題」tab
-                const tabToClick = document.querySelector('.tab[onclick*="faq-form"]');
-                if (tabToClick) {
-                    switchTab('faq-form', tabToClick);
-                }
-
-                // 清空表單欄位
-                document.querySelector('input[name="faq_id"]').value = '';
-                // 如果有 select，重設選擇
-                const select = document.getElementById('project_id');
-                if (select) {
-                    select.selectedIndex = 0;
-                    select.disabled = false;
-                }
-                // 如果有搜尋欄，清空並啟用
-                const search = document.getElementById('project_search');
-                if (search) {
-                    search.value = '';
-                    search.disabled = false;
-                }
-                // 隱藏建議
-                const suggestions = document.getElementById('search_suggestions');
-                if (suggestions) {
-                    suggestions.style.display = 'none';
-                }
-                // 清空問題與回覆
-                document.getElementById('question').value = '';
-                document.getElementById('reply').value = '';
-
-                // 更新表單標題與按鈕
-                document.querySelector('#faq-form h2').innerText = '新增常見問題';
-                document.querySelector('#faq-form button[type="submit"]').innerText = '新增';
-
-                // 隱藏「切換為新增」按鈕
-                const toggleBtn = document.getElementById('switch-to-create');
-                if (toggleBtn) {
-                    toggleBtn.style.display = 'none';
-                }
+                // 取得目前網址
+                const url = new URL(window.location.href);
+                // 移除 edit 參數
+                url.searchParams.delete('edit');
+                // 重新導向到沒有 edit 參數的頁面（即新增狀態）
+                window.location.href = url.toString();
             }
         </script>
 
