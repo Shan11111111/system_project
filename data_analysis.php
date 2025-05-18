@@ -1,92 +1,111 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'system_project');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-
-function getPDOConnection() {
-    static $pdo = null;
-    if ($pdo === null) {
-        try {
-            $pdo = new PDO(
-                "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8",
-                DB_USER,
-                DB_PASS,
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
-        } catch (PDOException $e) {
-            error_log("Database connection failed: " . $e->getMessage());
-            die("系統暫時無法提供服務，請稍後再試。技術訊息: " . $e->getMessage());
-        }
-    }
-    return $pdo;
-}
+// 資料庫連線設定
+$host = 'localhost';
+$dbname = 'system_project';
+$username = 'root';
+$password = '';
 
 try {
-    $pdo = getPDOConnection();
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // 建言總數
-    $stmt = $pdo->query("SELECT COUNT(*) AS total FROM suggestions");
-    $totalSuggestions = $stmt->fetch()['total'];
+    $departments = ['教務處', '學務處', '總務處', '輔導室', '資訊中心', '體育組', '人事室', '圖書館'];
 
-    // 最新建言時間
-    $stmt2 = $pdo->query("SELECT MAX(created_at) AS latest FROM suggestions");
-    $latestSuggestion = $stmt2->fetch()['latest'];
-
-} catch (PDOException $e) {
-    echo "<p style='color: red;'>操作失敗: " . htmlspecialchars($e->getMessage()) . "</p>";
-    exit;
-}
-?>
+    // 使用 heredoc 輸出 HTML 頁面
+    echo <<<HTML
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang='zh-Hant'>
 <head>
-    <meta charset="UTF-8">
-    <title>數據分析</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset='UTF-8'>
+    <title>建言數據分析報告</title>
     <style>
-        body { background-color: #f8f9fa; }
-        .sidebar {
-            height: 100vh;
-            background-color: #343a40;
-            color: white;
-            padding-top: 1rem;
-        }
-        .sidebar a { color: white; text-decoration: none; padding: 10px 20px; display: block; }
-        .sidebar a:hover { background-color: #495057; }
+        body { font-family: Arial; padding: 20px; background: #f8f8f8; color: #333; }
+        h2 { color: #2c3e50; }
+        h3 { margin-top: 40px; color: #34495e; }
+        p, ul { line-height: 1.6; }
+        hr { margin: 30px 0; border: none; border-top: 1px solid #ccc; }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- 側邊欄 -->
-        <nav class="col-md-2 d-none d-md-block sidebar">
-            <h4 class="text-center">管理選單</h4>
-            <a href="suggestions.php">建言管理</a>
-            <a href="#">使用者管理</a>
-            <a href="#">系統設定</a>
-            <a href="analytics.php">數據分析</a>
-            <a href="#">登出</a>
-        </nav>
-        <!-- 主內容區 -->
-        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 py-4">
-            <h2>數據分析儀表板</h2>
-            <div class="card mt-4 shadow-sm">
-                <div class="card-body">
-                    <h5>建言總數：<span class="text-primary"><?= $totalSuggestions ?></span></h5>
-                    <h5>最新建言時間：<span class="text-success"><?= $latestSuggestion ? $latestSuggestion : "無" ?></span></h5>
-                    <!-- 這裡可以再加入更多統計、圖表等分析資料 -->
-                </div>
-            </div>
-        </main>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<h2>建言統計報告（含加值功能）</h2>
+HTML;
+
+    foreach ($departments as $dept) {
+        echo "<h3>$dept</h3>";
+
+        // 1. 狀態統計
+        $stmt = $pdo->prepare("
+            SELECT status, COUNT(*) AS count 
+            FROM suggestions 
+            WHERE department = ? 
+            GROUP BY status
+        ");
+        $stmt->execute([$dept]);
+        $statusData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        $total = array_sum($statusData);
+        $completed = $statusData['已完成'] ?? 0;
+        $completionRate = $total > 0 ? round($completed / $total * 100, 2) : 0;
+
+        echo "<p>建言總數：$total</p>";
+        echo "<p>完成率：$completionRate%</p>";
+        echo "<ul>
+            <li>未處理：" . ($statusData['未處理'] ?? 0) . "</li>
+            <li>處理中：" . ($statusData['處理中'] ?? 0) . "</li>
+            <li>已完成：" . ($statusData['已完成'] ?? 0) . "</li>
+        </ul>";
+
+        // 2. 平均處理時間
+        $stmt = $pdo->prepare("
+            SELECT AVG(DATEDIFF(resolved_at, created_at)) AS avg_days 
+            FROM suggestions 
+            WHERE department = ? AND status = '已完成' AND resolved_at IS NOT NULL
+        ");
+        $stmt->execute([$dept]);
+        $avgDaysRaw = $stmt->fetchColumn();
+        $avgDays = is_numeric($avgDaysRaw) ? round($avgDaysRaw, 1) : null;
+        echo "<p>平均處理時間：" . ($avgDays !== null ? "$avgDays 天" : "尚無完成資料") . "</p>";
+
+        // 3. 平均滿意度
+        $stmt = $pdo->prepare("
+            SELECT AVG(satisfaction) AS avg_satisfaction 
+            FROM suggestions 
+            WHERE department = ? AND satisfaction IS NOT NULL
+        ");
+        $stmt->execute([$dept]);
+        $avgSatisfactionRaw = $stmt->fetchColumn();
+        $avgSatisfaction = is_numeric($avgSatisfactionRaw) ? round($avgSatisfactionRaw, 1) : null;
+        echo "<p>平均滿意度：" . ($avgSatisfaction !== null ? "$avgSatisfaction / 5 ⭐" : "無回饋") . "</p>";
+
+        // 4. 最新三則回覆摘要
+        $stmt = $pdo->prepare("
+            SELECT title, response 
+            FROM suggestions 
+            WHERE department = ? AND response IS NOT NULL AND response != '' 
+            ORDER BY resolved_at DESC 
+            LIMIT 3
+        ");
+        $stmt->execute([$dept]);
+        $replies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($replies) > 0) {
+            echo "<p>最新回覆摘要：</p><ul>";
+            foreach ($replies as $reply) {
+                $responseText = strip_tags($reply['response']);
+                $short = function_exists('mb_substr') ? mb_substr($responseText, 0, 50, 'UTF-8') : substr($responseText, 0, 50);
+                echo "<li><strong>" . htmlspecialchars($reply['title']) . "</strong>：$short...</li>";
+            }
+            echo "</ul>";
+        } else {
+            echo "<p>尚無回覆內容。</p>";
+        }
+
+        echo "<hr>";
+    }
+
+    echo "</body></html>";
+
+} catch (PDOException $e) {
+    echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
+}
+?>
