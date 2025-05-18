@@ -237,7 +237,7 @@ $result = $stmt->get_result();
 
 
         table.expired-table {
-            width: 1050px;
+            width: 950px;
             margin: 20px auto;
             border-collapse: collapse;
             font-family: Arial;
