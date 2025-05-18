@@ -661,7 +661,6 @@ while ($office_row = $offices_result->fetch_assoc()) {
         <a href="office_apply_date.php">延後募款申請</a>
         <a href="funding_FAQ.php">募資常見問題</a>
         <a href="funding_return.php">募資進度回報</a>
-        <a href="data">數據分析</a>
         <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
         <script>
             document.getElementById('logout-link').addEventListener('click', function() {
