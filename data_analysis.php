@@ -10,15 +10,11 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // 取得所有建言及相關部門資訊
-    $stmt = $pdo->query("SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.announce_date, a.advice_state, u.department
+    $stmt = $pdo->query("SELECT a.advice_id, a.advice_title, a.advice_content, a.category, a.announce_date, u.department
         FROM advice a
         LEFT JOIN suggestion_assignments sa ON a.advice_id = sa.advice_id
         LEFT JOIN users u ON sa.office_id = u.user_id");
     $advice_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // 取得建言狀態統計
-    $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
-    $advice_states = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // 取得所有募資提案及相關資訊
     $stmt = $pdo->query("SELECT 
@@ -26,7 +22,6 @@ try {
         fp.title as proposal_title, 
         fp.description as proposal_content, 
         fp.funding_goal as amount, 
-        fp.status, 
         u.department, 
         DATE(fp.start_date) as date,
         (SELECT SUM(donation_amount) FROM donation_record WHERE project_id = fp.project_id) as donated_amount
@@ -34,10 +29,6 @@ try {
         LEFT JOIN suggestion_assignments sa ON fp.suggestion_assignments_id = sa.suggestion_assignments_id
         LEFT JOIN users u ON sa.office_id = u.user_id");
     $fundraising_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // 取得募資狀態統計
-    $stmt = $pdo->query("SELECT status, COUNT(*) as count FROM fundraising_projects GROUP BY status");
-    $fundraising_states = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // 取得捐款總金額統計
     $stmt = $pdo->query("SELECT SUM(donation_amount) as total_donations FROM donation_record");
@@ -81,7 +72,6 @@ try {
             line-height: 20px;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <h2>建言與募資提案報告</h2>
@@ -89,13 +79,6 @@ try {
 <div class='stats-box'>
     <h3>捐款總金額統計</h3>
     <p>總捐款金額: NT$ {$total_donations}</p>
-</div>
-
-<div class='section'>
-    <h3>建言處理狀態統計</h3>
-    <div class='chart-container'>
-        <canvas id='adviceStateChart'></canvas>
-    </div>
 </div>
 
 <div class='section'>
@@ -107,7 +90,6 @@ try {
             <th>內容</th>
             <th>分類</th>
             <th>日期</th>
-            <th>狀態</th>
             <th>部門</th>
         </tr>
 HTML;
@@ -118,19 +100,10 @@ HTML;
             <td>" . htmlspecialchars(mb_substr($advice['advice_content'], 0, 50)) . "...</td>
             <td>{$advice['category']}</td>
             <td>{$advice['announce_date']}</td>
-            <td>{$advice['advice_state']}</td>
             <td>{$advice['department']}</td>
         </tr>";
     }
     echo "</table></div>";
-
-    // 募資狀態圖表
-    echo "<div class='section'>
-    <h3>募資處理狀態統計</h3>
-    <div class='chart-container'>
-        <canvas id='fundStateChart'></canvas>
-    </div>
-    </div>";
 
     // 募資提案表格
     echo "<div class='section'>
@@ -143,14 +116,13 @@ HTML;
             <th>目標金額</th>
             <th>已募得金額</th>
             <th>進度</th>
-            <th>狀態</th>
             <th>部門</th>
             <th>日期</th>
         </tr>";
     foreach ($fundraising_list as $fund) {
-        $progress = ($fund['donated_amount'] / $fund['amount']) * 100;
+        $progress = ($fund['amount'] > 0) ? (($fund['donated_amount'] / $fund['amount']) * 100) : 0;
         $progress = round($progress, 2);
-        
+
         echo "<tr>
             <td>{$fund['project_id']}</td>
             <td>{$fund['proposal_title']}</td>
@@ -162,85 +134,12 @@ HTML;
                     <div class='progress' style='width: {$progress}%'>{$progress}%</div>
                 </div>
             </td>
-            <td>{$fund['status']}</td>
             <td>{$fund['department']}</td>
             <td>{$fund['date']}</td>
         </tr>";
     }
     echo "</table></div>";
 
-    // 狀態圖表資料
-    $adviceStateLabels = [];
-    $adviceStateData = [];
-    foreach ($advice_states as $state) {
-        $adviceStateLabels[] = $state['advice_state'];
-        $adviceStateData[] = $state['count'];
-    }
-    
-    $fundStateLabels = [];
-    $fundStateData = [];
-    foreach ($fundraising_states as $state) {
-        $fundStateLabels[] = $state['status'];
-        $fundStateData[] = $state['count'];
-    }
-    
-    echo "<script>
-        // 建言狀態圖表
-        const adviceStateCtx = document.getElementById('adviceStateChart');
-        new Chart(adviceStateCtx, {
-            type: 'bar',
-            data: {
-                labels: " . json_encode($adviceStateLabels) . ",
-                datasets: [{
-                    label: '建言狀態',
-                    data: " . json_encode($adviceStateData) . ",
-                    backgroundColor: [
-                        '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF6384'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: '建言處理狀態'
-                    }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-        
-        // 募資狀態圖表
-        const fundStateCtx = document.getElementById('fundStateChart');
-        new Chart(fundStateCtx, {
-            type: 'bar',
-            data: {
-                labels: " . json_encode($fundStateLabels) . ",
-                datasets: [{
-                    label: '募資狀態',
-                    data: " . json_encode($fundStateData) . ",
-                    backgroundColor: [
-                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: '募資提案處理狀態'
-                    }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    </script>";
     echo "</body></html>";
 
 } catch (PDOException $e) {
