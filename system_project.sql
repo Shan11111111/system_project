@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-05-20 07:21:19
+-- 產生時間： 2025-05-20 09:26:25
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.0.30
 
@@ -381,6 +381,29 @@ INSERT INTO `announcement` (`announcement_id`, `title`, `content`, `category`, `
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `assig_cat`
+--
+
+CREATE TABLE `assig_cat` (
+  `assign_cat_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `category` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- 傾印資料表的資料 `assig_cat`
+--
+
+INSERT INTO `assig_cat` (`assign_cat_id`, `user_id`, `category`) VALUES
+(1, 123, 'academic'),
+(2, 345678, 'club'),
+(3, 2222, 'equipment'),
+(4, 909, 'welfare'),
+(5, 904, 'environment');
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `collection`
 --
 
@@ -488,7 +511,9 @@ INSERT INTO `donation_record` (`donation_id`, `donor`, `project_id`, `donation_a
 (16, '匿名', 3, 100.00, '2025-05-06 14:46:19', '', 904),
 (17, '匿名', 3, 100.00, '2025-05-13 15:24:41', '', 345678),
 (18, '匿名', 9, 1000.00, '2025-05-14 18:35:47', '', 1111),
-(19, '匿名', 5, 2000.00, '2025-05-14 18:35:58', '', 1111);
+(19, '匿名', 5, 2000.00, '2025-05-14 18:35:58', '', 1111),
+(20, '王安石', 5, 1000.00, '2025-05-20 13:50:02', '', 345678),
+(21, '歐陽修', 5, 1000.00, '2025-05-20 13:50:32', '', 345678);
 
 -- --------------------------------------------------------
 
@@ -609,7 +634,8 @@ INSERT INTO `funding_faq` (`funding_FAQ_id`, `project_id`, `user_id`, `question`
 (3, 5, 332478, '111', '111', '2025-04-28 21:18:53'),
 (4, 5, 332478, '133', '333', '2025-04-26 22:17:18'),
 (6, 5, 345678, '沒捐過血可以嗎?', '可以哦!一般來說，只要符合捐血條件（像年齡、體重、健康狀況OK），沒捐過血的人也可以第一次去捐血喔！', '2025-04-26 22:39:25'),
-(7, 5, 345678, '該拔牙可以捐血嗎?', '如果你剛拔牙，暫時不能捐血喔！\r\n\r\n一般來說，拔牙後要暫緩捐血 7 天以上（有些地方規定是 7～14 天）', '2025-04-26 22:35:26');
+(8, 5, 345678, '不知道自己的血型?', '現場會有專人幫你驗血', '2025-05-20 13:42:34'),
+(9, 4, 345678, '遇到怎麼辦?', '趕快跑到人多的地方', '2025-05-20 13:44:40');
 
 -- --------------------------------------------------------
 
@@ -843,6 +869,13 @@ ALTER TABLE `announcement`
   ADD KEY `user_id` (`user_id`) USING BTREE;
 
 --
+-- 資料表索引 `assig_cat`
+--
+ALTER TABLE `assig_cat`
+  ADD PRIMARY KEY (`assign_cat_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- 資料表索引 `collection`
 --
 ALTER TABLE `collection`
@@ -966,6 +999,12 @@ ALTER TABLE `announcement`
   MODIFY `announcement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `assig_cat`
+--
+ALTER TABLE `assig_cat`
+  MODIFY `assign_cat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `collection`
 --
 ALTER TABLE `collection`
@@ -981,7 +1020,7 @@ ALTER TABLE `comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `donation_record`
 --
 ALTER TABLE `donation_record`
-  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `donation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `execution_report`
@@ -1005,7 +1044,7 @@ ALTER TABLE `funding_comments`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `funding_faq`
 --
 ALTER TABLE `funding_faq`
-  MODIFY `funding_FAQ_id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `funding_FAQ_id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `fundraising_extension_requests`
