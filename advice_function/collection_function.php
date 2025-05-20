@@ -6,7 +6,7 @@ $user_id = $_SESSION['user_id'] ?? null;
 $advice_id = $_POST['advice_id'] ?? null;
 
 // 若未登入導回原頁
-if (!$user_id || !$advice_id) {
+if (!$user_id) {
     echo "<script>alert('請先登入'); window.location.href = '../advice_detail.php?advice_id=" . urlencode($advice_id) . "';</script>";
     exit;
 }
