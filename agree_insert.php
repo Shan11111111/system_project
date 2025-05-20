@@ -23,6 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $check_stmt->fetch();
     $check_stmt->close();
 
+    $level_query = $conn->prepare("SELECT level FROM users WHERE user_id = ?");
+    $level_query->bind_param("i", $user_id);
+    $level_query->execute();
+    $level_query->bind_result($user_level);
+    $level_query->fetch();
+    $level_query->close();
+
+    if ($user_level === 'manager' || $user_level === 'office') {
+        header("Location: homepage.php");
+        exit();
+    }
+
 
     ?>
     <?php
@@ -59,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         logo.classList.add("fade-out");
                         myobject.classList.add("fade-out");
                         setTimeout(() => {
-                            window.location.href = "advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>"; // Redirect to homepage.php
+                            window.location.href = "member_center.php";
                         }, 1000); // Wait for fade-out duration before redirecting
                     }, 1000); // Duration of rotation
                 });
@@ -134,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         logo.classList.add("fade-out");
                         myobject.classList.add("fade-out");
                         setTimeout(() => {
-                            window.location.href = "advice_detail.php?advice_id=<?php echo urlencode($advice_id); ?>";
+                            window.location.href = "member_center.php";
                         }, 1000); // Wait for fade-out duration before redirecting
                     }, 1000); // Duration of rotation
                 });
