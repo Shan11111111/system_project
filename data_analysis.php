@@ -80,8 +80,8 @@ try {
 
 <script>
     // 建言分類資料
-    const adviceCategoryLabels = " . json_encode(array_column($adviceCategoryStats, 'category'), JSON_UNESCAPED_UNICODE) . ";
-    const adviceCategoryData = " . json_encode(array_column($adviceCategoryStats, 'count')) . ";
+    const adviceCategoryLabels = <?php echo json_encode(array_column($adviceCategoryStats, 'category'), JSON_UNESCAPED_UNICODE); ?>;
+    const adviceCategoryData = <?php echo json_encode(array_column($adviceCategoryStats, 'count')); ?>;
 
     new Chart(document.getElementById('adviceCategoryChart'), {
         type: 'pie',
@@ -105,9 +105,9 @@ try {
     });
 
     // 募資提案目標 vs 募得
-    const fundTitles = " . json_encode($fundTitles, JSON_UNESCAPED_UNICODE) . ";
-    const fundGoals = " . json_encode($fundGoals) . ";
-    const fundDonated = " . json_encode($fundDonated) . ";
+    const fundTitles = <?php echo json_encode($fundTitles, JSON_UNESCAPED_UNICODE); ?>;
+    const fundGoals = <?php echo json_encode($fundGoals); ?>;
+    const fundDonated = <?php echo json_encode($fundDonated); ?>;
 
     new Chart(document.getElementById('fundraisingChart'), {
         type: 'bar',
