@@ -21,7 +21,7 @@ try {
 
     // 取得捐款總金額統計
     $stmt = $pdo->query("SELECT SUM(donation_amount) as total_donations FROM donation_record");
-    $total_donations = $stmt->fetch(PDO::FETCH_ASSOC)['total_donations'];
+    $total_donations = $stmt->fetch(PDO::FETCH_ASSOC)['total_donations'] ?? 0;
 
     // 籌資標題、目標、已募
     $fundTitles = [];
@@ -61,7 +61,7 @@ try {
 
 <div class='stats-box'>
     <h3>捐款總金額統計</h3>
-    <p>總捐款金額: NT$ {$total_donations}</p>
+    <p>總捐款金額: NT$ " . number_format($total_donations) . "</p>
 </div>
 
 <div class='section'>
@@ -80,7 +80,7 @@ try {
 
 <script>
     // 建言分類資料
-    const adviceCategoryLabels = " . json_encode(array_column($adviceCategoryStats, 'category')) . ";
+    const adviceCategoryLabels = " . json_encode(array_column($adviceCategoryStats, 'category'), JSON_UNESCAPED_UNICODE) . ";
     const adviceCategoryData = " . json_encode(array_column($adviceCategoryStats, 'count')) . ";
 
     new Chart(document.getElementById('adviceCategoryChart'), {
@@ -105,7 +105,7 @@ try {
     });
 
     // 募資提案目標 vs 募得
-    const fundTitles = " . json_encode($fundTitles) . ";
+    const fundTitles = " . json_encode($fundTitles, JSON_UNESCAPED_UNICODE) . ";
     const fundGoals = " . json_encode($fundGoals) . ";
     const fundDonated = " . json_encode($fundDonated) . ";
 
