@@ -9,20 +9,16 @@ if ($conn->connect_error) {
 session_start();
 $office_id = $_SESSION['user_id'];
 
-// 統一 $cat 判斷
-if ($_SESSION['user_id'] == '123') {
-    $cat = 'academic';
-} else if ($_SESSION['user_id'] == '345678') {
-    $cat = 'club';
-} else if ($_SESSION['user_id'] == '2222') {
-    $cat = 'equipment';
-} else if ($_SESSION['user_id'] == '0909') {
-    $cat = 'welfare';
-} else if ($_SESSION['user_id'] == '0904') {
-    $cat = 'environment';
-} else {
-    $cat = 'other';
+// 取得該 user_id 的 category
+$cat = 'other';
+$stmt = $conn->prepare("SELECT category FROM assig_cat a join users u on u.user_id =a.user_id WHERE u.user_id = ?");
+$stmt->bind_param("i", $_SESSION['user_id']);
+$stmt->execute();
+$stmt->bind_result($category);
+if ($stmt->fetch() && !empty($category)) {
+    $cat = $category;
 }
+$stmt->close();
 
 // 引入個人資料模組
 // include 'profile_module.php';
@@ -663,7 +659,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
         <a href="funding_return.php">募資進度回報</a>
         <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
         <script>
-            document.getElementById('logout-link').addEventListener('click', function() {
+            document.getElementById('logout-link').addEventListener('click', function () {
                 // 彈出確認視窗
                 const confirmLogout = confirm("確定要登出嗎？");
                 if (confirmLogout) {
@@ -831,7 +827,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
 
     <?php
     // ...原本的 session 與 $cat 判斷...
-
+    
     // 判斷有無可加入的建言
     $has_new_advice = false;
     $stmt = $conn->prepare("SELECT COUNT(*) AS cnt FROM advice WHERE category = ? AND advice_state = '未處理' AND agree > 2");
@@ -847,7 +843,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
     ?>
     <!-- 懸浮按鈕 -->
     <button id="fab" onclick="openFabModal()" <?php if (!$has_new_advice)
-                                                    echo 'disabled style="background:#aaa;cursor:not-allowed;"'; ?>>
+        echo 'disabled style="background:#aaa;cursor:not-allowed;"'; ?>>
         <?php if ($has_new_advice): ?>
             有新的建言需要加入!
             <span class="fab-dot"></span>
@@ -870,19 +866,16 @@ while ($office_row = $offices_result->fetch_assoc()) {
                         die("連線失敗: " . $conn->connect_error);
                     }
 
-                    if ($_SESSION['user_id'] == '123') {
-                        $cat = 'academic';
-                    } else if ($_SESSION['user_id'] == '345678') {
-                        $cat = 'club';
-                    } else if ($_SESSION['user_id'] == '2222') {
-                        $cat = 'equipment';
-                    } else if ($_SESSION['user_id'] == '0909') {
-                        $cat = 'welfare';
-                    } else if ($_SESSION['user_id'] == '0904') {
-                        $cat = 'environment';
-                    } else {
-                        $cat = 'other';
+                    // 取得該 user_id 的 category
+                    $cat = 'other';
+                    $stmt = $conn->prepare("SELECT category FROM assig_cat a join users u on u.user_id =a.user_id WHERE u.user_id = ?");
+                    $stmt->bind_param("i", $_SESSION['user_id']);
+                    $stmt->execute();
+                    $stmt->bind_result($category);
+                    if ($stmt->fetch() && !empty($category)) {
+                        $cat = $category;
                     }
+                    $stmt->close();
 
                     $stmt = $conn->prepare("SELECT advice_id, advice_title, category FROM advice  WHERE  category = ? AND advice_state = '未處理' AND agree > 2");
                     if ($stmt) {
@@ -931,7 +924,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
             document.getElementById('fabModal').style.display = 'none';
         }
         // 點擊 modal 外部關閉
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             var modal = document.getElementById('fabModal');
             if (event.target === modal) modal.style.display = "none";
         }
