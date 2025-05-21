@@ -11,7 +11,8 @@ $office_id = $_SESSION['user_id'];
 
 // 取得該 user_id 的 category
 $cat = 'other';
-$stmt = $conn->prepare("SELECT category FROM assig_cat a join users u on u.user_id =a.user_id WHERE u.user_id = ?");
+// 原本 assig_cat 查詢，改為直接查 users
+$stmt = $conn->prepare("SELECT category FROM users WHERE user_id = ?");
 $stmt->bind_param("i", $_SESSION['user_id']);
 $stmt->execute();
 $stmt->bind_result($category);
@@ -868,7 +869,7 @@ while ($office_row = $offices_result->fetch_assoc()) {
 
                     // 取得該 user_id 的 category
                     $cat = 'other';
-                    $stmt = $conn->prepare("SELECT category FROM assig_cat a join users u on u.user_id =a.user_id WHERE u.user_id = ?");
+                    $stmt = $conn->prepare("SELECT category FROM users WHERE user_id = ?");
                     $stmt->bind_param("i", $_SESSION['user_id']);
                     $stmt->execute();
                     $stmt->bind_result($category);
