@@ -99,6 +99,7 @@ $categoryMap = [
         <a href="review_extension_requests.php">延後募資申請審核</a>
         <a href="people_manager.php">人員處理</a>
         <a href="../funding/announcement.php">發布公告</a>
+        <a href="data_analysis.php">數據分析</a>
         <a href="javascript:void(0);" id="logout-link"><i class="fa-solid fa-right-from-bracket"></i>登出</a>
 
         <script>
