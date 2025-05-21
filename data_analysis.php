@@ -1,68 +1,92 @@
 <?php
-// 資料庫連線設定
-$host = 'localhost';
-$dbname = 'system_project';
-$username = 'root';
-$password = '';
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'system_project');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+
+function getPDOConnection() {
+    static $pdo = null;
+    if ($pdo === null) {
+        try {
+            $pdo = new PDO(
+                "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8",
+                DB_USER,
+                DB_PASS,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false
+                ]
+            );
+        } catch (PDOException $e) {
+            error_log("Database connection failed: " . $e->getMessage());
+            die("系統暫時無法提供服務，請稍後再試。技術訊息: " . $e->getMessage());
+        }
+    }
+    return $pdo;
+}
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = getPDOConnection();
 
-    // 查詢全部部門的資料
-    $stmt = $pdo->query("SELECT * FROM department_data");
-    $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // 建言總數
+    $stmt = $pdo->query("SELECT COUNT(*) AS total FROM suggestions");
+    $totalSuggestions = $stmt->fetch()['total'];
 
-    echo <<<HTML
-<!DOCTYPE html>
-<html lang='zh-Hant'>
-<head>
-    <meta charset='UTF-8'>
-    <title>建言數據分析報告</title>
-    <style>
-        body { font-family: Arial; padding: 20px; background: #f8f8f8; color: #333; }
-        h2 { color: #2c3e50; }
-        .section { margin-bottom: 40px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
-        .details { display: none; margin-top: 10px; }
-        button { margin-top: 10px; }
-    </style>
-    <script>
-        function toggleDetails(id) {
-            var el = document.getElementById(id);
-            el.style.display = el.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
-</head>
-<body>
-<h2>建言統計報告（資料庫版本）</h2>
-HTML;
-
-    foreach ($departments as $i => $dept) {
-        $id = "details_$i";
-        $completionRate = $dept['total'] > 0 ? round($dept['completed'] / $dept['total'] * 100, 2) : 0;
-        echo "<div class='section'>";
-        echo "<h3>{$dept['department']}</h3>";
-        echo "<button onclick=\"toggleDetails('$id')\">點我查看詳細數據</button>";
-        echo "<div class='details' id='$id'>";
-        echo "<p>建言總數：{$dept['total']}</p>";
-        echo "<p>完成率：$completionRate%</p>";
-        echo "<p>平均處理時間：{$dept['avg_days']} 天</p>";
-        echo "<p>平均滿意度：{$dept['avg_satisfaction']} / 5 ⭐</p>";
-        echo "<p>最新回覆摘要：</p>";
-        echo "<ul>";
-        for ($j = 1; $j <= 3; $j++) {
-            $title = htmlspecialchars($dept["latest{$j}_title"]);
-            $res = htmlspecialchars(mb_substr(strip_tags($dept["latest{$j}_response"]), 0, 50, 'UTF-8'));
-            if ($title && $res) {
-                echo "<li><strong>$title</strong>：$res...</li>";
-            }
-        }
-        echo "</ul></div></div>";
-    }
-
-    echo "</body></html>";
+    // 最新建言時間
+    $stmt2 = $pdo->query("SELECT MAX(created_at) AS latest FROM suggestions");
+    $latestSuggestion = $stmt2->fetch()['latest'];
 
 } catch (PDOException $e) {
-    echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
+    echo "<p style='color: red;'>操作失敗: " . htmlspecialchars($e->getMessage()) . "</p>";
+    exit;
 }
 ?>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>數據分析</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .sidebar {
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+            padding-top: 1rem;
+        }
+        .sidebar a { color: white; text-decoration: none; padding: 10px 20px; display: block; }
+        .sidebar a:hover { background-color: #495057; }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- 側邊欄 -->
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <h4 class="text-center">管理選單</h4>
+            <a href="suggestions.php">建言管理</a>
+            <a href="#">使用者管理</a>
+            <a href="#">系統設定</a>
+            <a href="analytics.php">數據分析</a>
+            <a href="#">登出</a>
+        </nav>
+        <!-- 主內容區 -->
+        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <h2>數據分析儀表板</h2>
+            <div class="card mt-4 shadow-sm">
+                <div class="card-body">
+                    <h5>建言總數：<span class="text-primary"><?= $totalSuggestions ?></span></h5>
+                    <h5>最新建言時間：<span class="text-success"><?= $latestSuggestion ? $latestSuggestion : "無" ?></span></h5>
+                    <!-- 這裡可以再加入更多統計、圖表等分析資料 -->
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
