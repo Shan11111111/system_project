@@ -26,7 +26,7 @@ category_select.send_keys(Keys.RETURN)  # 確認選擇
 # 測試搜索欄功能
 search_input = driver.find_element(By.ID, 'search')
 search_input.clear()  # 清除之前的輸入
-search_input.send_keys("自動測試")  # 輸入搜索關鍵字
+search_input.send_keys("廁所")  # 輸入搜索關鍵字
 search_input.send_keys(Keys.RETURN)  # 按下 Enter 鍵
 
 # 測試排序選單功能
@@ -48,10 +48,8 @@ suggestion_list = driver.find_element(By.ID, 'suggestion-list')
 # 檢查是否有建議項目顯示
 assert suggestion_list.is_displayed(), "建議項目未顯示"
 
-
-
 # 測試點擊建議項目
-first_suggestion = suggestion_list.find_element(By.XPATH, "//div[@class='suggestion']")
+first_suggestion = suggestion_list.find_element(By.CLASS_NAME, "suggestion")
 first_suggestion.click()  # 點擊第一個建議項目
 
 # 等待頁面跳轉並檢查是否正確跳轉

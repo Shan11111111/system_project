@@ -39,7 +39,7 @@ try:
     # 6. 測試搜尋功能
     search_box = driver.find_element(By.NAME, "search")
     search_box.clear()
-    search_box.send_keys("測試")
+    search_box.send_keys("跨國")
     search_box.send_keys(Keys.RETURN)
     time.sleep(2)
     print("搜尋後卡片數：", len(driver.find_elements(By.CLASS_NAME, "card")))
