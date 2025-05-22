@@ -1,14 +1,170 @@
 <?php
 // 資料庫連線設定
-$host = 'localhost';  // 資料庫伺服器
-$dbname = 'system_project';  // 資料庫名稱
-$username = 'root';  // 資料庫使用者名稱
-$password = '';  // 資料庫密碼
+$host = 'localhost';
+$dbname = 'system_project';
+$username = 'root';
+$password = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // 建言狀態統計
+    $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
+    $statusData = ['未處理' => 0, '已分派' => 0, '已回覆' => 0];
+    $totalAdvice = 0;
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $status = $row['advice_state'];
+        $count = (int)$row['count'];
+        if (isset($statusData[$status])) {
+            $statusData[$status] = $count;
+        }
+        $totalAdvice += $count;
+    }
+
+    $completed = $statusData['已回覆'];
+    $completionRate = $totalAdvice > 0 ? round($completed / $totalAdvice * 100, 2) : 0;
+
+    // 額外列出所有建言狀態
+    $allAdviceStates = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state")->fetchAll(PDO::FETCH_ASSOC);
+
+    // 捐款統計
+    $stmt = $pdo->query("SELECT SUM(donate_amount) FROM donate");
+    $totalDonation = $stmt->fetchColumn() ?? 0;
+
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
+    exit;
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>建言與捐款統計分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background: #FFF4E2;
+            color: #333;
+        }
+        h2 { color: #7A4E21; }
+        h3 { color: #7A4E21; margin-top: 40px; }
+        .hidden { display: none; }
+        .chart-container { max-width: 400px; margin-top: 20px; }
+        button {
+            padding: 10px 20px;
+            background: #7A4E21;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a3c17;
+        }
+        ul { line-height: 1.6; }
+        hr { margin: 40px 0; border: none; border-top: 1px solid #ccc; }
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            border-radius: 5px;
+            background-color: #3CB371;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #7A4E21;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #FFF6E6;
+        }
+        .state-pending { background-color: #ffeaea; }
+        .state-assigned { background-color: #fff8d6; }
+        .state-replied { background-color: #e4f7e9; }
+    </style>
+</head>
+<body>
+    <h2>建言與捐款統計分析</h2>
+
+    <h3>📌 建言統計</h3>
+    <p>建言總數：<?= $totalAdvice ?></p>
+    <p>完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
+
+    <h3>💰 捐款統計</h3>
+    <p>總捐款金額：<?= number_format($totalDonation) ?> 元</p>
+
+    <button onclick="toggleStats()">顯示／隱藏建言狀態圖表</button>
+
+    <div id="statusStats" class="hidden">
+        <ul>
+            <li>未處理：<?= $statusData['未處理'] ?></li>
+            <li>已分派：<?= $statusData['已分派'] ?></li>
+            <li>已回覆：<?= $statusData['已回覆'] ?></li>
+        </ul>
+
+        <div class="chart-container">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <hr>
+    <h3>📌 所有建言狀態（動態統計）</h3>
+    <ul>
+        <?php foreach ($allAdviceStates as $row): ?>
+            <li><?= htmlspecialchars($row['advice_state']) ?>：<?= $row['count'] ?> 筆</li>
+        <?php endforeach; ?>
+    </ul>
+
+    <script>
+        function toggleStats() {
+            const stats = document.getElementById('statusStats');
+            stats.classList.toggle('hidden');
+        }
+
+        const ctx = document.getElementById('statusChart').getContext('2d');
+        const statusChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['未處理', '已分派', '已回覆'],
+                datasets: [{
+                    label: '建言狀態統計',
+                    data: [
+                        <?= $statusData['未處理'] ?>,
+                        <?= $statusData['已分派'] ?>,
+                        <?= $statusData['已回覆'] ?>
+                    ],
+                    backgroundColor: ['#E74C3C', '#FCD34D', '#3CB371'],
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>
