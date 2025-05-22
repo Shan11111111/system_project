@@ -26,8 +26,17 @@ try {
     $completed = $statusData['已回覆'];
     $completionRate = $totalAdvice > 0 ? round($completed / $totalAdvice * 100, 2) : 0;
 
+    // 獲取所有建言詳細資料
+    $allAdvice = $pdo->query("
+        SELECT a.advice_id, a.advice_title, a.advice_state, a.announce_date, 
+               u.name as user_name, u.department
+        FROM advice a
+        JOIN users u ON a.user_id = u.user_id
+        ORDER BY a.announce_date DESC
+    ")->fetchAll(PDO::FETCH_ASSOC);
+
     // 募資專案統計
-    $stmt = $pdo->query("
+    $fundingStats = $pdo->query("
         SELECT 
             COUNT(*) as total_projects,
             SUM(funding_goal) as total_goal,
@@ -38,17 +47,31 @@ try {
             FROM donation_record
             GROUP BY project_id
         ) dr ON fp.project_id = dr.project_id
-    ");
-    $fundingStats = $stmt->fetch(PDO::FETCH_ASSOC);
+    ")->fetch(PDO::FETCH_ASSOC);
 
     $totalProjects = $fundingStats['total_projects'] ?? 0;
     $totalGoal = $fundingStats['total_goal'] ?? 0;
     $totalDonated = $fundingStats['total_donated'] ?? 0;
     $fundingProgress = $totalGoal > 0 ? round(($totalDonated / $totalGoal) * 100, 2) : 0;
 
+    // 獲取所有募資提案詳細資料
+    $allFundingProjects = $pdo->query("
+        SELECT fp.project_id, fp.title, fp.status, fp.start_date, fp.end_date, 
+               fp.funding_goal, COALESCE(dr.total_donated, 0) as donated_amount,
+               sa.advice_id, a.advice_title
+        FROM fundraising_projects fp
+        LEFT JOIN (
+            SELECT project_id, SUM(donation_amount) as total_donated
+            FROM donation_record
+            GROUP BY project_id
+        ) dr ON fp.project_id = dr.project_id
+        LEFT JOIN suggestion_assignments sa ON fp.suggestion_assignments_id = sa.suggestion_assignments_id
+        LEFT JOIN advice a ON sa.advice_id = a.advice_id
+        ORDER BY fp.start_date DESC
+    ")->fetchAll(PDO::FETCH_ASSOC);
+
     // 額外列出所有建言狀態
-    $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
-    $allAdviceStates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $allAdviceStates = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state")->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
@@ -75,7 +98,7 @@ try {
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 20px;
+            margin: 10px 5px;
         }
         button:hover {
             background: #2980b9;
@@ -95,6 +118,36 @@ try {
             text-align: center;
             line-height: 20px;
             color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .state-pending { background-color: #ffdddd; }
+        .state-assigned { background-color: #fff3cd; }
+        .state-replied { background-color: #d4edda; }
+        .status-ongoing { background-color: #fff3cd; }
+        .status-completed { background-color: #d4edda; }
+        .status-cancelled { background-color: #f8d7da; }
+        .data-table {
+            max-height: 500px;
+            overflow-y: auto;
+            margin: 20px 0;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
@@ -118,8 +171,12 @@ try {
         </div>
     </div>
 
-    <!-- 圖表按鈕 -->
-    <button onclick="toggleStats()">顯示／隱藏建言狀態圖表</button>
+    <!-- 按鈕區 -->
+    <div>
+        <button onclick="toggleStats()">顯示／隱藏建言狀態圖表</button>
+        <button onclick="toggleAllAdvice()">顯示／隱藏所有建言</button>
+        <button onclick="toggleAllFunding()">顯示／隱藏所有募資提案</button>
+    </div>
 
     <!-- 圖表區塊 -->
     <div id="statusStats" class="hidden">
@@ -131,6 +188,94 @@ try {
 
         <div class="chart-container">
             <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 所有建言列表 -->
+    <div id="allAdvice" class="hidden">
+        <h3>📋 所有建言列表</h3>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>標題</th>
+                        <th>狀態</th>
+                        <th>提出者</th>
+                        <th>單位</th>
+                        <th>提出日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($allAdvice as $advice): ?>
+                        <tr class="state-<?= 
+                            $advice['advice_state'] === '未處理' ? 'pending' : 
+                            ($advice['advice_state'] === '已分派' ? 'assigned' : 'replied') 
+                        ?>">
+                            <td><?= $advice['advice_id'] ?></td>
+                            <td><?= htmlspecialchars($advice['advice_title']) ?></td>
+                            <td><?= $advice['advice_state'] ?></td>
+                            <td><?= htmlspecialchars($advice['user_name']) ?></td>
+                            <td><?= htmlspecialchars($advice['department']) ?></td>
+                            <td><?= $advice['announce_date'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 所有募資提案列表 -->
+    <div id="allFunding" class="hidden">
+        <h3>💰 所有募資提案列表</h3>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>專案ID</th>
+                        <th>標題</th>
+                        <th>狀態</th>
+                        <th>來源建言</th>
+                        <th>目標金額</th>
+                        <th>已募得</th>
+                        <th>進度</th>
+                        <th>開始日期</th>
+                        <th>結束日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($allFundingProjects as $project): 
+                        $progress = $project['funding_goal'] > 0 ? 
+                            round(($project['donated_amount'] / $project['funding_goal']) * 100, 2) : 0;
+                    ?>
+                        <tr class="status-<?= strtolower(str_replace(' ', '-', $project['status'])) ?>">
+                            <td><?= $project['project_id'] ?></td>
+                            <td><?= htmlspecialchars($project['title']) ?></td>
+                            <td><?= $project['status'] ?></td>
+                            <td>
+                                <?php if ($project['advice_id']): ?>
+                                    <a href="#" title="<?= htmlspecialchars($project['advice_title']) ?>">
+                                        #<?= $project['advice_id'] ?>
+                                    </a>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
+                            <td><?= number_format($project['funding_goal']) ?> 元</td>
+                            <td><?= number_format($project['donated_amount']) ?> 元</td>
+                            <td>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: <?= $progress ?>%">
+                                        <?= $progress ?>%
+                                    </div>
+                                </div>
+                            </td>
+                            <td><?= $project['start_date'] ?></td>
+                            <td><?= $project['end_date'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -147,6 +292,16 @@ try {
         function toggleStats() {
             const stats = document.getElementById('statusStats');
             stats.classList.toggle('hidden');
+        }
+
+        function toggleAllAdvice() {
+            const allAdvice = document.getElementById('allAdvice');
+            allAdvice.classList.toggle('hidden');
+        }
+
+        function toggleAllFunding() {
+            const allFunding = document.getElementById('allFunding');
+            allFunding.classList.toggle('hidden');
         }
 
         const ctx = document.getElementById('statusChart').getContext('2d');
