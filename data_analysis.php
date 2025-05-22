@@ -26,9 +26,25 @@ try {
     $completed = $statusData['已回覆'];
     $completionRate = $totalAdvice > 0 ? round($completed / $totalAdvice * 100, 2) : 0;
 
-    // 捐款總金額（來自 donate）
-    $stmt = $pdo->query("SELECT SUM(donate_amount) FROM donate");
-    $totalDonation = $stmt->fetchColumn() ?? 0;
+    // 募資專案統計
+    $stmt = $pdo->query("
+        SELECT 
+            COUNT(*) as total_projects,
+            SUM(funding_goal) as total_goal,
+            SUM(COALESCE(dr.total_donated, 0)) as total_donated
+        FROM fundraising_projects fp
+        LEFT JOIN (
+            SELECT project_id, SUM(donation_amount) as total_donated
+            FROM donation_record
+            GROUP BY project_id
+        ) dr ON fp.project_id = dr.project_id
+    ");
+    $fundingStats = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $totalProjects = $fundingStats['total_projects'] ?? 0;
+    $totalGoal = $fundingStats['total_goal'] ?? 0;
+    $totalDonated = $fundingStats['total_donated'] ?? 0;
+    $fundingProgress = $totalGoal > 0 ? round(($totalDonated / $totalGoal) * 100, 2) : 0;
 
     // 額外列出所有建言狀態
     $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
@@ -44,7 +60,7 @@ try {
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>建言與捐款統計分析</title>
+    <title>建言與募資統計分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: Arial; padding: 20px; background: #f8f8f8; color: #333; }
@@ -66,17 +82,41 @@ try {
         }
         ul { line-height: 1.6; }
         hr { margin: 40px 0; border: none; border-top: 1px solid #ccc; }
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h2>建言與捐款統計分析</h2>
+    <h2>建言與募資統計分析</h2>
 
     <!-- 建言資訊 -->
-    <p>📌 建言總數：<?= $totalAdvice ?></p>
-    <p>✅ 完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
+    <h3>📌 建言統計</h3>
+    <p>總建言數：<?= $totalAdvice ?></p>
+    <p>完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
 
-    <!-- 捐款資訊 -->
-    <p>💰 捐款總金額：<?= number_format($totalDonation) ?> 元</p>
+    <!-- 募資資訊 -->
+    <h3>💰 募資統計</h3>
+    <p>總募資專案數：<?= $totalProjects ?></p>
+    <p>總募資目標金額：<?= number_format($totalGoal) ?> 元</p>
+    <p>總已募得金額：<?= number_format($totalDonated) ?> 元</p>
+    <p>整體募資進度：</p>
+    <div class="progress-container">
+        <div class="progress-bar" style="width: <?= $fundingProgress ?>%">
+            <?= $fundingProgress ?>%
+        </div>
+    </div>
 
     <!-- 圖表按鈕 -->
     <button onclick="toggleStats()">顯示／隱藏建言狀態圖表</button>
