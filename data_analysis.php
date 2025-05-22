@@ -9,22 +9,39 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // 取得各狀態數量
+    // 建言狀態統計
     $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
     $statusData = ['未處理' => 0, '已分派' => 0, '已回覆' => 0];
-    $total = 0;
+    $totalAdvice = 0;
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $status = $row['advice_state'];
         $count = (int)$row['count'];
         if (isset($statusData[$status])) {
             $statusData[$status] = $count;
-            $total += $count;
         }
+        $totalAdvice += $count;
     }
 
     $completed = $statusData['已回覆'];
-    $completionRate = $total > 0 ? round($completed / $total * 100, 2) : 0;
+    $completionRate = $totalAdvice > 0 ? round($completed / $totalAdvice * 100, 2) : 0;
+
+    // 募資提案數量
+    $stmt = $pdo->query("SELECT COUNT(*) FROM proposal");
+    $proposalCount = $stmt->fetchColumn();
+
+    // 捐款總金額
+    $stmt = $pdo->query("SELECT SUM(donate_amount) FROM donate");
+    $totalDonation = $stmt->fetchColumn() ?? 0;
+
+    // 額外：列出所有建言狀態
+    $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
+    $allAdviceStates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 額外：列出所有募資提案狀態
+    $stmt = $pdo->query("SELECT proposal_state, COUNT(*) as count FROM proposal GROUP BY proposal_state");
+    $allProposalStates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
     exit;
@@ -35,11 +52,12 @@ try {
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>建言總體數據分析</title>
+    <title>建言與募資統計分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: Arial; padding: 20px; background: #f8f8f8; color: #333; }
         h2 { color: #2c3e50; }
+        h3 { color: #34495e; margin-top: 40px; }
         .hidden { display: none; }
         .chart-container { max-width: 400px; margin-top: 20px; }
         button {
@@ -54,16 +72,25 @@ try {
         button:hover {
             background: #2980b9;
         }
+        ul { line-height: 1.6; }
+        hr { margin: 40px 0; border: none; border-top: 1px solid #ccc; }
     </style>
 </head>
 <body>
-    <h2>建言總體數據分析</h2>
+    <h2>建言與募資統計分析</h2>
 
-    <p>建言總數：<?= $total ?></p>
-    <p>完成率：<?= $completionRate ?>%</p>
+    <!-- 建言資訊 -->
+    <p>📌 建言總數：<?= $totalAdvice ?></p>
+    <p>✅ 完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
 
-    <button onclick="toggleStats()">顯示／隱藏狀態圖表</button>
+    <!-- 募資資訊 -->
+    <p>📦 募資提案總數：<?= $proposalCount ?></p>
+    <p>💰 捐款總金額：<?= number_format($totalDonation) ?> 元</p>
 
+    <!-- 圖表按鈕 -->
+    <button onclick="toggleStats()">顯示／隱藏建言狀態圖表</button>
+
+    <!-- 圖表區塊 -->
     <div id="statusStats" class="hidden">
         <ul>
             <li>未處理：<?= $statusData['未處理'] ?></li>
@@ -75,6 +102,22 @@ try {
             <canvas id="statusChart"></canvas>
         </div>
     </div>
+
+    <!-- 額外狀態列出 -->
+    <hr>
+    <h3>📌 所有建言狀態（動態統計）</h3>
+    <ul>
+        <?php foreach ($allAdviceStates as $row): ?>
+            <li><?= htmlspecialchars($row['advice_state']) ?>：<?= $row['count'] ?> 筆</li>
+        <?php endforeach; ?>
+    </ul>
+
+    <h3>📦 所有募資提案狀態（動態統計）</h3>
+    <ul>
+        <?php foreach ($allProposalStates as $row): ?>
+            <li><?= htmlspecialchars($row['proposal_state']) ?>：<?= $row['count'] ?> 筆</li>
+        <?php endforeach; ?>
+    </ul>
 
     <script>
         function toggleStats() {
