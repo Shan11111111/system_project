@@ -26,21 +26,13 @@ try {
     $completed = $statusData['已回覆'];
     $completionRate = $totalAdvice > 0 ? round($completed / $totalAdvice * 100, 2) : 0;
 
-    // 募資提案數量
-    $stmt = $pdo->query("SELECT COUNT(*) FROM proposal");
-    $proposalCount = $stmt->fetchColumn();
-
-    // 捐款總金額
+    // 捐款總金額（來自 donate）
     $stmt = $pdo->query("SELECT SUM(donate_amount) FROM donate");
     $totalDonation = $stmt->fetchColumn() ?? 0;
 
-    // 額外：列出所有建言狀態
+    // 額外列出所有建言狀態
     $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
     $allAdviceStates = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // 額外：列出所有募資提案狀態
-    $stmt = $pdo->query("SELECT proposal_state, COUNT(*) as count FROM proposal GROUP BY proposal_state");
-    $allProposalStates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
@@ -52,7 +44,7 @@ try {
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>建言與募資統計分析</title>
+    <title>建言與捐款統計分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: Arial; padding: 20px; background: #f8f8f8; color: #333; }
@@ -77,14 +69,13 @@ try {
     </style>
 </head>
 <body>
-    <h2>建言與募資統計分析</h2>
+    <h2>建言與捐款統計分析</h2>
 
     <!-- 建言資訊 -->
     <p>📌 建言總數：<?= $totalAdvice ?></p>
     <p>✅ 完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
 
-    <!-- 募資資訊 -->
-    <p>📦 募資提案總數：<?= $proposalCount ?></p>
+    <!-- 捐款資訊 -->
     <p>💰 捐款總金額：<?= number_format($totalDonation) ?> 元</p>
 
     <!-- 圖表按鈕 -->
@@ -109,13 +100,6 @@ try {
     <ul>
         <?php foreach ($allAdviceStates as $row): ?>
             <li><?= htmlspecialchars($row['advice_state']) ?>：<?= $row['count'] ?> 筆</li>
-        <?php endforeach; ?>
-    </ul>
-
-    <h3>📦 所有募資提案狀態（動態統計）</h3>
-    <ul>
-        <?php foreach ($allProposalStates as $row): ?>
-            <li><?= htmlspecialchars($row['proposal_state']) ?>：<?= $row['count'] ?> 筆</li>
         <?php endforeach; ?>
     </ul>
 
