@@ -8,6 +8,23 @@ $password = '';
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // 假設使用的資料表為 feedbacks，欄位為 status
+    $stmt = $pdo->query("SELECT status, COUNT(*) as count FROM feedbacks GROUP BY status");
+    $statusData = ['未處理' => 0, '處理中' => 0, '已完成' => 0];
+    $total = 0;
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $status = $row['status'];
+        $count = (int)$row['count'];
+        if (isset($statusData[$status])) {
+            $statusData[$status] = $count;
+            $total += $count;
+        }
+    }
+
+    $completed = $statusData['已完成'];
+    $completionRate = $total > 0 ? round($completed / $total * 100, 2) : 0;
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
     exit;
@@ -42,17 +59,16 @@ try {
 <body>
     <h2>建言總體數據分析</h2>
 
-    <!-- 以下數值暫時為靜態呈現，日後可用其他資料表補充 -->
-    <p>建言總數：0</p>
-    <p>完成率：0%</p>
+    <p>建言總數：<?= $total ?></p>
+    <p>完成率：<?= $completionRate ?>%</p>
 
     <button onclick="toggleStats()">顯示／隱藏狀態圖表</button>
 
     <div id="statusStats" class="hidden">
         <ul>
-            <li>未處理：0</li>
-            <li>處理中：0</li>
-            <li>已完成：0</li>
+            <li>未處理：<?= $statusData['未處理'] ?></li>
+            <li>處理中：<?= $statusData['處理中'] ?></li>
+            <li>已完成：<?= $statusData['已完成'] ?></li>
         </ul>
 
         <div class="chart-container">
@@ -73,7 +89,11 @@ try {
                 labels: ['未處理', '處理中', '已完成'],
                 datasets: [{
                     label: '狀態統計',
-                    data: [0, 0, 0],
+                    data: [
+                        <?= $statusData['未處理'] ?>,
+                        <?= $statusData['處理中'] ?>,
+                        <?= $statusData['已完成'] ?>
+                    ],
                     backgroundColor: ['#e74c3c', '#f1c40f', '#2ecc71'],
                 }]
             },
