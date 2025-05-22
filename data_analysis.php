@@ -9,13 +9,13 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // 假設使用的資料表為 feedbacks，欄位為 status
-    $stmt = $pdo->query("SELECT status, COUNT(*) as count FROM feedbacks GROUP BY status");
-    $statusData = ['未處理' => 0, '處理中' => 0, '已完成' => 0];
+    // 取得各狀態數量
+    $stmt = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state");
+    $statusData = ['未處理' => 0, '已分派' => 0, '已回覆' => 0];
     $total = 0;
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $status = $row['status'];
+        $status = $row['advice_state'];
         $count = (int)$row['count'];
         if (isset($statusData[$status])) {
             $statusData[$status] = $count;
@@ -23,7 +23,7 @@ try {
         }
     }
 
-    $completed = $statusData['已完成'];
+    $completed = $statusData['已回覆'];
     $completionRate = $total > 0 ? round($completed / $total * 100, 2) : 0;
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
@@ -67,8 +67,8 @@ try {
     <div id="statusStats" class="hidden">
         <ul>
             <li>未處理：<?= $statusData['未處理'] ?></li>
-            <li>處理中：<?= $statusData['處理中'] ?></li>
-            <li>已完成：<?= $statusData['已完成'] ?></li>
+            <li>已分派：<?= $statusData['已分派'] ?></li>
+            <li>已回覆：<?= $statusData['已回覆'] ?></li>
         </ul>
 
         <div class="chart-container">
@@ -86,15 +86,15 @@ try {
         const statusChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['未處理', '處理中', '已完成'],
+                labels: ['未處理', '已分派', '已回覆'],
                 datasets: [{
-                    label: '狀態統計',
+                    label: '建言狀態統計',
                     data: [
                         <?= $statusData['未處理'] ?>,
-                        <?= $statusData['處理中'] ?>,
-                        <?= $statusData['已完成'] ?>
+                        <?= $statusData['已分派'] ?>,
+                        <?= $statusData['已回覆'] ?>
                     ],
-                    backgroundColor: ['#e74c3c', '#f1c40f', '#2ecc71'],
+                    backgroundColor: ['#e74c3c', '#f39c12', '#2ecc71'],
                 }]
             },
             options: {
