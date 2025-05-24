@@ -26,12 +26,12 @@ try {
     $completed = $statusData['已回覆'];
     $completionRate = $totalAdvice > 0 ? round($completed / $totalAdvice * 100, 2) : 0;
 
-    // 額外列出所有建言狀態
-    $allAdviceStates = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state")->fetchAll(PDO::FETCH_ASSOC);
-
     // 捐款統計
     $stmt = $pdo->query("SELECT SUM(donate_amount) FROM donate");
     $totalDonation = $stmt->fetchColumn() ?? 0;
+
+    // 額外列出所有建言狀態
+    $allAdviceStates = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state")->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
@@ -45,50 +45,58 @@ try {
     <meta charset="UTF-8">
     <title>建言與捐款統計分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-<style>
-body {
-    font-family: Arial !important;
-    padding: 20px !important;
-    background: #FFF4E2 !important;
-    color: #333 !important;
-}
-h2, h3 {
-    color: #7A4E21 !important;
-}
-button {
-    background-color: #7A4E21 !important;
-    color: white !important;
-    border: none !important;
-    padding: 10px 20px !important;
-    border-radius: 6px !important;
-    margin: 10px 5px !important;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #5a3c17 !important;
-}
-th {
-    background-color: #7A4E21 !important;
-    color: white !important;
-}
-tr:nth-child(even) {
-    background-color: #FFF6E6 !important;
-}
-.state-pending {
-    background-color: #ffeaea !important;
-}
-.state-assigned {
-    background-color: #fff8d6 !important;
-}
-.state-replied {
-    background-color: #e4f7e9 !important;
-}
-.progress-bar {
-    background-color: #3CB371 !important;
-}
-</style>
-
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background: #FFF4E2;
+            color: #333;
+        }
+        h2, h3 {
+            color: #7A4E21;
+        }
+        button {
+            background-color: #7A4E21;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5a3c17;
+        }
+        .chart-container {
+            max-width: 400px;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            border-radius: 5px;
+            background-color: #3CB371;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
+        ul {
+            line-height: 1.6;
+        }
+        hr {
+            margin: 40px 0;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
     <h2>建言與捐款統計分析</h2>
