@@ -32,6 +32,12 @@ try {
     // 募資狀態統計
     $fundraisingStates = $pdo->query("SELECT status, COUNT(*) as count FROM fundraising_projects GROUP BY status")->fetchAll(PDO::FETCH_ASSOC);
 
+    // 建言明細
+    $adviceList = $pdo->query("SELECT advice_id, advice_title, advice_state FROM advice ORDER BY advice_id DESC")->fetchAll(PDO::FETCH_ASSOC);
+
+    // 募資明細
+    $fundingList = $pdo->query("SELECT project_id, title, status, start_date, end_date, funding_goal FROM fundraising_projects ORDER BY project_id DESC")->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
     exit;
@@ -81,6 +87,19 @@ try {
             border: none;
             border-top: 1px solid #ccc;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8e8d1;
+        }
     </style>
 </head>
 <body>
@@ -113,12 +132,48 @@ try {
     </ul>
 
     <hr>
-    <h3>💰 募資狀態統計</h3>
+    <h3>💬 建言明細</h3>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>標題</th><th>狀態</th></tr>
+        </thead>
+        <tbody>
+            <?php foreach ($adviceList as $advice): ?>
+                <tr>
+                    <td><?= $advice['advice_id'] ?></td>
+                    <td><?= htmlspecialchars($advice['advice_title']) ?></td>
+                    <td><?= $advice['advice_state'] ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <hr>
+    <h3>📢 募資狀態統計</h3>
     <ul>
         <?php foreach ($fundraisingStates as $row): ?>
             <li><?= htmlspecialchars($row['status']) ?>：<?= $row['count'] ?> 筆</li>
         <?php endforeach; ?>
     </ul>
+
+    <h3>📋 募資明細</h3>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>標題</th><th>狀態</th><th>開始</th><th>結束</th><th>目標金額</th></tr>
+        </thead>
+        <tbody>
+            <?php foreach ($fundingList as $proj): ?>
+                <tr>
+                    <td><?= $proj['project_id'] ?></td>
+                    <td><?= htmlspecialchars($proj['title']) ?></td>
+                    <td><?= $proj['status'] ?></td>
+                    <td><?= $proj['start_date'] ?></td>
+                    <td><?= $proj['end_date'] ?></td>
+                    <td><?= number_format($proj['funding_goal']) ?> 元</td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
     <script>
         function toggleStats() {
