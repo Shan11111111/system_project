@@ -26,10 +26,6 @@ try {
     $completed = $statusData['已回覆'];
     $completionRate = $totalAdvice > 0 ? round($completed / $totalAdvice * 100, 2) : 0;
 
-    // 捐款統計
-    $stmt = $pdo->query("SELECT SUM(donate_amount) FROM donate");
-    $totalDonation = $stmt->fetchColumn() ?? 0;
-
     // 額外列出所有建言狀態
     $allAdviceStates = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -43,7 +39,7 @@ try {
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>建言與捐款統計分析</title>
+    <title>建言統計分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -74,20 +70,6 @@ try {
         .hidden {
             display: none;
         }
-        .progress-container {
-            width: 100%;
-            background-color: #f1f1f1;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-        .progress-bar {
-            height: 20px;
-            border-radius: 5px;
-            background-color: #3CB371;
-            text-align: center;
-            line-height: 20px;
-            color: white;
-        }
         ul {
             line-height: 1.6;
         }
@@ -99,14 +81,11 @@ try {
     </style>
 </head>
 <body>
-    <h2>建言與捐款統計分析</h2>
+    <h2>建言統計分析</h2>
 
     <h3>📌 建言統計</h3>
     <p>建言總數：<?= $totalAdvice ?></p>
     <p>完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
-
-    <h3>💰 捐款統計</h3>
-    <p>總捐款金額：<?= number_format($totalDonation) ?> 元</p>
 
     <button onclick="toggleStats()">顯示／隱藏建言狀態圖表</button>
 
