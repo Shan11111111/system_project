@@ -29,10 +29,6 @@ try {
     // 額外列出所有建言狀態
     $allAdviceStates = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state")->fetchAll(PDO::FETCH_ASSOC);
 
-    // 募資統計
-    $donateStats = $pdo->query("SELECT SUM(donate_amount) AS total_donated FROM donate")->fetch(PDO::FETCH_ASSOC);
-    $totalDonated = $donateStats['total_donated'] ?? 0;
-
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
     exit;
@@ -43,7 +39,7 @@ try {
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>建言與募資統計分析</title>
+    <title>建言統計分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -85,7 +81,7 @@ try {
     </style>
 </head>
 <body>
-    <h2>建言與募資統計分析</h2>
+    <h2>建言統計分析</h2>
 
     <h3>📌 建言統計</h3>
     <p>建言總數：<?= $totalAdvice ?></p>
@@ -112,10 +108,6 @@ try {
             <li><?= htmlspecialchars($row['advice_state']) ?>：<?= $row['count'] ?> 筆</li>
         <?php endforeach; ?>
     </ul>
-
-    <hr>
-    <h3>💰 募資統計</h3>
-    <p>總募得金額：<?= number_format($totalDonated) ?> 元</p>
 
     <script>
         function toggleStats() {
