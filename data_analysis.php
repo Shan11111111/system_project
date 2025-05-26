@@ -29,6 +29,14 @@ try {
     // 額外列出所有建言狀態
     $allAdviceStates = $pdo->query("SELECT advice_state, COUNT(*) as count FROM advice GROUP BY advice_state")->fetchAll(PDO::FETCH_ASSOC);
 
+    // 募資資料統計
+    $fundraisingStats = $pdo->query("SELECT COUNT(*) AS total_projects, SUM(goal_amount) AS total_goal FROM fundraising_project")->fetch(PDO::FETCH_ASSOC);
+    $donatedStats = $pdo->query("SELECT SUM(donate_amount) AS total_donated FROM donate")->fetch(PDO::FETCH_ASSOC);
+    $totalProjects = $fundraisingStats['total_projects'] ?? 0;
+    $totalGoal = $fundraisingStats['total_goal'] ?? 0;
+    $totalDonated = $donatedStats['total_donated'] ?? 0;
+    $fundingProgress = ($totalGoal > 0) ? round(($totalDonated / $totalGoal) * 100, 2) : 0;
+
 } catch (PDOException $e) {
     echo "<p style='color: red;'>資料庫連線失敗：{$e->getMessage()}</p>";
     exit;
@@ -39,7 +47,7 @@ try {
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>建言統計分析</title>
+    <title>建言與募資統計分析</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -70,6 +78,20 @@ try {
         .hidden {
             display: none;
         }
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            border-radius: 5px;
+            background-color: #3CB371;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
         ul {
             line-height: 1.6;
         }
@@ -81,7 +103,7 @@ try {
     </style>
 </head>
 <body>
-    <h2>建言統計分析</h2>
+    <h2>建言與募資統計分析</h2>
 
     <h3>📌 建言統計</h3>
     <p>建言總數：<?= $totalAdvice ?></p>
@@ -108,6 +130,18 @@ try {
             <li><?= htmlspecialchars($row['advice_state']) ?>：<?= $row['count'] ?> 筆</li>
         <?php endforeach; ?>
     </ul>
+
+    <hr>
+    <h3>💰 募資統計</h3>
+    <p>總募資專案數：<?= $totalProjects ?></p>
+    <p>總募資目標金額：<?= number_format($totalGoal) ?> 元</p>
+    <p>總已募得金額：<?= number_format($totalDonated) ?> 元</p>
+    <p>整體募資達成率：</p>
+    <div class="progress-container">
+        <div class="progress-bar" style="width: <?= $fundingProgress ?>%">
+            <?= $fundingProgress ?>%
+        </div>
+    </div>
 
     <script>
         function toggleStats() {
