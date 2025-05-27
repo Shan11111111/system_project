@@ -105,19 +105,19 @@ try {
 <body>
     <h2>建言與募資統計分析</h2>
 
-    <h3>📌 建言統計</h3>
-    <p>建言總數：<?= $totalAdvice ?></p>
-    <p>完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
-
     <button onclick="toggleStats()">顯示／隱藏建言狀態圖表</button>
+    <button onclick="toggleAdviceDetail()">顯示／隱藏建言明細</button>
+    <button onclick="toggleFundDetail()">顯示／隱藏募資明細</button>
 
     <div id="statusStats" class="hidden">
+        <h3>📌 建言統計</h3>
+        <p>建言總數：<?= $totalAdvice ?></p>
+        <p>完成率（已回覆 / 總建言）：<?= $completionRate ?>%</p>
         <ul>
             <li>未處理：<?= $statusData['未處理'] ?></li>
             <li>已分派：<?= $statusData['已分派'] ?></li>
             <li>已回覆：<?= $statusData['已回覆'] ?></li>
         </ul>
-
         <div class="chart-container">
             <canvas id="statusChart"></canvas>
         </div>
@@ -131,22 +131,24 @@ try {
         <?php endforeach; ?>
     </ul>
 
-    <hr>
-    <h3>💬 建言明細</h3>
-    <table>
-        <thead>
-            <tr><th>ID</th><th>標題</th><th>狀態</th></tr>
-        </thead>
-        <tbody>
-            <?php foreach ($adviceList as $advice): ?>
-                <tr>
-                    <td><?= $advice['advice_id'] ?></td>
-                    <td><?= htmlspecialchars($advice['advice_title']) ?></td>
-                    <td><?= $advice['advice_state'] ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div id="adviceDetail" class="hidden">
+        <hr>
+        <h3>💬 建言明細</h3>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>標題</th><th>狀態</th></tr>
+            </thead>
+            <tbody>
+                <?php foreach ($adviceList as $advice): ?>
+                    <tr>
+                        <td><?= $advice['advice_id'] ?></td>
+                        <td><?= htmlspecialchars($advice['advice_title']) ?></td>
+                        <td><?= $advice['advice_state'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
     <hr>
     <h3>📢 募資狀態統計</h3>
@@ -156,29 +158,36 @@ try {
         <?php endforeach; ?>
     </ul>
 
-    <h3>📋 募資明細</h3>
-    <table>
-        <thead>
-            <tr><th>ID</th><th>標題</th><th>狀態</th><th>開始</th><th>結束</th><th>目標金額</th></tr>
-        </thead>
-        <tbody>
-            <?php foreach ($fundingList as $proj): ?>
-                <tr>
-                    <td><?= $proj['project_id'] ?></td>
-                    <td><?= htmlspecialchars($proj['title']) ?></td>
-                    <td><?= $proj['status'] ?></td>
-                    <td><?= $proj['start_date'] ?></td>
-                    <td><?= $proj['end_date'] ?></td>
-                    <td><?= number_format($proj['funding_goal']) ?> 元</td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div id="fundDetail" class="hidden">
+        <h3>📋 募資明細</h3>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>標題</th><th>狀態</th><th>開始</th><th>結束</th><th>目標金額</th></tr>
+            </thead>
+            <tbody>
+                <?php foreach ($fundingList as $proj): ?>
+                    <tr>
+                        <td><?= $proj['project_id'] ?></td>
+                        <td><?= htmlspecialchars($proj['title']) ?></td>
+                        <td><?= $proj['status'] ?></td>
+                        <td><?= $proj['start_date'] ?></td>
+                        <td><?= $proj['end_date'] ?></td>
+                        <td><?= number_format($proj['funding_goal']) ?> 元</td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
     <script>
         function toggleStats() {
-            const stats = document.getElementById('statusStats');
-            stats.classList.toggle('hidden');
+            document.getElementById('statusStats').classList.toggle('hidden');
+        }
+        function toggleAdviceDetail() {
+            document.getElementById('adviceDetail').classList.toggle('hidden');
+        }
+        function toggleFundDetail() {
+            document.getElementById('fundDetail').classList.toggle('hidden');
         }
 
         const ctx = document.getElementById('statusChart').getContext('2d');
